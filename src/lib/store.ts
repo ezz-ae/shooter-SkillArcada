@@ -1,3 +1,4 @@
+
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import type { Product } from "./products";
@@ -16,10 +17,14 @@ interface StoreState {
   shippingCart: ShippingItem[];
   walletBalance: number;
   addToVault: (item: VaultItem) => void;
-  tradeIn: (itemId: string, tradeInValue: number) => void;
-  moveToShipping: (itemIds: string[]) => boolean;
+  tradeIn: (vaultItemKey: string, tradeInValue: number) => void;
+  moveToShipping: (vaultItemKeys: string[]) => boolean;
   removeFromShipping: (shippingId: string) => void;
   confirmShipping: () => void;
+}
+
+const getVaultItemKey = (item: { id: string; purchaseTimestamp: number }) => {
+  return `${item.id}-${item.purchaseTimestamp}`;
 }
 
 export const useStore = create<StoreState>()(
@@ -43,21 +48,21 @@ export const useStore = create<StoreState>()(
         }
       },
 
-      tradeIn: (itemId, tradeInValue) => {
+      tradeIn: (vaultItemKey, tradeInValue) => {
         set((state) => ({
-          vault: state.vault.filter((item) => item.id !== itemId),
+          vault: state.vault.filter((item) => getVaultItemKey(item) !== vaultItemKey),
           walletBalance: state.walletBalance + tradeInValue,
         }));
       },
       
-      moveToShipping: (itemIds) => {
+      moveToShipping: (vaultItemKeys) => {
         const currentShippingCount = get().shippingCart.length;
-        if (currentShippingCount + itemIds.length > 3) {
+        if (currentShippingCount + vaultItemKeys.length > 3) {
             return false; // Violates the 3-item limit
         }
 
-        const itemsToMove = get().vault.filter(item => itemIds.includes(item.id));
-        const remainingVault = get().vault.filter(item => !itemIds.includes(item.id));
+        const itemsToMove = get().vault.filter(item => vaultItemKeys.includes(getVaultItemKey(item)));
+        const remainingVault = get().vault.filter(item => !vaultItemKeys.includes(getVaultItemKey(item)));
         
         const shippingItems = itemsToMove.map(item => ({...item, shippingId: `ship_${item.id}_${Date.now()}`}))
 

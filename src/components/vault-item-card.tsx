@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useState, useTransition } from "react";
@@ -24,7 +25,7 @@ import { cn } from "@/lib/utils";
 interface VaultItemCardProps {
   item: VaultItem;
   isSelected: boolean;
-  onSelect: (id: string) => void;
+  onSelect: () => void;
 }
 
 const TRADE_IN_COOLDOWN_MS = 60 * 1000; // 60 seconds
@@ -78,7 +79,8 @@ export function VaultItemCard({
   }, [currentPrice, item.purchaseTimestamp, isCoolingDown]);
 
   const handleTradeIn = () => {
-    tradeIn(item.id, currentPrice);
+    const vaultItemKey = `${item.id}-${item.purchaseTimestamp}`;
+    tradeIn(vaultItemKey, currentPrice);
     toast({
       title: "Trade-in Successful!",
       description: `You received $${currentPrice.toFixed(
@@ -104,7 +106,7 @@ export function VaultItemCard({
       )}
     >
       <button
-        onClick={() => onSelect(item.id)}
+        onClick={onSelect}
         className="absolute top-2 right-2 z-10 h-6 w-6 rounded-full border bg-card flex items-center justify-center"
         aria-label={isSelected ? "Deselect item" : "Select item"}
       >

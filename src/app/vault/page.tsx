@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -84,6 +85,10 @@ export default function VaultPage() {
     });
   }
 
+  const getVaultItemKey = (item: { id: string; purchaseTimestamp: number }) => {
+    return `${item.id}-${item.purchaseTimestamp}`;
+  }
+
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-2">My Vault</h1>
@@ -104,10 +109,10 @@ export default function VaultPage() {
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {vault.map((item) => (
               <VaultItemCard
-                key={item.id}
+                key={getVaultItemKey(item)}
                 item={item}
-                isSelected={selectedItems.has(item.id)}
-                onSelect={handleSelect}
+                isSelected={selectedItems.has(getVaultItemKey(item))}
+                onSelect={() => onSelect(getVaultItemKey(item))}
               />
             ))}
           </div>
