@@ -40,7 +40,7 @@ export function ProductCard({ product }: ProductCardProps) {
       }
     });
 
-    const updateInterval = 5000 + Math.random() * 2000; // Stagger updates
+    const updateInterval = 45000 + Math.random() * 10000; // Stagger updates to be between 45-55 seconds
 
     const interval = setInterval(() => {
       startTransition(async () => {
