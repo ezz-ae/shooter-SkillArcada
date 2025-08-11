@@ -50,20 +50,25 @@ export function VaultItemCard({
   );
 
   useEffect(() => {
-    const updatePriceInterval = setInterval(() => {
+    const updatePriceInterval = 5000 + Math.random() * 2000; // Stagger updates between 5-7 seconds
+    const interval = setInterval(() => {
       startTransition(async () => {
-        const newPriceData = await fetchUpdatedPrice({
-          currentPrice: currentPrice,
-        });
-        const newPrice = newPriceData.newPrice;
+        try {
+          const newPriceData = await fetchUpdatedPrice({
+            currentPrice: currentPrice,
+          });
+          const newPrice = newPriceData.newPrice;
 
-        if (newPrice > currentPrice) setPriceTrend("up");
-        else if (newPrice < currentPrice) setPriceTrend("down");
-        else setPriceTrend("stale");
+          if (newPrice > currentPrice) setPriceTrend("up");
+          else if (newPrice < currentPrice) setPriceTrend("down");
+          else setPriceTrend("stale");
 
-        setCurrentPrice(newPrice);
+          setCurrentPrice(newPrice);
+        } catch (error) {
+           console.error("Failed to update price for", item.name);
+        }
       });
-    }, 5000); // Update price every 5 seconds
+    }, updatePriceInterval); 
 
     let cooldownTimer: NodeJS.Timeout;
     if (isCoolingDown) {
@@ -73,10 +78,10 @@ export function VaultItemCard({
     }
 
     return () => {
-      clearInterval(updatePriceInterval);
+      clearInterval(interval);
       if (cooldownTimer) clearInterval(cooldownTimer);
     };
-  }, [currentPrice, item.purchaseTimestamp, isCoolingDown]);
+  }, [currentPrice, item.purchaseTimestamp, isCoolingDown, item.name]);
 
   const handleTradeIn = () => {
     const vaultItemKey = `${item.id}-${item.purchaseTimestamp}`;
