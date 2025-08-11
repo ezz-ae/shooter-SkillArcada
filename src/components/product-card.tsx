@@ -15,8 +15,7 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product }: ProductCardProps) {
-  const [discount, setDiscount] = useState(10); // Default discount
-  const [price, setPrice] = useState(product.marketPrice * (1 - 10 / 100));
+  const [price, setPrice] = useState(product.marketPrice);
   const [priceTrend, setPriceTrend] = useState<"up" | "down" | "stale">(
     "stale"
   );
@@ -25,47 +24,29 @@ export function ProductCard({ product }: ProductCardProps) {
   const { toast } = useToast();
 
   useEffect(() => {
-    // Fetch initial price
-    startTransition(async () => {
-      try {
-        const newPriceData = await fetchUpdatedPrice({
-          marketPrice: product.marketPrice,
-        });
-        const newPrice =
-          product.marketPrice * (1 - newPriceData.discountPercentage / 100);
-        setDiscount(newPriceData.discountPercentage);
-        setPrice(newPrice);
-      } catch (error) {
-        console.error("Failed to fetch initial price for", product.name);
-      }
-    });
-
-    const updateInterval = 45000 + Math.random() * 10000; // Stagger updates to be between 45-55 seconds
+    const updateInterval = 5000 + Math.random() * 2000; // Stagger updates to be between 5-7 seconds
 
     const interval = setInterval(() => {
       startTransition(async () => {
         try {
           const newPriceData = await fetchUpdatedPrice({
-            marketPrice: product.marketPrice,
+            currentPrice: price,
           });
-          const newPrice =
-            product.marketPrice * (1 - newPriceData.discountPercentage / 100);
+          const newPrice = newPriceData.newPrice;
 
           if (newPrice > price) setPriceTrend("up");
           else if (newPrice < price) setPriceTrend("down");
           else setPriceTrend("stale");
 
-          setDiscount(newPriceData.discountPercentage);
           setPrice(newPrice);
         } catch (error) {
             console.error("Failed to update price for", product.name);
-            // Optional: Show a toast or some indicator that the price couldn't be updated
         }
       });
     }, updateInterval); 
 
     return () => clearInterval(interval);
-  }, [price, product.marketPrice, product.name]);
+  }, [price, product.name]);
 
   const handleBuy = () => {
     addToVault({
@@ -94,32 +75,31 @@ export function ProductCard({ product }: ProductCardProps) {
       </CardHeader>
       <CardContent className="flex-grow p-4">
         <CardTitle className="mb-2 text-lg font-bold">{product.name}</CardTitle>
-        <p className="text-sm text-muted-foreground">
-          Market Price: ${product.marketPrice.toFixed(2)}
-        </p>
         <div className="mt-4 flex items-center justify-between">
           <div>
-            <div className="text-2xl font-black text-primary transition-colors duration-500">
-              {isPending && !price ? (
-                <Hourglass className="h-6 w-6 animate-spin" />
-              ) : (
-                `$${price.toFixed(2)}`
-              )}
+            <div className="flex items-center gap-2">
+              <div className="text-2xl font-black text-primary transition-colors duration-500">
+                {isPending && price === product.marketPrice ? (
+                  <Hourglass className="h-6 w-6 animate-spin" />
+                ) : (
+                  `$${price.toFixed(2)}`
+                )}
+              </div>
+              <div className="flex items-center transition-opacity duration-500">
+                {priceTrend === "up" && (
+                  <TrendingUp className="h-5 w-5 text-green-500" />
+                )}
+                {priceTrend === "down" && (
+                  <TrendingDown className="h-5 w-5 text-destructive" />
+                )}
+              </div>
             </div>
-            <div className="flex items-center text-sm font-semibold text-accent transition-opacity duration-500">
-              <span className="mr-1">{discount.toFixed(0)}% OFF</span>
-              {priceTrend === "up" && (
-                <TrendingUp className="h-4 w-4 text-destructive" />
-              )}
-              {priceTrend === "down" && (
-                <TrendingDown className="h-4 w-4 text-green-500" />
-              )}
-            </div>
+             <p className="text-sm text-muted-foreground">Current Price</p>
           </div>
         </div>
       </CardContent>
       <CardFooter className="p-4 pt-0">
-        <Button className="w-full" onClick={handleBuy} disabled={isPending && !price}>
+        <Button className="w-full" onClick={handleBuy} disabled={isPending && price === product.marketPrice}>
           Buy & Vault It!
         </Button>
       </CardFooter>

@@ -52,10 +52,9 @@ export function VaultItemCard({
     const updatePriceInterval = setInterval(() => {
       startTransition(async () => {
         const newPriceData = await fetchUpdatedPrice({
-          marketPrice: item.marketPrice,
+          currentPrice: currentPrice,
         });
-        const newPrice =
-          item.marketPrice * (1 - newPriceData.discountPercentage / 100);
+        const newPrice = newPriceData.newPrice;
 
         if (newPrice > currentPrice) setPriceTrend("up");
         else if (newPrice < currentPrice) setPriceTrend("down");
@@ -76,7 +75,7 @@ export function VaultItemCard({
       clearInterval(updatePriceInterval);
       if (cooldownTimer) clearInterval(cooldownTimer);
     };
-  }, [currentPrice, item.marketPrice, item.purchaseTimestamp, isCoolingDown]);
+  }, [currentPrice, item.purchaseTimestamp, isCoolingDown]);
 
   const handleTradeIn = () => {
     tradeIn(item.id, currentPrice);
@@ -134,8 +133,8 @@ export function VaultItemCard({
             <span className="text-2xl font-black text-primary">
               ${currentPrice.toFixed(2)}
             </span>
-            {priceTrend === "up" && <TrendingUp className="h-4 w-4" />}
-            {priceTrend === "down" && <TrendingDown className="h-4 w-4" />}
+            {priceTrend === "up" && <TrendingUp className="h-4 w-4 text-green-500" />}
+            {priceTrend === "down" && <TrendingDown className="h-4 w-4 text-destructive" />}
           </div>
           <p className={`text-sm font-bold ${profitColor}`}>
             {profitLoss >= 0 ? "+" : ""}${profitLoss.toFixed(2)} (

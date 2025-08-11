@@ -1,8 +1,8 @@
 'use server';
 /**
- * @fileOverview An AI agent that sets randomized discount amounts based on market prices.
+ * @fileOverview An AI agent that simulates price fluctuations for an item.
  *
- * - getAlgorithmicPrice - A function that returns a randomized discount amount based on market prices.
+ * - getAlgorithmicPrice - A function that returns a new price based on the current price to simulate market changes.
  * - AlgorithmicPricingInput - The input type for the getAlgorithmicPrice function.
  * - AlgorithmicPricingOutput - The return type for the getAlgorithmicPrice function.
  */
@@ -11,16 +11,14 @@ import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const AlgorithmicPricingInputSchema = z.object({
-  marketPrice: z.number().describe('The current market price of the item.'),
+  currentPrice: z.number().describe('The current price of the item.'),
 });
 export type AlgorithmicPricingInput = z.infer<typeof AlgorithmicPricingInputSchema>;
 
 const AlgorithmicPricingOutputSchema = z.object({
-  discountPercentage: z
+  newPrice: z
     .number()
-    .min(1)
-    .max(99)
-    .describe('The randomized discount percentage to apply to the item.'),
+    .describe('The new, fluctuated price for the item.'),
 });
 export type AlgorithmicPricingOutput = z.infer<typeof AlgorithmicPricingOutputSchema>;
 
@@ -32,13 +30,13 @@ const prompt = ai.definePrompt({
   name: 'algorithmicPricingPrompt',
   input: {schema: AlgorithmicPricingInputSchema},
   output: {schema: AlgorithmicPricingOutputSchema},
-  prompt: `You are an expert in pricing strategy, tasked with determining a randomized discount percentage for an item based on its market price.
+  prompt: `You are a market simulator for a highly volatile, speculative product, much like a cryptocurrency.
+  Your task is to generate the next price for an item based on its current price.
 
-  The discount percentage should be between 1% and 99%, and should be influenced by the market price.
-  A higher market price should generally lead to a slightly lower discount percentage, and vice versa, but randomness is key.
+  The price should fluctuate randomly. It can go up or down slightly. The change should be small, usually less than 5% of the current price, but with occasional larger swings to simulate market volatility.
 
-  Market Price: {{marketPrice}}
-  Set a discount percentage:`,
+  Current Price: {{currentPrice}}
+  Generate the new price:`,
 });
 
 const algorithmicPricingFlow = ai.defineFlow(
