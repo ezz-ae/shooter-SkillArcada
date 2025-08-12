@@ -42,7 +42,7 @@ interface ShotTakerProps {
 const SHOT_COST = 1;
 const RIDDLE_ANSWER = 80;
 const RIDDLE_TIMER_SECONDS = 300; // 5 minutes
-const DRAW_PASSCODE_ANSWER = '0,1,2,5,8'; // L-shape on 3x3 grid
+const DRAW_PASSCODE_ANSWER = '0,3,6,7,8'; // L-shape on 3x3 grid
 const DRAW_PASSCODE_PRICE = 99;
 
 export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
@@ -461,8 +461,8 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
                 </div>
              </div>
           )}
-           {isPage && (
-             <p className="mt-4 text-muted-foreground">{product.description}</p>
+           {!isPage && !isGameCard && (
+             <p className="mt-4 text-muted-foreground h-10">{product.description}</p>
            )}
         </CardContent>
         <CardFooter className={cn("p-4 pt-2 flex-col items-center", isPage && "p-0 pt-4")}>
@@ -608,5 +608,3 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
     </>
   );
 }
-
-    

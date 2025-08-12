@@ -76,13 +76,12 @@ export default function ProductPage({ params }: { params: { id: string } }) {
            </div>
         </div>
         <div className="flex flex-col">
-            {!isGame && <h1 className="mb-2 text-3xl font-bold lg:text-4xl">{product.name}</h1>}
             <ShotTaker product={product} isPage={true} />
         </div>
       </div>
        <Card className="mt-12">
         <CardHeader>
-            <CardTitle>Product Details</CardTitle>
+            <CardTitle>{product.name}</CardTitle>
         </CardHeader>
         <CardContent>
              <div className="prose prose-invert max-w-none text-muted-foreground">
