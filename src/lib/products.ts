@@ -77,4 +77,28 @@ export const mockProducts: Product[] = [
     imageUrl: 'https://placehold.co/600x400/3C3C3D/FFFFFF/png?text=ETH',
     dataAiHint: 'ethereum crypto',
   },
+  {
+    id: 'prod_phone_03',
+    name: 'Google Pixel 9 Pro',
+    description: 'Experience Google\'s AI-powered camera and the clean, fast Android OS in its purest form.',
+    marketPrice: 1199.0,
+    imageUrl: 'https://placehold.co/600x400/7C7C7C/FFFFFF/png?text=Pixel',
+    dataAiHint: 'google pixel',
+  },
+  {
+    id: 'prod_card_02',
+    name: '$100 Steam Gift Card',
+    description: 'A gift card with a $100 balance for the ultimate PC gaming platform. Buy games, DLC, and more.',
+    marketPrice: 100.0,
+    imageUrl: 'https://placehold.co/600x400/1B2838/FFFFFF/png?text=Steam',
+    dataAiHint: 'steam logo',
+  },
+  {
+    id: 'prod_card_03',
+    name: '$150 Visa Prepaid Card',
+    description: 'A versatile prepaid card with a $150 balance. Use it online or in-store wherever Visa is accepted.',
+    marketPrice: 150.0,
+    imageUrl: 'https://placehold.co/600x400/1A1F71/FFFFFF/png?text=VISA',
+    dataAiHint: 'visa card',
+  },
 ];
