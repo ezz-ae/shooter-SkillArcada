@@ -12,10 +12,8 @@ import { TrendingDown, TrendingUp, Hourglass } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import {
   ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
 } from "@/components/ui/chart";
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
+import { Area, AreaChart } from "recharts";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 
@@ -37,7 +35,7 @@ export function ProductCard({ product }: ProductCardProps) {
   const currentPrice = priceHistory.at(-1)?.price ?? product.marketPrice;
 
   useEffect(() => {
-    const updateInterval = 5000 + Math.random() * 2000; // Stagger updates to be between 5-7 seconds
+    const updateInterval = 5000 + Math.random() * 2000; 
 
     const interval = setInterval(() => {
       startTransition(async () => {
@@ -95,88 +93,36 @@ export function ProductCard({ product }: ProductCardProps) {
       : "text-primary";
 
   return (
-    <Card className="flex flex-col overflow-hidden shadow-lg transition-shadow duration-300 hover:shadow-xl">
-      <Link href={`/product/${product.id}`} className="contents">
+    <Card className="flex flex-col overflow-hidden shadow-lg transition-all duration-300 hover:shadow-primary/20 hover:ring-2 hover:ring-primary/50">
+       <Link href={`/product/${product.id}`} className="contents group">
         <CardHeader className="p-0">
-          <div className="relative h-48 w-full">
-            <Image
-              src={product.imageUrl}
-              alt={product.name}
-              fill
-              className="object-cover"
-              data-ai-hint={product.dataAiHint}
-            />
-            <div className="absolute bottom-0 h-20 w-full bg-gradient-to-t from-black/80 to-transparent">
-              <ChartContainer
-                config={{}}
-                className="h-full w-full [&_.recharts-cartesian-axis-tick_text]:hidden"
-              >
-                <AreaChart
-                  accessibilityLayer
-                  data={priceHistory}
-                  margin={{ top: 10, right: 0, left: 0, bottom: 0 }}
-                >
-                  <defs>
-                    <linearGradient id="fillGreen" x1="0" y1="0" x2="0" y2="1">
-                      <stop
-                        offset="5%"
-                        stopColor="hsl(var(--chart-2))"
-                        stopOpacity={0.8}
-                      />
-                      <stop
-                        offset="95%"
-                        stopColor="hsl(var(--chart-2))"
-                        stopOpacity={0.1}
-                      />
-                    </linearGradient>
-                    <linearGradient id="fillRed" x1="0" y1="0" x2="0" y2="1">
-                      <stop
-                        offset="5%"
-                        stopColor="hsl(var(--destructive))"
-                        stopOpacity={0.8}
-                      />
-                      <stop
-                        offset="95%"
-                        stopColor="hsl(var(--destructive))"
-                        stopOpacity={0.1}
-                      />
-                    </linearGradient>
-                  </defs>
-                  <Area
-                    dataKey="price"
-                    type="natural"
-                    fill={
-                      priceTrend === "down" ? "url(#fillRed)" : "url(#fillGreen)"
-                    }
-                    fillOpacity={0.4}
-                    stroke={
-                      priceTrend === "down"
-                        ? "hsl(var(--destructive))"
-                        : "hsl(var(--chart-2))"
-                    }
-                    strokeWidth={2}
-                    dot={false}
-                  />
-                </AreaChart>
-              </ChartContainer>
+            <div className="relative h-48 w-full overflow-hidden">
+                <Image
+                src={product.imageUrl}
+                alt={product.name}
+                fill
+                className="object-cover transition-transform duration-500 group-hover:scale-105"
+                data-ai-hint={product.dataAiHint}
+                />
             </div>
-          </div>
         </CardHeader>
-        <CardContent className="flex-grow p-4">
-          <CardTitle className="mb-2 text-lg font-bold group-hover:underline">
+        <CardContent className="flex-grow p-4 space-y-4">
+          <CardTitle className="text-lg font-bold group-hover:text-primary transition-colors">
             {product.name}
           </CardTitle>
-          <div className="mt-4 flex items-center justify-between">
+            
+          <div className="flex items-end justify-between">
             <div>
-              <div className="flex items-center gap-2">
-                <div
+              <p className="text-sm text-muted-foreground">Current Price</p>
+               <div className="flex items-baseline gap-2">
+                 <div
                   className={cn(
-                    "text-2xl font-black transition-colors duration-300",
+                    "text-3xl font-black transition-colors duration-300",
                     priceColor
                   )}
                 >
                   {isPending && priceHistory.length <= 1 ? (
-                    <Hourglass className="h-6 w-6 animate-spin" />
+                    <Hourglass className="h-7 w-7 animate-spin" />
                   ) : (
                     `$${currentPrice.toFixed(2)}`
                   )}
@@ -190,7 +136,38 @@ export function ProductCard({ product }: ProductCardProps) {
                   )}
                 </div>
               </div>
-              <p className="text-sm text-muted-foreground">Current Price</p>
+            </div>
+            <div className="h-10 w-24">
+               <ChartContainer
+                config={{}}
+                className="h-full w-full"
+              >
+                <AreaChart
+                  accessibilityLayer
+                  data={priceHistory}
+                  margin={{ top: 5, right: 0, left: 0, bottom: 0 }}
+                >
+                  <defs>
+                    <linearGradient id="fillGreenCard" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="hsl(var(--chart-2))" stopOpacity={0.8}/>
+                      <stop offset="95%" stopColor="hsl(var(--chart-2))" stopOpacity={0.1}/>
+                    </linearGradient>
+                    <linearGradient id="fillRedCard" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="hsl(var(--destructive))" stopOpacity={0.8}/>
+                      <stop offset="95%" stopColor="hsl(var(--destructive))" stopOpacity={0.1}/>
+                    </linearGradient>
+                  </defs>
+                  <Area
+                    dataKey="price"
+                    type="natural"
+                    fill={priceTrend === "down" ? "url(#fillRedCard)" : "url(#fillGreenCard)"}
+                    fillOpacity={0.4}
+                    stroke={priceTrend === "down" ? "hsl(var(--destructive))" : "hsl(var(--chart-2))"}
+                    strokeWidth={2}
+                    dot={false}
+                  />
+                </AreaChart>
+              </ChartContainer>
             </div>
           </div>
         </CardContent>

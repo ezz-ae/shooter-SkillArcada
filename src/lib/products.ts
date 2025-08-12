@@ -11,16 +11,16 @@ export interface Product {
 export const mockProducts: Product[] = [
   {
     id: 'prod_001',
-    name: "Vintage 'Cosmic Rift' Arcade Machine",
+    name: "Cosmic Rift Arcade",
     description:
       "A fully restored, original 1983 'Cosmic Rift' arcade cabinet. Features a CRT monitor, authentic joystick and buttons, and the classic 8-bit soundtrack. A true collector's item.",
     marketPrice: 2500.0,
     imageUrl: 'https://placehold.co/600x400.png',
-    dataAiHint: 'arcade machine',
+    dataAiHint: 'vintage arcade',
   },
   {
     id: 'prod_002',
-    name: 'Limited Edition Holographic Sneakers',
+    name: 'Holographic Sneakers',
     description:
       "Step into the future with these limited run sneakers. The synthetic upper is coated in a light-refractive material that creates a stunning holographic effect with every movement.",
     marketPrice: 750.0,
@@ -29,7 +29,7 @@ export const mockProducts: Product[] = [
   },
   {
     id: 'prod_003',
-    name: 'Self-Watering Smart Planter',
+    name: 'Smart Planter',
     description:
       'The perfect solution for the forgetful plant parent. This planter uses integrated sensors to detect soil moisture and automatically waters your plants when needed. Connects to your phone via Bluetooth.',
     marketPrice: 120.5,
@@ -38,7 +38,7 @@ export const mockProducts: Product[] = [
   },
   {
     id: 'prod_004',
-    name: 'Gourmet Molecular Gastronomy Kit',
+    name: 'Gastronomy Kit',
     description:
       'Transform your kitchen into a food laboratory. This kit includes everything you need to get started with spherification, gelification, and emulsification. Includes a recipe book with 20 mind-bending recipes.',
     marketPrice: 199.99,
@@ -52,11 +52,11 @@ export const mockProducts: Product[] = [
       'Experience personal levitation with the latest in magnetic field technology. The GRAV-LEVITRON offers a smooth, frictionless ride up to 15cm off the ground. Max speed of 25 km/h.',
     marketPrice: 1850.0,
     imageUrl: 'https://placehold.co/600x400.png',
-    dataAiHint: 'hoverboard',
+    dataAiHint: 'futuristic hoverboard',
   },
   {
     id: 'prod_006',
-    name: 'Retro-Futuristic Nixie Tube Clock',
+    name: 'Nixie Tube Clock',
     description:
       'A stunning conversation piece that blends Cold War-era technology with modern design. Genuine, new-old-stock Nixie tubes display the time in a warm, orange glow. Solid wood base.',
     marketPrice: 350.0,
@@ -65,7 +65,7 @@ export const mockProducts: Product[] = [
   },
   {
     id: 'prod_007',
-    name: 'AI-Powered Personal Chef Bot',
+    name: 'Personal Chef Bot',
     description:
       "The 'Culinary-tron 5000' can prepare over 10,000 recipes from its internal database. Simply add ingredients and let it do the chopping, mixing, and cooking. Cleans itself after use.",
     marketPrice: 3200.0,
@@ -74,7 +74,7 @@ export const mockProducts: Product[] = [
   },
   {
     id: 'prod_008',
-    name: "Signed First Edition 'Neuromancer'",
+    name: "Signed 'Neuromancer'",
     description:
       "A rare, signed first edition of William Gibson's seminal cyberpunk novel. In mint condition, complete with original dust jacket. A must-have for any serious science fiction collector.",
     marketPrice: 4800.0,
@@ -92,7 +92,7 @@ export const mockProducts: Product[] = [
   },
   {
     id: 'prod_010',
-    name: 'Personal Weather Control Drone',
+    name: 'Weather Control Drone',
     description:
       "The 'Atmo-Sphere 2' can influence a 50-meter radius microclimate. Uses cloud-seeding technology to generate small amounts of rain or ultrasonic waves to dissipate fog. Requires licensing in some areas.",
     marketPrice: 7800.0,
@@ -119,7 +119,7 @@ export const mockProducts: Product[] = [
   },
   {
     id: 'prod_013',
-    name: "'Pocket Galaxy' Mini Hologram Projector",
+    name: "'Pocket Galaxy' Projector",
     description:
       'Project a stunning, rotating 3D model of the Milky Way galaxy in the palm of your hand. A mesmerizing and educational desk toy for all ages.',
     marketPrice: 150.0,
@@ -128,7 +128,7 @@ export const mockProducts: Product[] = [
   },
   {
     id: 'prod_014',
-    name: "'Aura-Ring' Mood & Biometric Tracker",
+    name: "'Aura' Biometric Ring",
     description:
       'A sleek, minimalist ring that monitors your heart rate, sleep patterns, and body temperature. The exterior surface changes color to reflect your current emotional state.',
     marketPrice: 280.0,
@@ -137,7 +137,7 @@ export const mockProducts: Product[] = [
   },
   {
     id: 'prod_015',
-    name: "'Zenith' Levitating Air Bonsai Pot",
+    name: "Levitating Bonsai Pot",
     description:
       'Cultivate a sense of calm with this magical bonsai pot that floats and rotates gently above its magnetic base. A perfect fusion of nature and technology.',
     marketPrice: 180.5,
@@ -146,7 +146,7 @@ export const mockProducts: Product[] = [
   },
   {
     id: 'prod_016',
-    name: 'Cryo-Stasis Sleep Pod (Rental)',
+    name: 'Cryo-Stasis Sleep Pod',
     description:
       'Skip ahead in time with our weekly cryo-stasis rental service. Experience suspended animation in the comfort of your own home. For novelty and entertainment purposes only.',
     marketPrice: 5500.0,
@@ -155,7 +155,7 @@ export const mockProducts: Product[] = [
   },
   {
     id: 'prod_017',
-    name: 'Sonic-Cleanse Multi-Tool',
+    name: 'Sonic-Cleanse Tool',
     description:
       'Cleans anything at a microscopic level using high-frequency ultrasonic waves. Perfect for jewelry, electronics, and delicate instruments. Just add water.',
     marketPrice: 95.99,
@@ -164,7 +164,7 @@ export const mockProducts: Product[] = [
   },
   {
     id: 'prod_018',
-    name: "Autonomous 'Courier-Bot' Companion",
+    name: "Autonomous Courier-Bot",
     description:
       'This friendly, six-wheeled robot will follow you anywhere, carrying up to 20kg of your belongings. Features autonomous navigation and a secure, locked compartment.',
     marketPrice: 2100.0,
@@ -173,7 +173,7 @@ export const mockProducts: Product[] = [
   },
   {
     id: 'prod_019',
-    name: 'Graphene-Weave All-Weather Jacket',
+    name: 'Graphene All-Weather Jacket',
     description:
       'Impossibly thin and light, yet stronger than steel and fully waterproof. This jacket incorporates a graphene weave for unparalleled durability and weather resistance. Self-regulating temperature.',
     marketPrice: 620.0,
@@ -187,6 +187,6 @@ export const mockProducts: Product[] = [
       "The last power bank you'll ever need. Utilizes a stable, cold fusion reaction to provide a near-limitless supply of clean energy. Can power a small home for a week. Handle with care.",
     marketPrice: 15000.0,
     imageUrl: 'https://placehold.co/600x400.png',
-    dataAiHint: 'power bank',
+    dataAiHint: 'fusion generator',
   },
 ];
