@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -79,35 +79,86 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
   const { addToVault, walletBalance, spendShot, hasSeenShotInfo, setHasSeenShotInfo } = useStore();
   const { toast } = useToast();
   
-  const getNewPrice = (price: number) => {
-      const volatility = 0.1;
-      const changePercent = (Math.random() - 0.5) * volatility;
-      let newPrice = price * (1 + changePercent);
-      newPrice = Math.max(1, newPrice);
-      return newPrice;
-  }
-
   const isGame = product.game && ['reel-pause', 'riddle-calc', 'draw-passcode'].includes(product.game);
+  
+  // Advanced pricing model state
+  const priceState = useRef({
+      lastChangeTime: Date.now(),
+      timeInDiscountZone: 0,
+      currentTrend: 'stable', // 'stable', 'diving', 'climbing'
+  }).current;
+
+  const getNewPrice = useCallback((price: number, marketPrice: number) => {
+    const now = Date.now();
+    const discount = (marketPrice - price) / marketPrice;
+    
+    // Rule enforcement for discount zones
+    if (discount > 0.5 && now - priceState.lastChangeTime > 1000) { // Over 50% discount
+        priceState.currentTrend = 'climbing';
+        return marketPrice * (0.5 + Math.random() * 0.4); // Jump back up
+    }
+    if (discount > 0.4 && now - priceState.lastChangeTime > 2000) { // Over 40% discount
+        priceState.currentTrend = 'climbing';
+        return marketPrice * (0.6 + Math.random() * 0.3); // Jump back up
+    }
+
+    // Resting in the safe zone
+    if (discount < 0.1 && priceState.currentTrend !== 'diving') { // Under 10% discount
+        if (Math.random() < 0.3) { // 30% chance to just stay put for a bit
+            priceState.currentTrend = 'stable';
+            return price;
+        }
+        if (Math.random() < 0.1) { // 10% chance to start diving
+            priceState.currentTrend = 'diving';
+        }
+    }
+    
+    let newPrice;
+    const majorVolatility = 0.3 + Math.random() * 0.4; // Very volatile
+    const minorVolatility = 0.05;
+
+    if (priceState.currentTrend === 'diving') {
+        newPrice = price * (1 - majorVolatility * Math.random());
+        if (discount > 0.6 || Math.random() < 0.2) { // If discount gets big, or 20% chance, start climbing
+            priceState.currentTrend = 'climbing';
+        }
+    } else if (priceState.currentTrend === 'climbing') {
+        newPrice = price * (1 + majorVolatility * Math.random() * 0.5);
+         if (discount < 0.1) { // Once it reaches the safe zone
+            priceState.currentTrend = 'stable';
+        }
+    } else { // 'stable' or random walk
+        const changePercent = (Math.random() - 0.5) * minorVolatility;
+        newPrice = price * (1 + changePercent);
+    }
+    
+    newPrice = Math.max(1, newPrice); // Never go below $1
+    newPrice = Math.min(newPrice, marketPrice * 1.1); // Cap at 110% of market price
+
+    priceState.lastChangeTime = now;
+    return newPrice;
+
+  }, [priceState]);
 
   useEffect(() => {
     let isMounted = true;
     if (!isGame) {
       const priceInterval = setInterval(() => {
         if (!isMounted) return;
-        const newPrice = getNewPrice(currentPrice);
+        const newPrice = getNewPrice(currentPrice, product.marketPrice);
         setCurrentPrice(newPrice);
         setPriceHistory(prev => {
           const newHistory = [...prev.slice(1), { time: prev[prev.length - 1].time + 1, price: newPrice }];
           return newHistory;
         });
-      }, 700 + Math.random() * 600);
+      }, 300 + Math.random() * 400);
 
       return () => {
           isMounted = false;
           clearInterval(priceInterval);
       };
     }
-  }, [isGame, currentPrice]);
+  }, [isGame, currentPrice, product.marketPrice, getNewPrice]);
   
   // Cleanup intervals on component unmount
   useEffect(() => {
@@ -176,7 +227,11 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
     
     handleTakeShot(() => {
         if (product.game === 'multi-shot') {
-            const prices = [getNewPrice(currentPrice), getNewPrice(currentPrice), getNewPrice(currentPrice)];
+            const prices = [
+              getNewPrice(currentPrice, product.marketPrice), 
+              getNewPrice(currentPrice, product.marketPrice), 
+              getNewPrice(currentPrice, product.marketPrice)
+            ];
             setCapturedPrices(prices);
             setSelectedPrice(prices[0]);
         } else {
@@ -394,7 +449,7 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
                   <AreaChart data={priceHistory} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
                     <defs>
                       <linearGradient id="chart-fill" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.2} />
+                        <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.1} />
                         <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0.05} />
                       </linearGradient>
                     </defs>
@@ -618,3 +673,5 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
     </>
   );
 }
+
+    
