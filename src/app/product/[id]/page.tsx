@@ -24,14 +24,17 @@ export default function ProductPage({ params }: { params: { id: string } }) {
         </Link>
       </div>
        <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-         <div className="relative h-96 w-full md:h-full">
+         <div className="relative h-96 w-full overflow-hidden rounded-lg shadow-lg md:h-full">
            <Image
             src={product.imageUrl}
             alt={product.name}
             fill
-            className="rounded-lg object-cover shadow-lg"
+            className="object-cover"
             data-ai-hint={product.dataAiHint}
           />
+           <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent p-4 pt-8">
+              <h3 className="text-white text-lg font-bold text-center">{product.subtitle}</h3>
+           </div>
         </div>
         <div className="flex flex-col">
             <h1 className="mb-2 text-3xl font-bold lg:text-4xl">{product.name}</h1>
@@ -41,5 +44,3 @@ export default function ProductPage({ params }: { params: { id: string } }) {
     </div>
   );
 }
-
-    

@@ -367,17 +367,14 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
                   data-ai-hint={product.dataAiHint}
                 />
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent p-2 pt-4">
+                  <h3 className="text-white text-sm font-semibold text-center truncate">{product.subtitle}</h3>
+                </div>
               </div>
             </CardHeader>
           </Link>
         )}
         <CardContent className={cn("flex-grow p-4 pb-2 space-y-2", isPage && "p-0 pt-4")}>
-          <Link href={`/product/${product.id}`} className="flex-grow">
-            <h2 className="text-lg font-bold truncate group-hover:text-primary transition-colors">
-              {product.name}
-            </h2>
-          </Link>
-
            {isGameCard ? (
              <div className="text-sm text-muted-foreground min-h-[6rem]" />
            ) : (
@@ -400,7 +397,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
                 <div className="relative z-10 flex flex-col items-center justify-center h-full">
                   <span className={cn(
                     "font-black tracking-wider text-white shimmer-text",
-                     isPage ? "text-4xl lg:text-5xl" : "text-3xl lg:text-4xl"
+                     isPage ? "text-4xl lg:text-6xl" : "text-3xl lg:text-4xl"
                     )} style={{'--trend-color': 'hsl(var(--primary))'} as React.CSSProperties}>${currentPrice.toFixed(2)}</span>
                   <span className={cn("font-bold text-sm", discountColor)}>
                       {discountPercent > 0 && '+'}{discountPercent.toFixed(1)}%
@@ -518,5 +515,3 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
     </>
   );
 }
-
-    
