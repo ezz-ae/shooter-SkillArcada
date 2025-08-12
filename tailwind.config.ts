@@ -98,20 +98,26 @@ export default {
           '80%': { opacity: '1' },
           '100%': { opacity: '0' },
         },
-        'cue-stick-aim': {
+        'cue-stick-aim-subtle': {
           '0%, 100%': { transform: 'translateX(0)' },
-          '50%': { transform: 'translateX(-20px)' },
+          '50%': { transform: 'translateX(-5px)' },
         },
-        'cue-stick-shot': {
-          '0%': { transform: 'translateX(-20px)' },
-          '20%': { transform: 'translateX(50px)' },
-          '100%': { transform: 'translateX(50px)' },
+        'cue-stick-charge': {
+          '0%': { transform: 'translateX(-5px)' },
+          '100%': { transform: 'translateX(var(--shot-power))' },
         },
-        'cue-ball-shot': {
-          '0%': { transform: 'translateX(0)' },
-          '20%': { transform: 'translateX(0)' },
-          '70%': { transform: 'translateX(250%)' },
-          '100%': { transform: 'translateX(250%)' },
+        'cue-stick-release': {
+          '0%': { transform: 'translateX(var(--shot-power))' },
+          '20%': { transform: 'translateX(20px)', opacity: '1' },
+          '100%': { transform: 'translateX(20px)', opacity: '0' },
+        },
+        'cue-ball-release': {
+            '0%': { transform: 'translate(-50%, -50%)' },
+            '100%': { transform: 'translate(calc(var(--shot-power) - 50%), -50%)' },
+        },
+        '8-ball-sink': {
+            '0%': { transform: 'translateY(-50%) scale(1)', opacity: '1' },
+            '100%': { transform: 'translateY(200%) scale(0.5)', opacity: '0' },
         },
       },
       animation: {
@@ -122,9 +128,11 @@ export default {
         'shimmer': 'shimmer 1.5s linear infinite',
         'border-pulse': 'border-pulse 2s infinite',
         'fade-out': 'fade-out 4s ease-out forwards',
-        'cue-stick-aim': 'cue-stick-aim 1s ease-in-out infinite',
-        'cue-stick-shot': 'cue-stick-shot 1s ease-out forwards',
-        'cue-ball-shot': 'cue-ball-shot 1.5s ease-out forwards 0.2s',
+        'cue-stick-aim-subtle': 'cue-stick-aim-subtle 1.5s ease-in-out infinite',
+        'cue-stick-charge': 'cue-stick-charge 0.5s ease-out forwards',
+        'cue-stick-release': 'cue-stick-release 0.3s ease-out forwards',
+        'cue-ball-release': 'cue-ball-release 1s ease-out forwards',
+        '8-ball-sink': '8-ball-sink 1s ease-in forwards 1s',
       },
     },
   },
