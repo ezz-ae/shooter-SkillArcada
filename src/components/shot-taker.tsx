@@ -461,9 +461,6 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
                 </div>
              </div>
           )}
-           {!isPage && !isGameCard && (
-             <p className="mt-4 text-muted-foreground h-10">{product.description}</p>
-           )}
         </CardContent>
         <CardFooter className={cn("p-4 pt-2 flex-col items-center", isPage && "p-0 pt-4")}>
           {isGameCard ? renderGameFooter() : (
