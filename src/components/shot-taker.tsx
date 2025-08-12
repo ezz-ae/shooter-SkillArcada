@@ -259,8 +259,8 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
     } else {
       toast({
         variant: "destructive",
-        title: "Out of Luckshots!",
-        description: `You need ${cost} Luckshot(s) to play. Go to your vault to trade-in items for more.`,
+        title: "Out of Shots!",
+        description: `You need ${cost} Shot(s) to play. Go to your vault to trade-in items for more.`,
       });
     }
   }
@@ -575,7 +575,7 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
                         <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0} />
                       </linearGradient>
                     </defs>
-                    <Tooltip content={<></>} />
+                    <Tooltip content={<div />} />
                     <Area type="monotone" dataKey="price" stroke="hsl(var(--primary))" strokeWidth={2} fill="url(#chart-fill)" />
                   </AreaChart>
                 </ChartContainer>
@@ -658,7 +658,7 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
                   <Target className="h-8 w-8 text-primary mt-1"/>
                   <div>
                     <h3 className="font-bold">Take a Shot</h3>
-                    <p className="text-sm text-muted-foreground">Click the 'Shot' button on an item to lock in its current price. This costs 1 Luckshot from your balance.</p>
+                    <p className="text-sm text-muted-foreground">Click the 'Shot' button on an item to lock in its current price. This costs 1 Shot from your balance.</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
