@@ -27,6 +27,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export default function Home() {
     const { isAuthenticated, user, login, isNewUser, hasAcceptedTerms, acceptTerms } = useAuth();
@@ -35,6 +36,7 @@ export default function Home() {
       { id: 'c2', prize: 100, fee: 10, player1: mockUsers[2], player2: null },
       { id: 'c3', prize: 500, fee: 25, player1: mockUsers[3], player2: null },
     ]);
+    const [isAgreed, setIsAgreed] = useState(false);
     
     // Auto-login for guest users
     useEffect(() => {
@@ -93,19 +95,28 @@ export default function Home() {
                 <AlertDialogHeader>
                   <AlertDialogTitle className="flex items-center gap-2">
                     <FileText className="text-primary"/>
-                    Welcome to Luckshots!
+                    Please verify the following
                   </AlertDialogTitle>
-                  <AlertDialogDescription className="pt-2">
-                    Before you can play, please review and accept our terms of service. Our games involve spending and winning "Shots," which have a real-world value.
-                    <br/><br/>
-                    By clicking "Accept," you agree to our{' '}
+                  <AlertDialogDescription className="pt-4 text-left">
+                    Our games involve real value. Before playing, please confirm the following points. You can review our full terms anytime.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+
+                <div className="flex items-start space-x-3 rounded-md border p-4">
+                    <Checkbox id="terms" checked={isAgreed} onCheckedChange={(checked) => setIsAgreed(checked as boolean)} />
+                    <label htmlFor="terms" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                        I am over 18, I understand the risks of loss/win, and I assure you this money is my own.
+                    </label>
+                </div>
+                 <div className="text-sm text-muted-foreground">
+                    By clicking accept, you also agree to our full{' '}
                     <Link href="/terms" target="_blank" className="underline hover:text-primary">
                         Terms of Service
                     </Link>.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
+                 </div>
+
                 <AlertDialogFooter>
-                  <AlertDialogAction onClick={acceptTerms}>Accept & Play</AlertDialogAction>
+                  <AlertDialogAction onClick={acceptTerms} disabled={!isAgreed}>I Understand and Accept</AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
@@ -223,5 +234,3 @@ export default function Home() {
         </div>
     );
 }
-
-    
