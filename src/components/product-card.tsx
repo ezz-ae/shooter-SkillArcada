@@ -37,7 +37,7 @@ export function ProductCard({ product }: ProductCardProps) {
   const currentPrice = priceHistory.at(-1)?.price ?? product.marketPrice;
 
   useEffect(() => {
-    const updateInterval = 500 + Math.random() * 1000; 
+    const updateInterval = 100 + Math.random() * 400; 
 
     const interval = setInterval(() => {
       startTransition(async () => {
