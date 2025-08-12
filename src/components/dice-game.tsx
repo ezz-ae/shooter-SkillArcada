@@ -4,8 +4,10 @@
 import { useState, useMemo } from 'react';
 import { Button } from './ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
-import { Dices, PlayCircle, HelpCircle, Gamepad2, BrainCircuit } from 'lucide-react';
+import { Dices, PlayCircle, HelpCircle, Gamepad2, BrainCircuit, Dice1, Dice2, Dice3, Dice4, Dice5, Dice6 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+
+const diceIcons = [Dice1, Dice2, Dice3, Dice4, Dice5, Dice6];
 
 export function DiceGame() {
     const [rolls, setRolls] = useState<number[]>([]);
@@ -18,12 +20,11 @@ export function DiceGame() {
         if (rollsLeft <= 0 || isRolling) return;
 
         setIsRolling(true);
-        // Simulate a roll with a brief delay
         setTimeout(() => {
             const newRoll = Math.floor(Math.random() * 6) + 1;
             setRolls(prev => [...prev, newRoll]);
             setIsRolling(false);
-        }, 500);
+        }, 800);
     };
 
     const handleReset = () => {
@@ -73,20 +74,21 @@ export function DiceGame() {
                     {[...Array(MAX_ROLLS)].map((_, i) => {
                         const rollValue = rolls[i];
                         const isRolled = rollValue !== undefined;
-                        const isLastRoll = i === rolls.length - 1 && isRolling;
+                        const isCurrentlyRolling = i === rolls.length && isRolling;
+
+                        const DieIcon = isRolled ? diceIcons[rollValue - 1] : Dices;
 
                         return (
                             <div key={i} className={cn(
-                                "h-16 w-16 rounded-lg border-2 flex items-center justify-center transition-all duration-300",
+                                "h-20 w-20 rounded-lg border-2 flex items-center justify-center transition-all duration-300",
                                 isRolled ? "bg-primary/10 border-primary" : "bg-muted border-dashed",
-                                isRolling && !isRolled && "animate-pulse",
-                                isLastRoll && "animate-bounce"
+                                isCurrentlyRolling && "animate-pulse"
                             )}>
-                                {isRolled ? (
-                                    <span className="text-4xl font-bold">{rollValue}</span>
-                                ) : (
-                                    <span className="text-4xl font-bold text-muted-foreground">?</span>
-                                )}
+                               <DieIcon className={cn(
+                                    "transition-all duration-500",
+                                    isCurrentlyRolling ? "h-12 w-12 text-primary animate-[spin_0.8s_ease-in-out]" : "h-10 w-10",
+                                    isRolled ? "text-primary" : "text-muted-foreground"
+                               )} />
                             </div>
                         )
                     })}
