@@ -190,6 +190,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
 
     if (newLockedDigits.length === 3) {
       stopDigitGame();
+      setIsGameActive(false);
     }
   };
 
@@ -219,9 +220,9 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
   }
 
   const resetDigitGame = () => {
-      setIsGameActive(false); // This will trigger a restart via useEffect
       setLockedDigits([]);
       setDigits([0,0,0]);
+      startDigitGame();
   }
 
 
@@ -244,7 +245,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
                   key={index}
                   onClick={() => handleDigitClick(index)}
                   disabled={lockedDigits.length !== index}
-                  className="h-16 w-1/3 bg-secondary rounded-lg flex items-center justify-center text-5xl font-black text-primary-foreground tabular-nums disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                  className="h-16 w-1/3 bg-secondary rounded-lg flex items-center justify-center text-5xl font-black text-primary-foreground tabular-nums disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:enabled:bg-primary/80"
                   >
                   {lockedDigits.length > index ? '?' : digits[index]}
                   </button>
