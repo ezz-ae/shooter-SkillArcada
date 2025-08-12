@@ -196,13 +196,11 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
         </CardContent>
         <CardFooter className={cn("p-4 pt-0", isPage && "p-0 pt-4")}>
           <button
-            className="w-full h-12 text-md font-bold text-primary-foreground rounded-md relative overflow-hidden bg-secondary"
+            className="w-full h-12 text-md font-bold text-primary-foreground rounded-md relative overflow-hidden bg-secondary flex items-center justify-center"
             onClick={handleShot}
           >
             <div className="absolute inset-0 moving-gradient"></div>
-            <div className="absolute inset-0 flex items-center justify-center price-runner">
-                <span className="font-black text-lg">Take a Shot! ($1.00)</span>
-            </div>
+            <span className="relative font-black text-lg">Take a Shot! ($1.00)</span>
           </button>
         </CardFooter>
       </CardComponent>
