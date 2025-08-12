@@ -23,7 +23,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { FaChess } from "react-icons/fa";
 
 export function Header() {
-  const { luckshots } = useStore();
+  const { shots } = useStore();
   const { isAuthenticated, user, logout, initializeAuth } = useAuth();
   const [isClient, setIsClient] = useState(false);
 
@@ -33,10 +33,10 @@ export function Header() {
     return () => unsubscribe();
   }, [initializeAuth]);
 
-  const displayShots = isClient ? luckshots.toFixed(2) : '0.00';
+  const displayShots = isClient ? shots.toFixed(2) : '0.00';
 
   const gameNavItems = [
-    { href: "/luckshots", label: "Luckshots", icon: Dice5 },
+    { href: "/shotershots", label: "ShoterShots", icon: Dice5 },
     { href: "/brainshots", label: "Brainshots", icon: BrainCircuit },
     { href: "/crypto-luck", label: "Crypto Luck", icon: LineChart },
     { href: "/pool-shot", label: "Pool Shot", icon: Swords },
@@ -55,7 +55,7 @@ export function Header() {
       <div className="container flex h-16 items-center">
         <div className="mr-auto flex items-center">
           <Link href="/" className="mr-6 flex items-center space-x-2">
-            <svg
+             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
               height="24"
@@ -67,13 +67,12 @@ export function Header() {
               strokeLinejoin="round"
               className="h-6 w-6 text-primary"
             >
-              <path d="M12 2a10 10 0 1 0 10 10" />
-              <path d="M12 2a10 10 0 1 0 10 10" />
-              <path d="m15 9-6 6" />
-              <path d="M9 9h.01" />
-              <path d="M15 15h.01" />
+              <path d="M2 3h20" />
+              <path d="M2.92 3C2.42 8.33 4.13 14.32 8 18" />
+              <path d="M21.08 3c.5 5.33-1.21 11.32-5.08 15" />
+              <path d="M8 18c2 2 4 3 6 3s4-1 6-3" />
             </svg>
-            <span className="font-bold">Luckshots</span>
+            <span className="font-bold">ShoterShots</span>
           </Link>
           <nav className="hidden md:flex items-center space-x-1">
              <DropdownMenu>
@@ -161,7 +160,7 @@ export function Header() {
             </DropdownMenu>
             </>
           ) : (
-            <Button variant="outline">
+             <Button variant="outline" onClick={() => (window as any).location.reload() }>
               <DoorOpen className="mr-2" />
               Sign In
             </Button>
