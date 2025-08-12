@@ -2,12 +2,10 @@
 "use client";
 
 import Link from "next/link";
-import { Package, Target, BrainCircuit, Heart, Swords, Dice5, User, LogOut, LineChart, Gamepad2, ChevronDown, DoorOpen, Grid } from "lucide-react";
+import { Package, BrainCircuit, Heart, Swords, User, LogOut, BookOpen } from "lucide-react";
 import { Button } from "./ui/button";
 import { useStore } from "@/lib/store";
 import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
-import { cn } from "@/lib/utils";
 import { ThemeToggle } from "./theme-toggle";
 import { useAuth } from "@/lib/auth";
 import {
@@ -19,8 +17,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuGroup,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { FaChess } from "react-icons/fa";
+import { Avatar, AvatarFallback } from "./ui/avatar";
 
 export function Header() {
   const { shots } = useStore();
@@ -35,28 +32,13 @@ export function Header() {
 
   const displayShots = isClient && typeof shots === 'number' ? shots.toFixed(2) : '0.00';
 
-  const gameNavItems = [
-    { href: "/shotershots", label: "ShoterShots", icon: Dice5 },
-    { href: "/brainshots", label: "Brainshots", icon: BrainCircuit },
-    { href: "/crypto-luck", label: "Crypto Luck", icon: LineChart },
-    { href: "/pool-shot", label: "Pool Shot", icon: Swords },
-    { href: "/chess", label: "Chess", icon: FaChess as any },
-    { href: "/board-games", label: "Board Games", icon: Grid },
-    { href: "/luckgirls", label: "Luckgirls", icon: Heart },
-  ];
-
-  const challengeNavItems = [
-    { href: "/pool-shot", label: "Pool Challenges", icon: Swords },
-    { href: "/chess", label: "Chess Challenges", icon: FaChess as any },
-  ]
-
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center">
         <div className="mr-auto flex items-center">
           <Link href="/" className="mr-6 flex items-center space-x-2">
-             <svg
-              xmlns="http://www.w3.org/2000/svg"
+            <svg
+              role="img"
               width="24"
               height="24"
               viewBox="0 0 24 24"
@@ -67,59 +49,34 @@ export function Header() {
               strokeLinejoin="round"
               className="h-6 w-6 text-primary"
             >
-              <path d="M2 3h20" />
-              <path d="M2.92 3C2.42 8.33 4.13 14.32 8 18" />
-              <path d="M21.08 3c.5 5.33-1.21 11.32-5.08 15" />
-              <path d="M8 18c2 2 4 3 6 3s4-1 6-3" />
+                <title>ShoterShots Logo</title>
+                <path d="M2 3h20"></path>
+                <path d="M2.92 3C2.42 8.33 4.13 14.32 8 18"></path>
+                <path d="M21.08 3c.5 5.33-1.21 11.32-5.08 15"></path>
+                <path d="M8 18c2 2 4 3 6 3s4-1 6-3"></path>
+                <path d="M12 3v18"></path>
             </svg>
             <span className="font-bold">ShoterShots</span>
           </Link>
           <nav className="hidden md:flex items-center space-x-1">
-             <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost">
-                    <Gamepad2 className="h-5 w-5 mr-2" />
-                    Games
-                    <ChevronDown className="h-4 w-4 ml-1" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                {gameNavItems.map((item) => (
-                    <DropdownMenuItem key={item.href} asChild>
-                        <Link href={item.href} className="flex items-center gap-2">
-                           <item.icon className="h-4 w-4" />
-                           {item.label}
-                        </Link>
-                    </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost">
-                    <Swords className="h-5 w-5 mr-2" />
-                    Challenges
-                    <ChevronDown className="h-4 w-4 ml-1" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                {challengeNavItems.map((item) => (
-                    <DropdownMenuItem key={item.label} asChild>
-                        <Link href={item.href} className="flex items-center gap-2">
-                           <item.icon className="h-4 w-4" />
-                           {item.label}
-                        </Link>
-                    </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+             <Button variant="ghost" asChild>
+                <Link href="/shotershots">ShoterShots</Link>
+             </Button>
+             <Button variant="ghost" asChild>
+                <Link href="/brainshots">Brainshots</Link>
+             </Button>
+             <Button variant="ghost" asChild>
+                <Link href="/pool-shot">Pool Shot</Link>
+             </Button>
+             <Button variant="ghost" asChild>
+                <Link href="/learning-center">How to Earn</Link>
+             </Button>
           </nav>
         </div>
         <div className="flex flex-1 items-center justify-end space-x-2">
           {isClient && isAuthenticated && user ? (
             <>
             <div className="hidden sm:flex items-center space-x-2 text-sm font-medium p-2 bg-secondary rounded-md">
-                <Target className="h-5 w-5 text-accent" />
                 <span>Shots: {displayShots}</span>
             </div>
             
@@ -127,13 +84,10 @@ export function Header() {
               <DropdownMenuTrigger asChild>
                 <Button variant="secondary" className="flex items-center gap-2">
                     <Avatar className="h-7 w-7">
-                        {/* Fallback for anonymous users or users without avatar */}
                         <AvatarFallback className="bg-primary text-primary-foreground text-xs font-bold">
                           {user.uid.substring(0, 2).toUpperCase()}
                         </AvatarFallback>
                     </Avatar>
-                    <span className="font-mono hidden md:inline">{user.uid.substring(0, 6)}...</span>
-                    <ChevronDown className="h-4 w-4"/>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
@@ -143,7 +97,7 @@ export function Header() {
                     <DropdownMenuItem asChild>
                          <Link href="/vault">
                             <Package className="mr-2 h-4 w-4" />
-                            <span>Vault</span>
+                            <span>Vault & Wallet</span>
                          </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
@@ -161,7 +115,6 @@ export function Header() {
             </>
           ) : (
              <Button variant="outline" onClick={() => (window as any).location.reload() }>
-              <DoorOpen className="mr-2" />
               Sign In
             </Button>
           )}

@@ -6,7 +6,7 @@ import Image from "next/image";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
 import { useStore, type VaultItem } from "@/lib/store";
-import { TrendingDown, TrendingUp, Hourglass, Check, Gift, Gem } from "lucide-react";
+import { TrendingDown, TrendingUp, Hourglass, Check, Gem } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import {
   AlertDialog,
@@ -80,22 +80,15 @@ export function VaultItemCard({
     };
   }, [currentValue, item.purchaseTimestamp, isCoolingDown, item.marketPrice]);
 
-  const handleTradeIn = (tradeInForShots: boolean) => {
+  const handleTradeIn = () => {
     const vaultItemKey = `${item.id}-${item.purchaseTimestamp}`;
-    const tradeInValue = tradeInForShots ? Math.round(currentValue) : 20;
+    const tradeInValue = Math.round(currentValue);
     tradeIn(vaultItemKey, tradeInValue);
 
-    if (tradeInForShots) {
-       toast({
+    toast({
         title: "Trade-in Successful!",
         description: `You received ${tradeInValue.toFixed(2)} Shots for ${item.name}.`,
-      });
-    } else {
-        toast({
-            title: "Trade-in Successful!",
-            description: `You received 20 Luckshots for ${item.name}. This is a legacy option.`,
-        });
-    }
+    });
   };
 
   const profitLoss = currentValue - item.pricePaid;
@@ -170,27 +163,21 @@ export function VaultItemCard({
               <AlertDialogHeader>
                 <AlertDialogTitle>Confirm Trade-In?</AlertDialogTitle>
                 <AlertDialogDescription>
-                    Choose your reward for trading in <strong>{item.name}</strong>. This action cannot be undone.
+                    Are you sure you want to trade in <strong>{item.name}</strong> for its current market value? This action cannot be undone.
                 </AlertDialogDescription>
               </AlertDialogHeader>
-              <div className="grid grid-cols-2 gap-4 py-4">
-                <AlertDialogAction onClick={() => handleTradeIn(true)} className="h-auto flex flex-col gap-2 p-4">
+              <div className="py-4">
+                <div className="h-auto flex flex-col gap-2 p-4 items-center rounded-lg bg-secondary">
                     <Gem className="h-8 w-8 text-primary"/>
                     <div className="flex flex-col items-center">
                         <span className="font-bold text-lg">{currentValue.toFixed(2)} Shots</span>
-                        <span className="text-xs text-primary-foreground/80">To Balance</span>
+                        <span className="text-xs text-secondary-foreground/80">To Balance</span>
                     </div>
-                </AlertDialogAction>
-                <AlertDialogAction onClick={() => handleTradeIn(false)} className="h-auto flex flex-col gap-2 p-4">
-                    <Gift className="h-8 w-8 text-accent"/>
-                     <div className="flex flex-col items-center">
-                        <span className="font-bold text-lg">20 Luckshots</span>
-                        <span className="text-xs text-primary-foreground/80">Legacy Option</span>
-                    </div>
-                </AlertDialogAction>
+                </div>
               </div>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={() => handleTradeIn()}>Trade-in for {currentValue.toFixed(2)} Shots</AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
