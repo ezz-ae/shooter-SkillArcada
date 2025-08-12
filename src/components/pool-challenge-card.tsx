@@ -9,6 +9,7 @@ import { User } from "@/lib/user";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Target, X, Zap, Swords } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { FaChess } from "react-icons/fa";
 
 interface Challenge {
     id: string;
@@ -53,9 +54,9 @@ export function PoolChallengeCard({ challenge, onDismiss }: PoolChallengeCardPro
 
   const renderIcon = () => {
     if (type === 'chess') {
-        return <p className="font-black text-xl text-primary">CHESS</p>;
+        return <FaChess className="h-6 w-6 text-primary"/>;
     }
-    return <p className="font-black text-xl text-primary">POOL</p>;
+    return <Swords className="h-6 w-6 text-primary"/>;
   }
 
   return (
@@ -82,7 +83,9 @@ export function PoolChallengeCard({ challenge, onDismiss }: PoolChallengeCardPro
             </div>
             <div className="text-center">
                 <p className="text-muted-foreground text-xs">VS</p>
-                {renderIcon()}
+                <div className="h-8 w-8 flex items-center justify-center my-1">
+                    {renderIcon()}
+                </div>
                  {isWaiting && (
                     <div className="flex justify-center items-center gap-2 mt-2">
                         <Zap className="h-5 w-5 text-yellow-500 animate-ping" />
