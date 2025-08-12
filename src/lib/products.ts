@@ -64,4 +64,32 @@ export const mockProducts: Product[] = [
     imageUrl: "https://placehold.co/600x400.png",
     dataAiHint: "rare book",
   },
+  {
+    id: "prod_009",
+    name: "DIY Gene Editing Kit",
+    marketPrice: 1250.75,
+    imageUrl: "https://placehold.co/600x400.png",
+    dataAiHint: "science kit",
+  },
+  {
+    id: "prod_010",
+    name: "Personal Weather Control Drone",
+    marketPrice: 7800.0,
+    imageUrl: "https://placehold.co/600x400.png",
+    dataAiHint: "weather drone",
+  },
+  {
+    id: "prod_011",
+    name: "Anti-Gravity Yoga Mat",
+    marketPrice: 220.0,
+    imageUrl: "https://placehold.co/600x400.png",
+    dataAiHint: "yoga mat",
+  },
+  {
+    id: "prod_012",
+    name: "Zero-G Space Pen",
+    marketPrice: 85.0,
+    imageUrl: "https://placehold.co/600x400.png",
+    dataAiHint: "space pen",
+  },
 ];
