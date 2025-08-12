@@ -42,9 +42,9 @@ export function DiceGame() {
         if (!luckScore) return null;
         
         const actions = {
-            low: { label: "Need Help?", icon: HelpCircle, variant: 'secondary' },
-            medium: { label: "Play a Challenge", icon: Gamepad2, variant: 'outline' },
-            high: { label: "Go to Brainshots!", icon: BrainCircuit, variant: 'default' },
+            low: { label: "Need Help?", icon: HelpCircle, variant: 'secondary' as const },
+            medium: { label: "Play a Challenge", icon: Gamepad2, variant: 'outline' as const },
+            high: { label: "Go to Brainshots!", icon: BrainCircuit, variant: 'default' as const },
         };
         
         const luckyAction = actions[luckScore];
