@@ -93,7 +93,7 @@ export default function Home() {
                     </section>
                     
                     {/* Featured Games */}
-                    <section>
+                     <section>
                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
                             {iphoneProduct && 
                                 <div className="relative">
@@ -107,7 +107,7 @@ export default function Home() {
                                      <ShotTaker product={btcProduct} />
                                 </div>
                             }
-                            <Card className="shadow-2xl border-accent/50 border-2 flex flex-col justify-between">
+                             <Card className="shadow-2xl border-accent/50 border-2 flex flex-col justify-between">
                                 <CardHeader className="text-center">
                                     <Trophy className="mx-auto h-16 w-16 text-accent animate-pulse"/>
                                     <CardTitle className="text-3xl font-black">Pool Luck Pros</CardTitle>
