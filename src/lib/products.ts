@@ -7,7 +7,7 @@ export interface Product {
   marketPrice: number;
   imageUrl: string;
   dataAiHint: string;
-  game?: 'reel-pause' | 'multi-shot' | 'riddle-calc' | 'draw-passcode';
+  game?: 'reel-pause' | 'multi-shot' | 'riddle-calc' | 'draw-passcode' | 'chess-mate';
   category?: 'luckshot' | 'brainshot';
 }
 
@@ -42,6 +42,17 @@ export const mockProducts: Product[] = [
     imageUrl: 'https://placehold.co/600x400/F7931A/FFFFFF/png?text=BTC',
     dataAiHint: 'bitcoin crypto',
     game: 'riddle-calc',
+    category: 'brainshot',
+  },
+   {
+    id: 'prod_chess_01',
+    name: 'One-Move Mate',
+    subtitle: 'A Royal Challenge',
+    description: 'Find the checkmate in one move to win a massive prize. All pieces share a single, minimalist design, distinguished only by their names. Focus on the position, not the pieces.',
+    marketPrice: 250.0,
+    imageUrl: 'https://placehold.co/600x400/769656/eeeed2/png?text=Chess',
+    dataAiHint: 'chess board',
+    game: 'chess-mate',
     category: 'brainshot',
   },
   {

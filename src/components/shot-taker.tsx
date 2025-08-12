@@ -33,7 +33,8 @@ import { cn } from "@/lib/utils";
 import { Calculator } from "./calculator";
 import { ChartContainer } from "./ui/chart";
 import { DrawPad } from "./draw-pad";
-import { Target, HelpCircle } from "lucide-react";
+import { Target, HelpCircle, Check } from "lucide-react";
+import { ChessBoard } from "./chess-board";
 
 interface ShotTakerProps {
   product: Product;
@@ -44,6 +45,19 @@ const RIDDLE_ANSWER = 80;
 const RIDDLE_TIMER_SECONDS = 300; // 5 minutes
 const DRAW_PASSCODE_ANSWER = '0,3,6,7,8'; // L-shape on 3x3 grid
 const DRAW_PASSCODE_PRICE = 99;
+const CHESS_PRIZE_SHOTS = 500;
+const CHESS_MATE_MOVE = { from: [1, 5], to: [0, 5] }; // Example: White Rook from f7 to f8
+
+const initialChessBoard = Array(8).fill(null).map(() => Array(8).fill(null));
+// Black King on e8
+initialChessBoard[7][4] = { type: 'King', color: 'black' };
+// White King on e1
+initialChessBoard[0][4] = { type: 'King', color: 'white' };
+// White Rook on f7
+initialChessBoard[1][5] = { type: 'Rook', color: 'white' };
+// White Rook on h7
+initialChessBoard[1][7] = { type: 'Rook', color: 'white' };
+
 
 export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
   const [currentPrice, setCurrentPrice] = useState(product.marketPrice);
@@ -75,11 +89,15 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
   const [isDrawPasscodeDialogOpen, setIsDrawPasscodeDialogOpen] = useState(false);
   const [drawPadValue, setDrawPadValue] = useState<number[]>([]);
 
+  // For chess-mate game
+  const [isChessGameActive, setIsChessGameActive] = useState(false);
+  const [isChessWon, setIsChessWon] = useState(false);
 
-  const { addToVault, walletBalance, spendLuckshot, hasSeenShotInfo, setHasSeenShotInfo } = useStore();
+
+  const { addToVault, walletBalance, spendLuckshot, hasSeenShotInfo, setHasSeenShotInfo, addEarnedShots } = useStore();
   const { toast } = useToast();
   
-  const isGame = product.game && ['reel-pause', 'riddle-calc', 'draw-passcode'].includes(product.game);
+  const isGame = product.game && ['reel-pause', 'riddle-calc', 'draw-passcode', 'chess-mate'].includes(product.game);
   
   // Advanced pricing model state
   const priceState = useRef({
@@ -206,20 +224,20 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
     setIsReelPaused(true);
   }
   
-  const handleTakeShot = (shotAction: () => void) => {
-    if (!hasSeenShotInfo) {
+  const handleTakeShot = (shotAction: () => void, cost = 1) => {
+    if (!hasSeenShotInfo && product.game !== 'chess-mate') {
       setIsInfoDialogOpen(true);
       return;
     }
 
-    const shotTaken = spendLuckshot();
+    const shotTaken = spendLuckshot(cost);
     if (shotTaken) {
       shotAction();
     } else {
       toast({
         variant: "destructive",
         title: "Out of Luckshots!",
-        description: `You need Luckshots to play. Go to your vault to trade-in items for more.`,
+        description: `You need ${cost} Luckshot(s) to play. Go to your vault to trade-in items for more.`,
       });
     }
   }
@@ -351,16 +369,65 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
     setIsDrawPasscodeDialogOpen(false);
   }
   
+  const handleChessStart = () => {
+    handleTakeShot(() => {
+        setIsChessGameActive(true);
+    }, 50);
+  }
+
+  const handleChessMove = (from: [number, number], to: [number, number]) => {
+      const isCorrectMove = from[0] === CHESS_MATE_MOVE.from[0] &&
+                            from[1] === CHESS_MATE_MOVE.from[1] &&
+                            to[0] === CHESS_MATE_MOVE.to[0] &&
+                            to[1] === CHESS_MATE_MOVE.to[1];
+      if (isCorrectMove) {
+          setIsChessWon(true);
+          addEarnedShots(CHESS_PRIZE_SHOTS);
+          toast({
+            title: "Checkmate!",
+            description: `You won ${CHESS_PRIZE_SHOTS} Earned Shots!`,
+          });
+      } else {
+          toast({
+            variant: "destructive",
+            title: "Not Quite",
+            description: "That wasn't the winning move. Try again!",
+          });
+      }
+      setIsChessGameActive(false);
+  }
+
   const minutes = Math.floor(riddleTimer / 60);
   const seconds = riddleTimer % 60;
   const timerColor = riddleTimer <= 60 ? "text-destructive" : "text-foreground";
 
-  const isGameCard = product.game === 'reel-pause' || product.game === 'riddle-calc' || product.game === 'draw-passcode';
+  const isGameCard = product.game === 'reel-pause' || product.game === 'riddle-calc' || product.game === 'draw-passcode' || product.game === 'chess-mate';
 
   const discountPercent = ((product.marketPrice - currentPrice) / product.marketPrice) * 100;
   const discountColor = discountPercent > 0 ? "text-accent" : "text-[hsl(var(--chart-4))]";
   
   const renderActions = () => {
+    if (product.game === 'chess-mate') {
+      return (
+        <div className="w-full flex flex-col gap-2">
+            <ChessBoard 
+              initialBoard={initialChessBoard}
+              onMove={handleChessMove} 
+              className={cn(!isChessGameActive && "pointer-events-none opacity-50")}
+            />
+            {isChessWon ? (
+              <div className="flex items-center justify-center gap-2 font-bold text-primary p-4 h-12">
+                <Check /> You Won!
+              </div>
+            ) : (
+               <Button onClick={handleChessStart} disabled={isChessGameActive} className="w-full h-12 text-lg font-bold">
+                  Play for 50 Shots
+              </Button>
+            )}
+        </div>
+      );
+    }
+    
     if (product.game === 'reel-pause') {
         return (
             <div className="w-full flex flex-col gap-2">
