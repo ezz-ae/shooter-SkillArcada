@@ -68,10 +68,6 @@ export function Header() {
         <div className="flex flex-1 items-center justify-end space-x-2">
           {isClient && isAuthenticated && user ? (
             <>
-            <div className="hidden sm:flex items-center space-x-2 text-sm font-medium p-2 bg-secondary rounded-md">
-                <span>Shots: {displayShots}</span>
-            </div>
-            
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="secondary" className="relative h-9 w-9 rounded-full">
@@ -110,8 +106,6 @@ export function Header() {
               Sign In
             </Button>
           )}
-          
-          <ThemeToggle />
         </div>
       </div>
     </header>
