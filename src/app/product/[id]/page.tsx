@@ -59,6 +59,12 @@ export default function ProductPage({ params }: { params: { id: string } }) {
             Instead of one, you get three shots at a great price! Click the "x3 Shot" button to capture three different prices simultaneously. Review the three options and pick the best one to add to your vault. More chances, more luck!
           </p>
         );
+      case 'chess-mate':
+        return (
+            <p>
+                This is a "Checkmate in One" puzzle. You are playing as White. Analyze the board and make the single move that puts the Black king in checkmate. If you find the correct move, you instantly win the prize.
+            </p>
+        );
       default:
         return (
           <p>
@@ -153,7 +159,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
                   <ShotTaker product={product} view="actions" />
                 </div>
             </div>
-        </CardContent>
+        </Content>
        </Card>
     </div>
   );
