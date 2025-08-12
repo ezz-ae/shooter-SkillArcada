@@ -12,24 +12,28 @@ export interface ShippingItem extends VaultItem {
   shippingId: string;
 }
 
+const EARNED_SHOT_VALUE_USD = 0.5; // Each earned shot is worth $0.50
+
 interface StoreState {
   vault: VaultItem[];
   shippingCart: ShippingItem[];
   walletBalance: number;
-  shots: number;
+  luckshots: number; // For playing games
+  earnedShots: number; // Won from games, redeemable
   hasSeenShotInfo: boolean;
   hasSeenVaultInfo: boolean;
   hasTradedForShots: boolean;
   setHasSeenShotInfo: (hasSeen: boolean) => void;
   setHasSeenVaultInfo: (hasSeen: boolean) => void;
-  addShots: (amount: number) => void;
-  spendShot: (amount?: number) => boolean;
+  addEarnedShots: (amount: number) => void;
+  spendLuckshot: (amount?: number) => boolean;
   addToVault: (item: VaultItem) => void;
   tradeIn: (vaultItemKey: string, tradeInValue: number, tradeInType: 'cash' | 'shots') => void;
   moveToShipping: (vaultItemKeys: string[]) => boolean;
   removeFromShipping: (shippingId: string) => void;
   confirmShipping: () => void;
   spendFromWallet: (amount: number) => void;
+  redeemEarnedShots: () => void;
 }
 
 const getVaultItemKey = (item: { id: string; purchaseTimestamp: number }) => {
@@ -42,7 +46,8 @@ export const useStore = create<StoreState>()(
       vault: [],
       shippingCart: [],
       walletBalance: 10000.0,
-      shots: 5,
+      luckshots: 5,
+      earnedShots: 0,
       hasSeenShotInfo: false,
       hasSeenVaultInfo: false,
       hasTradedForShots: false,
@@ -50,14 +55,14 @@ export const useStore = create<StoreState>()(
       setHasSeenShotInfo: (hasSeen: boolean) => set({ hasSeenShotInfo: hasSeen }),
       setHasSeenVaultInfo: (hasSeen: boolean) => set({ hasSeenVaultInfo: hasSeen }),
 
-      addShots: (amount) => {
-        set((state) => ({ shots: state.shots + amount }));
+      addEarnedShots: (amount) => {
+        set((state) => ({ earnedShots: state.earnedShots + amount }));
       },
 
-      spendShot: (amount = 1) => {
-        const currentShots = get().shots;
+      spendLuckshot: (amount = 1) => {
+        const currentShots = get().luckshots;
         if (currentShots >= amount) {
-          set({ shots: currentShots - amount });
+          set({ luckshots: currentShots - amount });
           return true;
         }
         return false;
@@ -88,7 +93,7 @@ export const useStore = create<StoreState>()(
         } else if (tradeInType === 'shots') {
           set((state) => ({
             vault: state.vault.filter((item) => getVaultItemKey(item) !== vaultItemKey),
-            shots: state.shots + 20,
+            luckshots: state.luckshots + 20,
             hasTradedForShots: true,
           }));
         }
@@ -127,9 +132,20 @@ export const useStore = create<StoreState>()(
       confirmShipping: () => {
         set({ shippingCart: [] });
       },
+
+      redeemEarnedShots: () => {
+        const { earnedShots } = get();
+        const valueToRedeem = earnedShots * EARNED_SHOT_VALUE_USD;
+        if (valueToRedeem >= 10) {
+          set(state => ({
+            earnedShots: 0,
+            walletBalance: state.walletBalance + valueToRedeem,
+          }));
+        }
+      },
     }),
     {
-      name: "shopnluck-storage-v2", 
+      name: "shopnluck-storage-v3", 
       storage: createJSONStorage(() => localStorage), 
     }
   )

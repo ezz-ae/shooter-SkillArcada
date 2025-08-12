@@ -8,6 +8,7 @@ export interface Product {
   imageUrl: string;
   dataAiHint: string;
   game?: 'reel-pause' | 'multi-shot' | 'riddle-calc' | 'draw-passcode';
+  category?: 'luckshot' | 'brainshot';
 }
 
 export const mockProducts: Product[] = [
@@ -19,6 +20,7 @@ export const mockProducts: Product[] = [
     marketPrice: 100.0,
     imageUrl: 'https://placehold.co/600x400/232F3E/FFFFFF/png?text=Amazon',
     dataAiHint: 'gift card',
+    category: 'luckshot',
   },
   {
     id: 'prod_phone_01',
@@ -29,6 +31,7 @@ export const mockProducts: Product[] = [
     imageUrl: 'https://placehold.co/600x400/333333/FFFFFF/png?text=iPhone+16',
     dataAiHint: 'iphone mockup',
     game: 'reel-pause',
+    category: 'brainshot',
   },
   {
     id: 'prod_crypto_01',
@@ -39,6 +42,7 @@ export const mockProducts: Product[] = [
     imageUrl: 'https://placehold.co/600x400/F7931A/FFFFFF/png?text=BTC',
     dataAiHint: 'bitcoin crypto',
     game: 'riddle-calc',
+    category: 'brainshot',
   },
   {
     id: 'prod_phone_02',
@@ -49,6 +53,7 @@ export const mockProducts: Product[] = [
     imageUrl: 'https://placehold.co/600x400/1C1C1C/E0E0E0/png?text=Galaxy',
     dataAiHint: 'android phone',
     game: 'draw-passcode',
+    category: 'brainshot',
   },
   {
     id: 'prod_card_04',
@@ -59,6 +64,7 @@ export const mockProducts: Product[] = [
     imageUrl: 'https://placehold.co/600x400/EB001B/FFFFFF/png?text=Mastercard',
     dataAiHint: 'credit card',
     game: 'multi-shot',
+    category: 'luckshot',
   },
   {
     id: 'prod_card_05',
@@ -68,6 +74,7 @@ export const mockProducts: Product[] = [
     marketPrice: 200.0,
     imageUrl: 'https://placehold.co/600x400/003087/FFFFFF/png?text=PayPal',
     dataAiHint: 'paypal logo',
+    category: 'luckshot',
   },
   {
     id: 'prod_crypto_03',
@@ -77,6 +84,7 @@ export const mockProducts: Product[] = [
     marketPrice: 500.0,
     imageUrl: 'https://placehold.co/600x400/26A17B/FFFFFF/png?text=USDT',
     dataAiHint: 'usdt crypto',
+    category: 'luckshot',
   },
   {
     id: 'prod_crypto_02',
@@ -86,6 +94,7 @@ export const mockProducts: Product[] = [
     marketPrice: 500.0,
     imageUrl: 'https://placehold.co/600x400/3C3C3D/FFFFFF/png?text=ETH',
     dataAiHint: 'ethereum crypto',
+    category: 'luckshot',
   },
   {
     id: 'prod_phone_03',
@@ -95,6 +104,7 @@ export const mockProducts: Product[] = [
     marketPrice: 1199.0,
     imageUrl: 'https://placehold.co/600x400/7C7C7C/FFFFFF/png?text=Pixel',
     dataAiHint: 'google pixel',
+    category: 'luckshot',
   },
   {
     id: 'prod_card_02',
@@ -104,6 +114,7 @@ export const mockProducts: Product[] = [
     marketPrice: 100.0,
     imageUrl: 'https://placehold.co/600x400/1B2838/FFFFFF/png?text=Steam',
     dataAiHint: 'steam logo',
+    category: 'luckshot',
   },
   {
     id: 'prod_card_03',
@@ -113,6 +124,7 @@ export const mockProducts: Product[] = [
     marketPrice: 150.0,
     imageUrl: 'https://placehold.co/600x400/1A1F71/FFFFFF/png?text=VISA',
     dataAiHint: 'visa card',
+    category: 'luckshot',
   },
   {
     id: 'prod_card_06',
@@ -122,5 +134,6 @@ export const mockProducts: Product[] = [
     marketPrice: 100.0,
     imageUrl: 'https://placehold.co/600x400/F0B90B/000000/png?text=Binance',
     dataAiHint: 'binance crypto',
+    category: 'luckshot',
   },
 ];

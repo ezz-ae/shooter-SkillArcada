@@ -2,22 +2,30 @@
 "use client";
 
 import Link from "next/link";
-import { Package, Wallet, Target } from "lucide-react";
+import { Package, Wallet, Target, Bot, BrainCircuit } from "lucide-react";
 import { Button } from "./ui/button";
 import { useStore } from "@/lib/store";
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 export function Header() {
-  const { vault, walletBalance, shots } = useStore();
+  const { vault, luckshots } = useStore();
   const [isClient, setIsClient] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     setIsClient(true);
   }, []);
 
   const vaultItemCount = isClient ? vault.length : 0;
-  const displayBalance = isClient ? walletBalance.toFixed(2) : "0.00";
-  const displayShots = isClient ? shots : 0;
+  const displayShots = isClient ? luckshots : 0;
+
+  const navItems = [
+    { href: "/luckshots", label: "Luckshots", icon: Target },
+    { href: "/brainshots", label: "Brainshots", icon: BrainCircuit },
+    { href: "/pool-shot", label: "Pool Shot", icon: Bot },
+  ]
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -44,21 +52,21 @@ export function Header() {
             </svg>
             <span className="font-bold">Luckshots</span>
           </Link>
+          <nav className="hidden md:flex items-center space-x-2">
+             {navItems.map((item) => (
+                <Button key={item.href} variant={pathname === item.href ? "secondary" : "ghost"} asChild>
+                    <Link href={item.href} className="flex items-center">
+                       <item.icon className="h-5 w-5 mr-2" />
+                       {item.label}
+                    </Link>
+                </Button>
+            ))}
+          </nav>
         </div>
         <div className="flex flex-1 items-center justify-end space-x-2">
-           <Button variant="ghost" asChild>
-              <Link href="/pool-shot" className="relative">
-                <Target className="h-5 w-5 mr-2" />
-                <span>Pool Shot</span>
-              </Link>
-          </Button>
-          <div className="flex items-center space-x-2 text-sm font-medium p-2 bg-secondary rounded-md">
-            <Wallet className="h-5 w-5 text-primary" />
-            <span>Wallet: ${displayBalance}</span>
-          </div>
           <div className="flex items-center space-x-2 text-sm font-medium p-2 bg-secondary rounded-md">
             <Target className="h-5 w-5 text-accent" />
-            <span>Shots: {displayShots}</span>
+            <span>Luckshots: {displayShots}</span>
           </div>
           <Button variant="outline" asChild>
             <Link href="/vault" className="relative">

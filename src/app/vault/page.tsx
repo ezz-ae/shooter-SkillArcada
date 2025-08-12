@@ -7,7 +7,7 @@ import { VaultItemCard } from "@/components/vault-item-card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
-import { ArrowLeft, ShoppingCart, Info, Repeat, Gift } from "lucide-react";
+import { ArrowLeft, ShoppingCart, Info, Repeat, Gift, Wallet, Target, Gem } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import {
   AlertDialog,
@@ -20,11 +20,24 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 export default function VaultPage() {
-  const { vault, shippingCart, moveToShipping, removeFromShipping, confirmShipping, hasSeenVaultInfo, setHasSeenVaultInfo } = useStore();
+  const { 
+    vault, 
+    shippingCart, 
+    moveToShipping, 
+    removeFromShipping, 
+    confirmShipping, 
+    hasSeenVaultInfo, 
+    setHasSeenVaultInfo,
+    walletBalance,
+    earnedShots,
+    redeemEarnedShots
+  } = useStore();
+  
   const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
   const [isClient, setIsClient] = useState(false);
   const { toast } = useToast();
@@ -36,6 +49,9 @@ export default function VaultPage() {
       setIsInfoOpen(true);
     }
   }, [hasSeenVaultInfo]);
+  
+  const earnedShotsValue = isClient ? (earnedShots * 0.5).toFixed(2) : "0.00";
+  const canRedeem = isClient && parseFloat(earnedShotsValue) >= 10;
 
   const getVaultItemKey = (item: { id: string; purchaseTimestamp: number }) => {
     return `${item.id}-${item.purchaseTimestamp}`;
@@ -91,6 +107,22 @@ export default function VaultPage() {
     });
   }
 
+  const handleRedeem = () => {
+    if (!canRedeem) {
+      toast({
+        variant: "destructive",
+        title: "Redemption Failed",
+        description: "You need at least $10.00 in Earned Shots value to redeem.",
+      });
+      return;
+    }
+    redeemEarnedShots();
+    toast({
+      title: "Redemption Successful!",
+      description: `You've added $${earnedShotsValue} to your wallet.`,
+    });
+  }
+
   if (!isClient) {
     return (
         <div className="container mx-auto px-4 py-8">
@@ -136,8 +168,8 @@ export default function VaultPage() {
               <div className="flex items-start gap-4">
                 <Gift className="h-8 w-8 text-accent mt-1"/>
                 <div>
-                  <h3 className="font-bold">Trade-In for Shots</h3>
-                   <p className="text-sm text-muted-foreground">Alternatively, you can trade in any item for a flat rate of <span className="font-bold text-accent-foreground">20 Shots</span>. A great way to restock if you're running low!</p>
+                  <h3 className="font-bold">Trade-In for Luckshots</h3>
+                   <p className="text-sm text-muted-foreground">Alternatively, you can trade in any item for a flat rate of <span className="font-bold text-accent-foreground">20 Luckshots</span>. A great way to restock if you're running low!</p>
                 </div>
               </div>
             </AlertDialogDescription>
@@ -169,83 +201,108 @@ export default function VaultPage() {
       )}
 
       <div className="grid grid-cols-1 gap-8 md:grid-cols-12">
-        {vault.length > 0 && (
-            <div className="md:col-span-8">
-                <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-2xl font-bold">Your Items ({vault.length})</h2>
-                    <Button onClick={handleMoveToShipping} disabled={selectedItems.size === 0}>
-                        Move {selectedItems.size > 0 ? `(${selectedItems.size})` : ''} to Shipping
-                    </Button>
-                </div>
-                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
-                    {vault.map((item) => (
-                    <VaultItemCard
-                        key={getVaultItemKey(item)}
-                        item={item}
-                        isSelected={selectedItems.has(getVaultItemKey(item))}
-                        onSelect={() => handleSelect(getVaultItemKey(item))}
-                    />
-                    ))}
-                </div>
-            </div>
-        )}
-
-        <div className={vault.length > 0 ? "md:col-span-4" : "md:col-span-12"}>
-             <Card className="sticky top-24">
-                <CardHeader>
-                    <h2 className="text-2xl font-bold">Ready to Ship ({shippingCart.length}/3)</h2>
-                </CardHeader>
-                <CardContent>
-                    {shippingCart.length > 0 ? (
-                        <div className="space-y-4">
-                            {shippingCart.map(item => (
-                                <div key={item.shippingId} className="flex items-center justify-between p-2 bg-secondary/50 rounded-lg">
-                                    <div className="flex items-center gap-4">
-                                        <Image src={item.imageUrl} alt={item.name} width={48} height={48} className="rounded-md object-cover" data-ai-hint={item.dataAiHint} />
-                                        <div>
-                                            <p className="font-semibold text-sm">{item.name}</p>
-                                            <p className="text-xs text-muted-foreground">Paid: ${item.pricePaid.toFixed(2)}</p>
-                                        </div>
-                                    </div>
-                                    <Button variant="ghost" size="icon" onClick={() => handleMoveToVault(item.shippingId)}>
-                                        <ArrowLeft className="h-4 w-4" />
-                                        <span className="sr-only">Move back to vault</span>
-                                    </Button>
-                                </div>
-                            ))}
-                        </div>
-                    ) : (
-                        <div className="text-center py-10 text-muted-foreground">
-                            <p>Select items from your vault to move them here for shipping.</p>
-                        </div>
-                    )}
-                </CardContent>
-                {shippingCart.length > 0 && (
-                     <div className="p-4 border-t">
-                        <AlertDialog>
-                            <AlertDialogTrigger asChild>
-                                <Button size="lg" variant="default" className="w-full" disabled={shippingCart.length === 0}>Confirm Shipment</Button>
-                            </AlertDialogTrigger>
-                            <AlertDialogContent>
-                                <AlertDialogHeader>
-                                <AlertDialogTitle>Confirm Your Shipment?</AlertDialogTitle>
-                                <AlertDialogDescription>
-                                    This will finalize the shipment for the {shippingCart.length} item(s) in your cart. This action cannot be undone.
-                                </AlertDialogDescription>
-                                </AlertDialogHeader>
-                                <AlertDialogFooter>
-                                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                <AlertDialogAction onClick={handleConfirmShipping}>Confirm & Ship</AlertDialogAction>
-                                </AlertDialogFooter>
-                            </AlertDialogContent>
-                        </AlertDialog>
+        <div className={cn("grid gap-8", vault.length > 0 ? "md:col-span-8" : "md:col-span-12")}>
+            {vault.length > 0 && (
+                <div>
+                    <div className="flex justify-between items-center mb-4">
+                        <h2 className="text-2xl font-bold">Your Items ({vault.length})</h2>
+                        <Button onClick={handleMoveToShipping} disabled={selectedItems.size === 0}>
+                            Move {selectedItems.size > 0 ? `(${selectedItems.size})` : ''} to Shipping
+                        </Button>
                     </div>
-                )}
-             </Card>
+                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
+                        {vault.map((item) => (
+                        <VaultItemCard
+                            key={getVaultItemKey(item)}
+                            item={item}
+                            isSelected={selectedItems.has(getVaultItemKey(item))}
+                            onSelect={() => handleSelect(getVaultItemKey(item))}
+                        />
+                        ))}
+                    </div>
+                </div>
+            )}
+        </div>
+
+        <div className={cn(vault.length > 0 ? "md:col-span-4" : "hidden")}>
+             <div className="sticky top-24 space-y-6">
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2"><Wallet className="text-primary"/> Wallet</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <p className="text-3xl font-black">${isClient ? walletBalance.toFixed(2) : '0.00'}</p>
+                        <p className="text-sm text-muted-foreground">Available to spend or withdraw.</p>
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2"><Gem className="text-accent"/> Earned Shots</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <p className="text-3xl font-black">{isClient ? earnedShots : 0}</p>
+                        <p className="text-sm text-muted-foreground">Value: <span className="font-bold text-foreground">${earnedShotsValue}</span></p>
+                    </CardContent>
+                    <CardFooter>
+                        <Button className="w-full" disabled={!canRedeem} onClick={handleRedeem}>
+                            Redeem to Wallet
+                        </Button>
+                    </CardFooter>
+                </Card>
+                 <Card>
+                    <CardHeader>
+                        <CardTitle>Ready to Ship ({shippingCart.length}/3)</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        {shippingCart.length > 0 ? (
+                            <div className="space-y-4">
+                                {shippingCart.map(item => (
+                                    <div key={item.shippingId} className="flex items-center justify-between p-2 bg-secondary/50 rounded-lg">
+                                        <div className="flex items-center gap-4">
+                                            <Image src={item.imageUrl} alt={item.name} width={48} height={48} className="rounded-md object-cover" data-ai-hint={item.dataAiHint} />
+                                            <div>
+                                                <p className="font-semibold text-sm">{item.name}</p>
+                                                <p className="text-xs text-muted-foreground">Paid: ${item.pricePaid.toFixed(2)}</p>
+                                            </div>
+                                        </div>
+                                        <Button variant="ghost" size="icon" onClick={() => handleMoveToVault(item.shippingId)}>
+                                            <ArrowLeft className="h-4 w-4" />
+                                            <span className="sr-only">Move back to vault</span>
+                                        </Button>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="text-center py-10 text-muted-foreground">
+                                <p>Select items from your vault to move them here for shipping.</p>
+                            </div>
+                        )}
+                    </CardContent>
+                    {shippingCart.length > 0 && (
+                         <CardFooter>
+                            <AlertDialog>
+                                <AlertDialogTrigger asChild>
+                                    <Button size="lg" variant="default" className="w-full" disabled={shippingCart.length === 0}>Confirm Shipment</Button>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent>
+                                    <AlertDialogHeader>
+                                    <AlertDialogTitle>Confirm Your Shipment?</AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                        This will finalize the shipment for the {shippingCart.length} item(s) in your cart. This action cannot be undone.
+                                    </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                    <AlertDialogAction onClick={handleConfirmShipping}>Confirm & Ship</AlertDialogAction>
+                                    </AlertDialogFooter>
+                                </AlertDialogContent>
+                            </AlertDialog>
+                        </CardFooter>
+                    )}
+                 </Card>
+             </div>
         </div>
       </div>
     </div>
   );
 }
-
-    

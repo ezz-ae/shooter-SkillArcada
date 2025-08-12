@@ -92,7 +92,7 @@ export function VaultItemCard({
     } else {
         toast({
             title: "Trade-in Successful!",
-            description: `You received 20 Shots for ${item.name}.`,
+            description: `You received 20 Luckshots for ${item.name}.`,
         });
     }
   };
@@ -183,7 +183,7 @@ export function VaultItemCard({
                 <AlertDialogAction onClick={() => handleTradeIn('shots')} className="h-auto flex flex-col gap-2 p-4">
                     <Gift className="h-8 w-8 text-accent"/>
                      <div className="flex flex-col items-center">
-                        <span className="font-bold text-lg">20 Shots</span>
+                        <span className="font-bold text-lg">20 Luckshots</span>
                         <span className="text-xs text-primary-foreground/80">To Balance</span>
                     </div>
                 </AlertDialogAction>

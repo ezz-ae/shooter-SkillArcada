@@ -3,18 +3,19 @@
 
 import { ShotTaker } from "@/components/shot-taker";
 import { mockProducts } from "@/lib/products";
-import { cn } from "@/lib/utils";
 
-export default function Home() {
+export default function BrainshotsPage() {
   
+  const brainshotProducts = mockProducts.filter(p => p.category === 'brainshot');
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="text-center mb-8">
         <h1 className="text-4xl font-black tracking-tight lg:text-5xl">
-          Take Your Best Shot
+          Brainshots
         </h1>
         <p className="mt-2 text-lg text-muted-foreground">
-          Unique games, unbelievable prices. Your next lucky break is just a click away.
+          Solve puzzles and challenges to unlock incredible prices.
         </p>
       </div>
 
@@ -22,7 +23,7 @@ export default function Home() {
         id="products"
         className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4"
       >
-        {mockProducts.map((product) => (
+        {brainshotProducts.map((product) => (
           <div key={product.id}>
             <ShotTaker product={product} />
           </div>

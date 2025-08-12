@@ -76,7 +76,7 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
   const [drawPadValue, setDrawPadValue] = useState<number[]>([]);
 
 
-  const { addToVault, walletBalance, spendShot, hasSeenShotInfo, setHasSeenShotInfo } = useStore();
+  const { addToVault, walletBalance, spendLuckshot, hasSeenShotInfo, setHasSeenShotInfo } = useStore();
   const { toast } = useToast();
   
   const isGame = product.game && ['reel-pause', 'riddle-calc', 'draw-passcode'].includes(product.game);
@@ -212,14 +212,14 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
       return;
     }
 
-    const shotTaken = spendShot();
+    const shotTaken = spendLuckshot();
     if (shotTaken) {
       shotAction();
     } else {
       toast({
         variant: "destructive",
-        title: "Out of Shots!",
-        description: `You need shots to play. Go to your vault to trade-in items for more.`,
+        title: "Out of Luckshots!",
+        description: `You need Luckshots to play. Go to your vault to trade-in items for more.`,
       });
     }
   }
@@ -542,7 +542,7 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
                   <Target className="h-8 w-8 text-primary mt-1"/>
                   <div>
                     <h3 className="font-bold">Take a Shot</h3>
-                    <p className="text-sm text-muted-foreground">Click the 'Shot' button on an item to lock in its current price. This costs 1 Shot from your balance.</p>
+                    <p className="text-sm text-muted-foreground">Click the 'Shot' button on an item to lock in its current price. This costs 1 Luckshot from your balance.</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
@@ -689,5 +689,3 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
     </>
   );
 }
-
-    

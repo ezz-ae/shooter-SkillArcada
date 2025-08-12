@@ -25,18 +25,18 @@ export function PoolShotGame({}: PoolShotGameProps) {
   const tableRef = useRef<HTMLDivElement>(null);
   const powerIntervalRef = useRef<NodeJS.Timeout>();
 
-  const { shots, spendShot, addShots } = useStore();
+  const { luckshots, spendLuckshot, addEarnedShots } = useStore();
   const { toast } = useToast();
 
   const prize = level * 10;
   const cost = level;
 
   const handleStartPlacing = () => {
-    if (shots < cost) {
+    if (luckshots < cost) {
       toast({
         variant: "destructive",
-        title: "Not enough shots!",
-        description: `You need ${cost} shot(s) to play this level.`,
+        title: "Not enough Luckshots!",
+        description: `You need ${cost} Luckshot(s) to play this level.`,
       });
       return;
     }
@@ -82,12 +82,12 @@ export function PoolShotGame({}: PoolShotGameProps) {
     
     clearInterval(powerIntervalRef.current);
     
-    const shotTaken = spendShot(cost);
+    const shotTaken = spendLuckshot(cost);
     if (!shotTaken) {
       toast({
         variant: "destructive",
         title: "Shot Failed",
-        description: "Could not spend shots. Please try again.",
+        description: "Could not spend Luckshots. Please try again.",
       });
       resetGame();
       return;
@@ -105,7 +105,7 @@ export function PoolShotGame({}: PoolShotGameProps) {
         
         const success = Math.random() < successChance;
         if (success) {
-            addShots(prize);
+            addEarnedShots(prize);
             setGameState('won');
         } else {
             setGameState('lost');
@@ -148,7 +148,7 @@ export function PoolShotGame({}: PoolShotGameProps) {
                  <div className="text-center w-full space-y-2">
                     <Button onClick={handleStartPlacing} size="lg" className="w-full">
                         <Target className="mr-2 h-5 w-5"/>
-                        Play for {cost} Shot{cost > 1 ? 's' : ''}
+                        Play for {cost} Luckshot{cost > 1 ? 's' : ''}
                     </Button>
                 </div>
             )
@@ -176,7 +176,7 @@ export function PoolShotGame({}: PoolShotGameProps) {
              return (
                 <div className="text-center w-full space-y-2">
                     <div className="flex items-center justify-center gap-2 text-2xl font-bold text-green-500">
-                        <Check size={28} /> You Won {prize} Shots!
+                        <Check size={28} /> You Won {prize} Earned Shots!
                     </div>
                     <Button onClick={handleNextLevel} size="lg" className="w-full">
                         <TrendingUp className="mr-2 h-5 w-5"/>
@@ -205,7 +205,7 @@ export function PoolShotGame({}: PoolShotGameProps) {
             <CardTitle>Level {level}</CardTitle>
             <div className="text-right">
                 <p className="text-sm text-muted-foreground">Prize</p>
-                <p className="text-2xl font-bold text-primary">{prize} Shots</p>
+                <p className="text-2xl font-bold text-primary">{prize} Earned Shots</p>
             </div>
         </div>
       </CardHeader>
@@ -273,7 +273,7 @@ export function PoolShotGame({}: PoolShotGameProps) {
         {renderGameStateUI()}
          {gameState !== 'idle' && gameState !== 'placing' && (
             <div className="text-center">
-                 <p className="text-sm text-muted-foreground mt-2">Cost: {cost} Shot{cost > 1 ? 's' : ''}</p>
+                 <p className="text-sm text-muted-foreground mt-2">Cost: {cost} Luckshot{cost > 1 ? 's' : ''}</p>
             </div>
          )}
       </CardFooter>
