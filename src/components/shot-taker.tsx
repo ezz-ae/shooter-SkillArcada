@@ -27,10 +27,10 @@ interface ShotTakerProps {
   isPage?: boolean;
 }
 
-type DialogState = 'closed' | 'initialShot' | 'doubleSnipe';
+type DialogState = 'closed' | 'initialShot' | 'doubleSnipe' | 'reelPause' | 'reelPaused1' | 'reelResult';
 
 const SHOT_COST = 1;
-const DOUBLE_SNIPE_COST = 5;
+const GAME_COST = 5; // Cost for Double Snipe or Reel Pause
 
 export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
   const [currentPrice, setCurrentPrice] = useState(product.marketPrice);
@@ -42,10 +42,17 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
   const [snipePrice1, setSnipePrice1] = useState(0);
   const [snipePrice2, setSnipePrice2] = useState(0);
 
+  // For reel pause
+  const [reel1, setReel1] = useState(0);
+  const [reel2, setReel2] = useState(0);
+  const [pausedReel1, setPausedReel1] = useState<number | null>(null);
+  const [finalReelPrice, setFinalReelPrice] = useState(0);
+
+
   const { addToVault, walletBalance, spendFromWallet, hasTakenFirstShot, setHasTakenFirstShot } = useStore();
   const { toast } = useToast();
   const cardRef = useRef<HTMLDivElement>(null);
-  const snipeIntervalRef = useRef<NodeJS.Timeout>();
+  const gameIntervalRef = useRef<NodeJS.Timeout>();
 
 
   useEffect(() => {
@@ -73,8 +80,8 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
     return () => {
         isMounted = false;
         clearInterval(interval)
-        if (snipeIntervalRef.current) {
-            clearInterval(snipeIntervalRef.current);
+        if (gameIntervalRef.current) {
+            clearInterval(gameIntervalRef.current);
         }
     };
   }, []);
@@ -126,38 +133,67 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
     setDialogState('closed');
   };
 
-  const startDoubleSnipe = () => {
-    if (walletBalance < DOUBLE_SNIPE_COST) {
+  const handleCloseDialog = () => {
+    if (gameIntervalRef.current) clearInterval(gameIntervalRef.current);
+    setDialogState('closed');
+    setPausedReel1(null);
+  }
+
+  const startGame = (mode: Product['gameMode']) => {
+    if (walletBalance < GAME_COST) {
         toast({
             variant: "destructive",
             title: "Insufficient Funds",
-            description: `You need $${DOUBLE_SNIPE_COST.toFixed(2)} for a Double Snipe.`,
+            description: `You need $${GAME_COST.toFixed(2)} to play.`,
         });
         return;
     }
-    spendFromWallet(DOUBLE_SNIPE_COST);
-    setDialogState('doubleSnipe');
+    spendFromWallet(GAME_COST);
 
-    const generateNewPrices = () => {
-        const volatility = 0.25; // Higher volatility for the snipe
-        let newPrice1 = capturedPrice * (1 + (Math.random() - 0.5) * volatility);
-        let newPrice2 = capturedPrice * (1 + (Math.random() - 0.5) * volatility);
-        newPrice1 = Math.max(1, newPrice1);
-        newPrice2 = Math.max(1, newPrice2);
-        setSnipePrice1(newPrice1);
-        setSnipePrice2(newPrice2);
-    };
-
-    generateNewPrices();
-    snipeIntervalRef.current = setInterval(generateNewPrices, 100);
+    if (mode === 'doubleSnipe') {
+        setDialogState('doubleSnipe');
+        const generateNewPrices = () => {
+            const volatility = 0.25;
+            let newPrice1 = capturedPrice * (1 + (Math.random() - 0.5) * volatility);
+            let newPrice2 = capturedPrice * (1 + (Math.random() - 0.5) * volatility);
+            setSnipePrice1(Math.max(1, newPrice1));
+            setSnipePrice2(Math.max(1, newPrice2));
+        };
+        generateNewPrices();
+        gameIntervalRef.current = setInterval(generateNewPrices, 100);
+    } else if (mode === 'reelPause') {
+        setDialogState('reelPause');
+        setPausedReel1(null);
+        const generateNewReels = () => {
+            setReel1(Math.floor(Math.random() * 10));
+            setReel2(Math.floor(Math.random() * 10));
+        }
+        generateNewReels();
+        gameIntervalRef.current = setInterval(generateNewReels, 75);
+    }
   }
 
   const handleSnipe = (snipedPrice: number) => {
-    if (snipeIntervalRef.current) {
-      clearInterval(snipeIntervalRef.current);
-    }
+    if (gameIntervalRef.current) clearInterval(gameIntervalRef.current);
     handleVault(snipedPrice);
   }
+
+  const handlePauseReel1 = () => {
+    setPausedReel1(reel1);
+    setDialogState('reelPaused1');
+  }
+
+  const handlePauseReel2 = () => {
+    if (gameIntervalRef.current) clearInterval(gameIntervalRef.current);
+    
+    const discountPercentage = parseFloat(`${pausedReel1}${reel2}`);
+    const discount = (discountPercentage / 100);
+    const finalPrice = product.marketPrice * (1 - discount);
+    
+    setFinalReelPrice(finalPrice);
+    setDialogState('reelResult');
+  }
+
 
   const CardComponent = isPage ? 'div' : Card;
 
@@ -231,22 +267,22 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
         </CardFooter>
       </CardComponent>
 
-      <AlertDialog open={dialogState !== 'closed'} onOpenChange={(open) => !open && setDialogState('closed')}>
+      <AlertDialog open={dialogState !== 'closed'} onOpenChange={(open) => !open && handleCloseDialog()}>
         {dialogState === 'initialShot' && (
              <AlertDialogContent>
                 <AlertDialogHeader>
                     <AlertDialogTitle>You've Locked a Price!</AlertDialogTitle>
                     <AlertDialogDescription>
-                        You've captured a price for {product.name}. You can vault it now, or try a Double Snipe for a chance at a better deal!
+                        You've captured a price for {product.name} at <span className="font-bold text-foreground">${capturedPrice.toFixed(2)}</span>. You can vault it now, or play a game for a chance at a better deal!
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter className="gap-2 sm:gap-0 sm:flex-row sm:justify-end sm:space-x-2">
-                    <Button variant="secondary" onClick={() => setDialogState('closed')}>Let it go</Button>
+                    <Button variant="secondary" onClick={handleCloseDialog}>Let it go</Button>
                     <Button variant="default" onClick={() => handleVault(capturedPrice)}>Vault It!</Button>
-                    {product.allowDoubleSnipe && (
-                        <Button variant="destructive" onClick={startDoubleSnipe}>
+                    {product.gameMode && (
+                        <Button variant="destructive" onClick={() => startGame(product.gameMode)}>
                             <Dices className="mr-2 h-4 w-4" />
-                            Double Snipe (${DOUBLE_SNIPE_COST.toFixed(2)})
+                            Play Game! (${GAME_COST.toFixed(2)})
                         </Button>
                     )}
                 </AlertDialogFooter>
@@ -269,12 +305,55 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
                     </Button>
                 </div>
                  <AlertDialogFooter>
-                    <AlertDialogCancel onClick={() => {
-                        if (snipeIntervalRef.current) clearInterval(snipeIntervalRef.current);
-                        setDialogState('closed');
-                    }}>
-                        Cancel
-                    </AlertDialogCancel>
+                    <AlertDialogCancel onClick={handleCloseDialog}>Cancel</AlertDialogCancel>
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        )}
+         {dialogState === 'reelPause' && (
+            <AlertDialogContent>
+                <AlertDialogHeader>
+                    <AlertDialogTitle>Reel Pause!</AlertDialogTitle>
+                    <AlertDialogDescription>
+                        Pause the first reel to lock in the first digit of your discount!
+                    </AlertDialogDescription>
+                </AlertDialogHeader>
+                <div className="flex justify-around items-center gap-4 p-4 text-6xl font-black">
+                    <span className="w-20 text-center">{reel1}</span>
+                    <span className="w-20 text-center text-muted-foreground">?</span>
+                </div>
+                <AlertDialogFooter>
+                    <Button size="lg" onClick={handlePauseReel1}>Pause Reel 1</Button>
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        )}
+        {dialogState === 'reelPaused1' && (
+            <AlertDialogContent>
+                <AlertDialogHeader>
+                    <AlertDialogTitle>First Reel Paused!</AlertDialogTitle>
+                    <AlertDialogDescription>
+                        Now pause the second reel to complete your discount!
+                    </AlertDialogDescription>
+                </AlertDialogHeader>
+                <div className="flex justify-around items-center gap-4 p-4 text-6xl font-black">
+                    <span className="w-20 text-center text-primary">{pausedReel1}</span>
+                    <span className="w-20 text-center">{reel2}</span>
+                </div>
+                <AlertDialogFooter>
+                    <Button size="lg" onClick={handlePauseReel2}>Pause Reel 2</Button>
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        )}
+        {dialogState === 'reelResult' && (
+            <AlertDialogContent>
+                <AlertDialogHeader>
+                    <AlertDialogTitle>Discount Locked!</AlertDialogTitle>
+                    <AlertDialogDescription>
+                        You've locked in a discount of <span className="font-bold text-primary">{pausedReel1}{reel2}%</span>! Your final price for {product.name} is <span className="font-bold text-foreground">${finalReelPrice.toFixed(2)}</span>.
+                    </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter className="gap-2 sm:gap-0 sm:flex-row sm:justify-end sm:space-x-2">
+                    <Button variant="secondary" onClick={handleCloseDialog}>Let it go</Button>
+                    <Button variant="default" onClick={() => handleVault(finalReelPrice)}>Vault It!</Button>
                 </AlertDialogFooter>
             </AlertDialogContent>
         )}

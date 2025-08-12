@@ -8,6 +8,7 @@ export interface Product {
   dataAiHint: string;
   value: number; // 1, 2, or 3 stars
   allowDoubleSnipe?: boolean;
+  gameMode?: 'doubleSnipe' | 'reelPause';
 }
 
 export const mockProducts: Product[] = [
@@ -20,7 +21,7 @@ export const mockProducts: Product[] = [
     imageUrl: 'https://placehold.co/600x400/000000/FFFFFF/png?text=Arcade',
     dataAiHint: 'vintage arcade',
     value: 3,
-    allowDoubleSnipe: true,
+    gameMode: 'reelPause',
   },
   {
     id: 'prod_002',
@@ -91,7 +92,7 @@ export const mockProducts: Product[] = [
     imageUrl: 'https://placehold.co/600x400/0000FF/FFFFFF/png?text=Book',
     dataAiHint: 'rare book',
     value: 3,
-    allowDoubleSnipe: true,
+    gameMode: 'doubleSnipe',
   },
   {
     id: 'prod_009',
@@ -212,6 +213,6 @@ export const mockProducts: Product[] = [
     imageUrl: 'https://placehold.co/600x400/FF4500/FFFFFF/png?text=Fusion',
     dataAiHint: 'fusion generator',
     value: 3,
-    allowDoubleSnipe: true,
+    gameMode: 'doubleSnipe',
   },
 ];
