@@ -1,0 +1,153 @@
+
+"use client";
+
+import { useState } from "react";
+import { Button } from "./ui/button";
+import { ArrowRight, Sparkles, Heart, DollarSign, Compass, Loader2 } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { generateLuckAnalysis, LuckAnalysisOutput } from "@/ai/flows/luck-analysis-flow";
+import { useToast } from "@/hooks/use-toast";
+import { Card, CardContent } from "./ui/card";
+
+type SessionState = 'intro' | 'preferences' | 'analyzing' | 'reading' | 'test' | 'complete';
+const preferences = [
+    { label: "Money", icon: DollarSign, theme: "bg-green-500/10 border-green-500/50 text-green-500" },
+    { label: "Love", icon: Heart, theme: "bg-red-500/10 border-red-500/50 text-red-500" },
+    { label: "Adventure", icon: Compass, theme: "bg-blue-500/10 border-blue-500/50 text-blue-500" },
+]
+
+export function LuckSession() {
+    const [sessionState, setSessionState] = useState<SessionState>('intro');
+    const [analysis, setAnalysis] = useState<LuckAnalysisOutput | null>(null);
+    const { toast } = useToast();
+
+    const handleStart = () => {
+        setSessionState('preferences');
+    }
+
+    const handleSelectPreference = async (preference: string) => {
+        setSessionState('analyzing');
+        try {
+            const result = await generateLuckAnalysis({ preference });
+            setAnalysis(result);
+            setSessionState('reading');
+        } catch (error) {
+            console.error("Luck analysis failed:", error);
+            toast({
+                variant: "destructive",
+                title: "Shoter is Resting",
+                description: "Couldn't perform the luck analysis right now. Please try again in a moment."
+            });
+            setSessionState('preferences');
+        }
+    }
+
+    const renderContent = () => {
+        switch(sessionState) {
+            case 'intro':
+                return (
+                    <div className="text-center animate-in fade-in-50 duration-1000">
+                        <h1 className="text-4xl font-black tracking-tight lg:text-6xl text-transparent bg-clip-text bg-gradient-to-br from-white to-stone-400">
+                            Let Shoter read your luck.
+                        </h1>
+                        <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
+                           Our resident gamegang mega wants to give you a personalized luck session.
+                        </p>
+                        <Button size="lg" className="mt-8" onClick={handleStart}>
+                            Right shot if you in <ArrowRight className="ml-2"/>
+                        </Button>
+                    </div>
+                )
+            case 'preferences':
+                return (
+                     <div className="text-center animate-in fade-in-50 duration-1000">
+                        <h2 className="text-3xl font-bold tracking-tight lg:text-4xl text-transparent bg-clip-text bg-gradient-to-br from-white to-stone-400">
+                           What matters most to you now?
+                        </h2>
+                        <div className="mt-8 flex flex-col sm:flex-row gap-4">
+                            {preferences.map(pref => {
+                                const Icon = pref.icon;
+                                return (
+                                <Button 
+                                    key={pref.label} 
+                                    className={cn("h-24 w-48 text-2xl flex-col gap-2", pref.theme)} 
+                                    variant="outline"
+                                    onClick={() => handleSelectPreference(pref.label)}
+                                >
+                                    <Icon size={32} />
+                                    {pref.label}
+                                </Button>
+                                )
+                            })}
+                        </div>
+                    </div>
+                )
+            case 'analyzing':
+                return (
+                    <div className="text-center animate-in fade-in-50 duration-1000 flex flex-col items-center gap-4">
+                        <Loader2 className="h-16 w-16 animate-spin text-primary" />
+                        <p className="text-lg text-muted-foreground">Shoter is consulting the cards...</p>
+                    </div>
+                )
+            case 'reading':
+                if (!analysis) return null;
+                return (
+                    <div className="max-w-4xl w-full animate-in fade-in-50 duration-1000 space-y-8">
+                        <div className="text-center">
+                            <h2 className="text-3xl font-bold tracking-tight lg:text-4xl text-transparent bg-clip-text bg-gradient-to-br from-white to-stone-400">
+                                Shoter's Reading
+                            </h2>
+                        </div>
+                        <div className="grid md:grid-cols-3 gap-6 text-center">
+                            <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
+                                <CardContent className="p-6">
+                                    <h3 className="font-bold text-sm text-muted-foreground mb-2">THE PAST</h3>
+                                    <p className="text-white">{analysis.past}</p>
+                                </CardContent>
+                            </Card>
+                            <Card className="bg-white/5 border-white/10 backdrop-blur-sm scale-105 shadow-2xl shadow-primary/20">
+                                <CardContent className="p-6">
+                                     <h3 className="font-bold text-sm text-muted-foreground mb-2">THE PRESENT</h3>
+                                    <p className="text-white">{analysis.present}</p>
+                                </CardContent>
+                            </Card>
+                            <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
+                                <CardContent className="p-6">
+                                    <h3 className="font-bold text-sm text-muted-foreground mb-2">THE FUTURE</h3>
+                                    <p className="text-white">{analysis.future}</p>
+                                </CardContent>
+                            </Card>
+                        </div>
+                        <div className="text-center space-y-4">
+                            <p className="text-muted-foreground">Your lucky symbol is the <span className="font-bold text-primary">{analysis.luckySymbol}</span></p>
+                            <Button size="lg" onClick={() => setSessionState('test')}>
+                                Take the Speed Test <ArrowRight className="ml-2"/>
+                            </Button>
+                        </div>
+                    </div>
+                )
+             case 'test':
+                 return (
+                     <div className="text-center animate-in fade-in-50 duration-1000">
+                        <h2 className="text-3xl font-bold tracking-tight lg:text-4xl text-transparent bg-clip-text bg-gradient-to-br from-white to-stone-400">
+                           Speed Test Coming Soon!
+                        </h2>
+                        <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
+                           A quick challenge to seal in your luck is on its way.
+                        </p>
+                        <Button size="lg" className="mt-8" onClick={() => setSessionState('intro')}>
+                            Start Over
+                        </Button>
+                    </div>
+                 )
+            default:
+                return <div>Something went wrong.</div>
+        }
+    }
+
+    return (
+        <div className="w-full">
+           {renderContent()}
+        </div>
+    )
+}
