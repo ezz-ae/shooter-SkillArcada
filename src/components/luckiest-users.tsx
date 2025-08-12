@@ -10,6 +10,9 @@ const luckyUsers = [
     { rank: 1, user: mockUsers[2], prize: '500 Shots' },
     { rank: 2, user: mockUsers[1], prize: '$1000 USD' },
     { rank: 3, user: mockUsers[4], prize: '100 Shots' },
+    { rank: 4, user: mockUsers[0], prize: 'iPhone 16 Pro' },
+    { rank: 5, user: mockUsers[3], prize: '75 Shots' },
+    { rank: 6, user: mockUsers[5], prize: '$50 USD' },
 ];
 
 
@@ -36,5 +39,3 @@ export function LuckiestUsers() {
         </Card>
     );
 }
-
-    
