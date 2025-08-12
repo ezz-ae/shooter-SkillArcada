@@ -22,7 +22,7 @@ export default function Home() {
         { id: 'c4', prize: 20, fee: 2, player1: mockUsers[4], player2: mockUsers[5] },
     ];
     
-    const openChallenges = challenges.filter(c => !c.player2);
+    const recommendedChallenge = challenges.find(c => !c.player2);
 
     if (!isAuthenticated && !isLoggingIn) {
         return <LoginModal />;
@@ -37,14 +37,13 @@ export default function Home() {
                     {/* Open Challenges */}
                     <section>
                         <div className="flex justify-between items-center mb-4">
-                            <h2 className="text-2xl font-bold">Open Challenges</h2>
-                            <Button variant="outline">View All</Button>
+                            <h2 className="text-2xl font-bold">Recommended Challenge</h2>
                         </div>
-                        {openChallenges.length > 0 ? (
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                {openChallenges.map(challenge => (
-                                    <PoolChallengeCard key={challenge.id} challenge={challenge} />
-                                ))}
+                        {recommendedChallenge ? (
+                            <div className="flex justify-center">
+                                <div className="w-full max-w-sm">
+                                    <PoolChallengeCard key={recommendedChallenge.id} challenge={recommendedChallenge} />
+                                </div>
                             </div>
                         ) : (
                              <div className="text-center py-16 border-2 border-dashed rounded-lg">

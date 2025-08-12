@@ -2,11 +2,16 @@
 "use client";
 
 import { PoolShotGame } from "@/components/pool-shot-game";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { HelpCircle, Shield } from "lucide-react";
 
 // This is a placeholder page for a specific challenge.
 // In a real app, you would fetch challenge details based on the `params.id`.
 export default function PoolChallengePage({ params }: { params: { id: string } }) {
+  // Mock prize, would be fetched from backend
+  const prizeAmount = 100; 
+
   return (
     <div className="container mx-auto px-4 py-8 flex flex-col items-center">
        <div className="text-center mb-8">
@@ -14,7 +19,7 @@ export default function PoolChallengePage({ params }: { params: { id: string } }
           Challenge Match
         </h1>
         <p className="mt-2 text-lg text-muted-foreground">
-          You vs. The World. Sink the 8-ball to win the prize.
+          Winner gets <span className="font-bold text-primary">{prizeAmount} Shots</span>. Sink the 8-ball to win.
         </p>
       </div>
 
@@ -24,8 +29,12 @@ export default function PoolChallengePage({ params }: { params: { id: string } }
 
        <div className="w-full max-w-4xl mt-8">
             <Card>
-                <CardHeader>
+                <CardHeader className="flex flex-row items-center justify-between">
                     <CardTitle>Live Chat & Audience</CardTitle>
+                    <Button variant="outline" size="sm">
+                        <Shield className="mr-2 h-4 w-4" />
+                        Call Admin for Help
+                    </Button>
                 </CardHeader>
                 <CardContent>
                     <div className="h-48 bg-muted rounded-lg flex items-center justify-center text-muted-foreground">
