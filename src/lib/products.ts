@@ -41,16 +41,6 @@ export const mockProducts: Product[] = [
     game: 'riddle-calc',
   },
   {
-    id: 'prod_card_04',
-    name: '$250 Mastercard Prepaid Card',
-    subtitle: '$250 Prepaid Card',
-    description: 'A prepaid card loaded with $250 that can be used anywhere Mastercard is accepted.',
-    marketPrice: 250.0,
-    imageUrl: 'https://placehold.co/600x400/EB001B/FFFFFF/png?text=Mastercard',
-    dataAiHint: 'credit card',
-    game: 'multi-shot',
-  },
-  {
     id: 'prod_phone_02',
     name: 'Samsung Galaxy S25 Ultra',
     subtitle: 'The Android Powerhouse',
@@ -58,6 +48,16 @@ export const mockProducts: Product[] = [
     marketPrice: 1350.0,
     imageUrl: 'https://placehold.co/600x400/1C1C1C/E0E0E0/png?text=Galaxy',
     dataAiHint: 'android phone',
+    game: 'multi-shot',
+  },
+  {
+    id: 'prod_card_04',
+    name: '$250 Mastercard Prepaid Card',
+    subtitle: '$250 Prepaid Card',
+    description: 'A prepaid card loaded with $250 that can be used anywhere Mastercard is accepted.',
+    marketPrice: 250.0,
+    imageUrl: 'https://placehold.co/600x400/EB001B/FFFFFF/png?text=Mastercard',
+    dataAiHint: 'credit card',
     game: 'draw-passcode',
   },
   {
