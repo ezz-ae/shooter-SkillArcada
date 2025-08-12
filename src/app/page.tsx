@@ -160,18 +160,18 @@ export default function Home() {
                                     className="object-cover blur-sm"
                                 />
                                 <div className="absolute inset-0 bg-black/50" />
-                                <div className="relative flex flex-col h-full p-6 text-white items-center justify-center text-center">
+                                <div className="relative flex flex-col h-full p-6 text-white text-center justify-between">
                                     <CardHeader className="p-0">
                                         <Trophy className="mx-auto h-16 w-16 text-accent animate-pulse"/>
                                         <CardTitle className="text-3xl font-black text-shadow-lg">Pool Luck Pros</CardTitle>
                                         <CardDescription className="text-lg text-white/80">New Season is available</CardDescription>
-                                    </CardHeader>
-                                    <CardContent className="flex-grow flex flex-col justify-center p-0 my-4">
-                                        <div>
+                                        <div className="mt-4">
                                             <p className="text-7xl font-black text-primary text-shadow-lg">One Ethereum</p>
                                             <p className="font-semibold text-white/90">Grand Prize</p>
                                         </div>
-                                        <div className="mt-4 text-white/80 px-4">
+                                    </CardHeader>
+                                    <CardContent className="flex-grow flex flex-col justify-center p-0 my-4">
+                                        <div className="text-white/80 px-4">
                                             <p>Join the top 32 players from the globe in an open chat event with a live audience.</p>
                                         </div>
                                     </CardContent>
