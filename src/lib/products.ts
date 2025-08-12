@@ -219,3 +219,5 @@ export const mockProducts: Product[] = [
     dataAiHint: "phone case",
   },
 ];
+
+    
