@@ -6,7 +6,7 @@ import Image from "next/image";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
 import { useStore, type VaultItem } from "@/lib/store";
-import { TrendingDown, TrendingUp, Hourglass, Check, Gift, DollarSign, Gem } from "lucide-react";
+import { TrendingDown, TrendingUp, Hourglass, Check, Gift, Gem } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import {
   AlertDialog,
@@ -80,20 +80,20 @@ export function VaultItemCard({
     };
   }, [currentValue, item.purchaseTimestamp, isCoolingDown, item.marketPrice]);
 
-  const handleTradeIn = (tradeInType: 'luckshots' | 'shots') => {
+  const handleTradeIn = (tradeInForShots: boolean) => {
     const vaultItemKey = `${item.id}-${item.purchaseTimestamp}`;
-    const tradeInValue = tradeInType === 'luckshots' ? Math.round(currentValue) : 20;
-    tradeIn(vaultItemKey, tradeInValue, tradeInType);
+    const tradeInValue = tradeInForShots ? Math.round(currentValue) : 20;
+    tradeIn(vaultItemKey, tradeInValue);
 
-    if (tradeInType === 'luckshots') {
+    if (tradeInForShots) {
        toast({
         title: "Trade-in Successful!",
-        description: `You received ${tradeInValue} Shots for ${item.name}.`,
+        description: `You received ${tradeInValue.toFixed(2)} Shots for ${item.name}.`,
       });
     } else {
         toast({
             title: "Trade-in Successful!",
-            description: `You received 20 Luckshots for ${item.name}.`,
+            description: `You received 20 Luckshots for ${item.name}. This is a legacy option.`,
         });
     }
   };
@@ -174,18 +174,18 @@ export function VaultItemCard({
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <div className="grid grid-cols-2 gap-4 py-4">
-                <AlertDialogAction onClick={() => handleTradeIn('luckshots')} className="h-auto flex flex-col gap-2 p-4">
+                <AlertDialogAction onClick={() => handleTradeIn(true)} className="h-auto flex flex-col gap-2 p-4">
                     <Gem className="h-8 w-8 text-primary"/>
                     <div className="flex flex-col items-center">
-                        <span className="font-bold text-lg">{Math.round(currentValue)} Shots</span>
+                        <span className="font-bold text-lg">{currentValue.toFixed(2)} Shots</span>
                         <span className="text-xs text-primary-foreground/80">To Balance</span>
                     </div>
                 </AlertDialogAction>
-                <AlertDialogAction onClick={() => handleTradeIn('shots')} className="h-auto flex flex-col gap-2 p-4">
+                <AlertDialogAction onClick={() => handleTradeIn(false)} className="h-auto flex flex-col gap-2 p-4">
                     <Gift className="h-8 w-8 text-accent"/>
                      <div className="flex flex-col items-center">
-                        <span className="font-bold text-lg">20 Shots</span>
-                        <span className="text-xs text-primary-foreground/80">To Balance</span>
+                        <span className="font-bold text-lg">20 Luckshots</span>
+                        <span className="text-xs text-primary-foreground/80">Legacy Option</span>
                     </div>
                 </AlertDialogAction>
               </div>

@@ -48,12 +48,15 @@ export const useAuth = create<AuthState>()(
       logout: () => {
         // Also reset the main store on logout
         useStore.getState().reset();
-        set({ ...initialState, isNewUser: get().isNewUser }); // Keep isNewUser state on logout
+        // Keep the isNewUser state on logout, but reset everything else.
+        // This is a bit tricky, so we grab isNewUser before setting initial state.
+        const isNewUser = get().isNewUser;
+        set({ ...initialState, isNewUser });
       },
       setIsLoggingIn: (isLoggingIn) => set({ isLoggingIn }),
     }),
     {
-      name: 'luckshot-auth-storage-v2', // Incremented version to reset for existing users
+      name: 'luckshot-auth-storage-v3',
       storage: createJSONStorage(() => localStorage),
     }
   )

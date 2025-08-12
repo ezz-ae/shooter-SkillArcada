@@ -32,7 +32,7 @@ export function Header() {
   }, []);
 
   const vaultItemCount = isClient ? vault.length : 0;
-  const displayShots = isClient ? luckshots : 0;
+  const displayShots = isClient ? luckshots.toFixed(2) : '0.00';
 
   const navItems = [
     { href: "/luckshots", label: "Luckshots", icon: Dice5 },
@@ -83,7 +83,7 @@ export function Header() {
             <>
             <div className="hidden sm:flex items-center space-x-2 text-sm font-medium p-2 bg-secondary rounded-md">
                 <Target className="h-5 w-5 text-accent" />
-                <span>Luckshots: {displayShots}</span>
+                <span>Shots: {displayShots}</span>
             </div>
             <Button variant="outline" asChild>
                 <Link href="/vault" className="relative">

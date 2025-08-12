@@ -18,13 +18,12 @@ interface StoreState {
   luckshots: number; // Represents user's balance. 1 shot = $1 USD
   hasSeenShotInfo: boolean;
   hasSeenVaultInfo: boolean;
-  hasTradedForShots: boolean;
   setHasSeenShotInfo: (hasSeen: boolean) => void;
   setHasSeenVaultInfo: (hasSeen: boolean) => void;
   spendLuckshot: (amount?: number) => boolean;
   addLuckshots: (amount: number) => void;
   addToVault: (item: VaultItem) => boolean;
-  tradeIn: (vaultItemKey: string, tradeInShots: number, tradeInType: 'shots' | 'luckshots') => void;
+  tradeIn: (vaultItemKey: string, tradeInValue: number) => void;
   moveToShipping: (vaultItemKeys: string[]) => boolean;
   removeFromShipping: (shippingId: string) => void;
   confirmShipping: () => void;
@@ -41,7 +40,6 @@ const initialState = {
     luckshots: 0, // Start with 0 shots, new users get a bonus
     hasSeenShotInfo: false,
     hasSeenVaultInfo: false,
-    hasTradedForShots: false,
 };
 
 export const useStore = create<StoreState>()(
@@ -76,12 +74,10 @@ export const useStore = create<StoreState>()(
         return false;
       },
 
-      tradeIn: (vaultItemKey, tradeInValue, tradeInType) => {
-        // tradeInType 'shots' is legacy but functions same as 'luckshots'
+      tradeIn: (vaultItemKey, tradeInValue) => {
         set((state) => ({
           vault: state.vault.filter((item) => getVaultItemKey(item) !== vaultItemKey),
           luckshots: state.luckshots + tradeInValue,
-          hasTradedForShots: tradeInType === 'shots' ? true : state.hasTradedForShots
         }));
       },
       
@@ -124,7 +120,7 @@ export const useStore = create<StoreState>()(
       }
     }),
     {
-      name: "shopnluck-storage-v5", 
+      name: "shopnluck-storage-v6", 
       storage: createJSONStorage(() => localStorage), 
     }
   )
