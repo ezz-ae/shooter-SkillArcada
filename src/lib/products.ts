@@ -10,7 +10,7 @@ export interface Product {
   marketPrice: number;
   imageUrl: string;
   dataAiHint: string;
-  game?: 'reel-pause' | 'multi-shot' | 'riddle-calc' | 'draw-passcode' | 'chess-mate' | 'time-challenge' | 'pink-cups' | 'snake-and-stairs' | 'ai-adventure';
+  game?: 'reel-pause' | 'multi-shot' | 'riddle-calc' | 'draw-passcode' | 'chess-mate' | 'time-challenge' | 'pink-cups' | 'snake-and-stairs' | 'ai-adventure' | 'maze-draw';
   category?: 'luckshot' | 'brainshot' | 'luckgirls';
 }
 
@@ -58,6 +58,17 @@ export const mockProducts: Product[] = [
     imageUrl: 'https://placehold.co/600x400/5E35B1/FFFFFF/png?text=VR',
     dataAiHint: 'vr headset',
     game: 'draw-passcode',
+    category: 'brainshot',
+  },
+   {
+    id: 'prod_maze_01',
+    name: '$5 Prize Voucher',
+    subtitle: 'Solve the Pathfinder Maze',
+    description: 'Navigate the maze from start to finish to win a $5 voucher, credited as 5 Shots to your account.',
+    marketPrice: 5.0,
+    imageUrl: 'https://placehold.co/600x400/009688/FFFFFF/png?text=Maze',
+    dataAiHint: 'maze labyrinth',
+    game: 'maze-draw',
     category: 'brainshot',
   },
   {

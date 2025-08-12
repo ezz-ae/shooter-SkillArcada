@@ -53,6 +53,12 @@ export default function ProductPage({ params }: { params: { id: string } }) {
             A secret pattern is the key to this item's price. Click "Start Challenge" and a pattern will flash on screen. Memorize it, then draw it on the 3x3 grid. If you replicate it correctly, you unlock the chance to buy the item for a steal.
           </p>
         );
+      case 'maze-draw':
+        return (
+          <p>
+            This is a timed Pathfinder puzzle. Click "Start Game" and draw the correct path from the start point (S) to the end point (E) before the timer runs out. If you succeed, you win the prize!
+          </p>
+        );
       case 'multi-shot':
         return (
           <p>

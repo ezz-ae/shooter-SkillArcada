@@ -35,6 +35,7 @@ import { ChartContainer } from "./ui/chart";
 import { DrawPad } from "./draw-pad";
 import { Target, HelpCircle, Check, Gem, DollarSign } from "lucide-react";
 import { ChessBoard } from "./chess-board";
+import { MazeGame } from "./maze-game";
 
 interface ShotTakerProps {
   product: Product;
@@ -47,6 +48,7 @@ const DRAW_PASSCODE_ANSWER = '0,3,6,7,8'; // L-shape on 3x3 grid
 const DRAW_PASSCODE_PRICE = 99;
 const CHESS_PRIZE_SHOTS = 500;
 const CHESS_MATE_MOVE = { from: [1, 5], to: [0, 5] }; // Example: White Rook from f7 to f8
+const MAZE_TIMER_SECONDS = 30; // 30 seconds
 
 const initialChessBoard = Array(8).fill(null).map(() => Array(8).fill(null));
 // Black King on e8
@@ -92,12 +94,17 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
   // For chess-mate game
   const [isChessGameActive, setIsChessGameActive] = useState(false);
   const [isChessWon, setIsChessWon] = useState(false);
+  
+  // For maze-draw game
+  const [isMazeGameActive, setIsMazeGameActive] = useState(false);
+  const [isMazeWon, setIsMazeWon] = useState(false);
+  const [mazeTimer, setMazeTimer] = useState(MAZE_TIMER_SECONDS);
 
 
   const { addToVault, luckshots, spendLuckshot, hasSeenShotInfo, setHasSeenShotInfo, addLuckshots } = useStore();
   const { toast } = useToast();
   
-  const isGame = product.game && ['reel-pause', 'riddle-calc', 'draw-passcode', 'chess-mate'].includes(product.game);
+  const isGame = product.game && ['reel-pause', 'riddle-calc', 'draw-passcode', 'chess-mate', 'maze-draw'].includes(product.game);
   
   // Advanced pricing model state
   const priceState = useRef({
@@ -210,6 +217,21 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
       if (timerInterval.current) clearInterval(timerInterval.current);
     }
   }, [isRiddleDialogOpen, riddleTimer]);
+  
+  useEffect(() => {
+    if (isMazeGameActive && mazeTimer > 0) {
+      timerInterval.current = setInterval(() => {
+        setMazeTimer(prev => prev - 1);
+      }, 1000);
+    } else if (mazeTimer === 0) {
+      if (timerInterval.current) clearInterval(timerInterval.current);
+      setIsMazeGameActive(false);
+      toast({ variant: "destructive", title: "Time's up!", description: "You didn't solve the maze in time." });
+    }
+    return () => {
+      if (timerInterval.current) clearInterval(timerInterval.current);
+    }
+  }, [isMazeGameActive, mazeTimer, toast]);
 
   const startReelGame = () => {
     setIsReelPaused(false);
@@ -392,17 +414,53 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
       }
       setIsChessGameActive(false);
   }
+  
+  const handleMazeStart = () => {
+    handleTakeShot(() => {
+      setIsMazeGameActive(true);
+      setMazeTimer(MAZE_TIMER_SECONDS);
+      setIsMazeWon(false);
+    })
+  }
+
+  const handleMazeComplete = () => {
+    setIsMazeWon(true);
+    if(timerInterval.current) clearInterval(timerInterval.current);
+    handleVault(0); // Vault the $5 prize for 0 cost
+    toast({
+        title: "Pathfinder!",
+        description: `You solved the maze and won a ${product.name}!`,
+    });
+    setIsMazeGameActive(false);
+  }
 
   const minutes = Math.floor(riddleTimer / 60);
   const seconds = riddleTimer % 60;
   const timerColor = riddleTimer <= 60 ? "text-destructive" : "text-foreground";
 
-  const isGameCard = product.game === 'reel-pause' || product.game === 'riddle-calc' || product.game === 'draw-passcode' || product.game === 'chess-mate';
+  const isGameCard = ['reel-pause', 'riddle-calc', 'draw-passcode', 'chess-mate', 'maze-draw'].includes(product.game ?? '');
 
   const discountPercent = ((product.marketPrice - currentPrice) / product.marketPrice) * 100;
   const discountColor = discountPercent > 0 ? "text-green-500" : "text-red-500";
   
   const renderActions = () => {
+    if (product.game === 'maze-draw') {
+        return (
+             <div className="w-full flex flex-col gap-2">
+                <MazeGame onComplete={handleMazeComplete} isGameActive={isMazeGameActive} />
+                {isMazeWon ? (
+                    <div className="flex items-center justify-center gap-2 font-bold text-primary p-4 h-12">
+                        <Check /> You Won!
+                    </div>
+                ) : (
+                    <Button onClick={handleMazeStart} disabled={isMazeGameActive} className="w-full h-12 text-lg font-bold">
+                        {isMazeGameActive ? `Time: ${mazeTimer}s` : 'Start Game'}
+                    </Button>
+                )}
+            </div>
+        )
+    }
+
     if (product.game === 'chess-mate') {
       return (
         <div className="w-full flex flex-col gap-2">
