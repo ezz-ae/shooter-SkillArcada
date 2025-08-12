@@ -165,7 +165,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
   const isGameCard = product.game === 'digit-pause';
 
   const discountPercent = ((product.marketPrice - currentPrice) / product.marketPrice) * 100;
-  const discountColor = discountPercent > 0 ? "text-green-500" : "text-destructive";
+  const discountColor = discountPercent > 0 ? "text-accent" : "text-[hsl(var(--chart-4))]";
 
   return (
     <>
@@ -203,7 +203,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
                  <div className="flex items-baseline gap-2">
                     <span className="text-2xl font-black tracking-wider text-white shimmer-text" style={{'--trend-color': 'hsl(var(--primary))'} as React.CSSProperties}>${currentPrice.toFixed(2)}</span>
                     <span className={cn("font-bold", discountColor)}>
-                        {discountPercent > 0 ? '▼' : '▲'}{Math.abs(discountPercent).toFixed(1)}%
+                        {Math.abs(discountPercent).toFixed(1)}%
                     </span>
                  </div>
               )}
@@ -214,7 +214,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
              <div className="mt-4">
               <span className="text-3xl font-black tracking-wider text-white shimmer-text" style={{'--trend-color': 'hsl(var(--primary))'} as React.CSSProperties}>${currentPrice.toFixed(2)}</span>
                <span className={cn("ml-2 font-bold", discountColor)}>
-                    {discountPercent > 0 ? '▼' : '▲'}{Math.abs(discountPercent).toFixed(1)}%
+                    {Math.abs(discountPercent).toFixed(1)}%
                 </span>
             </div>
            )}
