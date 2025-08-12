@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/
 import { Dices, PlayCircle, HelpCircle, Gamepad2, BrainCircuit } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Dice } from './dice';
+import Link from 'next/link';
 
 export function DiceGame() {
     const [rolls, setRolls] = useState<(number | null)[]>([null, null, null]);
@@ -48,17 +49,19 @@ export function DiceGame() {
         if (!luckScore) return null;
         
         const actions = {
-            low: { label: "Need Help?", icon: HelpCircle, variant: 'secondary' as const },
-            medium: { label: "Play a Challenge", icon: Gamepad2, variant: 'outline' as const },
-            high: { label: "Go to Brainshots!", icon: BrainCircuit, variant: 'default' as const },
+            low: { label: "Need Help?", icon: HelpCircle, variant: 'secondary' as const, href: '/learning-center' },
+            medium: { label: "Play a Challenge", icon: Gamepad2, variant: 'outline' as const, href: '/pool-shot' },
+            high: { label: "Go to Brainshots!", icon: BrainCircuit, variant: 'default' as const, href: '/brainshots' },
         };
         
         const luckyAction = actions[luckScore];
 
         return (
             <div className="mt-4 flex flex-col sm:flex-row gap-2 justify-center">
-                <Button size="lg" variant={luckyAction.variant}>
-                    <luckyAction.icon className="mr-2" /> {luckyAction.label}
+                <Button size="lg" variant={luckyAction.variant} asChild>
+                    <Link href={luckyAction.href}>
+                        <luckyAction.icon className="mr-2" /> {luckyAction.label}
+                    </Link>
                 </Button>
                 <Button size="lg" variant="ghost" onClick={handleReset}>Try Again</Button>
             </div>
