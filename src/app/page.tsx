@@ -30,7 +30,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { GameLinkCard } from "@/components/game-link-card";
 import { FaChess } from "react-icons/fa";
-import { ChallengeAI } from "@/components/challenge-ai";
+import { ShoterChallenge } from "@/components/shoter-challenge";
 
 export default function Home() {
     const { isAuthenticated, user, initializeAuth, isNewUser, hasAcceptedTerms, acceptTerms, isLoggingIn } = useAuth();
@@ -66,7 +66,7 @@ export default function Home() {
     const btcProduct = products.find(p => p.id === 'prod_crypto_01');
     
     const gameLinks = [
-      { href: "/luckshots", label: "Luckshots", icon: Dices, description: "Classic price drop action." },
+      { href: "/shotershots", label: "ShoterShots", icon: Dices, description: "Classic price drop action." },
       { href: "/brainshots", label: "Brainshots", icon: BrainCircuit, description: "Puzzles and skill challenges." },
       { href: "/crypto-luck", label: "Crypto Luck", icon: LineChart, description: "Predict the market to win." },
       { href: "/pool-shot", label: "Pool Shot", icon: Swords, description: "1-on-1 skill-based pool." },
@@ -212,9 +212,9 @@ export default function Home() {
                          </div>
                     </section>
 
-                    {/* AI Challenge Suggester */}
+                    {/* Shoter's Challenge Corner */}
                     <section>
-                         <ChallengeAI />
+                         <ShoterChallenge />
                     </section>
 
                      {/* All Games */}

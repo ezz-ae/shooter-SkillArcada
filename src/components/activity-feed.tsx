@@ -21,7 +21,7 @@ export function ActivityFeed({ users }: ActivityFeedProps) {
                 { id: 1, user: users[0], action: 'won', details: '40 Shots', time: '2m ago' },
                 { id: 2, user: users[1], action: 'redeemed', details: '$1000 USD', time: '5m ago', highlight: true },
                 { id: 3, user: users[2], action: 'won', details: '500 Shots', time: '12m ago' },
-                { id: 4, user: users[3], action: 'traded', details: 'for 20 Luckshots', time: '25m ago' },
+                { id: 4, user: users[3], action: 'traded', details: 'for 20 Shots', time: '25m ago' },
                 { id: 5, user: users[4], action: 'won', details: '100 Shots', time: '45m ago' },
                 { id: 6, user: users[5], action: 'redeemed', details: '$50 USD', time: '1h ago' },
             ]);
@@ -51,7 +51,7 @@ export function ActivityFeed({ users }: ActivityFeedProps) {
                     {mockActivities.map(activity => (
                         <div key={activity.id} className={cn(
                             "flex items-center gap-3 p-3 transition-colors",
-                            (activity as any).highlight && "bg-primary/10 border-l-4 border-primary"
+                            (activity as any).highlight && "bg-primary/10"
                             )}>
                             <Avatar className="h-10 w-10 border-2 border-secondary">
                                 <AvatarImage src={activity.user.avatarUrl} alt={activity.user.name} />

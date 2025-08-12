@@ -132,3 +132,13 @@
     background-position: -200% center;
   }
 }
+
+@keyframes border-pulse {
+  0%,
+  100% {
+    border-color: hsl(var(--primary) / 0.5);
+  }
+  50% {
+    border-color: hsl(var(--accent) / 0.7);
+  }
+}
