@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PoolChallengeCard } from "@/components/pool-challenge-card";
 import { mockUsers } from "@/lib/user";
 import { Bot, Trophy, PlusCircle, Gamepad2 } from "lucide-react";
+import Link from "next/link";
 
 export default function PoolShotPage() {
 
@@ -38,7 +39,7 @@ export default function PoolShotPage() {
             <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger value="challenges">Public Challenges</TabsTrigger>
                 <TabsTrigger value="leagues">Leagues</TabsTrigger>
-                <TabsTrigger value="practice">Your Active Games</TabsTrigger>
+                <TabsTrigger value="practice">Practice</TabsTrigger>
             </TabsList>
             <TabsContent value="challenges" className="mt-6">
                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -71,16 +72,18 @@ export default function PoolShotPage() {
             <TabsContent value="practice" className="mt-6">
                  <Card>
                     <CardHeader>
-                        <CardTitle className="flex items-center gap-2"><Gamepad2/> Your Games</CardTitle>
-                        <CardDescription>Your active 1v1 challenges and practice sessions.</CardDescription>
+                        <CardTitle className="flex items-center gap-2"><Gamepad2/> Practice Mode</CardTitle>
+                        <CardDescription>Hone your skills in a solo session. No pressure, just practice.</CardDescription>
                     </CardHeader>
-                    <CardContent>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            {challenges.filter(c => !!c.player2).map(challenge => (
-                                <PoolChallengeCard key={challenge.id} challenge={challenge} />
-                            ))}
-                        </div>
+                    <CardContent className="text-center py-12">
+                       <h3 className="text-4xl font-black">Free Play</h3>
+                       <p className="text-muted-foreground">Practice your aim and power.</p>
                     </CardContent>
+                    <CardFooter>
+                        <Button size="lg" className="w-full" asChild>
+                            <Link href="/pool-shot/challenge/practice">Start Practice Session for 1 Luckshot</Link>
+                        </Button>
+                    </CardFooter>
                 </Card>
             </TabsContent>
         </Tabs>
