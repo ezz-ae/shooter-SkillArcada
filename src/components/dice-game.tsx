@@ -3,7 +3,7 @@
 
 import { useState, useMemo } from 'react';
 import { Button } from './ui/button';
-import { Dices, PlayCircle, HelpCircle, Gamepad2, BrainCircuit } from 'lucide-react';
+import { Dices, PlayCircle, HelpCircle, Gamepad2, BrainCircuit, Target } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Dice } from './dice';
 import Link from 'next/link';
@@ -36,30 +36,43 @@ export function DiceGame() {
         setCurrentRollIndex(0);
     };
 
-    const luckScore = useMemo(() => {
+    const luckAnalysis = useMemo(() => {
         if (!isGameComplete) return null;
         const total = rolls.reduce((sum, roll) => sum + (roll || 0), 0);
-        if (total <= 6) return { label: 'low', color: 'text-destructive' };
-        if (total <= 12) return { label: 'medium', color: 'text-yellow-500' };
-        return { label: 'high', color: 'text-primary' };
+        
+        if (total <= 8) return { 
+            message: "My grandma used to say, 'You make your own luck!' Your sharp mind is your greatest asset today.",
+            actionLabel: "Go to Brainshots!",
+            icon: BrainCircuit,
+            href: "/brainshots",
+            variant: "default" as const
+        };
+        if (total <= 14) return { 
+            message: "A solid roll! The energy is balanced. A mix of skill and chance is your best bet right now.",
+            actionLabel: "Play a Challenge",
+            icon: Gamepad2,
+            href: "/pool-shot",
+            variant: "outline" as const
+        };
+        return { 
+            message: "Let's gooo! The dice are on fire! Today's the day to take a chance and ride that lucky wave.",
+            actionLabel: "Try a Luckshot!",
+            icon: Target,
+            href: "/luckshots",
+            variant: "default" as const
+        };
     }, [rolls, isGameComplete]);
 
     const renderLuckActions = () => {
-        if (!luckScore) return null;
+        if (!luckAnalysis) return null;
         
-        const actions = {
-            low: { label: "Need Help?", icon: HelpCircle, variant: 'secondary' as const, href: '/learning-center' },
-            medium: { label: "Play a Challenge", icon: Gamepad2, variant: 'outline' as const, href: '/pool-shot' },
-            high: { label: "Go to Brainshots!", icon: BrainCircuit, variant: 'default' as const, href: '/brainshots' },
-        };
-        
-        const luckyAction = actions[luckScore.label as keyof typeof actions];
+        const { label, ...luckyAction } = luckAnalysis;
 
         return (
             <div className="mt-4 flex flex-col sm:flex-row gap-2 justify-center">
                 <Button size="lg" variant={luckyAction.variant} asChild>
                     <Link href={luckyAction.href}>
-                        <luckyAction.icon className="mr-2" /> {luckyAction.label}
+                        <luckyAction.icon className="mr-2" /> {luckyAction.actionLabel}
                     </Link>
                 </Button>
                 <Button size="lg" variant="ghost" onClick={handleReset}>Try Again</Button>
@@ -86,10 +99,14 @@ export function DiceGame() {
                 ))}
             </div>
 
-            {isGameComplete ? (
-                <div className="mt-4">
-                    <p className="text-xl font-semibold">Your luck score is <span className={cn("font-extrabold", luckScore?.color)}>{luckScore?.label.toUpperCase()}</span>!</p>
-                   {renderLuckActions()}
+            {isGameComplete && luckAnalysis ? (
+                <div className="mt-4 animate-in fade-in-50 duration-500">
+                    <Card className="max-w-2xl mx-auto bg-secondary/50 border-primary/20">
+                      <CardContent className="p-6">
+                        <p className="text-xl font-semibold text-center italic">"{luckAnalysis.message}"</p>
+                      </CardContent>
+                    </Card>
+                   <div className="mt-6">{renderLuckActions()}</div>
                 </div>
             ) : (
                 <Button size="lg" onClick={handleRoll} disabled={isRolling} className="px-12 py-8 text-xl">
