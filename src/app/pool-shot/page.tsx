@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PoolChallengeCard } from "@/components/pool-challenge-card";
-import { Product, getProducts } from "@/lib/products";
 import { User, getUsers } from "@/lib/user";
 import { Bot, Trophy, PlusCircle, Gamepad2, Swords } from "lucide-react";
 import Link from "next/link";
@@ -14,13 +13,11 @@ import { useEffect, useState } from "react";
 
 export default function PoolShotPage() {
   const [users, setUsers] = useState<User[]>([]);
-  const [products, setProducts] = useState<Product[]>([]);
   
   useEffect(() => {
     async function fetchData() {
-      const [fetchedUsers, fetchedProducts] = await Promise.all([getUsers(), getProducts()]);
+      const fetchedUsers = await getUsers();
       setUsers(fetchedUsers);
-      setProducts(fetchedProducts);
     }
     fetchData();
   }, []);
@@ -35,8 +32,8 @@ export default function PoolShotPage() {
   return (
     <div className="container mx-auto px-4 py-8 flex flex-col items-center">
        <div className="text-center mb-8">
-        <h1 className="text-4xl font-black tracking-tight lg:text-5xl">
-          Pool Shot
+        <h1 className="text-4xl font-black tracking-tight lg:text-5xl flex items-center justify-center gap-4">
+            <Swords size={40} className="text-primary"/> Pool Shot
         </h1>
         <p className="mt-2 text-lg text-muted-foreground max-w-2xl mx-auto">
           Compete in 1-on-1 challenges, join high-stakes leagues, or practice your skills. The felt is waiting.
@@ -94,7 +91,7 @@ export default function PoolShotPage() {
                         </div>
                     </CardContent>
                     <CardFooter className="flex-col gap-2">
-                        <Button size="lg" variant="outline" className="w-full">Register with Crypto (1 ETH)</Button>
+                        <Button size="lg" className="w-full">Register Now</Button>
                     </CardFooter>
                 </Card>
             </TabsContent>
@@ -104,5 +101,3 @@ export default function PoolShotPage() {
     </div>
   );
 }
-
-    

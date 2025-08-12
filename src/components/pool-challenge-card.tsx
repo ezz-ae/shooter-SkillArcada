@@ -111,8 +111,8 @@ export function PoolChallengeCard({ challenge, onDismiss }: PoolChallengeCardPro
         </div>
       </CardHeader>
       <CardContent className="flex-grow text-center flex flex-col justify-center">
-        <p className="text-4xl font-black text-accent">{prize} $</p>
-        <p className="text-muted-foreground text-sm">Prize Pool for the winner</p>
+        <p className="text-4xl font-black text-accent">{prize} Shots</p>
+        <p className="text-muted-foreground text-sm">Prize Pool</p>
       </CardContent>
       <CardFooter className="flex-col gap-2">
          <Button asChild className="w-full">
@@ -122,7 +122,7 @@ export function PoolChallengeCard({ challenge, onDismiss }: PoolChallengeCardPro
         </Button>
         <div className="flex items-center gap-1 text-xs text-muted-foreground">
             <Target className="h-3 w-3" />
-            <p>Entry Fee: {fee} Luckshots</p>
+            <p>Entry Fee: {fee} Shots</p>
         </div>
       </CardFooter>
     </Card>
