@@ -30,7 +30,7 @@ const initialState = {
   hasAcceptedTerms: false,
 };
 
-const auth = getAuth(app); // Use the imported app
+const auth = getAuth(app); // Use the imported, initialized app
 
 export const useAuth = create<AuthState>()(
   persist(

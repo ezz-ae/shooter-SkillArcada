@@ -8,7 +8,7 @@ export interface User {
   avatarUrl: string;
 }
 
-const db = getFirestore(app); // Use the imported app
+const db = getFirestore(app); // Use the imported, initialized app
 
 export async function getUsers(): Promise<User[]> {
   // In a real app, this would fetch from Firestore. For now, using mock data.

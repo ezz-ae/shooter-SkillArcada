@@ -14,7 +14,7 @@ export interface Product {
   category?: 'luckshot' | 'brainshot' | 'luckgirls';
 }
 
-const db = getFirestore(app); // Use the imported app
+const db = getFirestore(app); // Use the imported, initialized app
 
 export async function getProducts(): Promise<Product[]> {
   // Mock data for products. In a real app, this would fetch from Firestore.
