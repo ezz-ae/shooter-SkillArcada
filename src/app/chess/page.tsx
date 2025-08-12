@@ -24,13 +24,13 @@ export default function ChessPage() {
   }, []);
 
   const chessChallenges = users.length > 3 ? [
-    { id: 'chess1', prize: 250, fee: 25, player1: users[1], player2: null, type: 'chess' },
-    { id: 'chess2', prize: 1000, fee: 100, player1: users[3], player2: null, type: 'chess' },
-    { id: 'chess3', prize: 50, fee: 5, player1: users[0], player2: users[2], type: 'chess' },
+    { id: 'chess1', prize: 250, fee: 25, player1: users[1], player2: null, type: 'chess' as const },
+    { id: 'chess2', prize: 1000, fee: 100, player1: users[3], player2: null, type: 'chess' as const },
+    { id: 'chess3', prize: 50, fee: 5, player1: users[0], player2: users[2], type: 'chess' as const },
   ] : [];
 
   return (
-    <div className="container mx-auto px-4 py-8 flex flex-col items-center">
+    <div className="container mx-auto px-4 py-8">
        <div className="text-center mb-8">
         <h1 className="text-4xl font-black tracking-tight lg:text-5xl flex items-center justify-center gap-4">
           <FaChess /> Chess Challenges
@@ -40,7 +40,7 @@ export default function ChessPage() {
         </p>
       </div>
 
-      <div className="w-full max-w-5xl">
+      <div className="w-full max-w-5xl mx-auto">
          <div className="flex justify-end mb-4">
             <Button size="lg">
                 <PlusCircle className="mr-2"/>
