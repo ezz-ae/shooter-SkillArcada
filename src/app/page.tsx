@@ -15,9 +15,15 @@ import { ShotTaker } from "@/components/shot-taker";
 import { mockProducts } from "@/lib/products";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { PoolChallengeCard } from "@/components/pool-challenge-card";
 
 export default function Home() {
     const { isAuthenticated, user, login } = useAuth();
+    const [openChallenges, setOpenChallenges] = useState([
+      { id: 'c1', prize: 40, fee: 5, player1: mockUsers[0], player2: null },
+      { id: 'c2', prize: 100, fee: 10, player1: mockUsers[2], player2: null },
+      { id: 'c3', prize: 500, fee: 25, player1: mockUsers[3], player2: null },
+    ]);
     
     // Auto-login for guest users
     useEffect(() => {
@@ -36,6 +42,15 @@ export default function Home() {
       { href: "/pool-shot", label: "Pool Shot", icon: Swords, description: "1-on-1 skill-based pool." },
       { href: "/luckgirls", label: "Luckgirls", icon: Heart, description: "Fun, social, and exciting games." },
     ];
+
+    const handleDismissChallenge = (id: string) => {
+        setOpenChallenges(prev => {
+            const dismissedChallenge = prev.find(c => c.id === id);
+            if (!dismissedChallenge) return prev;
+            // Move the dismissed challenge to the end of the array
+            return [...prev.filter(c => c.id !== id), dismissedChallenge];
+        });
+    };
 
     if (!isAuthenticated || !user) {
         return (
@@ -64,17 +79,39 @@ export default function Home() {
                 
                 {/* Main Content: Challenges and League */}
                 <div className="space-y-8">
-                    {/* Test Your Luck */}
-                    <section>
-                        <DiceGame />
+                    {/* Test Your Luck & Skill */}
+                    <section className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                       <DiceGame />
+                       {openChallenges.length > 0 && (
+                            <PoolChallengeCard 
+                                challenge={openChallenges[0]}
+                                onDismiss={() => handleDismissChallenge(openChallenges[0].id)}
+                            />
+                       )}
                     </section>
                     
                     {/* Featured Games */}
                     <section>
                          <h2 className="text-2xl font-bold mb-4">Featured Games</h2>
-                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
                             {iphoneProduct && <ShotTaker product={iphoneProduct} />}
                             {btcProduct && <ShotTaker product={btcProduct} />}
+                            <Card className="shadow-2xl border-accent/50 border-2 flex flex-col justify-between">
+                                <CardHeader className="text-center">
+                                    <Trophy className="mx-auto h-16 w-16 text-accent animate-pulse"/>
+                                    <CardTitle className="text-3xl font-black">The Pro League</CardTitle>
+                                    <CardDescription className="text-lg">Season 1 is now open for registration.</CardDescription>
+                                </CardHeader>
+                                <CardContent className="text-center">
+                                    <p className="text-5xl font-black text-primary">1 ETH</p>
+                                    <p className="text-muted-foreground font-semibold">Grand Prize</p>
+                                </CardContent>
+                                <CardFooter>
+                                    <Button size="lg" className="w-full" asChild>
+                                        <Link href="/pool-shot">View League</Link>
+                                    </Button>
+                                </CardFooter>
+                            </Card>
                          </div>
                     </section>
 
@@ -122,3 +159,5 @@ export default function Home() {
         </div>
     );
 }
+
+    
