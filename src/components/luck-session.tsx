@@ -58,7 +58,7 @@ export function LuckSession() {
                            Our resident gamegang mega wants to give you a personalized luck session.
                         </p>
                         <Button size="lg" className="mt-8" onClick={handleStart}>
-                            Right shot if you in <ArrowRight className="ml-2"/>
+                            HOW LUCKY I AM <ArrowRight className="ml-2"/>
                         </Button>
                     </div>
                 )
