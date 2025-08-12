@@ -31,8 +31,9 @@ export const useAuth = create<AuthState>()(
     (set, get) => ({
       ...initialState,
       login: (method) => {
-        // In a real app, this would involve a complex authentication flow.
-        // Here, we'll just simulate a successful login and show the signup form.
+        // In a real app, this would involve a complex authentication flow via WhatsApp/Wallet.
+        // The user must connect a wallet or WhatsApp to have a fully active account.
+        // Here, we'll just simulate a successful login and show the final signup step.
         set({ isLoggingIn: false, showSignup: true });
       },
       logout: () => {
@@ -41,6 +42,8 @@ export const useAuth = create<AuthState>()(
         set({ ...initialState });
       },
       completeSignup: (luckyNumber) => {
+        // This is the final step after a successful Wallet/WhatsApp login.
+        // A backend would verify the lucky number is unique before completing signup.
         set({
           isAuthenticated: true,
           showSignup: false,
