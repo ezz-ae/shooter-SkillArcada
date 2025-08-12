@@ -34,24 +34,28 @@ interface StoreState {
   confirmShipping: () => void;
   spendFromWallet: (amount: number) => void;
   redeemEarnedShots: () => void;
+  reset: () => void;
 }
 
 const getVaultItemKey = (item: { id: string; purchaseTimestamp: number }) => {
   return `${item.id}-${item.purchaseTimestamp}`;
 }
 
+const initialState = {
+    vault: [],
+    shippingCart: [],
+    walletBalance: 10000.0,
+    luckshots: 5,
+    earnedShots: 0,
+    hasSeenShotInfo: false,
+    hasSeenVaultInfo: false,
+    hasTradedForShots: false,
+};
+
 export const useStore = create<StoreState>()(
   persist(
     (set, get) => ({
-      vault: [],
-      shippingCart: [],
-      walletBalance: 10000.0,
-      luckshots: 5,
-      earnedShots: 0,
-      hasSeenShotInfo: false,
-      hasSeenVaultInfo: false,
-      hasTradedForShots: false,
-
+      ...initialState,
       setHasSeenShotInfo: (hasSeen: boolean) => set({ hasSeenShotInfo: hasSeen }),
       setHasSeenVaultInfo: (hasSeen: boolean) => set({ hasSeenVaultInfo: hasSeen }),
 
@@ -143,9 +147,13 @@ export const useStore = create<StoreState>()(
           }));
         }
       },
+
+      reset: () => {
+        set(initialState);
+      }
     }),
     {
-      name: "shopnluck-storage-v3", 
+      name: "shopnluck-storage-v4", 
       storage: createJSONStorage(() => localStorage), 
     }
   )

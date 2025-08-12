@@ -1,33 +1,97 @@
 
 "use client";
 
-import { ShotTaker } from "@/components/shot-taker";
-import { mockProducts } from "@/lib/products";
-import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { mockUsers } from "@/lib/user";
+import { PoolChallengeCard } from "@/components/pool-challenge-card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Bot, Trophy, PlusCircle, Gamepad2 } from "lucide-react";
+import { ActivityFeed } from "@/components/activity-feed";
+import { useAuth } from "@/lib/auth";
+import { LoginModal } from "@/components/login-modal";
+import { SignUpForm } from "@/components/signup-form";
 
 export default function Home() {
-  
-  return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="text-center mb-8">
-        <h1 className="text-4xl font-black tracking-tight lg:text-5xl">
-          Take Your Best Shot
-        </h1>
-        <p className="mt-2 text-lg text-muted-foreground">
-          Unique games, unbelievable prices. Your next lucky break is just a click away.
-        </p>
-      </div>
+    const { isAuthenticated, user, isLoggingIn, showSignup, setShowSignup } = useAuth();
+    
+    // Mock data for challenges
+    const challenges = [
+        { id: 'c1', prize: 40, fee: 5, player1: mockUsers[0], player2: mockUsers[1] },
+        { id: 'c2', prize: 100, fee: 10, player1: mockUsers[2], player2: null },
+        { id: 'c3', prize: 500, fee: 25, player1: mockUsers[3], player2: null },
+        { id: 'c4', prize: 20, fee: 2, player1: mockUsers[4], player2: mockUsers[5] },
+    ];
+    
+    const openChallenges = challenges.filter(c => !c.player2);
 
-      <section
-        id="products"
-        className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4"
-      >
-        {mockProducts.map((product) => (
-          <div key={product.id}>
-            <ShotTaker product={product} />
-          </div>
-        ))}
-      </section>
-    </div>
-  );
+    if (!isAuthenticated && !isLoggingIn && !showSignup) {
+        return <LoginModal />;
+    }
+
+    if (showSignup) {
+        return <SignUpForm />;
+    }
+
+    return (
+        <div className="container mx-auto px-4 py-8">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                {/* Main Content: Challenges and League */}
+                <div className="lg:col-span-2 space-y-8">
+                    {/* Open Challenges */}
+                    <section>
+                        <div className="flex justify-between items-center mb-4">
+                            <h2 className="text-2xl font-bold">Open Challenges</h2>
+                            <Button variant="outline">View All</Button>
+                        </div>
+                        {openChallenges.length > 0 ? (
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                {openChallenges.map(challenge => (
+                                    <PoolChallengeCard key={challenge.id} challenge={challenge} />
+                                ))}
+                            </div>
+                        ) : (
+                             <div className="text-center py-16 border-2 border-dashed rounded-lg">
+                                <h3 className="text-xl font-semibold">No Open Challenges</h3>
+                                <p className="text-muted-foreground mt-2">Why not create one yourself?</p>
+                                <Button className="mt-4"><PlusCircle/> Create Challenge</Button>
+                            </div>
+                        )}
+                    </section>
+
+                    {/* Luck League */}
+                    <section>
+                         <h2 className="text-2xl font-bold mb-4">Join the Luck League</h2>
+                         <Card className="shadow-2xl border-accent/50 border-2 overflow-hidden">
+                            <div className="grid grid-cols-1 md:grid-cols-2">
+                                <div className="p-6 flex flex-col justify-center text-center md:text-left">
+                                     <Trophy className="mx-auto md:mx-0 h-16 w-16 text-accent animate-pulse"/>
+                                    <CardTitle className="text-3xl font-black mt-2">The Pro League</CardTitle>
+                                    <CardDescription className="text-lg mt-1">Season 1 is now open for registration.</CardDescription>
+                                     <div className="mt-4">
+                                        <p className="text-5xl font-black text-primary">1 ETH</p>
+                                        <p className="text-muted-foreground font-semibold">Grand Prize</p>
+                                    </div>
+                                </div>
+                                <div className="bg-secondary/50 p-6 flex flex-col justify-center gap-4">
+                                    <CardTitle className="text-center">Register Now</CardTitle>
+                                    <Button size="lg" className="w-full">Register with 200 Luckshots</Button>
+                                    <Button size="lg" variant="outline" className="w-full">Register with Crypto (1 ETH)</Button>
+                                </div>
+                            </div>
+                        </Card>
+                    </section>
+                </div>
+
+                {/* Sidebar: Live Activity */}
+                <aside className="space-y-8">
+                     <section>
+                        <h2 className="text-2xl font-bold mb-4">Live Activity</h2>
+                        <ActivityFeed />
+                    </section>
+                </aside>
+
+            </div>
+        </div>
+    );
 }
