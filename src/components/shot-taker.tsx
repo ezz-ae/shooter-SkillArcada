@@ -20,7 +20,6 @@ import { useStore } from "@/lib/store";
 import type { Product } from "@/lib/products";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
-import { X } from "lucide-react";
 
 interface ShotTakerProps {
   product: Product;
@@ -72,24 +71,24 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
     }
   }, []);
 
+  useEffect(() => {
+    // Start the game automatically for the digit-pause product
+    if (product.game === 'digit-pause' && !isGameActive) {
+      startDigitGame();
+    }
+  }, [product.game, isGameActive]);
+
   const startDigitGame = () => {
-    setLockedDigits([]);
-    setDigits([0,0,0]);
     setIsGameActive(true);
-    
     // Clear any existing intervals before starting new ones
     stopDigitGame();
 
     digitIntervals.current = [0, 1, 2].map(index => {
       return setInterval(() => {
         setDigits(prev => {
-          // Only update if the digit is not locked
-          if (lockedDigits.length <= index) {
             const newDigits = [...prev];
             newDigits[index] = Math.floor(Math.random() * 10);
             return newDigits;
-          }
-          return prev;
         });
       }, 75);
     });
@@ -102,7 +101,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
 
   const handleShot = () => {
     if (product.game === 'digit-pause') {
-      startDigitGame();
+      // Game logic is handled inline
       return;
     }
     
@@ -160,14 +159,37 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
   }
 
   const handleDigitClick = (index: number) => {
-    if (lockedDigits.length === index && isGameActive) {
-      const newLockedDigits = [...lockedDigits, digits[index]];
-      setLockedDigits(newLockedDigits);
-      clearInterval(digitIntervals.current[index]);
+    if (lockedDigits.length !== index || !isGameActive) {
+      return;
+    }
 
-      if (newLockedDigits.length === 3) {
-        stopDigitGame();
+    // Charge for the shot on the first click
+    if (lockedDigits.length === 0) {
+      if (hasTakenFirstShot) {
+        if (walletBalance < SHOT_COST) {
+            toast({
+                variant: "destructive",
+                title: "Insufficient Funds",
+                description: `You need at least $${SHOT_COST.toFixed(2)} to play.`,
+            });
+            return;
+        }
+        spendFromWallet(SHOT_COST);
+      } else {
+        toast({
+          title: "Your First Shot is Free!",
+          description: "Lock in your price!",
+        });
+        setHasTakenFirstShot();
       }
+    }
+    
+    const newLockedDigits = [...lockedDigits, digits[index]];
+    setLockedDigits(newLockedDigits);
+    clearInterval(digitIntervals.current[index]);
+
+    if (newLockedDigits.length === 3) {
+      stopDigitGame();
     }
   };
 
@@ -197,10 +219,9 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
   }
 
   const resetDigitGame = () => {
-      setIsGameActive(false);
+      setIsGameActive(false); // This will trigger a restart via useEffect
       setLockedDigits([]);
       setDigits([0,0,0]);
-      stopDigitGame();
   }
 
 
@@ -211,24 +232,9 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
   const discountColor = discountPercent > 0 ? "text-accent" : "text-[hsl(var(--chart-4))]";
 
   const renderGameFooter = () => {
-    if (!isGameActive) {
-      return (
-        <button
-          className="w-full h-12 text-md font-bold text-primary-foreground rounded-md relative overflow-hidden bg-secondary flex items-center justify-center"
-          onClick={handleShot}
-        >
-          <div className="absolute inset-0 moving-gradient"></div>
-          <div className="relative flex items-baseline w-full justify-center">
-            <span className="font-black text-lg">Price</span>
-          </div>
-        </button>
-      );
-    }
-
     if (lockedDigits.length < 3) {
       return (
          <div className="flex justify-center items-center gap-2 w-full relative">
-            {isGameActive && <button onClick={resetDigitGame} className="absolute right-[-8px] top-[-8px] text-muted-foreground hover:text-foreground"><X size={18}/></button>}
             {[0, 1, 2].map(index => (
                 <button
                 key={index}
@@ -250,7 +256,6 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
             </div>
         </div>
     );
-
   }
 
 
