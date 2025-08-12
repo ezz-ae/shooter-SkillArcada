@@ -2,7 +2,7 @@
 "use client";
 
 import Link from "next/link";
-import { Package, Target, BrainCircuit, Heart, Swords, Dice5, User as UserIcon, LogOut, LineChart, Gamepad2, ChevronDown } from "lucide-react";
+import { Package, Target, BrainCircuit, Heart, Swords, Dice5, User, LogOut, LineChart, Gamepad2, ChevronDown, DoorOpen } from "lucide-react";
 import { Button } from "./ui/button";
 import { useStore } from "@/lib/store";
 import { useEffect, useState } from "react";
@@ -49,6 +49,12 @@ export function Header() {
     { href: "/luckgirls", label: "Luckgirls", icon: Heart },
   ];
 
+  const challengeNavItems = [
+    { href: "/pool-shot", label: "All Challenges", icon: Swords },
+    { href: "/pool-shot", label: "My Challenges", icon: User },
+    { href: "/pool-shot", label: "Open Challenges", icon: DoorOpen },
+  ]
+
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center">
@@ -94,6 +100,25 @@ export function Header() {
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost">
+                    <Swords className="h-5 w-5 mr-2" />
+                    Challenges
+                    <ChevronDown className="h-4 w-4 ml-1" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                {challengeNavItems.map((item) => (
+                    <DropdownMenuItem key={item.label} asChild>
+                        <Link href={item.href} className="flex items-center gap-2">
+                           <item.icon className="h-4 w-4" />
+                           {item.label}
+                        </Link>
+                    </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </nav>
         </div>
         <div className="flex flex-1 items-center justify-end space-x-2">
@@ -128,7 +153,7 @@ export function Header() {
                          </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
-                        <UserIcon className="mr-2 h-4 w-4" />
+                        <User className="mr-2 h-4 w-4" />
                         <span>Profile Settings</span>
                     </DropdownMenuItem>
                 </DropdownMenuGroup>
