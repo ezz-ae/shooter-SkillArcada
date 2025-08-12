@@ -247,7 +247,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
                   disabled={lockedDigits.length !== index}
                   className={cn(
                     "h-16 w-1/3 rounded-lg flex items-center justify-center text-5xl font-black tabular-nums disabled:opacity-50 disabled:cursor-not-allowed transition-all",
-                    lockedDigits.length === index ? "bg-secondary text-primary-foreground hover:enabled:bg-primary/80" : "bg-secondary text-primary-foreground"
+                    "bg-secondary text-primary-foreground hover:enabled:bg-primary/80"
                   )}
                   >
                   {lockedDigits.length > index ? '?' : digits[index]}
@@ -301,7 +301,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
             </Link>
           )}
            {isGameCard ? (
-             <div className="h-5" /> 
+             <p className="text-sm text-muted-foreground h-5">Special timed price game. Hit the digits!</p> 
            ) : (
              <div className="flex items-baseline gap-2">
                 <span className="text-2xl font-black tracking-wider text-white shimmer-text" style={{'--trend-color': 'hsl(var(--primary))'} as React.CSSProperties}>${currentPrice.toFixed(2)}</span>
