@@ -2,6 +2,7 @@
 "use client";
 
 import { PoolShotGame } from "@/components/pool-shot-game";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 // This is a placeholder page for a specific challenge.
 // In a real app, you would fetch challenge details based on the `params.id`.
