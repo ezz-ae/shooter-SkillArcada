@@ -49,12 +49,9 @@ export function Header() {
               strokeLinejoin="round"
               className="h-6 w-6 text-primary"
             >
-                <title>ShoterShots Logo</title>
-                <path d="M2 3h20"></path>
-                <path d="M2.92 3C2.42 8.33 4.13 14.32 8 18"></path>
-                <path d="M21.08 3c.5 5.33-1.21 11.32-5.08 15"></path>
-                <path d="M8 18c2 2 4 3 6 3s4-1 6-3"></path>
-                <path d="M12 3v18"></path>
+              <title>ShoterShots Logo</title>
+              <path d="M12 2L14.39 8.36L21 9.27L16.5 13.5L18 19.82L12 16.73L6 19.82L7.5 13.5L3 9.27L9.61 8.36L12 2z" />
+              <circle cx="12" cy="12" r="10" />
             </svg>
             <span className="font-bold">ShoterShots</span>
           </Link>
