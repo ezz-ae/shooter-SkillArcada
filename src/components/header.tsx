@@ -41,7 +41,7 @@ export function Header() {
               <path d="M9 9h.01" />
               <path d="M15 15h.01" />
             </svg>
-            <span className="font-bold">ShopnLuck</span>
+            <span className="font-bold">Luckshots</span>
           </Link>
         </div>
         <div className="flex flex-1 items-center justify-end space-x-4">

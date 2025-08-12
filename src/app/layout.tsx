@@ -8,8 +8,8 @@ import { Header } from "@/components/header";
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
-  title: "ShopnLuck",
-  description: "Where Fortune Favors the Shopper.",
+  title: "Luckshots",
+  description: "Your shot at unbelievable prices.",
 };
 
 export default function RootLayout({
