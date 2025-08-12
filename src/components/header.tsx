@@ -161,7 +161,10 @@ export function Header() {
             </DropdownMenu>
             </>
           ) : (
-            <div className="h-10 w-24 animate-pulse bg-muted rounded-md"></div>
+            <Button variant="outline">
+              <DoorOpen className="mr-2" />
+              Sign In
+            </Button>
           )}
           
           <ThemeToggle />

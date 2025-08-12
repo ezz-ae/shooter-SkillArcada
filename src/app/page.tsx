@@ -85,7 +85,7 @@ export default function Home() {
         });
     };
 
-    if (isLoggingIn || !isAuthenticated || !user) {
+    if (isLoggingIn) {
         return (
              <div className="container mx-auto px-4 py-8 flex items-center justify-center min-h-[calc(100vh-8rem)]">
                 <div className="animate-pulse">

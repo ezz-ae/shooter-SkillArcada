@@ -30,41 +30,52 @@ const initialState = {
   hasAcceptedTerms: false,
 };
 
-const auth = getAuth(app); // Use the imported, initialized app
+// const auth = getAuth(app); // Use the imported, initialized app
 
 export const useAuth = create<AuthState>()(
   persist(
     (set, get) => ({
       ...initialState,
       initializeAuth: () => {
-        const unsubscribe = onAuthStateChanged(auth, (firebaseUser: FirebaseUser | null) => {
-          if (firebaseUser) {
-            // User is signed in.
-            const isNew = firebaseUser.metadata.creationTime === firebaseUser.metadata.lastSignInTime;
+        // const unsubscribe = onAuthStateChanged(auth, (firebaseUser: FirebaseUser | null) => {
+        //   if (firebaseUser) {
+        //     // User is signed in.
+        //     const isNew = firebaseUser.metadata.creationTime === firebaseUser.metadata.lastSignInTime;
             
-            if (isNew && get().isNewUser) {
-              useStore.getState().addLuckshots(3);
-            }
+        //     if (isNew && get().isNewUser) {
+        //       useStore.getState().addLuckshots(3);
+        //     }
 
-            set({
-              isAuthenticated: true,
-              user: { uid: firebaseUser.uid, isAnonymous: firebaseUser.isAnonymous },
-              isLoggingIn: false,
-              isNewUser: isNew,
-            });
-          } else {
-            // User is signed out or not yet signed in.
-            // Try to sign in anonymously.
-            signInAnonymously(auth).catch((error) => {
-              console.error("Anonymous sign-in failed:", error);
-              set({ isLoggingIn: false });
-            });
-          }
-        });
-        return unsubscribe;
+        //     set({
+        //       isAuthenticated: true,
+        //       user: { uid: firebaseUser.uid, isAnonymous: firebaseUser.isAnonymous },
+        //       isLoggingIn: false,
+        //       isNewUser: isNew,
+        //     });
+        //   } else {
+        //     // User is signed out or not yet signed in.
+        //     // Try to sign in anonymously.
+        //     signInAnonymously(auth).catch((error) => {
+        //       console.error("Anonymous sign-in failed:", error);
+        //       set({ isLoggingIn: false });
+        //     });
+        //   }
+        // });
+        // return unsubscribe;
+        
+        // --- WORKAROUND START ---
+        console.warn("Firebase Auth is temporarily disabled due to suspended API key.");
+        set({
+            isAuthenticated: true,
+            isLoggingIn: false,
+            user: { uid: 'temp-user-id', isAnonymous: true },
+            isNewUser: false
+        })
+        return () => {}; // Return a dummy unsubscribe function
+        // --- WORKAROUND END ---
       },
       logout: async () => {
-        await auth.signOut();
+        // await auth.signOut();
         useStore.getState().reset();
         const isNewUser = get().isNewUser;
         set({ ...initialState, isLoggingIn: false, isNewUser });
