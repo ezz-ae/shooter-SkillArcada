@@ -129,7 +129,7 @@ export default function Home() {
                                             <p className="font-semibold text-white/90">Grand Prize</p>
                                         </div>
                                         <div className="mt-4 text-white/80 px-4">
-                                            <p>Join top players from the globe in an open chat event with a live audience. (32 Players)</p>
+                                            <p>Join the top 32 players from the globe in an open chat event with a live audience.</p>
                                         </div>
                                     </CardContent>
                                     <CardFooter className="p-0">
