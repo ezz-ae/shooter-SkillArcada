@@ -1,0 +1,154 @@
+
+"use client";
+
+import { useEffect, useState } from 'react';
+import { generateStoryAdventure, StoryAdventureOutput } from '@/ai/flows/story-adventure-flow';
+import { Button } from './ui/button';
+import { Textarea } from './ui/textarea';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from './ui/card';
+import Image from 'next/image';
+import { Skeleton } from './ui/skeleton';
+import { Sparkles, FileText } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+import { useStore } from '@/lib/store';
+
+interface AIAdventureGameProps {
+    productName: string;
+}
+
+export function AIAdventureGame({ productName }: AIAdventureGameProps) {
+    const [adventure, setAdventure] = useState<StoryAdventureOutput | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [storyConclusion, setStoryConclusion] = useState("");
+    const [submitted, setSubmitted] = useState(false);
+    const { toast } = useToast();
+    const { addLuckshots } = useStore();
+
+    useEffect(() => {
+        async function getAdventure() {
+            try {
+                setLoading(true);
+                const result = await generateStoryAdventure({ productName });
+                setAdventure(result);
+            } catch (error) {
+                console.error("Failed to generate adventure:", error);
+                toast({
+                    variant: "destructive",
+                    title: "Generation Failed",
+                    description: "Could not generate the AI adventure. Please try refreshing the page."
+                });
+            } finally {
+                setLoading(false);
+            }
+        }
+        getAdventure();
+    }, [productName, toast]);
+
+    const handleSubmit = () => {
+        if (storyConclusion.length < 50) {
+            toast({
+                variant: "destructive",
+                title: "Story Too Short",
+                description: "Your conclusion needs to be at least 50 characters long.",
+            });
+            return;
+        }
+        setSubmitted(true);
+        addLuckshots(25); // Reward for completing
+        toast({
+            title: "Adventure Complete!",
+            description: "A fantastic conclusion! You've been awarded 25 Shots for your creativity."
+        });
+    };
+
+    if (loading) {
+        return (
+            <Card className="w-full max-w-2xl mx-auto">
+                <CardHeader>
+                    <Skeleton className="h-8 w-3/4" />
+                    <Skeleton className="h-4 w-1/2" />
+                </CardHeader>
+                <CardContent>
+                    <Skeleton className="w-full h-80 rounded-lg" />
+                    <Skeleton className="h-6 w-full mt-4" />
+                    <Skeleton className="h-6 w-3/4 mt-2" />
+                </CardContent>
+                <CardFooter>
+                    <Skeleton className="h-24 w-full" />
+                </CardFooter>
+            </Card>
+        );
+    }
+
+    if (!adventure) {
+        return (
+             <Card className="w-full max-w-2xl mx-auto text-center">
+                <CardHeader>
+                    <CardTitle>Error</CardTitle>
+                </CardHeader>
+                 <CardContent>
+                    <p className="text-destructive">Could not load the adventure. Please try again later.</p>
+                </CardContent>
+             </Card>
+        )
+    }
+
+    return (
+        <Card className="w-full max-w-2xl mx-auto shadow-2xl border-primary/20">
+            <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-2xl">
+                    <Sparkles className="text-primary" />
+                    Continue the Story
+                </CardTitle>
+                <CardDescription>
+                    The AI has started a story and created an image. It's up to you to write the perfect ending.
+                </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+                <div className="relative h-80 w-full overflow-hidden rounded-lg border shadow-inner">
+                    <Image
+                        src={adventure.imageUrl}
+                        alt="AI-generated adventure scene"
+                        fill
+                        className="object-cover"
+                        data-ai-hint="fantasy adventure"
+                    />
+                </div>
+                <blockquote className="border-l-4 border-accent pl-4 italic text-muted-foreground">
+                    {adventure.story}
+                </blockquote>
+                
+                {submitted ? (
+                     <div className="p-4 bg-green-500/10 border border-green-500/50 rounded-lg text-center">
+                        <p className="font-bold text-green-700 dark:text-green-400">Thank you for your submission! You've earned a reward.</p>
+                    </div>
+                ) : (
+                    <div className="space-y-2">
+                        <label htmlFor="conclusion" className="font-semibold flex items-center gap-2">
+                            <FileText className="h-5 w-5"/>
+                            Write Your Conclusion
+                        </label>
+                        <Textarea
+                            id="conclusion"
+                            value={storyConclusion}
+                            onChange={(e) => setStoryConclusion(e.target.value)}
+                            placeholder="What happens next...?"
+                            rows={5}
+                            className="text-base"
+                        />
+                    </div>
+                )}
+            </CardContent>
+            <CardFooter>
+                 <Button
+                    size="lg"
+                    className="w-full"
+                    onClick={handleSubmit}
+                    disabled={submitted || storyConclusion.length < 10}
+                >
+                    {submitted ? "Completed!" : "Submit Story & Win Prize"}
+                </Button>
+            </CardFooter>
+        </Card>
+    );
+}

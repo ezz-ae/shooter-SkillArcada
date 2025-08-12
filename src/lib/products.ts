@@ -10,7 +10,7 @@ export interface Product {
   marketPrice: number;
   imageUrl: string;
   dataAiHint: string;
-  game?: 'reel-pause' | 'multi-shot' | 'riddle-calc' | 'draw-passcode' | 'chess-mate' | 'time-challenge' | 'pink-cups' | 'snake-and-stairs';
+  game?: 'reel-pause' | 'multi-shot' | 'riddle-calc' | 'draw-passcode' | 'chess-mate' | 'time-challenge' | 'pink-cups' | 'snake-and-stairs' | 'ai-adventure';
   category?: 'luckshot' | 'brainshot' | 'luckgirls';
 }
 
@@ -45,6 +45,17 @@ export const mockProducts: Product[] = [
     imageUrl: 'https://placehold.co/600x400/F7931A/FFFFFF/png?text=BTC',
     dataAiHint: 'bitcoin crypto',
     game: 'riddle-calc',
+    category: 'brainshot',
+  },
+  {
+    id: 'prod_adventure_01',
+    name: "The Adventurer's Golden Key",
+    subtitle: 'Unlock a special prize',
+    description: 'A key that unlocks a special prize for those who can prove their creativity in the AI Adventure.',
+    marketPrice: 50,
+    imageUrl: 'https://placehold.co/600x400/FFD700/000000/png?text=Key',
+    dataAiHint: 'golden key fantasy',
+    game: 'ai-adventure',
     category: 'brainshot',
   },
 ];
