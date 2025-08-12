@@ -2,7 +2,7 @@
 "use client";
 
 import Link from "next/link";
-import { Package, Wallet, Target, Bot, BrainCircuit } from "lucide-react";
+import { Package, Wallet, Target, BrainCircuit, Heart, Swords, Dice5 } from "lucide-react";
 import { Button } from "./ui/button";
 import { useStore } from "@/lib/store";
 import { useEffect, useState } from "react";
@@ -22,9 +22,10 @@ export function Header() {
   const displayShots = isClient ? luckshots : 0;
 
   const navItems = [
-    { href: "/luckshots", label: "Luckshots", icon: Target },
+    { href: "/luckshots", label: "Luckshots", icon: Dice5 },
     { href: "/brainshots", label: "Brainshots", icon: BrainCircuit },
-    { href: "/pool-shot", label: "Pool Shot", icon: Bot },
+    { href: "/pool-shot", label: "Pool Shot", icon: Swords },
+    { href: "/luckgirls", label: "Luckgirls", icon: Heart },
   ]
 
   return (
@@ -54,7 +55,7 @@ export function Header() {
           </Link>
           <nav className="hidden md:flex items-center space-x-2">
              {navItems.map((item) => (
-                <Button key={item.href} variant={pathname === item.href ? "secondary" : "ghost"} asChild>
+                <Button key={item.href} variant={pathname.startsWith(item.href) ? "secondary" : "ghost"} asChild>
                     <Link href={item.href} className="flex items-center">
                        <item.icon className="h-5 w-5 mr-2" />
                        {item.label}

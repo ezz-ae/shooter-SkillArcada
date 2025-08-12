@@ -7,8 +7,8 @@ export interface Product {
   marketPrice: number;
   imageUrl: string;
   dataAiHint: string;
-  game?: 'reel-pause' | 'multi-shot' | 'riddle-calc' | 'draw-passcode' | 'chess-mate';
-  category?: 'luckshot' | 'brainshot';
+  game?: 'reel-pause' | 'multi-shot' | 'riddle-calc' | 'draw-passcode' | 'chess-mate' | 'time-challenge' | 'pink-cups' | 'snake-and-stairs';
+  category?: 'luckshot' | 'brainshot' | 'luckgirls';
 }
 
 export const mockProducts: Product[] = [
@@ -54,6 +54,39 @@ export const mockProducts: Product[] = [
     dataAiHint: 'chess board',
     game: 'chess-mate',
     category: 'brainshot',
+  },
+   {
+    id: 'prod_girls_01',
+    name: 'Fashion Puzzle',
+    subtitle: 'Style in Time',
+    description: 'Arrange the fashion items in the correct order before time runs out. A test of speed and style!',
+    marketPrice: 50.0,
+    imageUrl: 'https://placehold.co/600x400/f472b6/ffffff/png?text=Style+Puzzle',
+    dataAiHint: 'fashion puzzle',
+    game: 'time-challenge',
+    category: 'luckgirls',
+  },
+   {
+    id: 'prod_girls_02',
+    name: 'Pink Cup Game',
+    subtitle: 'Quick Eyes, Big Prize',
+    description: 'Follow the coin under the shuffling pink cups. Pick the right one to win!',
+    marketPrice: 25.0,
+    imageUrl: 'https://placehold.co/600x400/ec4899/ffffff/png?text=Pink+Cups',
+    dataAiHint: 'pink cups',
+    game: 'pink-cups',
+    category: 'luckgirls',
+  },
+   {
+    id: 'prod_girls_03',
+    name: 'Serpent & Ladders',
+    subtitle: 'Card-driven classic',
+    description: 'A new take on a classic game. Draw cards to move, climb ladders, and avoid the snakes. Chat live with your opponent and the audience!',
+    marketPrice: 100.0,
+    imageUrl: 'https://placehold.co/600x400/8b5cf6/ffffff/png?text=S&L',
+    dataAiHint: 'board game',
+    game: 'snake-and-stairs',
+    category: 'luckgirls',
   },
   {
     id: 'prod_phone_02',
