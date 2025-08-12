@@ -7,7 +7,7 @@ import { ArrowRight, Sparkles, Heart, DollarSign, Compass, Loader2 } from "lucid
 import { cn } from "@/lib/utils";
 import { generateLuckAnalysis, LuckAnalysisOutput } from "@/ai/flows/luck-analysis-flow";
 import { useToast } from "@/hooks/use-toast";
-import { Card, CardContent } from "./ui/card";
+import { useTypewriter } from "@/hooks/use-typewriter";
 
 type SessionState = 'intro' | 'preferences' | 'analyzing' | 'reading' | 'test' | 'complete';
 const preferences = [
@@ -20,6 +20,10 @@ export function LuckSession() {
     const [sessionState, setSessionState] = useState<SessionState>('intro');
     const [analysis, setAnalysis] = useState<LuckAnalysisOutput | null>(null);
     const { toast } = useToast();
+
+    const pastText = useTypewriter(analysis?.past || "");
+    const presentText = useTypewriter(analysis?.present || "");
+    const futureText = useTypewriter(analysis?.future || "");
 
     const handleStart = () => {
         setSessionState('preferences');
@@ -66,8 +70,8 @@ export function LuckSession() {
                         </h2>
                         <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-8">
                             {preferences.map(pref => (
-                                <button 
-                                    key={pref.label} 
+                                <button
+                                    key={pref.label}
                                     className="text-2xl font-bold text-muted-foreground hover:text-primary hover:scale-110 transition-transform duration-300 flex items-center gap-2"
                                     onClick={() => handleSelectPreference(pref.label)}
                                 >
@@ -95,17 +99,17 @@ export function LuckSession() {
                             </h2>
                         </div>
                         <div className="grid md:grid-cols-3 gap-8 text-center">
-                            <div className="p-4 border-t border-white/10">
+                            <div className="p-4 border-t-2 border-white/10">
                                 <h3 className="font-bold text-sm text-muted-foreground mb-2">THE PAST</h3>
-                                <p className="text-white/90">{analysis.past}</p>
+                                <p className="text-white/90 min-h-[6em]">{pastText}</p>
                             </div>
                              <div className="p-4 border-t-2 border-primary scale-105">
                                  <h3 className="font-bold text-sm text-primary mb-2">THE PRESENT</h3>
-                                <p className="text-white">{analysis.present}</p>
+                                <p className="text-white min-h-[6em]">{presentText}</p>
                             </div>
-                            <div className="p-4 border-t border-white/10">
+                            <div className="p-4 border-t-2 border-white/10">
                                 <h3 className="font-bold text-sm text-muted-foreground mb-2">THE FUTURE</h3>
-                                <p className="text-white/90">{analysis.future}</p>
+                                <p className="text-white/90 min-h-[6em]">{futureText}</p>
                             </div>
                         </div>
                         <div className="text-center space-y-4 pt-8">
