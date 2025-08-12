@@ -4,7 +4,7 @@
 import { Button } from "@/components/ui/button";
 import { User, getUsers } from "@/lib/user";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Trophy, BrainCircuit, LineChart, Swords, Heart, Dices, Users, DollarSign, FileText, Sparkles } from "lucide-react";
+import { Trophy, BrainCircuit, LineChart, Swords, Heart, Dices, Users, DollarSign, FileText, Sparkles, Grid, RectangleHorizontal, Layers } from "lucide-react";
 import { ActivityFeed } from "@/components/activity-feed";
 import { useAuth } from "@/lib/auth";
 import { useState, useEffect } from "react";
@@ -70,6 +70,9 @@ export default function Home() {
       { href: "/pool-shot", label: "Pool Shot", icon: Swords, description: "1-on-1 skill-based pool." },
       { href: "/luckgirls", label: "Luckgirls", icon: Heart, description: "Fun, social, and exciting games." },
       { href: "/ai-adventure", label: "AI Adventure", icon: Sparkles, description: "AI-powered story game." },
+      { href: "/siga", label: "Siga", icon: Grid, description: "Classic Filipino strategy game." },
+      { href: "/dominoes", label: "Dominoes", icon: RectangleHorizontal, description: "Timeless tile-based fun." },
+      { href: "/card-games", label: "Card Games", icon: Layers, description: "Poker, and more." },
     ];
 
     const handleDismissChallenge = (id: string) => {
