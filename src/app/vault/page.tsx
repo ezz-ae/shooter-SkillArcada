@@ -234,42 +234,28 @@ export default function VaultPage() {
                     <CardHeader>
                          <CardTitle className="flex items-center gap-2"><Landmark className="text-primary"/> Stake for Rewards</CardTitle>
                          <CardDescription>
-                            Earn rewards by staking your Shots on major crypto assets.
+                            Earn high APY by staking your Shots on major crypto assets in our secure portal.
                         </CardDescription>
                     </CardHeader>
-                    <CardContent className="space-y-4">
-                        <div>
-                            <Label htmlFor="stake-amount" className="text-xs">Amount to Stake (Shots)</Label>
-                            <Input id="stake-amount" type="number" placeholder="0.00" />
+                    <CardContent className="flex justify-around items-center text-center py-4">
+                        <div className="flex flex-col items-center gap-1">
+                            <Bitcoin className="h-6 w-6 text-yellow-500"/>
+                            <span className="text-xs font-bold">BTC</span>
+                            <span className="text-xs text-green-500 font-semibold">12% APY</span>
                         </div>
-                        <div>
-                            <Label htmlFor="stake-asset" className="text-xs">Asset</Label>
-                             <Select>
-                                <SelectTrigger id="stake-asset">
-                                    <SelectValue placeholder="Select an asset" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="btc">
-                                        <div className="flex items-center gap-2">
-                                             <Bitcoin className="h-4 w-4" /> Bitcoin (up to 12% APY)
-                                        </div>
-                                    </SelectItem>
-                                    <SelectItem value="eth">
-                                        <div className="flex items-center gap-2">
-                                             <span className="font-bold">ETH</span> Ethereum (up to 15% APY)
-                                        </div>
-                                    </SelectItem>
-                                    <SelectItem value="sol">
-                                        <div className="flex items-center gap-2">
-                                            <span className="font-bold">SOL</span> Solana (up to 18% APY)
-                                        </div>
-                                    </SelectItem>
-                                </SelectContent>
-                            </Select>
+                         <div className="flex flex-col items-center gap-1">
+                            <span className="font-bold text-lg">ETH</span>
+                            <span className="text-xs font-bold">Ethereum</span>
+                             <span className="text-xs text-green-500 font-semibold">15% APY</span>
+                        </div>
+                         <div className="flex flex-col items-center gap-1">
+                            <span className="font-bold text-lg">SOL</span>
+                            <span className="text-xs font-bold">Solana</span>
+                             <span className="text-xs text-green-500 font-semibold">18% APY</span>
                         </div>
                     </CardContent>
                     <CardFooter>
-                        <Button className="w-full">Stake Now</Button>
+                        <Button className="w-full">Go to Staking Portal</Button>
                     </CardFooter>
                 </Card>
 
