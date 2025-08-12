@@ -10,7 +10,15 @@ export interface Product {
 }
 
 export const mockProducts: Product[] = [
-    {
+  {
+    id: 'prod_021',
+    name: 'Iphone 16',
+    description: 'The latest and greatest from Apple, featuring a brand new A19 Bionic chip, a revolutionary camera system, and a display that\'s brighter than ever. Experience the future of mobile.',
+    marketPrice: 1299.0,
+    imageUrl: 'https://placehold.co/600x400/333333/FFFFFF/png?text=iPhone+16',
+    dataAiHint: 'iphone mockup',
+  },
+  {
     id: 'prod_020',
     name: 'Portable Fusion Power Bank',
     description:
