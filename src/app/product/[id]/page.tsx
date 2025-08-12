@@ -37,7 +37,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
 
   useEffect(() => {
     if (!product) return;
-    const updateInterval = 5000 + Math.random() * 2000;
+    const updateInterval = 500 + Math.random() * 1000;
 
     const interval = setInterval(() => {
       startTransition(async () => {
