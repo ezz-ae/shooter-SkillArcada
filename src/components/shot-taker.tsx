@@ -501,19 +501,6 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
   }
 
   const renderChart = () => {
-    if (isGameCard && view === 'full') {
-      return (
-        <div className="h-full flex items-center justify-center bg-secondary/30 rounded-lg">
-          <p className="text-muted-foreground text-center px-4">This is a game of skill. Click to view the challenge.</p>
-        </div>
-      );
-    }
-    
-    if (isGameCard && view === 'chart') {
-      return <div className="h-32 flex items-center justify-center bg-secondary/30 rounded-lg"><p className="text-muted-foreground">Game in progress...</p></div>;
-    }
-
-
     return (
         <div className="relative h-32">
            <div className="absolute inset-0">
