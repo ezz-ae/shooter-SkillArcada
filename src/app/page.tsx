@@ -107,26 +107,36 @@ export default function Home() {
                                      <ShotTaker product={btcProduct} />
                                 </div>
                             }
-                             <Card className="shadow-2xl border-accent/50 border-2 flex flex-col justify-between">
-                                <CardHeader className="text-center">
-                                    <Trophy className="mx-auto h-16 w-16 text-accent animate-pulse"/>
-                                    <CardTitle className="text-3xl font-black">Pool Luck Pros</CardTitle>
-                                    <CardDescription className="text-lg">New Season is available</CardDescription>
-                                </CardHeader>
-                                <CardContent className="text-center flex-grow flex flex-col justify-center">
-                                    <div>
-                                        <p className="text-7xl font-black text-primary">One Ethereum</p>
-                                        <p className="text-muted-foreground font-semibold">Grand Prize</p>
-                                    </div>
-                                    <div className="mt-4 text-muted-foreground px-4">
-                                        <p>Join top players from the globe in an open chat event with a live audience. (32 Players)</p>
-                                    </div>
-                                </CardContent>
-                                <CardFooter>
-                                    <Button size="lg" className="w-full" variant="secondary">
-                                        Free Registration Test
-                                    </Button>
-                                </CardFooter>
+                             <Card className="shadow-2xl border-accent/50 border-2 flex flex-col justify-between relative overflow-hidden">
+                                <Image 
+                                    src="https://placehold.co/600x400/052e16/052e16/png" 
+                                    alt="Pool table background" 
+                                    fill 
+                                    className="object-cover blur-sm"
+                                    data-ai-hint="pool table top view"
+                                />
+                                <div className="absolute inset-0 bg-black/50" />
+                                <div className="relative flex flex-col h-full p-6 text-white">
+                                    <CardHeader className="text-center p-0">
+                                        <Trophy className="mx-auto h-16 w-16 text-accent animate-pulse"/>
+                                        <CardTitle className="text-3xl font-black text-shadow-lg">Pool Luck Pros</CardTitle>
+                                        <CardDescription className="text-lg text-white/80">New Season is available</CardDescription>
+                                    </CardHeader>
+                                    <CardContent className="text-center flex-grow flex flex-col justify-center p-0 my-4">
+                                        <div>
+                                            <p className="text-7xl font-black text-primary text-shadow-lg">One Ethereum</p>
+                                            <p className="text-muted-foreground font-semibold text-white/90">Grand Prize</p>
+                                        </div>
+                                        <div className="mt-4 text-white/80 px-4">
+                                            <p>Join top players from the globe in an open chat event with a live audience. (32 Players)</p>
+                                        </div>
+                                    </CardContent>
+                                    <CardFooter className="p-0">
+                                        <Button size="lg" className="w-full" variant="secondary">
+                                            Free Registration Test
+                                        </Button>
+                                    </CardFooter>
+                                </div>
                             </Card>
                          </div>
                     </section>
