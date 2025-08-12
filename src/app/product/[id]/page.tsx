@@ -1,15 +1,15 @@
-
 "use client";
 
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Product, getProducts } from "@/lib/products";
 import Link from "next/link";
-import { ArrowLeft, HelpCircle, Gamepad2, Zap, Tag, Clock, TrendingUp } from "lucide-react";
+import { ArrowLeft, HelpCircle, Gamepad2, Zap, Tag, Clock, TrendingUp, Bot } from "lucide-react";
 import { ShotTaker } from "@/components/shot-taker";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { useEffect, useState } from "react";
+import { AIGameGuide } from "@/components/ai-game-guide";
 
 export default function ProductPage({ params }: { params: { id: string } }) {
   const [product, setProduct] = useState<Product | null>(null);
@@ -34,50 +34,11 @@ export default function ProductPage({ params }: { params: { id: string } }) {
   }
 
   const renderHowToPlay = () => {
-    switch (product.game) {
-      case 'reel-pause':
-        return (
-          <p>
-            The price is hidden behind a fast-spinning reel of numbers. Click the "Pause" button to freeze the reel at the perfect moment. Then, select three digits to form your price. Can you time it right to score a massive discount?
-          </p>
-        );
-      case 'riddle-calc':
-        return (
-          <p>
-            This item's price is locked behind a riddle. Click "Start Riddle" to see the clues and begin the timer. Use the on-card calculator to punch in the correct answer. If you solve it, you can buy the item for a fixed, low price.
-          </p>
-        );
-      case 'draw-passcode':
-        return (
-          <p>
-            A secret pattern is the key to this item's price. Click "Start Challenge" and a pattern will flash on screen. Memorize it, then draw it on the 3x3 grid. If you replicate it correctly, you unlock the chance to buy the item for a steal.
-          </p>
-        );
-      case 'maze-draw':
-        return (
-          <p>
-            This is a timed Pathfinder puzzle. Click "Start Game" and draw the correct path from the start point (S) to the end point (E) before the timer runs out. If you succeed, you win the prize!
-          </p>
-        );
-      case 'multi-shot':
-        return (
-          <p>
-            Instead of one, you get three shots at a great price! Click the "x3 Shot" button to capture three different prices simultaneously. Review the three options and pick the best one to add to your vault. More chances, more luck!
-          </p>
-        );
-      case 'chess-mate':
-        return (
-            <p>
-                This is a "Checkmate in One" puzzle. You are playing as White. Analyze the board and make the single move that puts the Black king in checkmate. If you find the correct move, you instantly win the prize.
-            </p>
-        );
-      default:
-        return (
-          <p>
-            The price of this item is constantly changing. Watch the chart and click the "Shot" button when you see a price you like. This captures the price, giving you the option to buy the item for that amount and add it to your vault.
-          </p>
-        );
-    }
+    return (
+        <p>
+            {product.expertSystem}
+        </p>
+    )
   }
 
   return (
@@ -167,6 +128,22 @@ export default function ProductPage({ params }: { params: { id: string } }) {
             </div>
         </CardContent>
        </Card>
+       
+        <Card className="mt-12">
+            <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                    <Bot className="h-6 w-6 text-primary" />
+                    AI Game Guide
+                </CardTitle>
+            </CardHeader>
+            <CardContent>
+                <AIGameGuide 
+                    gameName={product.name}
+                    gameDescription={product.description}
+                    expertSystem={product.expertSystem}
+                />
+            </CardContent>
+        </Card>
     </div>
   );
 }
