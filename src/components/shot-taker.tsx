@@ -352,24 +352,24 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
             </Link>
           )}
            {isGameCard ? (
-             <div className="text-sm text-muted-foreground min-h-[2.5rem]" />
+             <div className="text-sm text-muted-foreground min-h-[4rem]" />
            ) : (
-             <div className="flex items-baseline gap-2">
-                <span className="text-2xl font-black tracking-wider text-white shimmer-text" style={{'--trend-color': 'hsl(var(--primary))'} as React.CSSProperties}>${currentPrice.toFixed(2)}</span>
-                <span className={cn("font-bold", discountColor)}>
-                    {discountPercent > 0 && '+'}{discountPercent.toFixed(1)}%
+             <div className="flex flex-col">
+                <span className="text-3xl font-black tracking-wider text-white shimmer-text" style={{'--trend-color': 'hsl(var(--primary))'} as React.CSSProperties}>${currentPrice.toFixed(2)}</span>
+                <span className={cn("font-bold text-sm", discountColor)}>
+                    {discountPercent > 0 && '+'}{discountPercent.toFixed(1)}% vs Market
                 </span>
              </div>
           )}
            {isPage && (
              <div className="mt-4">
                {product.game === 'regular' || !product.game && (
-                 <>
-                    <span className="text-3xl font-black tracking-wider text-white shimmer-text" style={{'--trend-color': 'hsl(var(--primary))'} as React.CSSProperties}>${currentPrice.toFixed(2)}</span>
-                    <span className={cn("ml-2 font-bold", discountColor)}>
-                          {discountPercent > 0 && '+'}{discountPercent.toFixed(1)}%
+                 <div className="flex flex-col">
+                    <span className="text-4xl font-black tracking-wider text-white shimmer-text" style={{'--trend-color': 'hsl(var(--primary))'} as React.CSSProperties}>${currentPrice.toFixed(2)}</span>
+                    <span className={cn("mt-1 font-bold", discountColor)}>
+                          {discountPercent > 0 && '+'}{discountPercent.toFixed(1)}% vs Market
                       </span>
-                 </>
+                 </div>
                )}
             </div>
            )}
