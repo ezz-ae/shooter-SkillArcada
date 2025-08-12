@@ -9,6 +9,7 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import {googleAI} from '@genkit-ai/googleai';
 
 const AlgorithmicPricingInputSchema = z.object({
   currentPrice: z.number().describe('The current price of the item.'),
@@ -30,6 +31,7 @@ const prompt = ai.definePrompt({
   name: 'algorithmicPricingPrompt',
   input: {schema: AlgorithmicPricingInputSchema},
   output: {schema: AlgorithmicPricingOutputSchema},
+  model: googleAI.model('gemini-2.0-flash'),
   prompt: `You are a market simulator for a highly volatile, speculative product, much like a cryptocurrency.
   Your task is to generate the next price for an item based on its current price.
 
