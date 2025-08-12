@@ -367,8 +367,8 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
                   data-ai-hint={product.dataAiHint}
                 />
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent p-2 pt-4">
-                  <h3 className="text-white text-sm font-semibold text-center truncate">{product.subtitle}</h3>
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent p-4 pt-8">
+                  <h3 className="text-white text-lg font-bold text-center">{product.name}</h3>
                 </div>
               </div>
             </CardHeader>
@@ -515,3 +515,5 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
     </>
   );
 }
+
+    
