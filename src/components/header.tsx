@@ -2,13 +2,13 @@
 "use client";
 
 import Link from "next/link";
-import { Package, Wallet } from "lucide-react";
+import { Package, Wallet, Target } from "lucide-react";
 import { Button } from "./ui/button";
 import { useStore } from "@/lib/store";
 import { useEffect, useState } from "react";
 
 export function Header() {
-  const { vault, walletBalance } = useStore();
+  const { vault, walletBalance, shots } = useStore();
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -17,6 +17,7 @@ export function Header() {
 
   const vaultItemCount = isClient ? vault.length : 0;
   const displayBalance = isClient ? walletBalance.toFixed(2) : "0.00";
+  const displayShots = isClient ? shots : 0;
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -44,10 +45,14 @@ export function Header() {
             <span className="font-bold">Luckshots</span>
           </Link>
         </div>
-        <div className="flex flex-1 items-center justify-end space-x-4">
+        <div className="flex flex-1 items-center justify-end space-x-2">
           <div className="flex items-center space-x-2 text-sm font-medium p-2 bg-secondary rounded-md">
             <Wallet className="h-5 w-5 text-primary" />
             <span>Wallet: ${displayBalance}</span>
+          </div>
+          <div className="flex items-center space-x-2 text-sm font-medium p-2 bg-secondary rounded-md">
+            <Target className="h-5 w-5 text-accent" />
+            <span>Shots: {displayShots}</span>
           </div>
           <Button variant="outline" asChild>
             <Link href="/vault" className="relative">

@@ -16,8 +16,9 @@ interface StoreState {
   vault: VaultItem[];
   shippingCart: ShippingItem[];
   walletBalance: number;
-  hasTakenFirstShot: boolean;
-  setHasTakenFirstShot: () => void;
+  shots: number;
+  addShots: (amount: number) => void;
+  spendShot: () => boolean;
   addToVault: (item: VaultItem) => void;
   tradeIn: (vaultItemKey: string, tradeInValue: number) => void;
   moveToShipping: (vaultItemKeys: string[]) => boolean;
@@ -36,10 +37,19 @@ export const useStore = create<StoreState>()(
       vault: [],
       shippingCart: [],
       walletBalance: 10000.0,
-      hasTakenFirstShot: false,
+      shots: 5,
 
-      setHasTakenFirstShot: () => {
-        set({ hasTakenFirstShot: true });
+      addShots: (amount) => {
+        set((state) => ({ shots: state.shots + amount }));
+      },
+
+      spendShot: () => {
+        const currentShots = get().shots;
+        if (currentShots > 0) {
+          set({ shots: currentShots - 1 });
+          return true;
+        }
+        return false;
       },
 
       spendFromWallet: (amount) => {

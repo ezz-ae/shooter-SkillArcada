@@ -39,7 +39,6 @@ interface ShotTakerProps {
   isPage?: boolean;
 }
 
-const SHOT_COST = 1;
 const RIDDLE_ANSWER = 80;
 const RIDDLE_TIMER_SECONDS = 300; // 5 minutes
 const DRAW_PASSCODE_ANSWER = '0,3,6,7,8'; // L-shape on 3x3 grid
@@ -75,7 +74,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
   const [drawPadValue, setDrawPadValue] = useState<number[]>([]);
 
 
-  const { addToVault, walletBalance, spendFromWallet, hasTakenFirstShot, setHasTakenFirstShot } = useStore();
+  const { addToVault, walletBalance, spendShot } = useStore();
   const { toast } = useToast();
   
   const getNewPrice = (price: number) => {
@@ -149,39 +148,36 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
     if (reelInterval.current) clearInterval(reelInterval.current);
     setIsReelPaused(true);
   }
+  
+  const handleTakeShot = (shotAction: () => void) => {
+    const shotTaken = spendShot();
+    if (shotTaken) {
+      shotAction();
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Out of Shots!",
+        description: `You need at least 1 shot to play. Go to your vault to buy more.`,
+      });
+    }
+  }
 
   const handleShot = () => {
     if (isGame) {
       return;
     }
     
-    if (hasTakenFirstShot) {
-      if (walletBalance < SHOT_COST) {
-          toast({
-              variant: "destructive",
-              title: "Insufficient Funds",
-              description: `You need at least $${SHOT_COST.toFixed(2)} to take a shot.`,
-          });
-          return;
-      }
-      spendFromWallet(SHOT_COST);
-    } else {
-      toast({
-        title: "Your First Shot is Free!",
-        description: "You've captured an item. Now choose whether to vault it!",
-      });
-      setHasTakenFirstShot();
-    }
-    
-    if (product.game === 'multi-shot') {
-        const prices = [getNewPrice(currentPrice), getNewPrice(currentPrice), getNewPrice(currentPrice)];
-        setCapturedPrices(prices);
-        setSelectedPrice(prices[0]);
-    } else {
-        setCapturedPrices([currentPrice]);
-    }
-    setCapturedTime(new Date());
-    setIsDialogOpen(true);
+    handleTakeShot(() => {
+        if (product.game === 'multi-shot') {
+            const prices = [getNewPrice(currentPrice), getNewPrice(currentPrice), getNewPrice(currentPrice)];
+            setCapturedPrices(prices);
+            setSelectedPrice(prices[0]);
+        } else {
+            setCapturedPrices([currentPrice]);
+        }
+        setCapturedTime(new Date());
+        setIsDialogOpen(true);
+    });
   };
   
   const handleVault = (price?: number) => {
@@ -265,25 +261,10 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
   }
   
   const handleRiddleStart = () => {
-    if (hasTakenFirstShot) {
-      if (walletBalance < SHOT_COST) {
-        toast({
-          variant: 'destructive',
-          title: 'Insufficient Funds',
-          description: `You need at least $${SHOT_COST.toFixed(2)} to play.`,
-        });
-        return;
-      }
-      spendFromWallet(SHOT_COST);
-    } else {
-       toast({
-        title: "Your First Shot is Free!",
-        description: "Solve the riddle to set the price!",
-      });
-      setHasTakenFirstShot();
-    }
-    setRiddleTimer(RIDDLE_TIMER_SECONDS);
-    setIsRiddleDialogOpen(true);
+    handleTakeShot(() => {
+      setRiddleTimer(RIDDLE_TIMER_SECONDS);
+      setIsRiddleDialogOpen(true);
+    });
   }
 
   const handleRiddleShot = () => {
@@ -293,24 +274,9 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
   }
 
   const handleDrawPasscodeStart = () => {
-     if (hasTakenFirstShot) {
-      if (walletBalance < SHOT_COST) {
-        toast({
-          variant: 'destructive',
-          title: 'Insufficient Funds',
-          description: `You need at least $${SHOT_COST.toFixed(2)} to play.`,
-        });
-        return;
-      }
-      spendFromWallet(SHOT_COST);
-    } else {
-       toast({
-        title: "Your First Shot is Free!",
-        description: "Draw the pattern to set the price!",
-      });
-      setHasTakenFirstShot();
-    }
-    setIsDrawPasscodeDialogOpen(true);
+    handleTakeShot(() => {
+      setIsDrawPasscodeDialogOpen(true);
+    });
   }
 
   const handleDrawPasscodeShot = () => {
@@ -348,7 +314,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
                     ))}
                 </div>
                 {!isReelPaused ? (
-                    <Button onClick={stopReelGame} className="w-full h-12 text-lg font-bold">Pause</Button>
+                    <Button onClick={() => handleTakeShot(stopReelGame)} className="w-full h-12 text-lg font-bold">Pause</Button>
                 ) : (
                     <Button onClick={handleReelShot} disabled={selectedReelIndices.length !== 3} className="w-full h-12 text-lg font-bold">
                         Shot
