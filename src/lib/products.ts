@@ -48,18 +48,18 @@ export const mockProducts: Product[] = [
   },
   {
     id: 'prod_003',
-    name: 'Smart Planter',
+    name: "'Mind-Reader' Flora Kit",
     description:
-      'The perfect solution for the forgetful plant parent. This planter uses integrated sensors to detect soil moisture and automatically waters your plants when needed. Connects to your phone via Bluetooth.',
+      'Go beyond watering. This smart planter translates your plant\'s bio-signals into simple emotional concepts displayed on its e-ink screen. Finally know if your fern is happy or just... existing.',
     marketPrice: 120.5,
     imageUrl: 'https://placehold.co/600x400/1A4D2E/F5EFE6/png?text=Plant',
     dataAiHint: 'smart planter',
   },
   {
     id: 'prod_004',
-    name: 'Gastronomy Kit',
+    name: 'Alien Gastronomy Kit',
     description:
-      'Transform your kitchen into a food laboratory. This kit includes everything you need to get started with spherification, gelification, and emulsification. Includes a recipe book with 20 mind-bending recipes.',
+      'The galaxy\'s most exotic flavors, delivered to your kitchen. This kit includes everything you need to experiment with nutrient-rich Martian soil and bioluminescent fungi from Kepler-186f. Edibility is probable.',
     marketPrice: 199.99,
     imageUrl: 'https://placehold.co/600x400/4C0B33/F0E4F0/png?text=Gastronomy',
     dataAiHint: 'gastronomy kit',
@@ -84,9 +84,9 @@ export const mockProducts: Product[] = [
   },
   {
     id: 'prod_007',
-    name: 'Personal Chef Bot',
+    name: 'Universal Matter Synthesizer',
     description:
-      "The 'Culinary-tron 5000' can prepare over 10,000 recipes from its internal database. Simply add ingredients and let it do the chopping, mixing, and cooking. Cleans itself after use.",
+      "The 'Culinary-tron 5000' can prepare over 10,000 recipes from a single cartridge of tasteless nutrient paste. Just select a dish and it reassembles matter to perfectly replicate its taste and texture.",
     marketPrice: 3200.0,
     imageUrl: 'https://placehold.co/600x400/C0C0C0/000000/png?text=Robot',
     dataAiHint: 'robot chef',
@@ -149,9 +149,9 @@ export const mockProducts: Product[] = [
   },
   {
     id: 'prod_014',
-    name: "'Aura' Biometric Ring",
+    name: "'Oracle' Biometric Ring",
     description:
-      'A sleek, minimalist ring that monitors your heart rate, sleep patterns, and body temperature. The exterior surface changes color to reflect your current emotional state.',
+      'This sleek ring monitors your vitals, but its true power lies in its predictive algorithm. The exterior surface changes color to reflect not your current mood, but the mood you will have in one hour.',
     marketPrice: 280.0,
     imageUrl: 'https://placehold.co/600x400/BDB76B/000000/png?text=Ring',
     dataAiHint: 'smart ring',
@@ -176,9 +176,9 @@ export const mockProducts: Product[] = [
   },
   {
     id: 'prod_017',
-    name: 'Sonic-Cleanse Tool',
+    name: 'Temporal Restoration Field',
     description:
-      'Cleans anything at a microscopic level using high-frequency ultrasonic waves. Perfect for jewelry, electronics, and delicate instruments. Just add water.',
+      'This device doesn\'t just clean, it reverses time on a microscopic level for any inanimate object placed within its field. Restores jewelry to its original mint condition or de-ages a leather wallet.',
     marketPrice: 95.99,
     imageUrl: 'https://placehold.co/600x400/00FFFF/000000/png?text=Clean',
     dataAiHint: 'ultrasonic cleaner',
