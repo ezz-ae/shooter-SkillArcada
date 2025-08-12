@@ -2,11 +2,8 @@
 "use client";
 
 import Link from "next/link";
-import { Package, BrainCircuit, Heart, Swords, User, LogOut, BookOpen, Sparkles, LineChart } from "lucide-react";
+import { Package, User, LogOut } from "lucide-react";
 import { Button } from "./ui/button";
-import { useStore } from "@/lib/store";
-import { useEffect, useState } from "react";
-import { ThemeToggle } from "./theme-toggle";
 import { useAuth } from "@/lib/auth";
 import {
   DropdownMenu,
@@ -19,10 +16,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "./ui/avatar";
 import Image from "next/image";
-import { cn } from "@/lib/utils";
+import { useEffect, useState } from "react";
 
 export function Header() {
-  const { shots } = useStore();
   const { isAuthenticated, user, logout, initializeAuth } = useAuth();
   const [isClient, setIsClient] = useState(false);
 
@@ -31,8 +27,6 @@ export function Header() {
     const unsubscribe = initializeAuth();
     return () => unsubscribe();
   }, [initializeAuth]);
-
-  const displayShots = isClient && typeof shots === 'number' ? shots.toFixed(2) : '0.00';
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">

@@ -3,10 +3,10 @@
 
 import { useState, useMemo } from 'react';
 import { Button } from './ui/button';
-import { Dices, PlayCircle, HelpCircle, Gamepad2, BrainCircuit, Target } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { Dice } from './dice';
+import { Dices, BrainCircuit, Target, Gamepad2 } from 'lucide-react';
 import Link from 'next/link';
+import { Dice } from './dice';
+import { Card, CardContent } from './ui/card';
 
 export function DiceGame() {
     const [rolls, setRolls] = useState<(number | null)[]>([null, null, null]);
@@ -66,13 +66,11 @@ export function DiceGame() {
     const renderLuckActions = () => {
         if (!luckAnalysis) return null;
         
-        const { label, ...luckyAction } = luckAnalysis;
-
         return (
             <div className="mt-4 flex flex-col sm:flex-row gap-2 justify-center">
-                <Button size="lg" variant={luckyAction.variant} asChild>
-                    <Link href={luckyAction.href}>
-                        <luckyAction.icon className="mr-2" /> {luckyAction.actionLabel}
+                <Button size="lg" variant={luckAnalysis.variant} asChild>
+                    <Link href={luckAnalysis.href}>
+                        <luckAnalysis.icon className="mr-2" /> {luckAnalysis.actionLabel}
                     </Link>
                 </Button>
                 <Button size="lg" variant="ghost" onClick={handleReset}>Try Again</Button>
