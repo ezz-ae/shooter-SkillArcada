@@ -5,6 +5,9 @@ import { ShotTaker } from "@/components/shot-taker";
 import { mockProducts } from "@/lib/products";
 
 export default function Home() {
+  const gameProduct = mockProducts.find(p => p.game === 'digit-pause');
+  const regularProducts = mockProducts.filter(p => p.game !== 'digit-pause');
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="text-center mb-8">
@@ -20,7 +23,12 @@ export default function Home() {
         id="products"
         className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
       >
-        {mockProducts.map((product) => (
+        {gameProduct && (
+          <div className="sm:col-span-2 lg:col-span-2 xl:col-span-2">
+             <ShotTaker product={gameProduct} />
+          </div>
+        )}
+        {regularProducts.map((product) => (
           <ShotTaker key={product.id} product={product} />
         ))}
       </section>

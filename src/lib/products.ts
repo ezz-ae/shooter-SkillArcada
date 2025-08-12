@@ -10,6 +10,16 @@ export interface Product {
 }
 
 export const mockProducts: Product[] = [
+    {
+    id: 'prod_020',
+    name: 'Portable Fusion Power Bank',
+    description:
+      "The last power bank you'll ever need. Utilizes a stable, cold fusion reaction to provide a near-limitless supply of clean energy. Can power a small home for a week. Handle with care.",
+    marketPrice: 15000.0,
+    imageUrl: 'https://placehold.co/600x400/FF4500/FFFFFF/png?text=Fusion',
+    dataAiHint: 'fusion generator',
+    game: 'digit-pause',
+  },
   {
     id: 'prod_001',
     name: "Cosmic Rift Arcade",
@@ -180,14 +190,5 @@ export const mockProducts: Product[] = [
     marketPrice: 620.0,
     imageUrl: 'https://placehold.co/600x400/2F4F4F/FFFFFF/png?text=Jacket',
     dataAiHint: 'smart jacket',
-  },
-  {
-    id: 'prod_020',
-    name: 'Portable Fusion Power Bank',
-    description:
-      "The last power bank you'll ever need. Utilizes a stable, cold fusion reaction to provide a near-limitless supply of clean energy. Can power a small home for a week. Handle with care.",
-    marketPrice: 15000.0,
-    imageUrl: 'https://placehold.co/600x400/FF4500/FFFFFF/png?text=Fusion',
-    dataAiHint: 'fusion generator',
   },
 ];
