@@ -114,4 +114,13 @@ export const mockProducts: Product[] = [
     imageUrl: 'https://placehold.co/600x400/1A1F71/FFFFFF/png?text=VISA',
     dataAiHint: 'visa card',
   },
+  {
+    id: 'prod_card_06',
+    name: '$100 Binance Gift Card',
+    subtitle: '$100 BUSD Voucher',
+    description: 'A gift card for the Binance crypto exchange, perfect for trading or holding various cryptocurrencies.',
+    marketPrice: 100.0,
+    imageUrl: 'https://placehold.co/600x400/F0B90B/000000/png?text=Binance',
+    dataAiHint: 'binance crypto',
+  },
 ];
