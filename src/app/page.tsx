@@ -17,6 +17,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { PoolChallengeCard } from "@/components/pool-challenge-card";
 import Image from "next/image";
+import { Badge } from "@/components/ui/badge";
 
 export default function Home() {
     const { isAuthenticated, user, login } = useAuth();
@@ -93,12 +94,21 @@ export default function Home() {
                     
                     {/* Featured Games */}
                     <section>
-                         <h2 className="text-2xl font-bold mb-4">Featured Games</h2>
                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
-                            {iphoneProduct && <ShotTaker product={iphoneProduct} />}
-                            {btcProduct && <ShotTaker product={btcProduct} />}
+                            {iphoneProduct && 
+                                <div className="relative">
+                                    <Badge variant="secondary" className="absolute top-2 left-2 z-10">Brainshot</Badge>
+                                    <ShotTaker product={iphoneProduct} />
+                                </div>
+                            }
+                            {btcProduct && 
+                                <div className="relative">
+                                     <Badge variant="secondary" className="absolute top-2 left-2 z-10">Brainshot</Badge>
+                                     <ShotTaker product={btcProduct} />
+                                </div>
+                            }
                             <Card className="shadow-2xl border-accent/50 border-2 flex flex-col justify-between overflow-hidden relative">
-                                <Image src="https://placehold.co/600x400.png" alt="Pool table" fill className="object-cover z-0" data-ai-hint="pool table" />
+                                <Image src="https://placehold.co/600x400/1E40AF/FFFFFF/png?text=Pool+League" alt="Pool table" fill className="object-cover z-0" data-ai-hint="pool game" />
                                 <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/60 to-black/80 z-10" />
                                 <div className="relative z-20 flex flex-col flex-grow text-white p-6">
                                     <CardHeader className="text-center p-0">
@@ -163,4 +173,5 @@ export default function Home() {
             </div>
         </div>
     );
-}
+
+    
