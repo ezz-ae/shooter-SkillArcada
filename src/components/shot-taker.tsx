@@ -40,7 +40,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
   const [capturedTime, setCapturedTime] = useState<Date | null>(null);
 
   // For reel-pause game
-  const [reelNumbers, setReelNumbers] = useState<number[]>(Array(12).fill(0));
+  const [reelNumbers, setReelNumbers] = useState<number[]>(Array(16).fill(0));
   const [isReelPaused, setIsReelPaused] = useState(false);
   const [selectedReelIndices, setSelectedReelIndices] = useState<number[]>([]);
   const reelInterval = useRef<NodeJS.Timeout>();
@@ -283,8 +283,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
                                 "h-10 border rounded-md flex items-center justify-center text-2xl font-mono transition-all",
                                 isReelPaused ? "cursor-pointer" : "cursor-default",
                                 isReelPaused && selectedReelIndices.includes(index) && "bg-primary text-primary-foreground",
-                                isReelPaused && "blur-sm",
-                                isReelPaused && selectedReelIndices.includes(index) && "blur-none"
+                                isReelPaused && !selectedReelIndices.includes(index) && "blur-sm",
                             )}
                         >{num}</button>
                     ))}
