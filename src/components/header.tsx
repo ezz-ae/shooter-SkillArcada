@@ -33,7 +33,7 @@ export function Header() {
     return () => unsubscribe();
   }, [initializeAuth]);
 
-  const displayShots = isClient ? shots.toFixed(2) : '0.00';
+  const displayShots = isClient && typeof shots === 'number' ? shots.toFixed(2) : '0.00';
 
   const gameNavItems = [
     { href: "/shotershots", label: "ShoterShots", icon: Dice5 },
