@@ -29,8 +29,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Checkbox } from "@/components/ui/checkbox";
 import { GameLinkCard } from "@/components/game-link-card";
-import { GiChessKing } from "react-icons/gi";
 import { FaChess } from "react-icons/fa";
+import { ChallengeAI } from "@/components/challenge-ai";
 
 export default function Home() {
     const { isAuthenticated, user, initializeAuth, isNewUser, hasAcceptedTerms, acceptTerms, isLoggingIn } = useAuth();
@@ -210,6 +210,11 @@ export default function Home() {
                                 </div>
                             </Card>
                          </div>
+                    </section>
+
+                    {/* AI Challenge Suggester */}
+                    <section>
+                         <ChallengeAI />
                     </section>
 
                      {/* All Games */}
