@@ -4,7 +4,7 @@
 import { useState, useMemo } from 'react';
 import { Button } from './ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
-import { Dices, PlayCircle, HelpCircle, Gamepad2 } from 'lucide-react';
+import { Dices, PlayCircle, HelpCircle, Gamepad2, BrainCircuit } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export function DiceGame() {
