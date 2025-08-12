@@ -1,13 +1,14 @@
 
 "use client";
 
-import Image from "next/image";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "./ui/card";
-import { User, mockUsers } from "@/lib/user";
+import { User } from "@/lib/user";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { Target } from "lucide-react";
+import { Target, Zap } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface Challenge {
     id: string;
@@ -21,14 +22,37 @@ interface PoolChallengeCardProps {
   challenge: Challenge;
 }
 
+const CHALLENGE_DURATION_SECONDS = 5 * 60; // 5 minutes
+
 export function PoolChallengeCard({ challenge }: PoolChallengeCardProps) {
   const { id, prize, fee, player1, player2 } = challenge;
   const isWaiting = player2 === null;
 
+  const [timeLeft, setTimeLeft] = useState(CHALLENGE_DURATION_SECONDS);
+
+  useEffect(() => {
+    if (!isWaiting) return;
+
+    const timer = setInterval(() => {
+      setTimeLeft((prevTime) => {
+        if (prevTime <= 1) {
+            // In a real app, you might fetch a new challenge here
+            return CHALLENGE_DURATION_SECONDS;
+        }
+        return prevTime - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [isWaiting]);
+
+  const minutes = Math.floor(timeLeft / 60);
+  const seconds = timeLeft % 60;
+
   return (
-    <Card className="flex flex-col">
-      <CardHeader>
-        <div className="flex justify-around items-center">
+    <Card className="flex flex-col border-2 border-transparent animate-pulse data-[waiting=true]:border-primary/50 data-[waiting=true]:animate-none" data-waiting={isWaiting}>
+       <CardHeader>
+         <div className="flex justify-around items-center">
             <div className="flex flex-col items-center gap-2">
                 <Avatar className="h-16 w-16 border-4 border-primary">
                     <AvatarImage src={player1.avatarUrl} alt={player1.name} />
@@ -41,7 +65,7 @@ export function PoolChallengeCard({ challenge }: PoolChallengeCardProps) {
                 <p className="font-black text-2xl text-primary">POOL</p>
             </div>
              <div className="flex flex-col items-center gap-2">
-                <Avatar className="h-16 w-16 border-4 border-secondary data-[waiting=true]:border-dashed">
+                <Avatar className="h-16 w-16 border-4 border-secondary data-[waiting=true]:border-dashed" data-waiting={isWaiting}>
                     {player2 ? (
                         <>
                             <AvatarImage src={player2.avatarUrl} alt={player2.name} />
@@ -56,6 +80,14 @@ export function PoolChallengeCard({ challenge }: PoolChallengeCardProps) {
         </div>
       </CardHeader>
       <CardContent className="flex-grow text-center">
+         {isWaiting && (
+            <div className="flex justify-center items-center gap-2 mb-2">
+                <Zap className="h-5 w-5 text-yellow-500 animate-ping" />
+                <p className={cn("font-mono text-xl font-bold", timeLeft < 60 && "text-destructive")}>
+                   {String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}
+                </p>
+            </div>
+        )}
         <p className="text-muted-foreground text-sm">Prize Pool</p>
         <p className="text-4xl font-black text-accent">{prize} Shots</p>
       </CardContent>
