@@ -91,7 +91,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
 
   const priceColor =
     priceTrend === "up"
-      ? "text-green-500"
+      ? "text-green-400"
       : priceTrend === "down"
       ? "text-destructive"
       : "text-primary";
@@ -128,14 +128,14 @@ export default function ProductPage({ params }: { params: { id: string } }) {
                         priceColor
                         )}
                     >
-                      `$${currentPrice.toFixed(2)}`
+                      ${currentPrice.toFixed(2)}
                     </div>
                     <div className="flex items-center transition-opacity duration-500">
                         {isPending && priceHistory.length > 1 && (
                             <Hourglass className="h-6 w-6 animate-spin" />
                         )}
                         {!isPending && priceTrend === "up" && (
-                            <TrendingUp className="h-6 w-6 text-green-500" />
+                            <TrendingUp className="h-6 w-6 text-green-400" />
                         )}
                         {!isPending && priceTrend === "down" && (
                             <TrendingDown className="h-6 w-6 text-destructive" />

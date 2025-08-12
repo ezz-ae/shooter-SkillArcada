@@ -76,10 +76,20 @@ export default {
             height: '0',
           },
         },
+        'flash-green': {
+          '0%, 100%': { boxShadow: '0 0 0 0px hsl(var(--primary) / 0)' },
+          '50%': { boxShadow: '0 0 0 3px hsl(var(--chart-1) / 0.7)' },
+        },
+        'flash-red': {
+          '0%, 100%': { boxShadow: '0 0 0 0px hsl(var(--destructive) / 0)' },
+          '50%': { boxShadow: '0 0 0 3px hsl(var(--destructive) / 0.7)' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+        'flash-green': 'flash-green 0.7s ease-in-out',
+        'flash-red': 'flash-red 0.7s ease-in-out',
       },
     },
   },

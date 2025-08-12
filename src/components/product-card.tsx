@@ -24,11 +24,13 @@ interface ProductCardProps {
 export function ProductCard({ product }: ProductCardProps) {
   const [priceHistory, setPriceHistory] = useState([
     { time: 0, price: product.marketPrice },
+    { time: 1, price: product.marketPrice },
   ]);
   const [priceTrend, setPriceTrend] = useState<"up" | "down" | "stale">(
     "stale"
   );
   const [isPending, startTransition] = useTransition();
+  const [flashKey, setFlashKey] = useState(0);
   const { addToVault } = useStore();
   const { toast } = useToast();
 
@@ -52,13 +54,13 @@ export function ProductCard({ product }: ProductCardProps) {
               ? "down"
               : "stale"
           );
+          setFlashKey(prev => prev + 1);
 
           setPriceHistory((prev) => {
             const newHistory = [
               ...prev,
               { time: prev.length, price: newPrice },
             ];
-            // Keep only the last 15 data points for the sparkline
             if (newHistory.length > 15) {
               return newHistory.slice(newHistory.length - 15);
             }
@@ -91,9 +93,17 @@ export function ProductCard({ product }: ProductCardProps) {
       : priceTrend === "down"
       ? "text-destructive"
       : "text-primary";
+  
+  const flashClass = priceTrend === 'up' ? 'flash-green' : priceTrend === 'down' ? 'flash-red' : '';
 
   return (
-    <Card className="flex flex-col overflow-hidden shadow-lg transition-all duration-300 hover:shadow-primary/20 hover:ring-2 hover:ring-primary/50">
+    <Card 
+      key={flashKey}
+      className={cn(
+        "flex flex-col overflow-hidden shadow-lg transition-all duration-300 hover:shadow-primary/20 hover:ring-2 hover:ring-primary/50",
+        flashClass
+      )}
+    >
        <Link href={`/product/${product.id}`} className="contents group">
         <CardHeader className="p-0">
             <div className="relative h-48 w-full overflow-hidden">
