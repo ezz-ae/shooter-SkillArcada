@@ -139,9 +139,11 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
         )}
         <CardContent className={cn("flex-grow p-4 space-y-2", isPage && "p-0")}>
           {!isPage && (
-            <CardTitle className="text-lg font-bold group-hover:text-primary transition-colors truncate">
-              {product.name}
-            </CardTitle>
+            <Link href={`/product/${product.id}`}>
+              <CardTitle className="text-lg font-bold group-hover:text-primary transition-colors truncate">
+                {product.name}
+              </CardTitle>
+            </Link>
           )}
 
           <div className="flex items-end justify-between">
