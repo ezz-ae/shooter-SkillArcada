@@ -180,16 +180,16 @@ export function CryptoLuckGame() {
       <CardContent>
         <div className="h-64 relative">
              <ChartContainer config={{
-                  price: { label: "Price", color: "hsl(var(--primary))" },
+                  price: { label: "Price", color: "hsl(var(--accent))" },
                 }} className="h-full w-full">
                   <AreaChart data={priceHistory} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
                     <defs>
                       <linearGradient id="chart-fill-crypto" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="hsl(var(--accent))" stopOpacity={0.4} />
-                        <stop offset="95%" stopColor="hsl(var(--accent))" stopOpacity={0} />
+                        <stop offset="5%" stopColor="var(--color-price)" stopOpacity={0.4} />
+                        <stop offset="95%" stopColor="var(--color-price)" stopOpacity={0} />
                       </linearGradient>
                     </defs>
-                    <Area type="monotone" dataKey="price" stroke="hsl(var(--accent))" strokeWidth={2} fill="url(#chart-fill-crypto)" />
+                    <Area type="monotone" dataKey="price" stroke="var(--color-price)" strokeWidth={2} fill="url(#chart-fill-crypto)" />
                   </AreaChart>
                 </ChartContainer>
             <div className="absolute inset-0 flex items-center justify-center">
