@@ -100,7 +100,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
           const newHistory = [...prev.slice(1), { time: prev[prev.length - 1].time + 1, price: newPrice }];
           return newHistory;
         });
-      }, 1000 + Math.random() * 1000);
+      }, 700 + Math.random() * 600);
 
       return () => {
           isMounted = false;
@@ -413,8 +413,8 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
                       <AreaChart data={priceHistory} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
                         <defs>
                           <linearGradient id="chart-fill" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.8} />
-                            <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0.2} />
+                            <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.4} />
+                            <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0.1} />
                           </linearGradient>
                         </defs>
                         <Tooltip content={<></>} />
