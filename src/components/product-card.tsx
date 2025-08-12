@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/chart";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 interface ProductCardProps {
   product: Product;
@@ -95,101 +96,105 @@ export function ProductCard({ product }: ProductCardProps) {
 
   return (
     <Card className="flex flex-col overflow-hidden shadow-lg transition-shadow duration-300 hover:shadow-xl">
-      <CardHeader className="p-0">
-        <div className="relative h-48 w-full">
-          <Image
-            src={product.imageUrl}
-            alt={product.name}
-            fill
-            className="object-cover"
-            data-ai-hint={product.dataAiHint}
-          />
-          <div className="absolute bottom-0 h-20 w-full bg-gradient-to-t from-black/80 to-transparent">
-            <ChartContainer
-              config={{}}
-              className="h-full w-full [&_.recharts-cartesian-axis-tick_text]:hidden"
-            >
-              <AreaChart
-                accessibilityLayer
-                data={priceHistory}
-                margin={{ top: 10, right: 0, left: 0, bottom: 0 }}
+      <Link href={`/product/${product.id}`} className="contents">
+        <CardHeader className="p-0">
+          <div className="relative h-48 w-full">
+            <Image
+              src={product.imageUrl}
+              alt={product.name}
+              fill
+              className="object-cover"
+              data-ai-hint={product.dataAiHint}
+            />
+            <div className="absolute bottom-0 h-20 w-full bg-gradient-to-t from-black/80 to-transparent">
+              <ChartContainer
+                config={{}}
+                className="h-full w-full [&_.recharts-cartesian-axis-tick_text]:hidden"
               >
-                <defs>
-                  <linearGradient id="fillGreen" x1="0" y1="0" x2="0" y2="1">
-                    <stop
-                      offset="5%"
-                      stopColor="hsl(var(--chart-2))"
-                      stopOpacity={0.8}
-                    />
-                    <stop
-                      offset="95%"
-                      stopColor="hsl(var(--chart-2))"
-                      stopOpacity={0.1}
-                    />
-                  </linearGradient>
-                  <linearGradient id="fillRed" x1="0" y1="0" x2="0" y2="1">
-                    <stop
-                      offset="5%"
-                      stopColor="hsl(var(--destructive))"
-                      stopOpacity={0.8}
-                    />
-                    <stop
-                      offset="95%"
-                      stopColor="hsl(var(--destructive))"
-                      stopOpacity={0.1}
-                    />
-                  </linearGradient>
-                </defs>
-                <Area
-                  dataKey="price"
-                  type="natural"
-                  fill={
-                    priceTrend === "down" ? "url(#fillRed)" : "url(#fillGreen)"
-                  }
-                  fillOpacity={0.4}
-                  stroke={
-                    priceTrend === "down"
-                      ? "hsl(var(--destructive))"
-                      : "hsl(var(--chart-2))"
-                  }
-                  strokeWidth={2}
-                  dot={false}
-                />
-              </AreaChart>
-            </ChartContainer>
-          </div>
-        </div>
-      </CardHeader>
-      <CardContent className="flex-grow p-4">
-        <CardTitle className="mb-2 text-lg font-bold">{product.name}</CardTitle>
-        <div className="mt-4 flex items-center justify-between">
-          <div>
-            <div className="flex items-center gap-2">
-              <div
-                className={cn(
-                  "text-2xl font-black transition-colors duration-300",
-                  priceColor
-                )}
-              >
-                {isPending && priceHistory.length <= 1 ? (
-                  <Hourglass className="h-6 w-6 animate-spin" />
-                ) : (
-                  `$${currentPrice.toFixed(2)}`
-                )}
-              </div>
-              <div className="flex items-center transition-opacity duration-500">
-                {priceTrend === "up" && (
-                  <TrendingUp className="h-5 w-5 text-green-500" />
-                )}
-                {priceTrend === "down" && (
-                  <TrendingDown className="h-5 w-5 text-destructive" />
-                )}
-              </div>
+                <AreaChart
+                  accessibilityLayer
+                  data={priceHistory}
+                  margin={{ top: 10, right: 0, left: 0, bottom: 0 }}
+                >
+                  <defs>
+                    <linearGradient id="fillGreen" x1="0" y1="0" x2="0" y2="1">
+                      <stop
+                        offset="5%"
+                        stopColor="hsl(var(--chart-2))"
+                        stopOpacity={0.8}
+                      />
+                      <stop
+                        offset="95%"
+                        stopColor="hsl(var(--chart-2))"
+                        stopOpacity={0.1}
+                      />
+                    </linearGradient>
+                    <linearGradient id="fillRed" x1="0" y1="0" x2="0" y2="1">
+                      <stop
+                        offset="5%"
+                        stopColor="hsl(var(--destructive))"
+                        stopOpacity={0.8}
+                      />
+                      <stop
+                        offset="95%"
+                        stopColor="hsl(var(--destructive))"
+                        stopOpacity={0.1}
+                      />
+                    </linearGradient>
+                  </defs>
+                  <Area
+                    dataKey="price"
+                    type="natural"
+                    fill={
+                      priceTrend === "down" ? "url(#fillRed)" : "url(#fillGreen)"
+                    }
+                    fillOpacity={0.4}
+                    stroke={
+                      priceTrend === "down"
+                        ? "hsl(var(--destructive))"
+                        : "hsl(var(--chart-2))"
+                    }
+                    strokeWidth={2}
+                    dot={false}
+                  />
+                </AreaChart>
+              </ChartContainer>
             </div>
-            <p className="text-sm text-muted-foreground">Current Price</p>
           </div>
-        </div>
-      </CardContent>
+        </CardHeader>
+        <CardContent className="flex-grow p-4">
+          <CardTitle className="mb-2 text-lg font-bold group-hover:underline">
+            {product.name}
+          </CardTitle>
+          <div className="mt-4 flex items-center justify-between">
+            <div>
+              <div className="flex items-center gap-2">
+                <div
+                  className={cn(
+                    "text-2xl font-black transition-colors duration-300",
+                    priceColor
+                  )}
+                >
+                  {isPending && priceHistory.length <= 1 ? (
+                    <Hourglass className="h-6 w-6 animate-spin" />
+                  ) : (
+                    `$${currentPrice.toFixed(2)}`
+                  )}
+                </div>
+                <div className="flex items-center transition-opacity duration-500">
+                  {priceTrend === "up" && (
+                    <TrendingUp className="h-5 w-5 text-green-500" />
+                  )}
+                  {priceTrend === "down" && (
+                    <TrendingDown className="h-5 w-5 text-destructive" />
+                  )}
+                </div>
+              </div>
+              <p className="text-sm text-muted-foreground">Current Price</p>
+            </div>
+          </div>
+        </CardContent>
+      </Link>
       <CardFooter className="p-4 pt-0">
         <Button
           className="w-full"
