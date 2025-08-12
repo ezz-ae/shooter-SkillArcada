@@ -20,6 +20,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { cn } from "@/lib/utils";
+import type { Product } from "@/lib/products";
 
 interface VaultItemCardProps {
   item: VaultItem;
@@ -133,7 +134,7 @@ export function VaultItemCard({
       <CardContent className="flex-grow p-4 pb-2">
         <h3 className="font-bold">{item.name}</h3>
         <p className="text-sm text-muted-foreground">
-          Paid: ${item.pricePaid.toFixed(2)} with {item.discountApplied}% off
+          Paid: ${item.pricePaid.toFixed(2)}
         </p>
         <div className="mt-2">
           <p className="text-sm font-semibold">Current Value:</p>

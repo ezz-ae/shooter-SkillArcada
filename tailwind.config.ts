@@ -1,3 +1,4 @@
+
 import type {Config} from 'tailwindcss';
 
 export default {
@@ -78,11 +79,15 @@ export default {
         },
         'flash-green': {
           '0%, 100%': { boxShadow: '0 0 0 0px hsl(var(--primary) / 0)' },
-          '50%': { boxShadow: '0 0 0 3px hsl(var(--chart-1) / 0.7)' },
+          '50%': { boxShadow: '0 0 4px 2px hsl(var(--chart-1) / 0.7)' },
         },
         'flash-red': {
           '0%, 100%': { boxShadow: '0 0 0 0px hsl(var(--destructive) / 0)' },
-          '50%': { boxShadow: '0 0 0 3px hsl(var(--destructive) / 0.7)' },
+          '50%': { boxShadow: '0 0 4px 2px hsl(var(--destructive) / 0.7)' },
+        },
+        'shimmer': {
+          '0%': { backgroundPosition: '200% 0' },
+          '100%': { backgroundPosition: '-200% 0' },
         },
       },
       animation: {
@@ -90,6 +95,7 @@ export default {
         'accordion-up': 'accordion-up 0.2s ease-out',
         'flash-green': 'flash-green 0.7s ease-in-out',
         'flash-red': 'flash-red 0.7s ease-in-out',
+        'shimmer': 'shimmer 1.5s linear infinite',
       },
     },
   },

@@ -6,7 +6,6 @@ import type { Product } from "./products";
 export interface VaultItem extends Product {
   pricePaid: number;
   purchaseTimestamp: number;
-  discountApplied: number;
 }
 
 export interface ShippingItem extends VaultItem {
@@ -17,11 +16,12 @@ interface StoreState {
   vault: VaultItem[];
   shippingCart: ShippingItem[];
   walletBalance: number;
-  addToVault: (item: Omit<VaultItem, 'discountApplied'>, discount: number) => void;
+  addToVault: (item: Omit<VaultItem, 'discountApplied'>, discount?: number) => void;
   tradeIn: (vaultItemKey: string, tradeInValue: number) => void;
   moveToShipping: (vaultItemKeys: string[]) => boolean;
   removeFromShipping: (shippingId: string) => void;
   confirmShipping: () => void;
+  spendFromWallet: (amount: number) => void;
 }
 
 const getVaultItemKey = (item: { id: string; purchaseTimestamp: number }) => {
@@ -33,17 +33,19 @@ export const useStore = create<StoreState>()(
     (set, get) => ({
       vault: [],
       shippingCart: [],
-      walletBalance: 10000.0, // Start with more money for testing
+      walletBalance: 10000.0, 
 
-      addToVault: (item, discount) => {
-        if (get().vault.length >= 20) {
-          // Limit vault size
-          return;
-        }
+      spendFromWallet: (amount) => {
+        set((state) => ({
+            walletBalance: state.walletBalance - amount,
+        }));
+      },
+      
+      addToVault: (item) => {
         const currentBalance = get().walletBalance;
         if (currentBalance >= item.pricePaid) {
           set((state) => ({
-            vault: [...state.vault, { ...item, discountApplied: discount }],
+            vault: [...state.vault, item],
             walletBalance: state.walletBalance - item.pricePaid,
           }));
         }
@@ -87,13 +89,11 @@ export const useStore = create<StoreState>()(
       },
 
       confirmShipping: () => {
-        // Here you would typically call an API to process the shipment
-        // For the MVP, we just clear the shipping cart.
         set({ shippingCart: [] });
       },
     }),
     {
-      name: "shopnluck-storage", 
+      name: "shopnluck-storage-v2", 
       storage: createJSONStorage(() => localStorage), 
     }
   )

@@ -1,20 +1,8 @@
 
 "use client";
 
-import { useEffect, useState, useTransition, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
-import { Button } from "./ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "./ui/card";
-import { useStore } from "@/lib/store";
-import type { Product } from "@/lib/products";
-import { useToast } from "@/hooks/use-toast";
-import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { Area, AreaChart, ResponsiveContainer } from "recharts";
 import {
@@ -26,16 +14,22 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "./ui/alert-dialog";
+} from "@/components/ui/alert-dialog";
+import { Button } from "./ui/button";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "./ui/card";
+import { useStore } from "@/lib/store";
+import type { Product } from "@/lib/products";
+import { useToast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
 
-
-interface ProductCardProps {
+interface ShotTakerProps {
   product: Product;
+  isPage?: boolean;
 }
 
 const SHOT_COST = 1;
 
-export function ProductCard({ product }: ProductCardProps) {
+export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
   const [currentPrice, setCurrentPrice] = useState(product.marketPrice);
   const [priceHistory, setPriceHistory] = useState([{ value: product.marketPrice }]);
   const [animationClass, setAnimationClass] = useState("");
@@ -52,7 +46,7 @@ export function ProductCard({ product }: ProductCardProps) {
         const volatility = 0.1;
         const changePercent = (Math.random() - 0.5) * volatility;
         let newPrice = prevPrice * (1 + changePercent);
-        newPrice = Math.max(1, newPrice); // Ensure price doesn't go to 0
+        newPrice = Math.max(1, newPrice);
 
         setPriceHistory((prevHistory) => {
           const newHistory = [...prevHistory, { value: newPrice }];
@@ -67,10 +61,9 @@ export function ProductCard({ product }: ProductCardProps) {
         
         setTimeout(() => setAnimationClass(""), 700);
 
-
         return newPrice;
       });
-    }, 1000 + Math.random() * 1000); // Update every 1-2 seconds
+    }, 1000 + Math.random() * 1000);
 
     return () => clearInterval(interval);
   }, []);
@@ -100,14 +93,11 @@ export function ProductCard({ product }: ProductCardProps) {
       return;
     }
     
-    addToVault(
-      {
+    addToVault({
         ...product,
         pricePaid: capturedPrice,
         purchaseTimestamp: Date.now(),
-      },
-      // No discount mechanic in this version
-    );
+      });
 
     toast({
       title: "Item Vaulted!",
@@ -120,32 +110,39 @@ export function ProductCard({ product }: ProductCardProps) {
     ? 'hsl(var(--chart-1))'
     : 'hsl(var(--destructive))';
 
+  const CardComponent = isPage ? 'div' : Card;
 
   return (
     <>
-    <Card
-      ref={cardRef}
-      className={cn(
-        "flex flex-col overflow-hidden shadow-lg transition-all duration-300 group",
-        animationClass
-      )}
-    >
-      <Link href={`/product/${product.id}`} className="contents">
-        <CardHeader className="p-0">
-          <div className="relative h-48 w-full overflow-hidden">
-            <Image
-              src={product.imageUrl}
-              alt={product.name}
-              fill
-              className="object-cover transition-transform duration-500 group-hover:scale-105"
-              data-ai-hint={product.dataAiHint}
-            />
-          </div>
-        </CardHeader>
-        <CardContent className="flex-grow p-4 space-y-2">
-          <CardTitle className="text-lg font-bold group-hover:text-primary transition-colors truncate">
-            {product.name}
-          </CardTitle>
+      <CardComponent
+        ref={cardRef}
+        className={cn(
+          "flex flex-col overflow-hidden transition-all duration-300 group",
+          !isPage && "shadow-lg",
+          animationClass
+        )}
+      >
+        {!isPage && (
+          <Link href={`/product/${product.id}`} className="contents">
+            <CardHeader className="p-0">
+              <div className="relative h-48 w-full overflow-hidden">
+                <Image
+                  src={product.imageUrl}
+                  alt={product.name}
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  data-ai-hint={product.dataAiHint}
+                />
+              </div>
+            </CardHeader>
+          </Link>
+        )}
+        <CardContent className={cn("flex-grow p-4 space-y-2", isPage && "p-0")}>
+          {!isPage && (
+            <CardTitle className="text-lg font-bold group-hover:text-primary transition-colors truncate">
+              {product.name}
+            </CardTitle>
+          )}
 
           <div className="flex items-end justify-between">
              <div className="relative text-3xl font-black">
@@ -153,7 +150,7 @@ export function ProductCard({ product }: ProductCardProps) {
                     ${currentPrice.toFixed(2)}
                 </span>
              </div>
-             <div className="w-1/3 h-10 -mr-4 -mb-2">
+             <div className="w-1/3 h-10">
                 <ResponsiveContainer width="100%" height="100%">
                     <AreaChart data={priceHistory} margin={{ top: 5, right: 0, left: 0, bottom: 0 }}>
                         <defs>
@@ -168,31 +165,30 @@ export function ProductCard({ product }: ProductCardProps) {
              </div>
           </div>
         </CardContent>
-      </Link>
-      <CardFooter className="p-4 pt-0">
-        <Button
-          className="w-full h-12 text-md font-bold"
-          onClick={handleShot}
-        >
-          Take a Shot! ($1.00)
-        </Button>
-      </CardFooter>
-    </Card>
+        <CardFooter className={cn("p-4 pt-0", isPage && "p-0 pt-4")}>
+          <Button
+            className="w-full h-12 text-md font-bold"
+            onClick={handleShot}
+          >
+            Take a Shot! ($1.00)
+          </Button>
+        </CardFooter>
+      </CardComponent>
 
-    <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <AlertDialogContent>
-            <AlertDialogHeader>
-            <AlertDialogTitle>You Shot at ${capturedPrice.toFixed(2)}!</AlertDialogTitle>
-            <AlertDialogDescription>
-                You've locked in the price for {product.name}. Do you want to vault it now? This will cost an additional ${capturedPrice.toFixed(2)} from your wallet.
-            </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-            <AlertDialogCancel>Let it go</AlertDialogCancel>
-            <AlertDialogAction onClick={handleVault}>Vault It!</AlertDialogAction>
-            </AlertDialogFooter>
-        </AlertDialogContent>
-    </AlertDialog>
+      <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <AlertDialogContent>
+              <AlertDialogHeader>
+              <AlertDialogTitle>You Shot at ${capturedPrice.toFixed(2)}!</AlertDialogTitle>
+              <AlertDialogDescription>
+                  You've locked in the price for {product.name}. Do you want to vault it now? This will cost an additional ${capturedPrice.toFixed(2)} from your wallet.
+              </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+              <AlertDialogCancel>Let it go</AlertDialogCancel>
+              <AlertDialogAction onClick={handleVault}>Vault It!</AlertDialogAction>
+              </AlertDialogFooter>
+          </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 }

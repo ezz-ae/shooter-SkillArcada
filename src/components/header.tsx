@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -15,6 +16,7 @@ export function Header() {
   }, []);
 
   const vaultItemCount = isClient ? vault.length : 0;
+  const displayBalance = isClient ? walletBalance.toFixed(2) : "0.00";
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -42,12 +44,10 @@ export function Header() {
             <span className="font-bold">ShopnLuck</span>
           </Link>
         </div>
-        <div className="flex flex-1 items-center justify-end space-x-2">
-          <div className="flex items-center space-x-2 text-sm font-medium">
+        <div className="flex flex-1 items-center justify-end space-x-4">
+          <div className="flex items-center space-x-2 text-sm font-medium p-2 bg-secondary rounded-md">
             <Wallet className="h-5 w-5 text-primary" />
-            <span>
-              {isClient ? walletBalance.toFixed(2) : "0.00"}
-            </span>
+            <span>${displayBalance}</span>
           </div>
           <Button variant="ghost" size="icon" asChild>
             <Link href="/vault" className="relative">
