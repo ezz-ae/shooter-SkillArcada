@@ -291,7 +291,17 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
               </CardTitle>
             </Link>
           )}
-           {isGameCard ? <p className="text-sm text-primary">Special timed event! Click fast to set your price!</p> : (
+           {isGameCard ? (
+             <div className="flex items-end justify-center gap-2">
+                <span className="text-2xl font-black text-primary">$</span>
+                <div className="text-4xl font-black text-primary-foreground tabular-nums">
+                    {lockedDigits.length > 0 ? lockedDigits[0] : '?'}
+                    {lockedDigits.length > 1 ? lockedDigits[1] : '?'}
+                    {lockedDigits.length > 2 ? lockedDigits[2] : '?'}
+                </div>
+                <span className="text-xl font-bold text-muted-foreground">USD</span>
+             </div>
+           ) : (
              <div className="flex items-baseline gap-2">
                 <span className="text-2xl font-black tracking-wider text-white shimmer-text" style={{'--trend-color': 'hsl(var(--primary))'} as React.CSSProperties}>${currentPrice.toFixed(2)}</span>
                 <span className={cn("font-bold", discountColor)}>
