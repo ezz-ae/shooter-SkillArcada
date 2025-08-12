@@ -20,7 +20,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ShoterChallenge } from "@/components/shoter-challenge";
+import { ShoterChat } from "@/components/shoter-chat";
 
 export default function Home() {
     const { initializeAuth, isNewUser, hasAcceptedTerms, acceptTerms, isLoggingIn } = useAuth();
@@ -94,7 +94,7 @@ export default function Home() {
                 </section>
                 
                 <section>
-                    <ShoterChallenge />
+                    <ShoterChat />
                 </section>
 
             </div>
