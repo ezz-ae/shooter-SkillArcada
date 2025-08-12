@@ -245,7 +245,10 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
                   key={index}
                   onClick={() => handleDigitClick(index)}
                   disabled={lockedDigits.length !== index}
-                  className="h-16 w-1/3 bg-secondary rounded-lg flex items-center justify-center text-5xl font-black text-primary-foreground tabular-nums disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:enabled:bg-primary/80"
+                  className={cn(
+                    "h-16 w-1/3 rounded-lg flex items-center justify-center text-5xl font-black tabular-nums disabled:opacity-50 disabled:cursor-not-allowed transition-all",
+                    lockedDigits.length === index ? "bg-secondary text-primary-foreground hover:enabled:bg-primary/80" : "bg-secondary text-primary-foreground"
+                  )}
                   >
                   {lockedDigits.length > index ? '?' : digits[index]}
                   </button>
