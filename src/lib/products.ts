@@ -11,7 +11,7 @@ export interface Product {
   imageUrl: string;
   dataAiHint: string;
   game?: 'reel-pause' | 'multi-shot' | 'riddle-calc' | 'draw-passcode' | 'chess-mate' | 'time-challenge' | 'pink-cups' | 'snake-and-stairs' | 'ai-adventure' | 'maze-draw';
-  category?: 'luckshot' | 'brainshot' | 'luckgirls';
+  category?: 'luckshot' | 'brainshot' | 'luckgirls' | 'chess';
 }
 
 const db = getFirestore(app); // Use the imported, initialized app
@@ -103,6 +103,17 @@ export const mockProducts: Product[] = [
     dataAiHint: 'chess board',
     game: 'chess-mate',
     category: 'brainshot',
+  },
+  {
+    id: 'prod_chess_challenge_01',
+    name: 'Head-to-Head Chess',
+    subtitle: '1v1 Puzzle Speedrun',
+    description: 'Challenge another player to a head-to-head chess puzzle speedrun. First to solve wins the prize.',
+    marketPrice: 100, // Represents the prize pool
+    imageUrl: 'https://placehold.co/600x400/795548/FFFFFF/png?text=Chess',
+    dataAiHint: 'chess board',
+    game: 'chess-mate',
+    category: 'chess',
   },
   {
     id: 'prod_laptop_01',

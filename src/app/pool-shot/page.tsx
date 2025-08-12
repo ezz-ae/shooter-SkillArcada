@@ -5,35 +5,44 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PoolChallengeCard } from "@/components/pool-challenge-card";
+import { Product, getProducts } from "@/lib/products";
 import { User, getUsers } from "@/lib/user";
-import { Bot, Trophy, PlusCircle, Gamepad2 } from "lucide-react";
+import { Bot, Trophy, PlusCircle, Gamepad2, Swords } from "lucide-react";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useEffect, useState } from "react";
 
 export default function PoolShotPage() {
   const [users, setUsers] = useState<User[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
   
   useEffect(() => {
-    async function fetchUsers() {
-      const fetchedUsers = await getUsers();
+    async function fetchData() {
+      const [fetchedUsers, fetchedProducts] = await Promise.all([getUsers(), getProducts()]);
       setUsers(fetchedUsers);
+      setProducts(fetchedProducts);
     }
-    fetchUsers();
+    fetchData();
   }, []);
 
-  const challenges = users.length > 5 ? [
-    { id: 'c1', prize: 40, fee: 5, player1: users[0], player2: users[1] },
-    { id: 'c2', prize: 100, fee: 10, player1: users[2], player2: null },
-    { id: 'c3', prize: 500, fee: 25, player1: users[3], player2: null },
-    { id: 'c4', prize: 20, fee: 2, player1: users[4], player2: users[5] },
+  const poolChallenges = users.length > 5 ? [
+    { id: 'c1', prize: 40, fee: 5, player1: users[0], player2: users[1], type: 'pool' },
+    { id: 'c2', prize: 100, fee: 10, player1: users[2], player2: null, type: 'pool' },
+    { id: 'c3', prize: 500, fee: 25, player1: users[3], player2: null, type: 'pool' },
+    { id: 'c4', prize: 20, fee: 2, player1: users[4], player2: users[5], type: 'pool' },
   ] : [];
+
+  const chessChallenges = users.length > 3 ? [
+    { id: 'chess1', prize: 250, fee: 25, player1: users[1], player2: null, type: 'chess' },
+    { id: 'chess2', prize: 1000, fee: 100, player1: users[3], player2: null, type: 'chess' },
+  ] : [];
+
 
   return (
     <div className="container mx-auto px-4 py-8 flex flex-col items-center">
        <div className="text-center mb-8">
         <h1 className="text-4xl font-black tracking-tight lg:text-5xl">
-          Pool Game Center
+          Game Center
         </h1>
         <p className="mt-2 text-lg text-muted-foreground max-w-2xl mx-auto">
           Compete in 1-on-1 challenges, join high-stakes leagues, or practice your skills. The felt is waiting.
@@ -47,20 +56,32 @@ export default function PoolShotPage() {
                 Create New Challenge
             </Button>
         </div>
-        <Tabs defaultValue="challenges" className="w-full">
-            <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="challenges">Public Challenges</TabsTrigger>
+        <Tabs defaultValue="pool-challenges" className="w-full">
+            <TabsList className="grid w-full grid-cols-4">
+                <TabsTrigger value="pool-challenges">Pool Challenges</TabsTrigger>
+                <TabsTrigger value="chess-challenges">Chess Challenges</TabsTrigger>
                 <TabsTrigger value="leagues">Leagues</TabsTrigger>
                 <TabsTrigger value="practice">Practice</TabsTrigger>
             </TabsList>
-            <TabsContent value="challenges" className="mt-6">
+            <TabsContent value="pool-challenges" className="mt-6">
                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {challenges.filter(c => !c.player2).map(challenge => (
+                    {poolChallenges.filter(c => !c.player2).map(challenge => (
                         <PoolChallengeCard key={challenge.id} challenge={challenge} />
                     ))}
                 </div>
                  <div className="text-center py-16 border-2 border-dashed rounded-lg mt-6">
-                    <h3 className="text-xl font-semibold">No More Open Challenges</h3>
+                    <h3 className="text-xl font-semibold">No More Open Pool Challenges</h3>
+                    <p className="text-muted-foreground mt-2">Why not create one yourself?</p>
+                </div>
+            </TabsContent>
+            <TabsContent value="chess-challenges" className="mt-6">
+                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {chessChallenges.filter(c => !c.player2).map(challenge => (
+                        <PoolChallengeCard key={challenge.id} challenge={challenge} />
+                    ))}
+                </div>
+                 <div className="text-center py-16 border-2 border-dashed rounded-lg mt-6">
+                    <h3 className="text-xl font-semibold">No More Open Chess Challenges</h3>
                     <p className="text-muted-foreground mt-2">Why not create one yourself?</p>
                 </div>
             </TabsContent>

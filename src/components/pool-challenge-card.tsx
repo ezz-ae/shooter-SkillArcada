@@ -7,7 +7,7 @@ import { Button } from "./ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "./ui/card";
 import { User } from "@/lib/user";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { Target, X, Zap } from "lucide-react";
+import { Target, X, Zap, Swords } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface Challenge {
@@ -16,6 +16,7 @@ interface Challenge {
     fee: number;
     player1: User;
     player2: User | null;
+    type: 'pool' | 'chess';
 }
 
 interface PoolChallengeCardProps {
@@ -26,7 +27,7 @@ interface PoolChallengeCardProps {
 const CHALLENGE_DURATION_SECONDS = 5 * 60; // 5 minutes
 
 export function PoolChallengeCard({ challenge, onDismiss }: PoolChallengeCardProps) {
-  const { id, prize, fee, player1, player2 } = challenge;
+  const { id, prize, fee, player1, player2, type } = challenge;
   const isWaiting = player2 === null;
 
   const [timeLeft, setTimeLeft] = useState(CHALLENGE_DURATION_SECONDS);
@@ -49,6 +50,13 @@ export function PoolChallengeCard({ challenge, onDismiss }: PoolChallengeCardPro
 
   const minutes = Math.floor(timeLeft / 60);
   const seconds = timeLeft % 60;
+
+  const renderIcon = () => {
+    if (type === 'chess') {
+        return <p className="font-black text-xl text-primary">CHESS</p>;
+    }
+    return <p className="font-black text-xl text-primary">POOL</p>;
+  }
 
   return (
     <Card className="flex flex-col border-2 border-transparent data-[waiting=true]:border-primary/50 relative" data-waiting={isWaiting}>
@@ -74,7 +82,7 @@ export function PoolChallengeCard({ challenge, onDismiss }: PoolChallengeCardPro
             </div>
             <div className="text-center">
                 <p className="text-muted-foreground text-xs">VS</p>
-                <p className="font-black text-2xl text-primary">POOL</p>
+                {renderIcon()}
                  {isWaiting && (
                     <div className="flex justify-center items-center gap-2 mt-2">
                         <Zap className="h-5 w-5 text-yellow-500 animate-ping" />

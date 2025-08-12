@@ -21,15 +21,16 @@ interface ChessBoardProps {
 
 const defaultBoard: (Piece | null)[][] = Array(8).fill(null).map(() => Array(8).fill(null));
 
+// Using text for pieces for better visual representation
+const pieceUnicode: { [key in PieceColor]: { [key in PieceType]: string } } = {
+  white: { King: '♔', Queen: '♕', Rook: '♖', Bishop: '♗', Knight: '♘', Pawn: '♙' },
+  black: { King: '♚', Queen: '♛', Rook: '♜', Bishop: '♝', Knight: '♞', Pawn: '♟︎' },
+};
+
 const PieceIcon = ({ piece }: { piece: Piece }) => (
-    <div className={cn("flex flex-col items-center justify-center h-full w-full", piece.color === 'white' ? 'text-gray-800' : 'text-white')}>
-        <svg viewBox="0 0 100 100" className="h-2/3 w-2/3" fill="currentColor">
-             <path d="M50 10 C 40 25, 40 50, 50 60 C 60 50, 60 25, 50 10 Z" />
-             <rect x="40" y="55" width="20" height="25" />
-             <rect x="30" y="80" width="40" height="10" />
-        </svg>
-        <span className="text-[8px] md:text-[10px] font-bold mt-[-4px] select-none">{piece.type}</span>
-    </div>
+    <span className={cn("text-4xl md:text-5xl", piece.color === 'white' ? 'text-stone-100' : 'text-stone-800')}>
+        {pieceUnicode[piece.color][piece.type]}
+    </span>
 );
 
 
@@ -55,7 +56,7 @@ export function ChessBoard({ initialBoard = defaultBoard, onMove, isWhiteTurn = 
   };
 
   return (
-    <div className={cn("aspect-square w-full grid grid-cols-8 bg-[#eeeed2] border-4 border-[#769656]", className)}>
+    <div className={cn("aspect-square w-full grid grid-cols-8 border-4 shadow-lg border-[#769656]", className)}>
       {board.map((row, rowIndex) =>
         row.map((piece, colIndex) => {
           const isLightSquare = (rowIndex + colIndex) % 2 !== 0;
@@ -65,7 +66,7 @@ export function ChessBoard({ initialBoard = defaultBoard, onMove, isWhiteTurn = 
               className={cn(
                 "w-full h-full flex items-center justify-center relative",
                 isLightSquare ? 'bg-[#eeeed2]' : 'bg-[#769656]',
-                'cursor-pointer'
+                'cursor-pointer transition-colors'
               )}
               onClick={() => handleSquareClick(rowIndex, colIndex)}
             >

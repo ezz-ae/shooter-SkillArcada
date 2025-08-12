@@ -165,7 +165,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
                   <ShotTaker product={product} view="actions" />
                 </div>
             </div>
-        </Content>
+        </CardContent>
        </Card>
     </div>
   );

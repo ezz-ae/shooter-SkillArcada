@@ -158,7 +158,7 @@ export function CryptoLuckGame() {
     return () => {
       if (timerInterval.current) clearInterval(timerInterval.current);
     }
-  }, [gameState, timer, currentPrice, marketPrice, addLuckshots, toast, isGuessLocked, guessedPrice]);
+  }, [gameState, timer, currentPrice, addLuckshots, toast, isGuessLocked, guessedPrice]);
   
   const handleStartGame = () => {
     if (luckshots < 1) {
