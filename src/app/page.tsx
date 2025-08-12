@@ -16,6 +16,7 @@ import { mockProducts } from "@/lib/products";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { PoolChallengeCard } from "@/components/pool-challenge-card";
+import Image from "next/image";
 
 export default function Home() {
     const { isAuthenticated, user, login } = useAuth();
@@ -96,21 +97,25 @@ export default function Home() {
                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
                             {iphoneProduct && <ShotTaker product={iphoneProduct} />}
                             {btcProduct && <ShotTaker product={btcProduct} />}
-                            <Card className="shadow-2xl border-accent/50 border-2 flex flex-col justify-between">
-                                <CardHeader className="text-center">
-                                    <Trophy className="mx-auto h-16 w-16 text-accent animate-pulse"/>
-                                    <CardTitle className="text-3xl font-black">The Pro League</CardTitle>
-                                    <CardDescription className="text-lg">Season 1 is now open for registration.</CardDescription>
-                                </CardHeader>
-                                <CardContent className="text-center">
-                                    <p className="text-5xl font-black text-primary">1 ETH</p>
-                                    <p className="text-muted-foreground font-semibold">Grand Prize</p>
-                                </CardContent>
-                                <CardFooter>
-                                    <Button size="lg" className="w-full" asChild>
-                                        <Link href="/pool-shot">View League</Link>
-                                    </Button>
-                                </CardFooter>
+                            <Card className="shadow-2xl border-accent/50 border-2 flex flex-col justify-between overflow-hidden">
+                                <Image src="https://placehold.co/600x400.png" alt="Pool table" fill className="object-cover z-0" data-ai-hint="pool table" />
+                                <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/60 to-black/80 z-10" />
+                                <div className="relative z-20 flex flex-col flex-grow text-white">
+                                    <CardHeader className="text-center">
+                                        <Trophy className="mx-auto h-16 w-16 text-accent animate-pulse"/>
+                                        <CardTitle className="text-3xl font-black text-white">The Pro League</CardTitle>
+                                        <CardDescription className="text-lg text-white/80">Season 1 is now open for registration.</CardDescription>
+                                    </CardHeader>
+                                    <CardContent className="text-center flex-grow flex flex-col justify-center">
+                                        <p className="text-5xl font-black text-primary">1 ETH</p>
+                                        <p className="text-white/80 font-semibold">Grand Prize</p>
+                                    </CardContent>
+                                    <CardFooter>
+                                        <Button size="lg" className="w-full" variant="secondary" asChild>
+                                            <Link href="/pool-shot">View League</Link>
+                                        </Button>
+                                    </CardFooter>
+                                </div>
                             </Card>
                          </div>
                     </section>
@@ -159,5 +164,3 @@ export default function Home() {
         </div>
     );
 }
-
-    
