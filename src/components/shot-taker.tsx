@@ -160,7 +160,7 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
     priceState.lastChangeTime = now;
     return newPrice;
 
-  }, [priceState]);
+  }, [priceState, product.marketPrice]);
 
   useEffect(() => {
     let isMounted = true;
