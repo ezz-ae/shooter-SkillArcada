@@ -11,6 +11,7 @@ interface AuthState {
   isAuthenticated: boolean;
   isLoggingIn: boolean;
   user: User | null;
+  isNewUser: boolean;
   login: (method: 'whatsapp' | 'wallet') => void;
   logout: () => void;
   setIsLoggingIn: (isLoggingIn: boolean) => void;
@@ -20,6 +21,7 @@ const initialState = {
   isAuthenticated: false,
   isLoggingIn: false,
   user: null,
+  isNewUser: true,
 };
 
 export const useAuth = create<AuthState>()(
@@ -30,21 +32,28 @@ export const useAuth = create<AuthState>()(
         // In a real app, this would involve a complex authentication flow.
         // Here, we simulate a successful login and assign a random lucky number.
         const randomLuckyNumber = String(Math.floor(1000 + Math.random() * 9000));
+        
+        if (get().isNewUser) {
+            // Give 3 free shots to new users
+            useStore.getState().addLuckshots(3);
+        }
+
         set({ 
           isAuthenticated: true,
           isLoggingIn: false,
-          user: { luckyNumber: randomLuckyNumber } 
+          user: { luckyNumber: randomLuckyNumber },
+          isNewUser: false, // Mark as not a new user after first login
         });
       },
       logout: () => {
         // Also reset the main store on logout
         useStore.getState().reset();
-        set({ ...initialState });
+        set({ ...initialState, isNewUser: get().isNewUser }); // Keep isNewUser state on logout
       },
       setIsLoggingIn: (isLoggingIn) => set({ isLoggingIn }),
     }),
     {
-      name: 'luckshot-auth-storage',
+      name: 'luckshot-auth-storage-v2', // Incremented version to reset for existing users
       storage: createJSONStorage(() => localStorage),
     }
   )

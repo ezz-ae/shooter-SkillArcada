@@ -38,7 +38,7 @@ const getVaultItemKey = (item: { id: string; purchaseTimestamp: number }) => {
 const initialState = {
     vault: [],
     shippingCart: [],
-    luckshots: 100, // Start with 100 shots, equivalent to $100
+    luckshots: 0, // Start with 0 shots, new users get a bonus
     hasSeenShotInfo: false,
     hasSeenVaultInfo: false,
     hasTradedForShots: false,
