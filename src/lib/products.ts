@@ -7,7 +7,7 @@ export interface Product {
   marketPrice: number;
   imageUrl: string;
   dataAiHint: string;
-  game?: 'reel-pause' | 'digit-pause' | 'multi-shot' | 'riddle-calc';
+  game?: 'reel-pause' | 'multi-shot' | 'riddle-calc' | 'draw-passcode';
 }
 
 export const mockProducts: Product[] = [
@@ -58,6 +58,7 @@ export const mockProducts: Product[] = [
     marketPrice: 1350.0,
     imageUrl: 'https://placehold.co/600x400/1C1C1C/E0E0E0/png?text=Galaxy',
     dataAiHint: 'android phone',
+    game: 'draw-passcode',
   },
   {
     id: 'prod_card_05',

@@ -93,6 +93,11 @@ export default {
           '0%, 100%': { 'box-shadow': '0 0 0 0px hsla(0, 0%, 100%, 0.4)' },
           '50%': { 'box-shadow': '0 0 0 3px hsla(0, 0%, 100%, 0)' },
         },
+        'fade-out': {
+          '0%': { opacity: '1' },
+          '80%': { opacity: '1' },
+          '100%': { opacity: '0' },
+        }
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
@@ -101,6 +106,7 @@ export default {
         'flash-red': 'flash-red 0.7s ease-in-out',
         'shimmer': 'shimmer 1.5s linear infinite',
         'border-pulse': 'border-pulse 2s infinite',
+        'fade-out': 'fade-out 4s ease-out forwards',
       },
     },
   },

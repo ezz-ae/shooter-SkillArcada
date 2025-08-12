@@ -32,6 +32,7 @@ import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { Calculator } from "./calculator";
 import { ChartContainer } from "./ui/chart";
+import { DrawPad } from "./draw-pad";
 
 interface ShotTakerProps {
   product: Product;
@@ -41,6 +42,8 @@ interface ShotTakerProps {
 const SHOT_COST = 1;
 const RIDDLE_ANSWER = 80;
 const RIDDLE_TIMER_SECONDS = 300; // 5 minutes
+const DRAW_PASSCODE_ANSWER = '0,1,2,5,8'; // L-shape on 3x3 grid
+const DRAW_PASSCODE_PRICE = 99;
 
 export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
   const [currentPrice, setCurrentPrice] = useState(product.marketPrice);
@@ -56,7 +59,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
   const [capturedTime, setCapturedTime] = useState<Date | null>(null);
 
   // For reel-pause game
-  const [reelNumbers, setReelNumbers] = useState<number[]>(Array(24).fill(0));
+  const [reelNumbers, setReelNumbers] = useState<number[]>(Array(16).fill(0));
   const [isReelPaused, setIsReelPaused] = useState(false);
   const [selectedReelIndices, setSelectedReelIndices] = useState<number[]>([]);
   const reelInterval = useRef<NodeJS.Timeout>();
@@ -66,6 +69,11 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
   const [riddleTimer, setRiddleTimer] = useState(RIDDLE_TIMER_SECONDS);
   const [calculatorValue, setCalculatorValue] = useState("");
   const timerInterval = useRef<NodeJS.Timeout>();
+
+  // For draw-passcode game
+  const [isDrawPasscodeDialogOpen, setIsDrawPasscodeDialogOpen] = useState(false);
+  const [drawPadValue, setDrawPadValue] = useState<number[]>([]);
+
 
   const { addToVault, walletBalance, spendFromWallet, hasTakenFirstShot, setHasTakenFirstShot } = useStore();
   const { toast } = useToast();
@@ -78,9 +86,11 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
       return newPrice;
   }
 
+  const isGame = product.game && ['reel-pause', 'riddle-calc', 'draw-passcode'].includes(product.game);
+
   useEffect(() => {
     let isMounted = true;
-    if (product.game !== 'reel-pause' && product.game !== 'riddle-calc') {
+    if (!isGame) {
       const priceInterval = setInterval(() => {
         if (!isMounted) return;
         const newPrice = getNewPrice(currentPrice);
@@ -96,7 +106,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
           clearInterval(priceInterval);
       };
     }
-  }, [product.game, currentPrice]);
+  }, [isGame, currentPrice]);
   
   // Cleanup intervals on component unmount
   useEffect(() => {
@@ -141,7 +151,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
   }
 
   const handleShot = () => {
-    if (product.game === 'reel-pause' || product.game === 'riddle-calc') {
+    if (isGame) {
       return;
     }
     
@@ -279,6 +289,33 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
   const handleRiddleShot = () => {
     handleVault(RIDDLE_ANSWER);
     setCalculatorValue("");
+    setIsRiddleDialogOpen(false);
+  }
+
+  const handleDrawPasscodeStart = () => {
+     if (hasTakenFirstShot) {
+      if (walletBalance < SHOT_COST) {
+        toast({
+          variant: 'destructive',
+          title: 'Insufficient Funds',
+          description: `You need at least $${SHOT_COST.toFixed(2)} to play.`,
+        });
+        return;
+      }
+      spendFromWallet(SHOT_COST);
+    } else {
+       toast({
+        title: "Your First Shot is Free!",
+        description: "Draw the pattern to set the price!",
+      });
+      setHasTakenFirstShot();
+    }
+    setIsDrawPasscodeDialogOpen(true);
+  }
+
+  const handleDrawPasscodeShot = () => {
+    handleVault(DRAW_PASSCODE_PRICE);
+    setDrawPadValue([]);
   }
   
   const minutes = Math.floor(riddleTimer / 60);
@@ -286,7 +323,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
   const timerColor = riddleTimer <= 60 ? "text-destructive" : "text-foreground";
 
   const CardComponent = isPage ? 'div' : Card;
-  const isGameCard = product.game === 'reel-pause' || product.game === 'riddle-calc';
+  const isGameCard = product.game === 'reel-pause' || product.game === 'riddle-calc' || product.game === 'draw-passcode';
 
   const discountPercent = ((product.marketPrice - currentPrice) / product.marketPrice) * 100;
   const discountColor = discountPercent > 0 ? "text-accent" : "text-[hsl(var(--chart-4))]";
@@ -336,6 +373,22 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
         )
     }
 
+    if (product.game === 'draw-passcode') {
+        const isCorrectAnswer = drawPadValue.join(',') === DRAW_PASSCODE_ANSWER;
+        return (
+            <div className="w-full flex flex-col gap-2">
+                <DrawPad onPatternComplete={setDrawPadValue} />
+                {isCorrectAnswer ? (
+                    <Button onClick={handleDrawPasscodeShot} className="w-full h-12 text-lg font-bold">
+                        Take the Shot for ${DRAW_PASSCODE_PRICE}!
+                    </Button>
+                ) : (
+                    <Button onClick={handleDrawPasscodeStart} className="w-full h-12 text-lg font-bold">Start Challenge</Button>
+                )}
+            </div>
+        )
+    }
+
     return null;
   }
   
@@ -376,7 +429,10 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
         )}
         <CardContent className={cn("flex-grow p-4 pb-2 space-y-2", isPage && "p-0 pt-4")}>
            {isGameCard ? (
-             <div className="text-sm text-muted-foreground min-h-[6rem]" />
+             <div className="text-center p-4">
+                <h3 className="font-bold text-lg">{product.name}</h3>
+                <p className="text-sm text-muted-foreground">{product.subtitle}</p>
+             </div>
            ) : (
              <div className="relative h-24">
                <div className="absolute inset-0 opacity-20">
@@ -512,8 +568,38 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
                 </div>
             </DialogContent>
         </Dialog>
+        <Dialog open={isDrawPasscodeDialogOpen} onOpenChange={setIsDrawPasscodeDialogOpen}>
+            <DialogContent className="max-w-md select-none">
+                <DialogHeader>
+                    <DialogTitle>Draw the Passcode</DialogTitle>
+                    <DialogDescription>
+                        The pattern will appear for a moment. Memorize it and draw it on the pad.
+                    </DialogDescription>
+                </DialogHeader>
+                <div className="flex justify-center items-center h-48">
+                    <div className="animate-fade-out">
+                         <svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="line-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stopColor="hsl(var(--primary))" />
+                                    <stop offset="100%" stopColor="hsl(var(--accent))" />
+                                </linearGradient>
+                            </defs>
+                            <circle cx="20" cy="20" r="4" fill="hsl(var(--foreground))" fillOpacity="0.5" />
+                            <circle cx="50" cy="20" r="4" fill="hsl(var(--foreground))" fillOpacity="0.5" />
+                            <circle cx="80" cy="20" r="4" fill="hsl(var(--foreground))" fillOpacity="0.5" />
+                            <circle cx="20" cy="50" r="4" fill="hsl(var(--foreground))" fillOpacity="0.5" />
+                            <circle cx="50" cy="50" r="4" fill="hsl(var(--foreground))" fillOpacity="0.5" />
+                            <circle cx="80" cy="50" r="4" fill="hsl(var(--foreground))" fillOpacity="0.5" />
+                            <circle cx="20" cy="80" r="4" fill="hsl(var(--foreground))" fillOpacity="0.5" />
+                            <circle cx="50" cy="80" r="4" fill="hsl(var(--foreground))" fillOpacity="0.5" />
+                            <circle cx="80" cy="80" r="4" fill="hsl(var(--foreground))" fillOpacity="0.5" />
+                            <path d="M20 20 L20 80 L80 80" stroke="url(#line-gradient)" strokeWidth="4" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                    </div>
+                </div>
+            </DialogContent>
+        </Dialog>
     </>
   );
 }
-
-    
