@@ -108,7 +108,7 @@ export default function Home() {
                                 </div>
                             }
                             <Card className="shadow-2xl border-accent/50 border-2 flex flex-col justify-between overflow-hidden relative">
-                                <Image src="https://placehold.co/600x400/000000/FFFFFF" alt="Pool table with balls" fill className="object-cover z-0" data-ai-hint="pool balls black table" />
+                                <Image src="https://placehold.co/600x400.png" alt="Pool table with balls" fill className="object-cover z-0" data-ai-hint="pool balls black table" />
                                 <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/60 to-black/80 z-10" />
                                 <div className="relative z-20 flex flex-col flex-grow text-white p-6">
                                     <CardHeader className="text-center p-0">
