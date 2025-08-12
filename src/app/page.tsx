@@ -115,7 +115,7 @@ export default function Home() {
                                 </CardHeader>
                                 <CardContent className="text-center flex-grow flex flex-col justify-center">
                                     <div>
-                                        <p className="text-7xl font-black text-primary">1 Ethereum</p>
+                                        <p className="text-7xl font-black text-primary">One Ethereum</p>
                                         <p className="text-muted-foreground font-semibold">Grand Prize</p>
                                     </div>
                                     <div className="mt-4 text-muted-foreground px-4">
