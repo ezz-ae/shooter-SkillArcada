@@ -84,6 +84,9 @@
         background-size: 400% 400%;
         animation: gradient-animation 5s ease infinite;
     }
+    .multi-shot-card {
+      @apply animate-border-pulse rounded-lg border-2 border-transparent;
+    }
 }
 
 @keyframes gradient-animation {
@@ -91,4 +94,3 @@
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
 }
-

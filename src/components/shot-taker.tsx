@@ -31,7 +31,8 @@ const SHOT_COST = 1;
 export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
   const [currentPrice, setCurrentPrice] = useState(product.marketPrice);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [capturedPrice, setCapturedPrice] = useState(0);
+  const [capturedPrices, setCapturedPrices] = useState<number[]>([]);
+  const [selectedPrice, setSelectedPrice] = useState<number | null>(null);
   const [capturedTime, setCapturedTime] = useState<Date | null>(null);
 
   // For digit-pause game
@@ -43,18 +44,20 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
   const { addToVault, walletBalance, spendFromWallet, hasTakenFirstShot, setHasTakenFirstShot } = useStore();
   const { toast } = useToast();
   
+  const getNewPrice = (price: number) => {
+      const volatility = 0.1;
+      const changePercent = (Math.random() - 0.5) * volatility;
+      let newPrice = price * (1 + changePercent);
+      newPrice = Math.max(1, newPrice);
+      return newPrice;
+  }
+
   useEffect(() => {
     let isMounted = true;
     if (product.game !== 'digit-pause') {
       const priceInterval = setInterval(() => {
         if (!isMounted) return;
-        setCurrentPrice((prevPrice) => {
-          const volatility = 0.1;
-          const changePercent = (Math.random() - 0.5) * volatility;
-          let newPrice = prevPrice * (1 + changePercent);
-          newPrice = Math.max(1, newPrice);
-          return newPrice;
-        });
+        setCurrentPrice(getNewPrice);
       }, 1000 + Math.random() * 1000);
 
       return () => {
@@ -101,7 +104,6 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
 
   const handleShot = () => {
     if (product.game === 'digit-pause') {
-      // Game logic is handled inline
       return;
     }
     
@@ -123,13 +125,21 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
       setHasTakenFirstShot();
     }
     
-    setCapturedPrice(currentPrice);
+    if (product.game === 'multi-shot') {
+        const prices = [getNewPrice(currentPrice), getNewPrice(currentPrice), getNewPrice(currentPrice)];
+        setCapturedPrices(prices);
+        setSelectedPrice(prices[0]);
+    } else {
+        setCapturedPrices([currentPrice]);
+    }
     setCapturedTime(new Date());
     setIsDialogOpen(true);
   };
   
   const handleVault = () => {
-    let priceToPay = capturedPrice;
+    const priceToPay = product.game === 'multi-shot' ? selectedPrice : capturedPrices[0];
+
+    if (priceToPay === null) return;
     
     if (walletBalance < priceToPay) {
       toast({
@@ -156,6 +166,8 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
 
   const handleCloseDialog = () => {
     setIsDialogOpen(false);
+    setCapturedPrices([]);
+    setSelectedPrice(null);
   }
 
   const handleDigitClick = (index: number) => {
@@ -163,7 +175,6 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
       return;
     }
 
-    // Charge for the shot on the first click
     if (lockedDigits.length === 0) {
       if (hasTakenFirstShot) {
         if (walletBalance < SHOT_COST) {
@@ -250,7 +261,6 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
                       className={cn(
                         "h-16 w-1/3 rounded-lg flex items-center justify-center text-5xl font-black tabular-nums transition-all bg-secondary text-primary-foreground",
                         isGameActive && isClickable && "cursor-pointer hover:bg-primary/80",
-                        !isGameActive || !isClickable && "cursor-not-allowed opacity-50",
                       )}
                     >
                       {lockedDigits.length > index ? '?' : digits[index]}
@@ -278,7 +288,8 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
         className={cn(
           "flex h-full flex-col overflow-hidden transition-all duration-300 group relative",
           !isPage && "shadow-lg",
-          isGameCard && "border-primary/50 border-2"
+          isGameCard && "border-primary/50 border-2",
+          product.game === 'multi-shot' && 'multi-shot-card'
         )}
       >
         {!isPage && (
@@ -335,14 +346,14 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
             >
               <div className="absolute inset-0 moving-gradient"></div>
               <div className="relative flex items-baseline w-full justify-center">
-                   <span className="font-black text-lg">Shot</span>
+                   <span className="font-black text-lg">{product.game === 'multi-shot' ? 'x3 Shot' : 'Shot'}</span>
               </div>
             </button>
           )}
         </CardFooter>
       </CardComponent>
 
-      <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+      <AlertDialog open={isDialogOpen} onOpenChange={handleCloseDialog}>
              <AlertDialogContent onEscapeKeyDown={handleCloseDialog}>
                 <AlertDialogHeader>
                     <AlertDialogTitle className="text-center">You Got a Shot!</AlertDialogTitle>
@@ -356,29 +367,53 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
                         className="object-cover"
                         data-ai-hint={product.dataAiHint}
                     />
-                    <div className="absolute inset-0 bg-black/20 flex flex-col justify-between p-4">
+                     <div className="absolute inset-0 bg-black/40 flex flex-col justify-between p-4">
                         <div className="text-right">
                         <div className="bg-black/50 text-white p-2 rounded-md text-sm font-mono inline-block">
                             {capturedTime?.toLocaleTimeString()}
                         </div>
                         </div>
 
-                        <div className="bg-black/50 p-4 rounded-lg text-center">
-                            <div className="text-sm text-muted-foreground">Captured Price</div>
-                            <div className="relative text-3xl font-black text-white shimmer-text" style={{'--trend-color': 'hsl(var(--primary))'} as React.CSSProperties}>
-                                ${capturedPrice.toFixed(2)}
+                        {product.game === 'multi-shot' ? (
+                            <div className="space-y-2">
+                                {capturedPrices.map((price, index) => (
+                                    <button
+                                        key={index}
+                                        onClick={() => setSelectedPrice(price)}
+                                        className={cn(
+                                            "w-full bg-black/50 p-2 rounded-lg text-center transition-all",
+                                            selectedPrice === price ? "ring-2 ring-primary" : "hover:bg-black/70"
+                                        )}
+                                    >
+                                        <div className="text-sm text-muted-foreground">Shot {index + 1}</div>
+                                        <div className={cn("relative text-2xl font-black text-white", selectedPrice === price && "shimmer-text")} style={{'--trend-color': 'hsl(var(--primary))'} as React.CSSProperties}>
+                                            ${price.toFixed(2)}
+                                        </div>
+                                    </button>
+                                ))}
                             </div>
-                        </div>
+                        ) : (
+                           <div className="bg-black/50 p-4 rounded-lg text-center">
+                                <div className="text-sm text-muted-foreground">Captured Price</div>
+                                <div className="relative text-3xl font-black text-white shimmer-text" style={{'--trend-color': 'hsl(var(--primary))'} as React.CSSProperties}>
+                                    ${capturedPrices[0]?.toFixed(2)}
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
 
                 <AlertDialogDescription className="text-center">
-                    You've captured <span className="font-bold text-foreground">{product.name}</span>! Vault it now for <span className="font-bold text-foreground">${capturedPrice.toFixed(2)}</span> or let it go.
+                     You've captured <span className="font-bold text-foreground">{product.name}</span>! 
+                     {product.game === 'multi-shot' 
+                        ? ` Choose one price to vault.`
+                        : ` Vault it now for a great price or let it go.`
+                     }
                 </AlertDialogDescription>
                 
                 <AlertDialogFooter className="gap-2 sm:gap-0 sm:flex-row sm:justify-center">
                     <AlertDialogCancel onClick={handleCloseDialog}>Let it go</AlertDialogCancel>
-                    <AlertDialogAction onClick={handleVault}>Vault It!</AlertDialogAction>
+                    <AlertDialogAction onClick={handleVault} disabled={product.game === 'multi-shot' && selectedPrice === null}>Vault It!</AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>
       </AlertDialog>

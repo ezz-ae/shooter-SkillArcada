@@ -6,7 +6,7 @@ export interface Product {
   marketPrice: number;
   imageUrl: string;
   dataAiHint: string;
-  game?: 'reel-pause' | 'digit-pause';
+  game?: 'reel-pause' | 'digit-pause' | 'multi-shot';
 }
 
 export const mockProducts: Product[] = [
@@ -91,6 +91,7 @@ export const mockProducts: Product[] = [
     marketPrice: 4800.0,
     imageUrl: 'https://placehold.co/600x400/0000FF/FFFFFF/png?text=Book',
     dataAiHint: 'rare book',
+    game: 'multi-shot',
   },
   {
     id: 'prod_009',
