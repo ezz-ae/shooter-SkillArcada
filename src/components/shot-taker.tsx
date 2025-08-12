@@ -209,7 +209,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
             onClick={handleShot}
           >
             <div className="absolute inset-0 moving-gradient"></div>
-            <span className="relative font-black text-lg">Take a Shot! ({!hasTakenFirstShot ? "Free" : "$1.00"})</span>
+            <span className="relative font-black text-lg">Shot</span>
           </button>
         </CardFooter>
       </CardComponent>
@@ -225,7 +225,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
                 </AlertDialogHeader>
                 <AlertDialogFooter className="gap-2 sm:gap-0 sm:flex-row sm:justify-end sm:space-x-2">
                     <Button variant="secondary" onClick={() => setDialogState('closed')}>Let it go</Button>
-                    <Button variant="default" onClick={() => handleVault(capturedPrice)}>Vault It! (${capturedPrice.toFixed(2)})</Button>
+                    <Button variant="default" onClick={() => handleVault(capturedPrice)}>Vault It!</Button>
                     {product.allowDoubleSnipe && (
                         <Button variant="destructive" onClick={startDoubleSnipe}>
                             <Dices className="mr-2 h-4 w-4" />
