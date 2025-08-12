@@ -38,7 +38,6 @@ export function Header() {
       <div className="container flex h-16 items-center">
         <div className="mr-auto flex items-center">
           <Link href="/" className="mr-6 flex items-center space-x-2">
-            <Image src="https://firebasestorage.googleapis.com/v0/b/reodywellness.firebasestorage.app/o/Untitled-4%20(13).png?alt=media&token=a7f36634-d0ab-40d5-9607-76ecbf375346" alt="ShoterShots Logo" width={32} height={32} />
             <span className="font-bold">ShoterShots</span>
           </Link>
           <nav className="hidden md:flex items-center space-x-1">

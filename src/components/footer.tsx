@@ -8,6 +8,7 @@ import { BrainCircuit, Dices, Heart, LineChart, MessageSquare, Swords, Volume2, 
 import Link from "next/link";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import Image from "next/image";
 
 export function Footer() {
     
@@ -52,8 +53,11 @@ export function Footer() {
   return (
     <footer className="border-t mt-12 py-8 bg-secondary/50">
       <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8">
-        <div className="md:col-span-1">
-            <h3 className="font-bold text-lg mb-2">ShoterShots</h3>
+        <div className="md:col-span-1 flex flex-col gap-2">
+            <div className="flex items-center gap-2">
+                <Image src="https://firebasestorage.googleapis.com/v0/b/reodywellness.firebasestorage.app/o/Untitled-4%20(13).png?alt=media&token=a7f36634-d0ab-40d5-9607-76ecbf375346" alt="ShoterShots Logo" width={32} height={32} />
+                <h3 className="font-bold text-lg">ShoterShots</h3>
+            </div>
             <p className="text-sm text-muted-foreground">Your shot at unbelievable prices, powered by our resident gamegang mega, Shoter.</p>
         </div>
         <div className="md:col-span-1">
