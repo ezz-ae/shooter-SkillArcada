@@ -10,6 +10,7 @@ import { ActivityFeed } from "@/components/activity-feed";
 import { useAuth } from "@/lib/auth";
 import { LoginModal } from "@/components/login-modal";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useState } from "react";
 
 export default function Home() {
     const { isAuthenticated, user, isLoggingIn } = useAuth();
@@ -20,9 +21,17 @@ export default function Home() {
         { id: 'c2', prize: 100, fee: 10, player1: mockUsers[2], player2: null },
         { id: 'c3', prize: 500, fee: 25, player1: mockUsers[3], player2: null },
         { id: 'c4', prize: 20, fee: 2, player1: mockUsers[4], player2: mockUsers[5] },
+        { id: 'c5', prize: 250, fee: 20, player1: mockUsers[1], player2: null },
     ];
     
-    const recommendedChallenge = challenges.find(c => !c.player2);
+    const openChallenges = challenges.filter(c => !c.player2);
+    const [currentChallengeIndex, setCurrentChallengeIndex] = useState(0);
+
+    const handleDismissChallenge = () => {
+        setCurrentChallengeIndex((prevIndex) => (prevIndex + 1) % openChallenges.length);
+    };
+    
+    const recommendedChallenge = openChallenges.length > 0 ? openChallenges[currentChallengeIndex] : null;
 
     if (!isAuthenticated && !isLoggingIn) {
         return <LoginModal />;
@@ -42,7 +51,11 @@ export default function Home() {
                         {recommendedChallenge ? (
                             <div className="flex justify-center">
                                 <div className="w-full max-w-sm">
-                                    <PoolChallengeCard key={recommendedChallenge.id} challenge={recommendedChallenge} />
+                                    <PoolChallengeCard 
+                                        key={recommendedChallenge.id} 
+                                        challenge={recommendedChallenge} 
+                                        onDismiss={handleDismissChallenge}
+                                    />
                                 </div>
                             </div>
                         ) : (

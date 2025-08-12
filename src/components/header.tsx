@@ -18,7 +18,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback } from "./ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 
 export function Header() {
@@ -99,6 +99,7 @@ export function Header() {
               <DropdownMenuTrigger asChild>
                 <Button variant="secondary" className="flex items-center gap-2">
                     <Avatar className="h-7 w-7">
+                        <AvatarImage src={user.avatarUrl} alt={user.luckyNumber} />
                         <AvatarFallback className="bg-primary text-primary-foreground text-xs font-bold">
                           {user.luckyNumber.substring(0, 2).toUpperCase()}
                         </AvatarFallback>

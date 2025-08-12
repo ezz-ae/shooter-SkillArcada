@@ -2,9 +2,11 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { useStore } from './store';
+import { mockUsers } from './user';
 
 interface User {
   luckyNumber: string;
+  avatarUrl: string;
 }
 
 interface AuthState {
@@ -30,8 +32,9 @@ export const useAuth = create<AuthState>()(
       ...initialState,
       login: (method) => {
         // In a real app, this would involve a complex authentication flow.
-        // Here, we simulate a successful login and assign a random lucky number.
+        // Here, we simulate a successful login and assign a random lucky number and avatar.
         const randomLuckyNumber = String(Math.floor(1000 + Math.random() * 9000));
+        const randomAvatar = mockUsers[Math.floor(Math.random() * mockUsers.length)].avatarUrl;
         
         if (get().isNewUser) {
             // Give 3 free shots to new users
@@ -41,7 +44,7 @@ export const useAuth = create<AuthState>()(
         set({ 
           isAuthenticated: true,
           isLoggingIn: false,
-          user: { luckyNumber: randomLuckyNumber },
+          user: { luckyNumber: randomLuckyNumber, avatarUrl: randomAvatar },
           isNewUser: false, // Mark as not a new user after first login
         });
       },

@@ -7,7 +7,7 @@ import { Button } from "./ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "./ui/card";
 import { User } from "@/lib/user";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { Target, Zap } from "lucide-react";
+import { Target, X, Zap } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface Challenge {
@@ -20,11 +20,12 @@ interface Challenge {
 
 interface PoolChallengeCardProps {
   challenge: Challenge;
+  onDismiss?: () => void;
 }
 
 const CHALLENGE_DURATION_SECONDS = 5 * 60; // 5 minutes
 
-export function PoolChallengeCard({ challenge }: PoolChallengeCardProps) {
+export function PoolChallengeCard({ challenge, onDismiss }: PoolChallengeCardProps) {
   const { id, prize, fee, player1, player2 } = challenge;
   const isWaiting = player2 === null;
 
@@ -50,7 +51,18 @@ export function PoolChallengeCard({ challenge }: PoolChallengeCardProps) {
   const seconds = timeLeft % 60;
 
   return (
-    <Card className="flex flex-col border-2 border-transparent animate-pulse data-[waiting=true]:border-primary/50 data-[waiting=true]:animate-none" data-waiting={isWaiting}>
+    <Card className="flex flex-col border-2 border-transparent animate-pulse data-[waiting=true]:border-primary/50 data-[waiting=true]:animate-none relative" data-waiting={isWaiting}>
+       {onDismiss && isWaiting && (
+         <Button 
+            variant="ghost" 
+            size="icon" 
+            className="absolute top-1 right-1 h-6 w-6 z-10"
+            onClick={onDismiss}
+            aria-label="Dismiss Challenge"
+        >
+            <X className="h-4 w-4" />
+        </Button>
+       )}
        <CardHeader>
          <div className="flex justify-around items-center">
             <div className="flex flex-col items-center gap-2">
