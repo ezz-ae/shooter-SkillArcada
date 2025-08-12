@@ -316,6 +316,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
   const handleDrawPasscodeShot = () => {
     handleVault(DRAW_PASSCODE_PRICE);
     setDrawPadValue([]);
+    setIsDrawPasscodeDialogOpen(false);
   }
   
   const minutes = Math.floor(riddleTimer / 60);
@@ -568,12 +569,17 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
                 </div>
             </DialogContent>
         </Dialog>
-        <Dialog open={isDrawPasscodeDialogOpen} onOpenChange={setIsDrawPasscodeDialogOpen}>
+        <Dialog open={isDrawPasscodeDialogOpen} onOpenChange={(isOpen) => {
+            if (!isOpen) {
+                setDrawPadValue([]);
+            }
+            setIsDrawPasscodeDialogOpen(isOpen);
+        }}>
             <DialogContent className="max-w-md select-none">
                 <DialogHeader>
                     <DialogTitle>Draw the Passcode</DialogTitle>
                     <DialogDescription>
-                        The pattern will appear for a moment. Memorize it and draw it on the pad.
+                        The pattern will appear for a moment. Memorize it and draw it on the pad on the card.
                     </DialogDescription>
                 </DialogHeader>
                 <div className="flex justify-center items-center h-48">
@@ -603,3 +609,5 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
     </>
   );
 }
+
+    
