@@ -9,10 +9,9 @@ import { Bot, Trophy, PlusCircle, Gamepad2 } from "lucide-react";
 import { ActivityFeed } from "@/components/activity-feed";
 import { useAuth } from "@/lib/auth";
 import { LoginModal } from "@/components/login-modal";
-import { SignUpForm } from "@/components/signup-form";
 
 export default function Home() {
-    const { isAuthenticated, user, isLoggingIn, showSignup, setShowSignup } = useAuth();
+    const { isAuthenticated, user, isLoggingIn } = useAuth();
     
     // Mock data for challenges
     const challenges = [
@@ -24,12 +23,8 @@ export default function Home() {
     
     const openChallenges = challenges.filter(c => !c.player2);
 
-    if (!isAuthenticated && !isLoggingIn && !showSignup) {
+    if (!isAuthenticated && !isLoggingIn) {
         return <LoginModal />;
-    }
-
-    if (showSignup) {
-        return <SignUpForm />;
     }
 
     return (
