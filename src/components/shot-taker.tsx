@@ -173,7 +173,7 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
           const newHistory = [...prev.slice(1), { time: prev[prev.length - 1].time + 1, price: newPrice }];
           return newHistory;
         });
-      }, 200 + Math.random() * 200);
+      }, 200 + Math.random() * 100);
 
       return () => {
           isMounted = false;
@@ -404,7 +404,7 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
   const isGameCard = product.game === 'reel-pause' || product.game === 'riddle-calc' || product.game === 'draw-passcode' || product.game === 'chess-mate';
 
   const discountPercent = ((product.marketPrice - currentPrice) / product.marketPrice) * 100;
-  const discountColor = discountPercent > 0 ? "text-accent" : "text-[hsl(var(--chart-4))]";
+  const discountColor = discountPercent > 0 ? "text-green-500" : "text-red-500";
   
   const renderActions = () => {
     if (product.game === 'chess-mate') {
@@ -505,11 +505,18 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
   }
 
   const renderChart = () => {
-    if (isGameCard) {
-      // Don't render chart for games, render their controls instead in the action view
-      if (view === 'chart') return <div className="h-32 flex items-center justify-center bg-secondary/30 rounded-lg"><p className="text-muted-foreground">Game in progress...</p></div>;
-      return null;
+    if (isGameCard && view === 'full') {
+      return (
+        <div className="h-full flex items-center justify-center bg-secondary/30 rounded-lg">
+          <p className="text-muted-foreground text-center px-4">This is a game of skill. Click to view the challenge.</p>
+        </div>
+      );
     }
+    
+    if (isGameCard && view === 'chart') {
+      return <div className="h-32 flex items-center justify-center bg-secondary/30 rounded-lg"><p className="text-muted-foreground">Game in progress...</p></div>;
+    }
+
 
     return (
         <div className="relative h-32">
@@ -520,7 +527,7 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
                   <AreaChart data={priceHistory} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
                     <defs>
                       <linearGradient id="chart-fill" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.05} />
+                        <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.2} />
                         <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0} />
                       </linearGradient>
                     </defs>
@@ -531,11 +538,11 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
             </div>
             <div className="relative z-10 flex flex-col items-center justify-center h-full">
               <span className={cn(
-                "font-black tracking-wider text-white shimmer-text",
+                "font-black tracking-wider text-foreground shimmer-text",
                  view === 'full' ? "text-3xl lg:text-4xl" : "text-4xl lg:text-6xl"
-                )} style={{'--trend-color': discountPercent > 0 ? 'hsl(var(--accent))' : 'hsl(var(--chart-4))'} as React.CSSProperties}>${currentPrice.toFixed(2)}</span>
+                )} style={{'--trend-color': discountPercent > 0 ? 'hsl(var(--accent))' : 'hsl(var(--destructive))'} as React.CSSProperties}>${currentPrice.toFixed(2)}</span>
               <span className={cn("font-bold text-sm", discountColor)}>
-                  {discountPercent > 0 && '+'}{discountPercent.toFixed(1)}%
+                  {discountPercent > 0 ? `+${discountPercent.toFixed(1)}%` : `${discountPercent.toFixed(1)}%`}
               </span>
             </div>
          </div>
@@ -752,5 +759,3 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
     </>
   );
 }
-
-    
