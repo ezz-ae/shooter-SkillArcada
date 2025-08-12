@@ -408,13 +408,13 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
              </div>
            ) : (
              <div className="relative h-24">
-               <div className="absolute inset-0 opacity-20">
+               <div className="absolute inset-0">
                     <ChartContainer config={chartConfig} className="h-full w-full">
                       <AreaChart data={priceHistory} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
                         <defs>
                           <linearGradient id="chart-fill" x1="0" y1="0" x2="0" y2="1">
                             <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.8} />
-                            <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0.1} />
+                            <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0.2} />
                           </linearGradient>
                         </defs>
                         <Tooltip content={<></>} />
@@ -427,7 +427,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
                   <span className={cn(
                     "font-black tracking-wider text-white shimmer-text",
                      isPage ? "text-4xl lg:text-6xl" : "text-3xl lg:text-4xl"
-                    )} style={{'--trend-color': 'hsl(var(--primary))'} as React.CSSProperties}>${currentPrice.toFixed(2)}</span>
+                    )} style={{'--trend-color': discountPercent > 0 ? 'hsl(var(--accent))' : 'hsl(var(--chart-4))'} as React.CSSProperties}>${currentPrice.toFixed(2)}</span>
                   <span className={cn("font-bold text-sm", discountColor)}>
                       {discountPercent > 0 && '+'}{discountPercent.toFixed(1)}%
                   </span>

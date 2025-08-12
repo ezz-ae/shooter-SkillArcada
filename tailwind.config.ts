@@ -86,8 +86,8 @@ export default {
           '50%': { boxShadow: '0 0 4px 2px hsl(var(--destructive) / 0.7)' },
         },
         'shimmer': {
-          '0%': { backgroundPosition: '200% 0' },
-          '100%': { backgroundPosition: '-200% 0' },
+          '0%': { backgroundPosition: '200% center' },
+          '100%': { backgroundPosition: '-200% center' },
         },
         'border-pulse': {
           '0%, 100%': { 'box-shadow': '0 0 0 0px hsla(0, 0%, 100%, 0.4)' },
