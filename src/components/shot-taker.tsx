@@ -430,9 +430,8 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
         )}
         <CardContent className={cn("flex-grow p-4 pb-2 space-y-2", isPage && "p-0 pt-4")}>
            {isGameCard ? (
-             <div className="text-center p-4">
-                <h3 className="font-bold text-lg">{product.name}</h3>
-                <p className="text-sm text-muted-foreground">{product.subtitle}</p>
+             <div className="p-4">
+                {/* The game UI is rendered in the footer, so this can be empty or have other static content if needed */}
              </div>
            ) : (
              <div className="relative h-24">
