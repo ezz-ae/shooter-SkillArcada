@@ -68,13 +68,16 @@ export function AIAdventureGame({ productName }: AIAdventureGameProps) {
                     <Skeleton className="h-8 w-3/4" />
                     <Skeleton className="h-4 w-1/2" />
                 </CardHeader>
-                <CardContent>
+                <CardContent className="space-y-4">
                     <Skeleton className="w-full h-80 rounded-lg" />
-                    <Skeleton className="h-6 w-full mt-4" />
-                    <Skeleton className="h-6 w-3/4 mt-2" />
+                    <Skeleton className="h-6 w-full" />
+                    <Skeleton className="h-6 w-3/4" />
                 </CardContent>
                 <CardFooter>
-                    <Skeleton className="h-24 w-full" />
+                    <div className="w-full space-y-2">
+                        <Skeleton className="h-24 w-full" />
+                        <Skeleton className="h-11 w-full" />
+                    </div>
                 </CardFooter>
             </Card>
         );
@@ -135,6 +138,7 @@ export function AIAdventureGame({ productName }: AIAdventureGameProps) {
                             placeholder="What happens next...?"
                             rows={5}
                             className="text-base"
+                            disabled={submitted}
                         />
                     </div>
                 )}
