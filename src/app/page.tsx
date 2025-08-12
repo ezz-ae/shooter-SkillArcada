@@ -4,7 +4,7 @@
 import { Button } from "@/components/ui/button";
 import { mockUsers } from "@/lib/user";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Trophy, PlusCircle, Gamepad2, Star, BrainCircuit, LineChart, Swords, Heart, Dices, ChevronRight, HelpCircle, Users } from "lucide-react";
+import { Trophy, PlusCircle, Gamepad2, Star, BrainCircuit, LineChart, Swords, Heart, Dices, ChevronRight, HelpCircle, Users, DollarSign } from "lucide-react";
 import { ActivityFeed } from "@/components/activity-feed";
 import { useAuth } from "@/lib/auth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -109,11 +109,10 @@ export default function Home() {
                             }
                              <Card className="shadow-2xl border-accent/50 border-2 flex flex-col justify-between relative overflow-hidden">
                                 <Image 
-                                    src="https://placehold.co/600x400/052e16/000000/png?text=Pool" 
+                                    src="https://firebasestorage.googleapis.com/v0/b/reodywellness.firebasestorage.app/o/billiard-games.jpeg?alt=media&token=de4a117f-42a2-458b-a3c1-ee185eb544fc" 
                                     alt="Pool table background" 
                                     fill 
                                     className="object-cover blur-sm"
-                                    data-ai-hint="pool table top view"
                                 />
                                 <div className="absolute inset-0 bg-black/50" />
                                 <div className="relative flex flex-col h-full p-6 text-white items-center justify-center text-center">
