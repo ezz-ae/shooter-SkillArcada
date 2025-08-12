@@ -9,7 +9,7 @@ import { useStore } from "@/lib/store";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { ChartContainer } from "./ui/chart";
-import { ArrowDown, ArrowUp, Bitcoin, Check, Gamepad, HelpCircle, Target, X } from "lucide-react";
+import { ArrowDown, ArrowUp, Bitcoin, Check, Gamepad, Target, X } from "lucide-react";
 import { Input } from "./ui/input";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import { Label } from "./ui/label";
@@ -79,17 +79,15 @@ export function CryptoLuckGame() {
       timerInterval.current = setInterval(() => {
         setTimer(prev => prev - 1);
       }, 1000);
-    } else if (timer === 0 && gameState === 'playing') {
+    } else if (timer <= 0 && gameState === 'playing') {
       stopIntervals();
       setGameState('finished');
       setFinalPrice(currentPrice);
 
       // Determine winner
       const actualDirection = currentPrice > marketPrice ? 'up' : 'down';
-      const userPrice = parseFloat(guessedPrice);
-      if (guessedDirection === actualDirection) {
-        // For simplicity, any correct direction is a win for now.
-        // A real implementation would compare closeness of price guesses.
+      
+      if (isGuessLocked && guessedDirection === actualDirection) {
         addLuckshots(20);
         setIsWinner(true);
         toast({ title: "You won!", description: "Your prediction was correct. You've won 20 Shots!" });
@@ -101,7 +99,7 @@ export function CryptoLuckGame() {
     return () => {
       if (timerInterval.current) clearInterval(timerInterval.current);
     }
-  }, [gameState, timer, currentPrice, marketPrice, addLuckshots, toast, guessedDirection, guessedPrice]);
+  }, [gameState, timer, currentPrice, marketPrice, addLuckshots, toast, guessedDirection, isGuessLocked]);
   
   const handleStartGame = () => {
     if (luckshots < 1) {
@@ -204,7 +202,7 @@ export function CryptoLuckGame() {
                 Play for 1 Luckshot
             </Button>
         )}
-        {(gameState === 'playing' || (gameState === 'finished' && !isGuessLocked)) && (
+        {gameState === 'playing' && (
             <div className="w-full space-y-4">
                 <div className="grid grid-cols-3 gap-4">
                     <Input 
@@ -217,11 +215,11 @@ export function CryptoLuckGame() {
                     />
                     <div className="col-span-1">
                         <RadioGroup defaultValue="up" className="flex h-full items-center justify-around rounded-md border" onValueChange={(v: Direction) => setGuessedDirection(v)} disabled={isGuessLocked}>
-                            <Label htmlFor="up" className="flex flex-col items-center justify-center gap-1 cursor-pointer p-2 rounded-md has-[:checked]:bg-primary has-[:checked]:text-primary-foreground">
+                            <Label htmlFor="up" className="flex flex-col items-center justify-center gap-1 cursor-pointer p-2 rounded-md has-[:checked]:bg-primary has-[:checked]:text-primary-foreground h-full w-full">
                                 <ArrowUp className="h-5 w-5" />
                                 <RadioGroupItem value="up" id="up" className="sr-only"/>
                             </Label>
-                            <Label htmlFor="down" className="flex flex-col items-center justify-center gap-1 cursor-pointer p-2 rounded-md has-[:checked]:bg-primary has-[:checked]:text-primary-foreground">
+                            <Label htmlFor="down" className="flex flex-col items-center justify-center gap-1 cursor-pointer p-2 rounded-md has-[:checked]:bg-primary has-[:checked]:text-primary-foreground h-full w-full">
                                 <ArrowDown className="h-5 w-5" />
                                 <RadioGroupItem value="down" id="down" className="sr-only"/>
                             </Label>
@@ -240,3 +238,5 @@ export function CryptoLuckGame() {
     </Card>
   );
 }
+
+    
