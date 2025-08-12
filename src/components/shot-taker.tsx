@@ -5,6 +5,15 @@ import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
+  Area,
+  AreaChart,
+  CartesianGrid,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
+import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -22,6 +31,7 @@ import type { Product } from "@/lib/products";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { Calculator } from "./calculator";
+import { ChartContainer } from "./ui/chart";
 
 interface ShotTakerProps {
   product: Product;
@@ -34,6 +44,12 @@ const RIDDLE_TIMER_SECONDS = 300; // 5 minutes
 
 export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
   const [currentPrice, setCurrentPrice] = useState(product.marketPrice);
+  const [priceHistory, setPriceHistory] = useState(() =>
+    Array.from({ length: 10 }, (_, i) => ({
+      time: i,
+      price: product.marketPrice * (1 + (Math.random() - 0.5) * 0.1),
+    }))
+  );
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [capturedPrices, setCapturedPrices] = useState<number[]>([]);
   const [selectedPrice, setSelectedPrice] = useState<number | null>(null);
@@ -67,7 +83,12 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
     if (product.game !== 'reel-pause' && product.game !== 'riddle-calc') {
       const priceInterval = setInterval(() => {
         if (!isMounted) return;
-        setCurrentPrice(getNewPrice);
+        const newPrice = getNewPrice(currentPrice);
+        setCurrentPrice(newPrice);
+        setPriceHistory(prev => {
+          const newHistory = [...prev.slice(1), { time: prev[prev.length - 1].time + 1, price: newPrice }];
+          return newHistory;
+        });
       }, 1000 + Math.random() * 1000);
 
       return () => {
@@ -75,7 +96,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
           clearInterval(priceInterval);
       };
     }
-  }, [product.game]);
+  }, [product.game, currentPrice]);
   
   // Cleanup intervals on component unmount
   useEffect(() => {
@@ -317,6 +338,13 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
 
     return null;
   }
+  
+  const chartConfig = {
+      price: {
+        label: "Price",
+        color: "hsl(var(--primary))",
+      },
+    };
 
   return (
     <>
@@ -352,25 +380,38 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
             </Link>
           )}
            {isGameCard ? (
-             <div className="text-sm text-muted-foreground min-h-[4rem]" />
+             <div className="text-sm text-muted-foreground min-h-[6rem]" />
            ) : (
-             <div className="flex flex-col">
-                <span className="text-3xl font-black tracking-wider text-white shimmer-text" style={{'--trend-color': 'hsl(var(--primary))'} as React.CSSProperties}>${currentPrice.toFixed(2)}</span>
-                <span className={cn("font-bold text-sm", discountColor)}>
-                    {discountPercent > 0 && '+'}{discountPercent.toFixed(1)}%
-                </span>
+             <div className="relative h-24">
+               <div className="absolute inset-0 opacity-20">
+                    <ChartContainer config={chartConfig} className="h-full w-full">
+                      <AreaChart data={priceHistory} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
+                        <defs>
+                          <linearGradient id="chart-fill" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.8} />
+                            <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0.1} />
+                          </linearGradient>
+                        </defs>
+                        <Tooltip content={<></>} />
+                        <Area type="monotone" dataKey="price" stroke="hsl(var(--primary))" strokeWidth={2} fill="url(#chart-fill)" />
+                      </AreaChart>
+                    </ChartContainer>
+                </div>
+
+                <div className="relative z-10 flex flex-col items-center justify-center h-full">
+                  <span className={cn(
+                    "font-black tracking-wider text-white shimmer-text",
+                     isPage ? "text-4xl lg:text-5xl" : "text-3xl lg:text-4xl"
+                    )} style={{'--trend-color': 'hsl(var(--primary))'} as React.CSSProperties}>${currentPrice.toFixed(2)}</span>
+                  <span className={cn("font-bold text-sm", discountColor)}>
+                      {discountPercent > 0 && '+'}{discountPercent.toFixed(1)}%
+                  </span>
+                </div>
              </div>
           )}
-           {isPage && (
+           {isPage && !isGameCard && (
              <div className="mt-4">
-               {product.game === 'regular' || !product.game && (
-                 <div className="flex flex-col">
-                    <span className="text-4xl font-black tracking-wider text-white shimmer-text" style={{'--trend-color': 'hsl(var(--primary))'} as React.CSSProperties}>${currentPrice.toFixed(2)}</span>
-                    <span className={cn("mt-1 font-bold", discountColor)}>
-                          {discountPercent > 0 && '+'}{discountPercent.toFixed(1)}%
-                      </span>
-                 </div>
-               )}
+                {/* Handled in the block above */}
             </div>
            )}
         </CardContent>
