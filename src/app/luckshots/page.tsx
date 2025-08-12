@@ -15,7 +15,7 @@ export default function LuckshotsPage() {
           Luckshots
         </h1>
         <p className="mt-2 text-lg text-muted-foreground">
-          Prices fluctuate wildly. Pay 1 Luckshot to lock a price. Will you get lucky?
+          shot your luck price, all items  in this page are in an ongoing price chaging with killer disscounts up to 99% off. Try  to press " shot" for more
         </p>
       </div>
 
