@@ -100,7 +100,7 @@ export function Header() {
                 <Button variant="secondary" className="flex items-center gap-2">
                     <Avatar className="h-7 w-7">
                         <AvatarFallback className="bg-primary text-primary-foreground text-xs font-bold">
-                          {user.username.substring(0, 2).toUpperCase()}
+                          {user.luckyNumber.substring(0, 2).toUpperCase()}
                         </AvatarFallback>
                     </Avatar>
                     <span className="font-mono">{user.luckyNumber}</span>
@@ -131,4 +131,3 @@ export function Header() {
     </header>
   );
 }
-

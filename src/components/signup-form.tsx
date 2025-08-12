@@ -10,7 +10,6 @@ import { useState } from "react";
 
 export function SignUpForm() {
     const { completeSignup } = useAuth();
-    const [username, setUsername] = useState("");
     const [luckyNumber, setLuckyNumber] = useState("");
 
     const handleLuckyNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -18,11 +17,11 @@ export function SignUpForm() {
         setLuckyNumber(value.slice(0, 4));
     };
 
-    const isFormValid = username.length >= 3 && luckyNumber.length === 4;
+    const isFormValid = luckyNumber.length === 4;
 
     const handleSubmit = () => {
         if (isFormValid) {
-            completeSignup(username, luckyNumber);
+            completeSignup(luckyNumber);
         }
     }
 
@@ -34,15 +33,6 @@ export function SignUpForm() {
                     <CardDescription>Create your simple, secure identity on Luckshots.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                    <div className="space-y-2">
-                        <Label htmlFor="username">Pick a Username</Label>
-                        <Input 
-                            id="username" 
-                            placeholder="e.g. LuckyPlayer" 
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                        />
-                    </div>
                     <div className="space-y-2">
                         <Label htmlFor="lucky-number">Your 4-Digit Lucky Number</Label>
                         <Input 

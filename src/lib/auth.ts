@@ -4,7 +4,6 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 import { useStore } from './store';
 
 interface User {
-  username: string;
   luckyNumber: string;
 }
 
@@ -15,7 +14,7 @@ interface AuthState {
   user: User | null;
   login: (method: 'whatsapp' | 'wallet') => void;
   logout: () => void;
-  completeSignup: (username: string, luckyNumber: string) => void;
+  completeSignup: (luckyNumber: string) => void;
   setIsLoggingIn: (isLoggingIn: boolean) => void;
   setShowSignup: (showSignup: boolean) => void;
 }
@@ -41,11 +40,11 @@ export const useAuth = create<AuthState>()(
         useStore.getState().reset();
         set({ ...initialState });
       },
-      completeSignup: (username, luckyNumber) => {
+      completeSignup: (luckyNumber) => {
         set({
           isAuthenticated: true,
           showSignup: false,
-          user: { username, luckyNumber },
+          user: { luckyNumber },
         });
       },
       setIsLoggingIn: (isLoggingIn) => set({ isLoggingIn }),
