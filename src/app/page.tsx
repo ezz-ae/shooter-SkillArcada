@@ -4,7 +4,7 @@
 import { Button } from "@/components/ui/button";
 import { mockUsers } from "@/lib/user";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Trophy, BrainCircuit, LineChart, Swords, Heart, Dices, ChevronRight, Users, DollarSign, FileText } from "lucide-react";
+import { Trophy, BrainCircuit, LineChart, Swords, Heart, Dices, Users, DollarSign, FileText } from "lucide-react";
 import { ActivityFeed } from "@/components/activity-feed";
 import { useAuth } from "@/lib/auth";
 import { useState, useEffect } from "react";
@@ -28,6 +28,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Checkbox } from "@/components/ui/checkbox";
+import { GameLinkCard } from "@/components/game-link-card";
 
 export default function Home() {
     const { isAuthenticated, user, login, isNewUser, hasAcceptedTerms, acceptTerms } = useAuth();
@@ -195,22 +196,15 @@ export default function Home() {
                      {/* All Games */}
                     <section>
                         <h2 className="text-2xl font-bold mb-4">All Games</h2>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div className="flex flex-col gap-4">
                             {gameLinks.map(game => (
-                                <Link href={game.href} key={game.href}>
-                                    <Card className="hover:bg-secondary/50 transition-colors h-full">
-                                        <CardHeader className="flex flex-row items-center justify-between">
-                                            <div className="flex items-center gap-3">
-                                                <game.icon className="h-8 w-8 text-primary"/>
-                                                <CardTitle className="text-xl">{game.label}</CardTitle>
-                                            </div>
-                                            <ChevronRight className="h-5 w-5 text-muted-foreground" />
-                                        </CardHeader>
-                                        <CardContent>
-                                            <p className="text-muted-foreground">{game.description}</p>
-                                        </CardContent>
-                                    </Card>
-                                </Link>
+                                <GameLinkCard
+                                    key={game.href}
+                                    href={game.href}
+                                    icon={game.icon}
+                                    label={game.label}
+                                    description={game.description}
+                                />
                             ))}
                         </div>
                     </section>
