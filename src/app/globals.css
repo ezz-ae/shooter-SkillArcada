@@ -85,4 +85,38 @@
     0%, 100% { box-shadow: 0 0 0 0px hsl(var(--destructive) / 0); }
     50% { box-shadow: 0 0 0 3px hsl(var(--destructive) / 0.7); }
   }
+
+  .animated-text-up {
+    animation: animated-text-up 0.7s ease-in-out;
+    background: linear-gradient(90deg, hsl(var(--foreground)), hsl(var(--chart-1)), hsl(var(--foreground)));
+    background-size: 200% auto;
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+  .animated-text-down {
+    animation: animated-text-down 0.7s ease-in-out;
+    background: linear-gradient(90deg, hsl(var(--foreground)), hsl(var(--destructive)), hsl(var(--foreground)));
+    background-size: 200% auto;
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+
+  @keyframes animated-text-up {
+    from {
+      background-position: 200% center;
+    }
+    to {
+      background-position: 0% center;
+    }
+  }
+  @keyframes animated-text-down {
+    from {
+      background-position: 200% center;
+    }
+    to {
+      background-position: 0% center;
+    }
+  }
 }

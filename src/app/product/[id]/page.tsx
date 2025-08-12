@@ -29,6 +29,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
     "stale"
   );
   const [isPending, startTransition] = useTransition();
+  const [priceFlashKey, setPriceFlashKey] = useState(0);
   const { addToVault } = useStore();
   const { toast } = useToast();
 
@@ -53,6 +54,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
               ? "down"
               : "stale"
           );
+          setPriceFlashKey(prev => prev + 1); // Trigger re-render for animation
           setPriceHistory((prev) => {
             const newHistory = [
               ...prev,
@@ -89,12 +91,12 @@ export default function ProductPage({ params }: { params: { id: string } }) {
     });
   };
 
-  const priceColor =
+  const priceAnimationClass =
     priceTrend === "up"
-      ? "text-green-400"
+      ? "animated-text-up"
       : priceTrend === "down"
-      ? "text-destructive"
-      : "text-primary";
+      ? "animated-text-down"
+      : "";
 
   return (
     <div className="container mx-auto max-w-4xl px-4 py-8">
@@ -123,9 +125,10 @@ export default function ProductPage({ params }: { params: { id: string } }) {
                 <p className="text-sm text-muted-foreground">Current Price</p>
                 <div className="flex items-baseline gap-2">
                      <div
+                        key={priceFlashKey}
                         className={cn(
                         "text-4xl font-black transition-colors duration-300",
-                        priceColor
+                        priceAnimationClass
                         )}
                     >
                       ${currentPrice.toFixed(2)}
@@ -160,7 +163,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
                                 <stop offset="95%" stopColor="hsl(var(--destructive))" stopOpacity={0.1}/>
                             </linearGradient>
                         </defs>
-                        <CartesianGrid vertical={false} strokeDasharray="3 3" />
+                        <CartesianGrid vertical={false} stroke="hsl(var(--border))" strokeDasharray="3 3" />
                          <YAxis domain={['dataMin - (dataMin * 0.05)', 'dataMax + (dataMax * 0.05)']} hide />
                          <RechartsTooltip 
                             contentStyle={{
