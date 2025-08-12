@@ -76,7 +76,7 @@ export function Header() {
                 <Button variant="secondary" className="relative h-9 w-9 rounded-full">
                     <Avatar className="h-9 w-9">
                         <AvatarFallback className="bg-primary text-primary-foreground text-xs font-bold">
-                            <Image src="https://firebasestorage.googleapis.com/v0/b/reodywellness.firebasestorage.app/o/Untitled-5%20(3).png?alt=media&token=5189b36c-c80d-4955-b800-d1e579e3f2e9" alt="User Avatar" fill className="object-cover" />
+                            <Image src="https://firebasestorage.googleapis.com/v0/b/reodywellness.firebasestorage.app/o/Untitled-4%20(14).png?alt=media&token=01417f92-30fc-4a5a-bb8a-69f3101811f0" alt="User Avatar" fill className="object-cover" />
                         </AvatarFallback>
                     </Avatar>
                 </Button>
