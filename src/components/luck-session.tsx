@@ -11,9 +11,9 @@ import { Card, CardContent } from "./ui/card";
 
 type SessionState = 'intro' | 'preferences' | 'analyzing' | 'reading' | 'test' | 'complete';
 const preferences = [
-    { label: "Money", icon: DollarSign, theme: "bg-green-500/10 border-green-500/50 text-green-500" },
-    { label: "Love", icon: Heart, theme: "bg-red-500/10 border-red-500/50 text-red-500" },
-    { label: "Adventure", icon: Compass, theme: "bg-blue-500/10 border-blue-500/50 text-blue-500" },
+    { label: "Money", icon: DollarSign },
+    { label: "Love", icon: Heart },
+    { label: "Adventure", icon: Compass },
 ]
 
 export function LuckSession() {
@@ -64,21 +64,17 @@ export function LuckSession() {
                         <h2 className="text-3xl font-bold tracking-tight lg:text-4xl text-transparent bg-clip-text bg-gradient-to-br from-white to-stone-400">
                            What matters most to you now?
                         </h2>
-                        <div className="mt-8 flex flex-col sm:flex-row gap-4">
-                            {preferences.map(pref => {
-                                const Icon = pref.icon;
-                                return (
-                                <Button 
+                        <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-8">
+                            {preferences.map(pref => (
+                                <button 
                                     key={pref.label} 
-                                    className={cn("h-24 w-48 text-2xl flex-col gap-2", pref.theme)} 
-                                    variant="outline"
+                                    className="text-2xl font-bold text-muted-foreground hover:text-primary hover:scale-110 transition-transform duration-300 flex items-center gap-2"
                                     onClick={() => handleSelectPreference(pref.label)}
                                 >
-                                    <Icon size={32} />
+                                    <pref.icon className="h-6 w-6" />
                                     {pref.label}
-                                </Button>
-                                )
-                            })}
+                                </button>
+                            ))}
                         </div>
                     </div>
                 )
@@ -98,27 +94,21 @@ export function LuckSession() {
                                 Shoter's Reading
                             </h2>
                         </div>
-                        <div className="grid md:grid-cols-3 gap-6 text-center">
-                            <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
-                                <CardContent className="p-6">
-                                    <h3 className="font-bold text-sm text-muted-foreground mb-2">THE PAST</h3>
-                                    <p className="text-white">{analysis.past}</p>
-                                </CardContent>
-                            </Card>
-                            <Card className="bg-white/5 border-white/10 backdrop-blur-sm scale-105 shadow-2xl shadow-primary/20">
-                                <CardContent className="p-6">
-                                     <h3 className="font-bold text-sm text-muted-foreground mb-2">THE PRESENT</h3>
-                                    <p className="text-white">{analysis.present}</p>
-                                </CardContent>
-                            </Card>
-                            <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
-                                <CardContent className="p-6">
-                                    <h3 className="font-bold text-sm text-muted-foreground mb-2">THE FUTURE</h3>
-                                    <p className="text-white">{analysis.future}</p>
-                                </CardContent>
-                            </Card>
+                        <div className="grid md:grid-cols-3 gap-8 text-center">
+                            <div className="p-4 border-t border-white/10">
+                                <h3 className="font-bold text-sm text-muted-foreground mb-2">THE PAST</h3>
+                                <p className="text-white/90">{analysis.past}</p>
+                            </div>
+                             <div className="p-4 border-t-2 border-primary scale-105">
+                                 <h3 className="font-bold text-sm text-primary mb-2">THE PRESENT</h3>
+                                <p className="text-white">{analysis.present}</p>
+                            </div>
+                            <div className="p-4 border-t border-white/10">
+                                <h3 className="font-bold text-sm text-muted-foreground mb-2">THE FUTURE</h3>
+                                <p className="text-white/90">{analysis.future}</p>
+                            </div>
                         </div>
-                        <div className="text-center space-y-4">
+                        <div className="text-center space-y-4 pt-8">
                             <p className="text-muted-foreground">Your lucky symbol is the <span className="font-bold text-primary">{analysis.luckySymbol}</span></p>
                             <Button size="lg" onClick={() => setSessionState('test')}>
                                 Take the Speed Test <ArrowRight className="ml-2"/>
