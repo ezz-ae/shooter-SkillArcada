@@ -51,7 +51,7 @@ export function PoolChallengeCard({ challenge, onDismiss }: PoolChallengeCardPro
   const seconds = timeLeft % 60;
 
   return (
-    <Card className="flex flex-col border-2 border-transparent animate-pulse data-[waiting=true]:border-primary/50 data-[waiting=true]:animate-none relative" data-waiting={isWaiting}>
+    <Card className="flex flex-col border-2 border-transparent data-[waiting=true]:border-primary/50 relative" data-waiting={isWaiting}>
        {onDismiss && isWaiting && (
          <Button 
             variant="ghost" 
@@ -75,6 +75,14 @@ export function PoolChallengeCard({ challenge, onDismiss }: PoolChallengeCardPro
             <div className="text-center">
                 <p className="text-muted-foreground text-xs">VS</p>
                 <p className="font-black text-2xl text-primary">POOL</p>
+                 {isWaiting && (
+                    <div className="flex justify-center items-center gap-2 mt-2">
+                        <Zap className="h-5 w-5 text-yellow-500 animate-ping" />
+                        <p className={cn("font-mono text-xl font-bold", timeLeft < 60 && "text-destructive")}>
+                           {String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}
+                        </p>
+                    </div>
+                )}
             </div>
              <div className="flex flex-col items-center gap-2 text-center w-24">
                 <Avatar className="h-16 w-16 border-4 border-secondary data-[waiting=true]:border-dashed" data-waiting={isWaiting}>
@@ -92,16 +100,8 @@ export function PoolChallengeCard({ challenge, onDismiss }: PoolChallengeCardPro
         </div>
       </CardHeader>
       <CardContent className="flex-grow text-center flex flex-col justify-center">
-         {isWaiting && (
-            <div className="flex justify-center items-center gap-2 mb-2">
-                <Zap className="h-5 w-5 text-yellow-500 animate-ping" />
-                <p className={cn("font-mono text-xl font-bold", timeLeft < 60 && "text-destructive")}>
-                   {String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}
-                </p>
-            </div>
-        )}
-        <p className="text-muted-foreground text-sm">Prize Pool for the winner</p>
         <p className="text-4xl font-black text-accent">{prize} $</p>
+        <p className="text-muted-foreground text-sm">Prize Pool for the winner</p>
       </CardContent>
       <CardFooter className="flex-col gap-2">
          <Button asChild className="w-full">
