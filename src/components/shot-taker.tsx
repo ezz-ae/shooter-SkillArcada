@@ -42,7 +42,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
   const [snipePrice1, setSnipePrice1] = useState(0);
   const [snipePrice2, setSnipePrice2] = useState(0);
 
-  const { addToVault, walletBalance, spendFromWallet } = useStore();
+  const { addToVault, walletBalance, spendFromWallet, hasTakenFirstShot, setHasTakenFirstShot } = useStore();
   const { toast } = useToast();
   const cardRef = useRef<HTMLDivElement>(null);
   const snipeIntervalRef = useRef<NodeJS.Timeout>();
@@ -80,15 +80,24 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
   }, []);
 
   const handleShot = () => {
-    if (walletBalance < SHOT_COST) {
-        toast({
-            variant: "destructive",
-            title: "Insufficient Funds",
-            description: `You need at least $${SHOT_COST.toFixed(2)} to take a shot.`,
-        });
-        return;
+    if (hasTakenFirstShot) {
+      if (walletBalance < SHOT_COST) {
+          toast({
+              variant: "destructive",
+              title: "Insufficient Funds",
+              description: `You need at least $${SHOT_COST.toFixed(2)} to take a shot.`,
+          });
+          return;
+      }
+      spendFromWallet(SHOT_COST);
+    } else {
+      toast({
+        title: "Your First Shot is Free!",
+        description: "You've locked in a price. Now choose what to do with it!",
+      });
+      setHasTakenFirstShot();
     }
-    spendFromWallet(SHOT_COST);
+    
     setCapturedPrice(currentPrice);
     setDialogState('initialShot');
   };
@@ -200,7 +209,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
             onClick={handleShot}
           >
             <div className="absolute inset-0 moving-gradient"></div>
-            <span className="relative font-black text-lg">Take a Shot! ($1.00)</span>
+            <span className="relative font-black text-lg">Take a Shot! ({!hasTakenFirstShot ? "Free" : "$1.00"})</span>
           </button>
         </CardFooter>
       </CardComponent>
@@ -209,12 +218,12 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
         {dialogState === 'initialShot' && (
              <AlertDialogContent>
                 <AlertDialogHeader>
-                    <AlertDialogTitle>You Shot at ${capturedPrice.toFixed(2)}!</AlertDialogTitle>
+                    <AlertDialogTitle>You've Locked a Price!</AlertDialogTitle>
                     <AlertDialogDescription>
-                        You've locked in the price for {product.name}. You can vault it now, or try a Double Snipe for a better price!
+                        You've captured a price for {product.name}. You can vault it now, or try a Double Snipe for a chance at a better deal!
                     </AlertDialogDescription>
                 </AlertDialogHeader>
-                <AlertDialogFooter className="gap-2">
+                <AlertDialogFooter className="gap-2 sm:gap-0 sm:flex-row sm:justify-end sm:space-x-2">
                     <Button variant="secondary" onClick={() => setDialogState('closed')}>Let it go</Button>
                     <Button variant="default" onClick={() => handleVault(capturedPrice)}>Vault It! (${capturedPrice.toFixed(2)})</Button>
                     {product.allowDoubleSnipe && (

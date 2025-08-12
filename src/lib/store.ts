@@ -16,6 +16,8 @@ interface StoreState {
   vault: VaultItem[];
   shippingCart: ShippingItem[];
   walletBalance: number;
+  hasTakenFirstShot: boolean;
+  setHasTakenFirstShot: () => void;
   addToVault: (item: Omit<VaultItem, 'discountApplied'>, discount?: number) => void;
   tradeIn: (vaultItemKey: string, tradeInValue: number) => void;
   moveToShipping: (vaultItemKeys: string[]) => boolean;
@@ -33,7 +35,12 @@ export const useStore = create<StoreState>()(
     (set, get) => ({
       vault: [],
       shippingCart: [],
-      walletBalance: 10000.0, 
+      walletBalance: 10000.0,
+      hasTakenFirstShot: false,
+
+      setHasTakenFirstShot: () => {
+        set({ hasTakenFirstShot: true });
+      },
 
       spendFromWallet: (amount) => {
         set((state) => ({
