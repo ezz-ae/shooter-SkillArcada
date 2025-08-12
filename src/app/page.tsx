@@ -4,7 +4,7 @@
 import { Button } from "@/components/ui/button";
 import { mockUsers } from "@/lib/user";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Trophy, PlusCircle, Gamepad2, Star, BrainCircuit, LineChart, Swords, Heart, Dices, ChevronRight, HelpCircle } from "lucide-react";
+import { Trophy, PlusCircle, Gamepad2, Star, BrainCircuit, LineChart, Swords, Heart, Dices, ChevronRight, HelpCircle, Users } from "lucide-react";
 import { ActivityFeed } from "@/components/activity-feed";
 import { useAuth } from "@/lib/auth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -108,17 +108,21 @@ export default function Home() {
                                 </div>
                             }
                             <Card className="shadow-2xl border-accent/50 border-2 flex flex-col justify-between overflow-hidden relative">
-                                <Image src="https://placehold.co/600x400/166534/FFFFFF/png" alt="Pool table" fill className="object-cover z-0" data-ai-hint="pool game" />
+                                <Image src="https://placehold.co/600x400/166534/FFFFFF/png" alt="Pool table" fill className="object-cover z-0" data-ai-hint="pool table top view" />
                                 <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/60 to-black/80 z-10" />
                                 <div className="relative z-20 flex flex-col flex-grow text-white p-6">
                                     <CardHeader className="text-center p-0">
                                         <Trophy className="mx-auto h-16 w-16 text-accent animate-pulse"/>
-                                        <CardTitle className="text-3xl font-black text-white">The Pool Pro League</CardTitle>
+                                        <CardTitle className="text-3xl font-black text-white">Pool Luck Pros</CardTitle>
                                         <CardDescription className="text-lg text-white/80">Season 1 is now open for registration.</CardDescription>
                                     </CardHeader>
                                     <CardContent className="text-center flex-grow flex flex-col justify-center p-0 pt-6">
                                         <p className="text-5xl font-black text-primary">1 ETH</p>
                                         <p className="text-white/80 font-semibold">Grand Prize</p>
+                                        <div className="flex items-center justify-center gap-2 mt-4 text-white/80">
+                                            <Users className="h-5 w-5" />
+                                            <span className="font-bold">23 Players</span>
+                                        </div>
                                     </CardContent>
                                     <CardFooter className="p-0 pt-6">
                                         <Button size="lg" className="w-full" variant="secondary" asChild>
