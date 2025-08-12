@@ -37,7 +37,7 @@ import { Target, HelpCircle } from "lucide-react";
 
 interface ShotTakerProps {
   product: Product;
-  isPage?: boolean;
+  view?: 'full' | 'chart' | 'actions';
 }
 
 const RIDDLE_ANSWER = 80;
@@ -45,7 +45,7 @@ const RIDDLE_TIMER_SECONDS = 300; // 5 minutes
 const DRAW_PASSCODE_ANSWER = '0,3,6,7,8'; // L-shape on 3x3 grid
 const DRAW_PASSCODE_PRICE = 99;
 
-export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
+export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
   const [currentPrice, setCurrentPrice] = useState(product.marketPrice);
   const [priceHistory, setPriceHistory] = useState(() =>
     Array.from({ length: 10 }, (_, i) => ({
@@ -119,10 +119,10 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
 
   useEffect(() => {
     // Start the reel game automatically
-    if (product.game === 'reel-pause' && !isReelPaused) {
+    if (product.game === 'reel-pause' && !isReelPaused && view !== 'chart') {
       startReelGame();
     }
-  }, [product.game, isReelPaused]);
+  }, [product.game, isReelPaused, view]);
   
   useEffect(() => {
     if (isRiddleDialogOpen && riddleTimer > 0) {
@@ -296,13 +296,12 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
   const seconds = riddleTimer % 60;
   const timerColor = riddleTimer <= 60 ? "text-destructive" : "text-foreground";
 
-  const CardComponent = isPage ? 'div' : Card;
   const isGameCard = product.game === 'reel-pause' || product.game === 'riddle-calc' || product.game === 'draw-passcode';
 
   const discountPercent = ((product.marketPrice - currentPrice) / product.marketPrice) * 100;
   const discountColor = discountPercent > 0 ? "text-accent" : "text-[hsl(var(--chart-4))]";
   
-  const renderGameFooter = () => {
+  const renderActions = () => {
     if (product.game === 'reel-pause') {
         return (
             <div className="w-full flex flex-col gap-2">
@@ -363,94 +362,105 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
         )
     }
 
-    return null;
+    // Default shot button
+    return (
+        <button
+          className="w-full h-16 text-md font-bold text-primary-foreground rounded-md relative overflow-hidden bg-secondary flex items-center justify-center"
+          onClick={handleShot}
+        >
+          <div className="absolute inset-0 moving-gradient"></div>
+          <div className="relative flex items-baseline w-full justify-center">
+               <span className={cn("font-black", product.game === 'multi-shot' ? "text-2xl" : "text-lg")}>
+                {product.game === 'multi-shot' ? 'x3 Shot' : 'Shot'}
+               </span>
+          </div>
+        </button>
+    );
   }
-  
-  const chartConfig = {
-      price: {
-        label: "Price",
-        color: "hsl(var(--primary))",
-      },
-    };
+
+  const renderChart = () => {
+    if (isGameCard) {
+      // Don't render chart for games, render their controls instead in the action view
+      if (view === 'chart') return <div className="h-32 flex items-center justify-center bg-secondary/30 rounded-lg"><p className="text-muted-foreground">Game in progress...</p></div>;
+      return null;
+    }
+
+    return (
+        <div className="relative h-32">
+           <div className="absolute inset-0">
+                <ChartContainer config={{
+                  price: { label: "Price", color: "hsl(var(--primary))" },
+                }} className="h-full w-full">
+                  <AreaChart data={priceHistory} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
+                    <defs>
+                      <linearGradient id="chart-fill" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.2} />
+                        <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0.05} />
+                      </linearGradient>
+                    </defs>
+                    <Tooltip content={<></>} />
+                    <Area type="monotone" dataKey="price" stroke="hsl(var(--primary))" strokeWidth={2} fill="url(#chart-fill)" />
+                  </AreaChart>
+                </ChartContainer>
+            </div>
+            <div className="relative z-10 flex flex-col items-center justify-center h-full">
+              <span className={cn(
+                "font-black tracking-wider text-white shimmer-text",
+                 view === 'full' ? "text-3xl lg:text-4xl" : "text-4xl lg:text-6xl"
+                )} style={{'--trend-color': discountPercent > 0 ? 'hsl(var(--accent))' : 'hsl(var(--chart-4))'} as React.CSSProperties}>${currentPrice.toFixed(2)}</span>
+              <span className={cn("font-bold text-sm", discountColor)}>
+                  {discountPercent > 0 && '+'}{discountPercent.toFixed(1)}%
+              </span>
+            </div>
+         </div>
+      )
+  }
+
+  if (view === 'chart') {
+    return renderChart();
+  }
+
+  if (view === 'actions') {
+    return renderActions();
+  }
 
   return (
     <>
-      <CardComponent
+      <Card
         className={cn(
           "flex h-full flex-col overflow-hidden transition-all duration-300 group relative",
-          !isPage && "shadow-lg",
+          view === 'full' && "shadow-lg",
           isGameCard && "border-primary/50 border-2",
           product.game === 'multi-shot' && 'multi-shot-card'
         )}
       >
-        {!isPage && (
-          <Link href={`/product/${product.id}`} className="contents">
-            <CardHeader className="p-0">
-              <div className="relative h-48 w-full overflow-hidden">
-                <Image
-                  src={product.imageUrl}
-                  alt={product.name}
-                  fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  data-ai-hint={product.dataAiHint}
-                />
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent p-4 pt-8">
-                  <h3 className="text-white text-lg font-bold text-center">{product.subtitle}</h3>
-                </div>
+        <Link href={`/product/${product.id}`} className="contents">
+          <CardHeader className="p-0">
+            <div className="relative h-48 w-full overflow-hidden">
+              <Image
+                src={product.imageUrl}
+                alt={product.name}
+                fill
+                className="object-cover transition-transform duration-500 group-hover:scale-105"
+                data-ai-hint={product.dataAiHint}
+              />
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent p-4 pt-8">
+                <h3 className="text-white text-lg font-bold text-center">{product.subtitle}</h3>
               </div>
-            </CardHeader>
-          </Link>
-        )}
-        <CardContent className={cn("flex-grow p-4 pb-2 space-y-2", isPage && "p-0 pt-4")}>
-           {isGameCard ? (
-             <div className="p-4">
-                {/* The game UI is rendered in the footer, so this can be empty or have other static content if needed */}
-             </div>
-           ) : (
-             <div className="relative h-24">
-               <div className="absolute inset-0">
-                    <ChartContainer config={chartConfig} className="h-full w-full">
-                      <AreaChart data={priceHistory} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
-                        <defs>
-                          <linearGradient id="chart-fill" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.4} />
-                            <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0.1} />
-                          </linearGradient>
-                        </defs>
-                        <Tooltip content={<></>} />
-                        <Area type="monotone" dataKey="price" stroke="hsl(var(--primary))" strokeWidth={2} fill="url(#chart-fill)" />
-                      </AreaChart>
-                    </ChartContainer>
-                </div>
-
-                <div className="relative z-10 flex flex-col items-center justify-center h-full">
-                  <span className={cn(
-                    "font-black tracking-wider text-white shimmer-text",
-                     isPage ? "text-4xl lg:text-6xl" : "text-3xl lg:text-4xl"
-                    )} style={{'--trend-color': discountPercent > 0 ? 'hsl(var(--accent))' : 'hsl(var(--chart-4))'} as React.CSSProperties}>${currentPrice.toFixed(2)}</span>
-                  <span className={cn("font-bold text-sm", discountColor)}>
-                      {discountPercent > 0 && '+'}{discountPercent.toFixed(1)}%
-                  </span>
-                </div>
-             </div>
-          )}
+            </div>
+          </CardHeader>
+        </Link>
+        <CardContent className="flex-grow p-4 pb-2 space-y-2">
+            {isGameCard ? (
+                 <div className="p-4"></div>
+            ) : (
+                renderChart()
+            )}
         </CardContent>
-        <CardFooter className={cn("p-4 pt-2 flex-col items-center", isPage && "p-0 pt-4")}>
-          {isGameCard ? renderGameFooter() : (
-            <button
-              className="w-full h-12 text-md font-bold text-primary-foreground rounded-md relative overflow-hidden bg-secondary flex items-center justify-center"
-              onClick={handleShot}
-            >
-              <div className="absolute inset-0 moving-gradient"></div>
-              <div className="relative flex items-baseline w-full justify-center">
-                   <span className={cn("font-black", product.game === 'multi-shot' ? "text-2xl" : "text-lg")}>
-                    {product.game === 'multi-shot' ? 'x3 Shot' : 'Shot'}
-                   </span>
-              </div>
-            </button>
-          )}
+        <CardFooter className="p-4 pt-2 flex-col items-center">
+          {renderActions()}
         </CardFooter>
-      </CardComponent>
+      </Card>
 
       <AlertDialog open={isInfoDialogOpen} onOpenChange={setIsInfoDialogOpen}>
         <AlertDialogContent>
