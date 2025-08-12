@@ -48,7 +48,7 @@ export const mockProducts: Product[] = [
     marketPrice: 1350.0,
     imageUrl: 'https://placehold.co/600x400/1C1C1C/E0E0E0/png?text=Galaxy',
     dataAiHint: 'android phone',
-    game: 'multi-shot',
+    game: 'draw-passcode',
   },
   {
     id: 'prod_card_04',
@@ -58,7 +58,7 @@ export const mockProducts: Product[] = [
     marketPrice: 250.0,
     imageUrl: 'https://placehold.co/600x400/EB001B/FFFFFF/png?text=Mastercard',
     dataAiHint: 'credit card',
-    game: 'draw-passcode',
+    game: 'multi-shot',
   },
   {
     id: 'prod_card_05',
