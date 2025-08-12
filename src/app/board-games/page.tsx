@@ -1,3 +1,4 @@
+"use client";
 
 import { GameLinkCard } from "@/components/game-link-card";
 import { Grid, RectangleHorizontal } from "lucide-react";
@@ -34,5 +35,3 @@ export default function BoardGamesPage() {
     </div>
   );
 }
-
-    
