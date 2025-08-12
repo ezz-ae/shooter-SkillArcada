@@ -31,19 +31,8 @@ const SHOT_COST = 1;
 export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
   const [currentPrice, setCurrentPrice] = useState(product.marketPrice);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [dialogMode, setDialogMode] = useState<'capture' | 'game-reel-pause' | 'game-digit-pause'>('capture');
   const [capturedPrice, setCapturedPrice] = useState(0);
   const [capturedTime, setCapturedTime] = useState<Date | null>(null);
-
-  // Game State
-  const [reel1Value, setReel1Value] = useState(0);
-  const [reel2Value, setReel2Value] = useState(0);
-  const [isReel1Paused, setIsReel1Paused] = useState(false);
-  const [isReel2Paused, setIsReel2Paused] = useState(false);
-  
-  // Digit Pause Game State
-  const [digits, setDigits] = useState([0, 0, 0]);
-  const [pausedDigits, setPausedDigits] = useState<number[]>([]);
 
   const gamePrice = useRef(0);
 
@@ -64,31 +53,11 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
       });
     }, 1000 + Math.random() * 1000);
 
-    let gameInterval: NodeJS.Timeout;
-    if (dialogMode === 'game-reel-pause' && !isReel1Paused) {
-        gameInterval = setInterval(() => setReel1Value(Math.floor(Math.random() * 10)), 50);
-    }
-    if (dialogMode === 'game-reel-pause' && isReel1Paused && !isReel2Paused) {
-        gameInterval = setInterval(() => setReel2Value(Math.floor(Math.random() * 10)), 50);
-    }
-    
-    if (dialogMode === 'game-digit-pause') {
-      gameInterval = setInterval(() => {
-        setDigits(currentDigits => {
-          return currentDigits.map((d, i) => {
-            return pausedDigits.includes(i) ? d : Math.floor(Math.random() * 10);
-          })
-        })
-      }, 50);
-    }
-
-
     return () => {
         isMounted = false;
         clearInterval(priceInterval);
-        clearInterval(gameInterval);
     };
-  }, [dialogMode, isReel1Paused, isReel2Paused, pausedDigits]);
+  }, []);
 
   const handleShot = () => {
     if (hasTakenFirstShot) {
@@ -111,19 +80,11 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
     
     setCapturedPrice(currentPrice);
     setCapturedTime(new Date());
-
-    if (product.game === 'digit-pause') {
-        setDialogMode('game-digit-pause');
-    } else if (product.game === 'reel-pause') {
-        setDialogMode('game-reel-pause');
-    } else {
-        setDialogMode('capture');
-    }
     setIsDialogOpen(true);
   };
   
   const handleVault = () => {
-    const priceToPay = gamePrice.current;
+    const priceToPay = capturedPrice;
 
     if (walletBalance < priceToPay) {
       toast({
@@ -150,35 +111,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
 
   const handleCloseDialog = () => {
     setIsDialogOpen(false);
-    // Reset game state
-    setReel1Value(0);
-    setReel2Value(0);
-    setIsReel1Paused(false);
-    setIsReel2Paused(false);
-    setDigits([0,0,0]);
-    setPausedDigits([]);
     gamePrice.current = 0;
-  }
-
-  const handlePauseReel = () => {
-      if (!isReel1Paused) {
-          setIsReel1Paused(true);
-      } else if (!isReel2Paused) {
-          setIsReel2Paused(true);
-          const finalPrice = parseFloat(`${reel1Value}${reel2Value}`);
-          gamePrice.current = finalPrice;
-      }
-  }
-
-  const handlePauseDigit = (index: number) => {
-    if (pausedDigits.includes(index) || pausedDigits.length !== index) return;
-    const newPausedDigits = [...pausedDigits, index];
-    setPausedDigits(newPausedDigits);
-
-    if (newPausedDigits.length === 3) {
-      const finalPrice = parseInt(digits.join(''));
-      gamePrice.current = finalPrice;
-    }
   }
 
   const CardComponent = isPage ? 'div' : Card;
@@ -233,115 +166,45 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
 
       <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
              <AlertDialogContent onEscapeKeyDown={handleCloseDialog}>
-                {dialogMode === 'capture' && (
-                    <>
-                        <AlertDialogHeader>
-                            <AlertDialogTitle className="text-center">You Got a Shot!</AlertDialogTitle>
-                        </AlertDialogHeader>
-                        
-                        <div className="relative h-64 w-full my-4 rounded-lg overflow-hidden shadow-lg">
-                            <Image
-                                src={product.imageUrl}
-                                alt={product.name}
-                                fill
-                                className="object-cover"
-                                data-ai-hint={product.dataAiHint}
-                            />
-                            <div className="absolute inset-0 bg-black/20 flex flex-col justify-between p-4">
-                                <div className="text-right">
-                                <div className="bg-black/50 text-white p-2 rounded-md text-sm font-mono inline-block">
-                                    {capturedTime?.toLocaleTimeString()}
-                                </div>
-                                </div>
-
-                                <div className="bg-black/50 p-4 rounded-lg text-center">
-                                    <div className="text-sm text-muted-foreground">Captured Price</div>
-                                    <div className="relative text-3xl font-black text-white shimmer-text" style={{'--trend-color': 'hsl(var(--primary))'} as React.CSSProperties}>
-                                        ${capturedPrice.toFixed(2)}
-                                    </div>
-                                </div>
-                            </div>
+                <AlertDialogHeader>
+                    <AlertDialogTitle className="text-center">You Got a Shot!</AlertDialogTitle>
+                </AlertDialogHeader>
+                
+                <div className="relative h-64 w-full my-4 rounded-lg overflow-hidden shadow-lg">
+                    <Image
+                        src={product.imageUrl}
+                        alt={product.name}
+                        fill
+                        className="object-cover"
+                        data-ai-hint={product.dataAiHint}
+                    />
+                    <div className="absolute inset-0 bg-black/20 flex flex-col justify-between p-4">
+                        <div className="text-right">
+                        <div className="bg-black/50 text-white p-2 rounded-md text-sm font-mono inline-block">
+                            {capturedTime?.toLocaleTimeString()}
+                        </div>
                         </div>
 
-                        <AlertDialogDescription className="text-center">
-                            You've captured <span className="font-bold text-foreground">{product.name}</span>! Vault it now for <span className="font-bold text-foreground">${capturedPrice.toFixed(2)}</span> or let it go.
-                        </AlertDialogDescription>
-                        
-                        <AlertDialogFooter className="gap-2 sm:gap-0 sm:flex-row sm:justify-center">
-                            <AlertDialogCancel onClick={handleCloseDialog}>Let it go</AlertDialogCancel>
-                            <AlertDialogAction onClick={() => {
-                                gamePrice.current = capturedPrice;
-                                handleVault();
-                            }}>Vault It!</AlertDialogAction>
-                        </AlertDialogFooter>
-                    </>
-                )}
-                {dialogMode === 'game-reel-pause' && (
-                    <>
-                         <AlertDialogHeader>
-                            <AlertDialogTitle className="text-center">Pause The Reels!</AlertDialogTitle>
-                             <AlertDialogDescription className="text-center pt-2">
-                                Stop both reels to lock in your price. Your timing is everything!
-                            </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <div className="flex justify-center items-center gap-4 text-6xl font-black p-8 my-4 bg-secondary rounded-lg">
-                           <div className="w-20 h-24 flex items-center justify-center bg-background rounded-md shadow-inner">
-                                <span className={cn(!isReel1Paused && "shimmer-text")}>{reel1Value}</span>
-                           </div>
-                           <div className="w-20 h-24 flex items-center justify-center bg-background rounded-md shadow-inner">
-                               <span className={cn(isReel1Paused && !isReel2Paused && "shimmer-text")}>{reel2Value}</span>
-                           </div>
-                        </div>
-                        {isReel2Paused && (
-                            <div className="text-center">
-                                <p className="text-muted-foreground">Your Price:</p>
-                                <p className="text-3xl font-bold text-primary">${gamePrice.current.toFixed(2)}</p>
+                        <div className="bg-black/50 p-4 rounded-lg text-center">
+                            <div className="text-sm text-muted-foreground">Captured Price</div>
+                            <div className="relative text-3xl font-black text-white shimmer-text" style={{'--trend-color': 'hsl(var(--primary))'} as React.CSSProperties}>
+                                ${capturedPrice.toFixed(2)}
                             </div>
-                        )}
-                         <AlertDialogFooter className="gap-2 sm:gap-0 sm:flex-row sm:justify-center">
-                            <AlertDialogCancel onClick={handleCloseDialog}>Let it go</AlertDialogCancel>
-                            {isReel2Paused ? (
-                                 <AlertDialogAction onClick={handleVault}>Vault It!</AlertDialogAction>
-                            ) : (
-                                <Button onClick={handlePauseReel}>
-                                    Pause {isReel1Paused ? "Reel 2" : "Reel 1"}
-                                </Button>
-                            )}
-                        </AlertDialogFooter>
-                    </>
-                )}
-                {dialogMode === 'game-digit-pause' && (
-                    <>
-                        <AlertDialogHeader>
-                            <AlertDialogTitle className="text-center">Set Your Price!</AlertDialogTitle>
-                            <AlertDialogDescription className="text-center pt-2">
-                                Click each box to stop the digit. Lock in all three to set your final price.
-                            </AlertDialogDescription>
-                        </AlertDialogHeader>
-
-                        <div className="flex justify-center items-center gap-4 text-6xl font-black p-8 my-4 bg-secondary rounded-lg">
-                            {digits.map((digit, index) => (
-                                <button key={index} onClick={() => handlePauseDigit(index)} disabled={pausedDigits.includes(index) || pausedDigits.length !== index} className={cn("w-20 h-24 flex items-center justify-center bg-background rounded-md shadow-inner cursor-pointer disabled:cursor-not-allowed", pausedDigits.length === index && "ring-2 ring-primary ring-offset-2 ring-offset-background")}>
-                                    <span className={cn(!pausedDigits.includes(index) && "shimmer-text")}>{digit}</span>
-                                </button>
-                            ))}
                         </div>
+                    </div>
+                </div>
 
-                        {pausedDigits.length === 3 && (
-                            <div className="text-center">
-                                <p className="text-muted-foreground">Your Final Price:</p>
-                                <p className="text-3xl font-bold text-primary">${gamePrice.current.toFixed(2)}</p>
-                            </div>
-                        )}
-
-                        <AlertDialogFooter className="gap-2 sm:gap-0 sm:flex-row sm:justify-center">
-                            <AlertDialogCancel onClick={handleCloseDialog}>Let it go</AlertDialogCancel>
-                            <AlertDialogAction onClick={handleVault} disabled={pausedDigits.length !== 3}>
-                                Vault It!
-                            </AlertDialogAction>
-                        </AlertDialogFooter>
-                    </>
-                )}
+                <AlertDialogDescription className="text-center">
+                    You've captured <span className="font-bold text-foreground">{product.name}</span>! Vault it now for <span className="font-bold text-foreground">${capturedPrice.toFixed(2)}</span> or let it go.
+                </AlertDialogDescription>
+                
+                <AlertDialogFooter className="gap-2 sm:gap-0 sm:flex-row sm:justify-center">
+                    <AlertDialogCancel onClick={handleCloseDialog}>Let it go</AlertDialogCancel>
+                    <AlertDialogAction onClick={() => {
+                        gamePrice.current = capturedPrice;
+                        handleVault();
+                    }}>Vault It!</AlertDialogAction>
+                </AlertDialogFooter>
             </AlertDialogContent>
       </AlertDialog>
     </>

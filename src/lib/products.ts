@@ -18,7 +18,6 @@ export const mockProducts: Product[] = [
     marketPrice: 2500.0,
     imageUrl: 'https://placehold.co/600x400/000000/FFFFFF/png?text=Arcade',
     dataAiHint: 'vintage arcade',
-    game: 'digit-pause',
   },
   {
     id: 'prod_002',
