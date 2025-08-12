@@ -293,13 +293,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
           )}
            {isGameCard ? (
              <div className="flex items-end justify-center gap-2">
-                <span className="text-2xl font-black text-primary">$</span>
-                <div className="text-4xl font-black text-primary-foreground tabular-nums">
-                    {lockedDigits.length > 0 ? lockedDigits[0] : '?'}
-                    {lockedDigits.length > 1 ? lockedDigits[1] : '?'}
-                    {lockedDigits.length > 2 ? lockedDigits[2] : '?'}
-                </div>
-                <span className="text-xl font-bold text-muted-foreground">USD</span>
+                <p className="text-muted-foreground text-center">to your luckprice</p>
              </div>
            ) : (
              <div className="flex items-baseline gap-2">
