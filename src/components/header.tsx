@@ -8,6 +8,7 @@ import { useStore } from "@/lib/store";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { ThemeToggle } from "./theme-toggle";
 
 export function Header() {
   const { vault, luckshots } = useStore();
@@ -75,6 +76,7 @@ export function Header() {
               <span>Vault ({vaultItemCount})</span>
             </Link>
           </Button>
+          <ThemeToggle />
         </div>
       </div>
     </header>
