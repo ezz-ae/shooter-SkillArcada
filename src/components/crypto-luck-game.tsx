@@ -35,7 +35,7 @@ export function CryptoLuckGame() {
   const [priceHistory, setPriceHistory] = useState(() =>
     Array.from({ length: 30 }, (_, i) => ({
       time: i,
-      price: 70000 * (1 + (Math.random() - 0.5) * 0.01),
+      price: 70000 * (1 + (Math.random() - 0.5) * 0.001),
     }))
   );
   const [timer, setTimer] = useState(GAME_DURATION_SECONDS);
@@ -104,18 +104,20 @@ export function CryptoLuckGame() {
   useEffect(() => {
     if (gameState === 'playing') {
       priceInterval.current = setInterval(() => {
-        const newPrice = getNewPrice(currentPrice);
-        setCurrentPrice(newPrice);
-        setPriceHistory(prev => {
-          const newHistory = [...prev.slice(1), { time: prev[prev.length - 1].time + 1, price: newPrice }];
-          return newHistory;
+        setCurrentPrice(prevPrice => {
+            const newPrice = getNewPrice(prevPrice);
+            setPriceHistory(prevHistory => {
+              const newHistory = [...prevHistory.slice(1), { time: prevHistory[prevHistory.length - 1].time + 1, price: newPrice }];
+              return newHistory;
+            });
+            return newPrice;
         });
       }, 1000 + Math.random() * 500);
     }
     return () => {
        if (priceInterval.current) clearInterval(priceInterval.current);
     }
-  }, [gameState, currentPrice, getNewPrice]);
+  }, [gameState, getNewPrice]);
 
   // Game timer effect
   useEffect(() => {
@@ -125,9 +127,8 @@ export function CryptoLuckGame() {
       }, 1000);
     } else if (timer <= 0 && gameState === 'playing') {
       stopIntervals();
-      const finalPriceValue = currentPrice;
       setGameState('finished');
-      setFinalPrice(finalPriceValue);
+      setFinalPrice(currentPrice);
 
       if (!isGuessLocked || !guessedPrice) {
         setGameResult({ isWinner: false, prize: 0, accuracy: 0 });
@@ -136,8 +137,8 @@ export function CryptoLuckGame() {
       }
       
       const numericalGuessedPrice = parseFloat(guessedPrice);
-      const difference = Math.abs(finalPriceValue - numericalGuessedPrice);
-      const accuracy = (difference / finalPriceValue); // lower is better
+      const priceDifference = Math.abs(currentPrice - numericalGuessedPrice);
+      const accuracy = (priceDifference / currentPrice); // lower is better
       
       let prize = 0;
       if (accuracy <= 0.01) { // Within 1%
@@ -243,11 +244,11 @@ export function CryptoLuckGame() {
                   <AreaChart data={priceHistory} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
                     <defs>
                       <linearGradient id="chart-fill-crypto" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="var(--color-price)" stopOpacity={0.4} />
-                        <stop offset="95%" stopColor="var(--color-price)" stopOpacity={0} />
+                        <stop offset="5%" stopColor="hsl(var(--accent))" stopOpacity={0.4} />
+                        <stop offset="95%" stopColor="hsl(var(--accent))" stopOpacity={0} />
                       </linearGradient>
                     </defs>
-                    <Area type="monotone" dataKey="price" stroke="var(--color-price)" strokeWidth={2} fill="url(#chart-fill-crypto)" />
+                    <Area type="monotone" dataKey="price" stroke="hsl(var(--accent))" strokeWidth={2} fill="url(#chart-fill-crypto)" />
                   </AreaChart>
                 </ChartContainer>
             <div className="absolute inset-0 flex items-center justify-center">
