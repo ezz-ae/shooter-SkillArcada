@@ -136,12 +136,17 @@ export default function Home() {
                        )}
                     </section>
                     
-                    {/* Featured Games */}
-                     <section>
+                    {/* Trending Games */}
+                     <section className="mt-8">
+                         <h2 className="text-2xl font-bold mb-4">Trending games</h2>
                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
                             {iphoneProduct && 
                                 <div className="relative">
-                                    <Badge variant="secondary" className="absolute top-2 left-2 z-10">Brainshot</Badge>
+                                    <div className="absolute top-2 left-2 z-10 flex gap-2">
+                                        <Badge variant="secondary">Brainshot</Badge>
+                                        <Badge variant="destructive">Ends Soon</Badge>
+                                        <Badge variant="default">+79% Wins</Badge>
+                                    </div>
                                     <ShotTaker product={iphoneProduct} />
                                 </div>
                             }
@@ -236,5 +241,3 @@ export default function Home() {
         </div>
     );
 }
-
-    
