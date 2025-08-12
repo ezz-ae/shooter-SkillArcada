@@ -184,24 +184,31 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
                   data-ai-hint={product.dataAiHint}
                 />
-                {!isGameCard && (
-                  <div className="absolute bottom-2 right-2 bg-black/50 p-2 rounded-md">
-                     <span className="text-lg font-black tracking-wider text-white shimmer-text" style={{'--trend-color': 'hsl(var(--primary))'} as React.CSSProperties}>${currentPrice.toFixed(2)}</span>
-                  </div>
-                )}
               </div>
             </CardHeader>
           </Link>
         )}
-        <CardContent className={cn("flex-grow p-4 pb-0 space-y-2", isPage && "p-0 pt-4")}>
+        <CardContent className={cn("flex-grow p-4 pb-2 space-y-2", isPage && "p-0 pt-4")}>
           {!isPage && (
-            <Link href={`/product/${product.id}`}>
-              <CardTitle className="text-lg font-bold group-hover:text-primary transition-colors truncate">
-                {product.name}
-              </CardTitle>
-            </Link>
+            <div className="flex justify-between items-start">
+              <Link href={`/product/${product.id}`} className="flex-grow">
+                <CardTitle className="text-lg font-bold group-hover:text-primary transition-colors truncate">
+                  {product.name}
+                </CardTitle>
+              </Link>
+              {!isGameCard && (
+                <div className="flex-shrink-0 ml-2">
+                   <span className="text-lg font-black tracking-wider text-white shimmer-text" style={{'--trend-color': 'hsl(var(--primary))'} as React.CSSProperties}>${currentPrice.toFixed(2)}</span>
+                </div>
+              )}
+            </div>
           )}
            {isGameCard && <p className="text-sm text-primary">Special timed event! Click fast to set your price!</p>}
+           {isPage && !isGameCard && (
+             <div className="mt-4">
+              <span className="text-3xl font-black tracking-wider text-white shimmer-text" style={{'--trend-color': 'hsl(var(--primary))'} as React.CSSProperties}>${currentPrice.toFixed(2)}</span>
+            </div>
+           )}
         </CardContent>
         <CardFooter className={cn("p-4", isPage && "p-0 pt-4")}>
           <button
@@ -293,3 +300,5 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
     </>
   );
 }
+
+    
