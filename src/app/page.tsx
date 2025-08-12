@@ -114,14 +114,15 @@ export default function Home() {
                                     <CardHeader className="text-center p-0">
                                         <Trophy className="mx-auto h-16 w-16 text-accent animate-pulse"/>
                                         <CardTitle className="text-3xl font-black text-white">Pool Luck Pros</CardTitle>
-                                        <CardDescription className="text-lg text-white/80">Season 1 is now open for registration.</CardDescription>
+                                        <CardDescription className="text-lg text-white/80">New Season is available</CardDescription>
                                     </CardHeader>
                                     <CardContent className="text-center flex-grow flex flex-col justify-center p-0 pt-6">
-                                        <p className="text-white/80 font-semibold">The Luckypro will receive</p>
-                                        <p className="text-7xl font-black text-primary">1 ETH</p>
-                                        <div className="flex items-center justify-center gap-2 mt-4 text-white/80">
-                                            <Users className="h-5 w-5" />
-                                            <span className="font-bold">32 Players</span>
+                                        <div>
+                                            <p className="text-7xl font-black text-primary">1 Ethereum</p>
+                                            <p className="text-white/80 font-semibold">Grand Prize</p>
+                                        </div>
+                                        <div className="mt-4 text-white/80 px-4">
+                                            <p>Join top players from the globe in an open chat event with a live audience. (32 Players)</p>
                                         </div>
                                     </CardContent>
                                     <CardFooter className="p-0 pt-6">
