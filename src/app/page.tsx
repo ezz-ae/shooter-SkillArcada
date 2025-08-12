@@ -18,6 +18,7 @@ import { cn } from "@/lib/utils";
 import { PoolChallengeCard } from "@/components/pool-challenge-card";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
+import { TopGames } from "@/components/top-games";
 
 export default function Home() {
     const { isAuthenticated, user, login } = useAuth();
@@ -110,7 +111,8 @@ export default function Home() {
                              <Card className="shadow-2xl border-accent/50 border-2 flex flex-col justify-between relative overflow-hidden">
                                 <Image 
                                     src="https://firebasestorage.googleapis.com/v0/b/reodywellness.firebasestorage.app/o/billiard-games.jpeg?alt=media&token=de4a117f-42a2-458b-a3c1-ee185eb544fc" 
-                                    alt="Pool table background" 
+                                    alt="Pool table with balls arranged"
+                                    data-ai-hint="pool table top view"
                                     fill 
                                     className="object-cover blur-sm"
                                 />
@@ -165,7 +167,7 @@ export default function Home() {
 
                 </div>
 
-                {/* Sidebar: Live Activity */}
+                {/* Sidebar: Live Activity & Social */}
                 <aside className="grid grid-cols-1 md:grid-cols-2 gap-8">
                      <section>
                         <h2 className="text-2xl font-bold mb-4">Live Activity</h2>
@@ -179,6 +181,11 @@ export default function Home() {
                         <LuckiestUsers />
                     </section>
                 </aside>
+
+                <section>
+                    <h2 className="text-2xl font-bold mb-4">Top Winning Games</h2>
+                    <TopGames />
+                </section>
 
             </div>
         </div>
