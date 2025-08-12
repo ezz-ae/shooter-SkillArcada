@@ -8,6 +8,7 @@ import { PoolChallengeCard } from "@/components/pool-challenge-card";
 import { mockUsers } from "@/lib/user";
 import { Bot, Trophy, PlusCircle, Gamepad2 } from "lucide-react";
 import Link from "next/link";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function PoolShotPage() {
 
@@ -59,12 +60,27 @@ export default function PoolShotPage() {
                         <CardTitle className="text-3xl font-black">The Pro League</CardTitle>
                         <CardDescription className="text-lg">Season 1 is now open for registration.</CardDescription>
                     </CardHeader>
-                    <CardContent className="text-center">
-                        <p className="text-5xl font-black text-primary">1 ETH</p>
-                        <p className="text-muted-foreground font-semibold">Grand Prize</p>
+                    <CardContent className="text-center space-y-4">
+                        <div>
+                            <p className="text-5xl font-black text-primary">1 ETH</p>
+                            <p className="text-muted-foreground font-semibold">Grand Prize</p>
+                        </div>
+                        <div>
+                            <p className="text-sm font-bold text-muted-foreground">Players Registered</p>
+                            <div className="flex justify-center items-center mt-2 gap-2">
+                                <div className="flex -space-x-4 rtl:space-x-reverse">
+                                    {mockUsers.slice(0, 5).map(user => (
+                                        <Avatar key={user.id} className="border-2 border-background">
+                                            <AvatarImage src={user.avatarUrl} />
+                                            <AvatarFallback>{user.name.substring(0,2)}</AvatarFallback>
+                                        </Avatar>
+                                    ))}
+                                </div>
+                                <span className="font-bold text-lg">5 / 23</span>
+                            </div>
+                        </div>
                     </CardContent>
-                    <CardFooter className="flex flex-col gap-2">
-                        <Button size="lg" className="w-full">Register with 200 Luckshots</Button>
+                    <CardFooter className="flex-col gap-2">
                         <Button size="lg" variant="outline" className="w-full">Register with Crypto (1 ETH)</Button>
                     </CardFooter>
                 </Card>

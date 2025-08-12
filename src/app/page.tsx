@@ -9,6 +9,7 @@ import { Bot, Trophy, PlusCircle, Gamepad2 } from "lucide-react";
 import { ActivityFeed } from "@/components/activity-feed";
 import { useAuth } from "@/lib/auth";
 import { LoginModal } from "@/components/login-modal";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function Home() {
     const { isAuthenticated, user, isLoggingIn } = useAuth();
@@ -59,18 +60,33 @@ export default function Home() {
                          <h2 className="text-2xl font-bold mb-4">Join the Luck League</h2>
                          <Card className="shadow-2xl border-accent/50 border-2 overflow-hidden">
                             <div className="grid grid-cols-1 md:grid-cols-2">
-                                <div className="p-6 flex flex-col justify-center text-center md:text-left">
-                                     <Trophy className="mx-auto md:mx-0 h-16 w-16 text-accent animate-pulse"/>
-                                    <CardTitle className="text-3xl font-black mt-2">The Pro League</CardTitle>
+                                <div className="p-6 flex flex-col justify-center">
+                                    <Trophy className="h-12 w-12 text-accent mb-2"/>
+                                    <CardTitle className="text-3xl font-black">The Pro League</CardTitle>
                                     <CardDescription className="text-lg mt-1">Season 1 is now open for registration.</CardDescription>
-                                     <div className="mt-4">
-                                        <p className="text-5xl font-black text-primary">1 ETH</p>
-                                        <p className="text-muted-foreground font-semibold">Grand Prize</p>
+                                    <div className="mt-4 grid grid-cols-2 gap-4 items-center">
+                                        <div>
+                                            <p className="text-5xl font-black text-primary">1 ETH</p>
+                                            <p className="text-muted-foreground font-semibold">Grand Prize</p>
+                                        </div>
+                                        <div>
+                                            <p className="text-sm font-bold text-muted-foreground text-center">Players Registered</p>
+                                            <div className="flex justify-center items-center mt-2 gap-2">
+                                                <div className="flex -space-x-3 rtl:space-x-reverse">
+                                                    {mockUsers.slice(0, 5).map(user => (
+                                                        <Avatar key={user.id} className="border-2 border-secondary h-10 w-10">
+                                                            <AvatarImage src={user.avatarUrl} />
+                                                            <AvatarFallback>{user.name.substring(0,2)}</AvatarFallback>
+                                                        </Avatar>
+                                                    ))}
+                                                </div>
+                                                <span className="font-bold text-lg">5 / 23</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="bg-secondary/50 p-6 flex flex-col justify-center gap-4">
                                     <CardTitle className="text-center">Register Now</CardTitle>
-                                    <Button size="lg" className="w-full">Register with 200 Luckshots</Button>
                                     <Button size="lg" variant="outline" className="w-full">Register with Crypto (1 ETH)</Button>
                                 </div>
                             </div>
