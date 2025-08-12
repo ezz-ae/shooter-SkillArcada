@@ -6,7 +6,7 @@ export interface Product {
   marketPrice: number;
   imageUrl: string;
   dataAiHint: string;
-  game?: 'reel-pause';
+  game?: 'reel-pause' | 'digit-pause';
 }
 
 export const mockProducts: Product[] = [
@@ -18,7 +18,7 @@ export const mockProducts: Product[] = [
     marketPrice: 2500.0,
     imageUrl: 'https://placehold.co/600x400/000000/FFFFFF/png?text=Arcade',
     dataAiHint: 'vintage arcade',
-    game: 'reel-pause',
+    game: 'digit-pause',
   },
   {
     id: 'prod_002',
