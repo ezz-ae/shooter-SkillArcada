@@ -6,7 +6,7 @@ import { useStore } from "@/lib/store";
 import { VaultItemCard } from "@/components/vault-item-card";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { ArrowLeft, ShoppingCart, Repeat, Gift, Wallet, Landmark, Bitcoin, ArrowDown, ArrowUp } from "lucide-react";
+import { ArrowLeft, ShoppingCart, Repeat, Gift, Wallet, Landmark, Bitcoin, ArrowDown, ArrowUp, PlusCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import {
   AlertDialog,
@@ -22,9 +22,6 @@ import {
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export default function VaultPage() {
   const { 
@@ -165,19 +162,20 @@ export default function VaultPage() {
       </AlertDialog>
 
 
-      <h1 className="text-3xl font-bold mb-2">My Vault & Wallet</h1>
+      <h1 className="text-3xl font-black mb-2">My Vault & Wallet</h1>
       <p className="text-muted-foreground mb-6">Manage your items, balance, and shipments.</p>
       
       <div className="grid grid-cols-1 gap-8 md:grid-cols-12">
         <div className="md:col-span-8 space-y-8">
-            {vault.length > 0 ? (
-                <div>
-                    <div className="flex justify-between items-center mb-4">
-                        <h2 className="text-2xl font-bold">Your Items ({vault.length})</h2>
-                        <Button onClick={handleMoveToShipping} disabled={selectedItems.size === 0}>
-                            Move {selectedItems.size > 0 ? `(${selectedItems.size})` : ''} to Shipping
-                        </Button>
-                    </div>
+            <div>
+                <div className="flex justify-between items-center mb-4">
+                    <h2 className="text-2xl font-bold">Your Items ({vault.length})</h2>
+                    <Button onClick={handleMoveToShipping} disabled={selectedItems.size === 0}>
+                        <ShoppingCart className="mr-2" />
+                        Move {selectedItems.size > 0 ? `(${selectedItems.size})` : ''} to Shipping
+                    </Button>
+                </div>
+                {vault.length > 0 ? (
                     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
                         {vault.map((item) => (
                         <VaultItemCard
@@ -188,26 +186,28 @@ export default function VaultPage() {
                         />
                         ))}
                     </div>
-                </div>
-            ) : (
-                <div className="text-center py-20 border-2 border-dashed rounded-lg flex flex-col items-center">
-                    <div className="bg-primary/10 p-4 rounded-full mb-4">
-                        <ShoppingCart className="h-12 w-12 text-primary" />
+                ) : (
+                    <div className="text-center py-20 border-2 border-dashed rounded-lg flex flex-col items-center">
+                        <div className="bg-primary/10 p-4 rounded-full mb-4">
+                            <ShoppingCart className="h-12 w-12 text-primary" />
+                        </div>
+                        <h2 className="text-xl font-semibold">Your Vault is Empty</h2>
+                        <p className="text-muted-foreground mt-2">Win some games to get items!</p>
+                        <Button asChild className="mt-4">
+                            <Link href="/">Explore Games</Link>
+                        </Button>
                     </div>
-                    <h2 className="text-xl font-semibold">Your Vault is Empty</h2>
-                    <p className="text-muted-foreground mt-2">Win some games to get items!</p>
-                    <Button asChild className="mt-4">
-                        <Link href="/">Explore Games</Link>
-                    </Button>
-                </div>
-            )}
+                )}
+            </div>
         </div>
 
         <div className="md:col-span-4">
              <div className="sticky top-24 space-y-6">
-                <Card>
+                <Card className="shadow-lg">
                     <CardHeader>
-                        <CardTitle className="flex items-center gap-2"><Wallet className="text-primary"/> Balance</CardTitle>
+                        <CardTitle className="flex items-center justify-between"><span className="flex items-center gap-2"><Wallet className="text-primary"/> Balance</span>
+                        <Button size="icon" variant="ghost"><PlusCircle/></Button>
+                        </CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="flex items-baseline gap-2">
@@ -227,37 +227,8 @@ export default function VaultPage() {
                       </Button>
                     </CardFooter>
                 </Card>
-
-                 <Card>
-                    <CardHeader>
-                         <CardTitle className="flex items-center gap-2"><Landmark className="text-primary"/> Stake for Rewards</CardTitle>
-                         <CardDescription>
-                            Earn high APY by staking your Shots on major crypto assets in our secure portal.
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent className="flex justify-around items-center text-center py-4">
-                        <div className="flex flex-col items-center gap-1">
-                            <Bitcoin className="h-6 w-6 text-yellow-500"/>
-                            <span className="text-xs font-bold">BTC</span>
-                            <span className="text-xs text-green-500 font-semibold">12% APY</span>
-                        </div>
-                         <div className="flex flex-col items-center gap-1">
-                            <span className="font-bold text-lg">ETH</span>
-                            <span className="text-xs font-bold">Ethereum</span>
-                             <span className="text-xs text-green-500 font-semibold">15% APY</span>
-                        </div>
-                         <div className="flex flex-col items-center gap-1">
-                            <span className="font-bold text-lg">SOL</span>
-                            <span className="text-xs font-bold">Solana</span>
-                             <span className="text-xs text-green-500 font-semibold">18% APY</span>
-                        </div>
-                    </CardContent>
-                    <CardFooter>
-                        <Button className="w-full">Go to Staking Portal</Button>
-                    </CardFooter>
-                </Card>
-
-                 <Card>
+                
+                <Card>
                     <CardHeader>
                         <CardTitle>Ready to Ship ({shippingCart.length}/3)</CardTitle>
                     </CardHeader>
