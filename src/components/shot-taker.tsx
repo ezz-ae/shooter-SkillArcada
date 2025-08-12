@@ -590,7 +590,7 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
         </Link>
         <CardContent className="flex-grow p-4 pb-2 space-y-2">
             {isGameCard ? (
-                 <div className="p-4"></div>
+                 <div className="h-32"></div>
             ) : (
                 renderChart()
             )}
@@ -756,3 +756,5 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
     </>
   );
 }
+
+    
