@@ -164,7 +164,7 @@ export const mockProducts: Product[] = [
     subtitle: 'Social board game',
     description: 'A social board game where you can chat with your opponent and the audience. Roll the dice and climb to victory!',
     marketPrice: 10,
-    imageUrl: 'https://firebasestorage.googleapis.com/v0/b/reodywellness.firebasestorage.app/o/Untitled-4%20(13).png?alt=media&token=4c527929-56fe-4d1b-8598-42b57dc409c1',
+    imageUrl: 'https://firebasestorage.googleapis.com/v0/b/reodywellness.firebasestorage.app/o/Untitled-4%20(13).png?alt=media&token=a7f36634-d0ab-40d5-9607-76ecbf375346',
     dataAiHint: 'anime girl blue hair',
     expertSystem: 'A social board game where you can chat with your opponent and the audience. Roll the dice and climb to victory!',
     game: 'snake-and-stairs',
