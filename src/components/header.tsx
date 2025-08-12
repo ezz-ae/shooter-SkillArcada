@@ -2,7 +2,7 @@
 "use client";
 
 import Link from "next/link";
-import { Package, Target, BrainCircuit, Heart, Swords, Dice5, User as UserIcon, LogIn, LogOut, LineChart } from "lucide-react";
+import { Package, Target, BrainCircuit, Heart, Swords, Dice5, User as UserIcon, LogOut, LineChart, Gamepad2, ChevronDown } from "lucide-react";
 import { Button } from "./ui/button";
 import { useStore } from "@/lib/store";
 import { useEffect, useState } from "react";
@@ -17,24 +17,31 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  DropdownMenuGroup,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 
 export function Header() {
   const { vault, luckshots } = useStore();
-  const { isAuthenticated, user, logout, setIsLoggingIn } = useAuth();
+  const { isAuthenticated, user, logout, login } = useAuth();
   const [isClient, setIsClient] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
     setIsClient(true);
   }, []);
+  
+  useEffect(() => {
+    if (isClient && !isAuthenticated) {
+        login('wallet'); // Auto-login guest user
+    }
+  }, [isClient, isAuthenticated, login]);
 
   const vaultItemCount = isClient ? vault.length : 0;
   const displayShots = isClient ? luckshots.toFixed(2) : '0.00';
 
-  const navItems = [
+  const gameNavItems = [
     { href: "/luckshots", label: "Luckshots", icon: Dice5 },
     { href: "/brainshots", label: "Brainshots", icon: BrainCircuit },
     { href: "/crypto-luck", label: "Crypto Luck", icon: LineChart },
@@ -67,34 +74,36 @@ export function Header() {
             </svg>
             <span className="font-bold">Luckshots</span>
           </Link>
-          <nav className="hidden md:flex items-center space-x-2">
-             {navItems.map((item) => (
-                <Button key={item.href} variant={pathname.startsWith(item.href) ? "secondary" : "ghost"} asChild>
-                    <Link href={item.href} className="flex items-center">
-                       <item.icon className="h-5 w-5 mr-2" />
-                       {item.label}
-                    </Link>
+          <nav className="hidden md:flex items-center space-x-1">
+             <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost">
+                    <Gamepad2 className="h-5 w-5 mr-2" />
+                    Games
+                    <ChevronDown className="h-4 w-4 ml-1" />
                 </Button>
-            ))}
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                {gameNavItems.map((item) => (
+                    <DropdownMenuItem key={item.href} asChild>
+                        <Link href={item.href} className="flex items-center gap-2">
+                           <item.icon className="h-4 w-4" />
+                           {item.label}
+                        </Link>
+                    </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </nav>
         </div>
         <div className="flex flex-1 items-center justify-end space-x-2">
-          {isAuthenticated && user && (
+          {isClient && isAuthenticated && user ? (
             <>
             <div className="hidden sm:flex items-center space-x-2 text-sm font-medium p-2 bg-secondary rounded-md">
                 <Target className="h-5 w-5 text-accent" />
                 <span>Shots: {displayShots}</span>
             </div>
-            <Button variant="outline" asChild>
-                <Link href="/vault" className="relative">
-                <Package className="h-5 w-5 mr-2" />
-                <span className="hidden sm:inline">Vault</span> ({vaultItemCount})
-                </Link>
-            </Button>
-            </>
-          )}
-
-          {isClient && isAuthenticated && user ? (
+            
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="secondary" className="flex items-center gap-2">
@@ -104,26 +113,35 @@ export function Header() {
                           {user.luckyNumber.substring(0, 2).toUpperCase()}
                         </AvatarFallback>
                     </Avatar>
-                    <span className="font-mono">{user.luckyNumber}</span>
+                    <span className="font-mono hidden md:inline">{user.luckyNumber}</span>
+                    <ChevronDown className="h-4 w-4"/>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                    <UserIcon className="mr-2 h-4 w-4" />
-                    <span>Profile</span>
-                </DropdownMenuItem>
+                <DropdownMenuGroup>
+                    <DropdownMenuItem asChild>
+                         <Link href="/vault">
+                            <Package className="mr-2 h-4 w-4" />
+                            <span>Vault</span>
+                         </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                        <UserIcon className="mr-2 h-4 w-4" />
+                        <span>Profile Settings</span>
+                    </DropdownMenuItem>
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={logout}>
                     <LogOut className="mr-2 h-4 w-4" />
                     <span>Log out</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+            </>
           ) : (
-             <Button onClick={() => setIsLoggingIn(true)}>
-                <LogIn className="mr-2 h-4 w-4" /> Login
-            </Button>
+            <div className="h-10 w-24 animate-pulse bg-muted rounded-md"></div>
           )}
           
           <ThemeToggle />

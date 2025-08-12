@@ -3,39 +3,59 @@
 
 import { Button } from "@/components/ui/button";
 import { mockUsers } from "@/lib/user";
-import { PoolChallengeCard } from "@/components/pool-challenge-card";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Bot, Trophy, PlusCircle, Gamepad2, Star } from "lucide-react";
+import { Trophy, PlusCircle, Gamepad2, Star, BrainCircuit, LineChart, Swords, Heart, Dices, ChevronRight, HelpCircle } from "lucide-react";
 import { ActivityFeed } from "@/components/activity-feed";
 import { useAuth } from "@/lib/auth";
-import { LoginModal } from "@/components/login-modal";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { LuckiestUsers } from "@/components/luckiest-users";
+import { DiceGame } from "@/components/dice-game";
+import { ShotTaker } from "@/components/shot-taker";
+import { mockProducts } from "@/lib/products";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 export default function Home() {
-    const { isAuthenticated, user, isLoggingIn } = useAuth();
+    const { isAuthenticated, user, login } = useAuth();
     
-    // Mock data for challenges
-    const challenges = [
-        { id: 'c1', prize: 40, fee: 5, player1: mockUsers[0], player2: mockUsers[1] },
-        { id: 'c2', prize: 100, fee: 10, player1: mockUsers[2], player2: null },
-        { id: 'c3', prize: 500, fee: 25, player1: mockUsers[3], player2: null },
-        { id: 'c4', prize: 20, fee: 2, player1: mockUsers[4], player2: mockUsers[5] },
-        { id: 'c5', prize: 250, fee: 20, player1: mockUsers[1], player2: null },
+    // Auto-login for guest users
+    useEffect(() => {
+        if (!isAuthenticated) {
+            login('wallet'); // Or 'whatsapp', doesn't matter for guest flow
+        }
+    }, [isAuthenticated, login]);
+
+    const iphoneProduct = mockProducts.find(p => p.id === 'prod_phone_01');
+    const btcProduct = mockProducts.find(p => p.id === 'prod_crypto_01');
+    
+    const gameLinks = [
+      { href: "/luckshots", label: "Luckshots", icon: Dices, description: "Classic price drop action." },
+      { href: "/brainshots", label: "Brainshots", icon: BrainCircuit, description: "Puzzles and skill challenges." },
+      { href: "/crypto-luck", label: "Crypto Luck", icon: LineChart, description: "Predict the market to win." },
+      { href: "/pool-shot", label: "Pool Shot", icon: Swords, description: "1-on-1 skill-based pool." },
+      { href: "/luckgirls", label: "Luckgirls", icon: Heart, description: "Fun, social, and exciting games." },
     ];
-    
-    const openChallenges = challenges.filter(c => !c.player2);
-    const [currentChallengeIndex, setCurrentChallengeIndex] = useState(0);
 
-    const handleDismissChallenge = () => {
-        setCurrentChallengeIndex((prevIndex) => (prevIndex + 1) % openChallenges.length);
-    };
-    
-    const recommendedChallenge = openChallenges.length > 0 ? openChallenges[currentChallengeIndex] : null;
-
-    if (!isAuthenticated && !isLoggingIn) {
-        return <LoginModal />;
+    if (!isAuthenticated || !user) {
+        return (
+             <div className="container mx-auto px-4 py-8 flex items-center justify-center min-h-[calc(100vh-8rem)]">
+                <div className="animate-pulse">
+                    <Card className="w-full max-w-md">
+                        <CardHeader className="text-center">
+                            <div className="h-12 w-12 bg-muted rounded-full mx-auto mb-4"></div>
+                            <div className="h-8 w-3/4 bg-muted rounded-md mx-auto"></div>
+                            <div className="h-4 w-1/2 bg-muted rounded-md mx-auto mt-2"></div>
+                        </CardHeader>
+                         <CardContent className="space-y-4">
+                            <div className="h-4 w-full bg-muted rounded-md"></div>
+                            <div className="h-12 w-full bg-muted rounded-md"></div>
+                            <div className="h-12 w-full bg-muted rounded-md"></div>
+                        </CardContent>
+                    </Card>
+                </div>
+            </div>
+        );
     }
 
     return (
@@ -44,67 +64,43 @@ export default function Home() {
                 
                 {/* Main Content: Challenges and League */}
                 <div className="lg:col-span-2 space-y-8">
-                    {/* Open Challenges */}
+                    {/* Test Your Luck */}
                     <section>
-                        <div className="flex justify-between items-center mb-4">
-                            <h2 className="text-2xl font-bold">Recommended Challenge</h2>
-                        </div>
-                        {recommendedChallenge ? (
-                            <div className="flex justify-center">
-                                <div className="w-full max-w-sm">
-                                    <PoolChallengeCard 
-                                        key={recommendedChallenge.id} 
-                                        challenge={recommendedChallenge} 
-                                        onDismiss={handleDismissChallenge}
-                                    />
-                                </div>
-                            </div>
-                        ) : (
-                             <div className="text-center py-16 border-2 border-dashed rounded-lg">
-                                <h3 className="text-xl font-semibold">No Open Challenges</h3>
-                                <p className="text-muted-foreground mt-2">Why not create one yourself?</p>
-                                <Button className="mt-4"><PlusCircle/> Create Challenge</Button>
-                            </div>
-                        )}
+                        <DiceGame />
+                    </section>
+                    
+                    {/* Featured Games */}
+                    <section>
+                         <h2 className="text-2xl font-bold mb-4">Featured Games</h2>
+                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            {iphoneProduct && <ShotTaker product={iphoneProduct} />}
+                            {btcProduct && <ShotTaker product={btcProduct} />}
+                         </div>
                     </section>
 
-                    {/* Luck League */}
+                     {/* All Games */}
                     <section>
-                         <h2 className="text-2xl font-bold mb-4">Join the Luck League</h2>
-                         <Card className="shadow-2xl border-accent/50 border-2 overflow-hidden">
-                            <div className="grid grid-cols-1 md:grid-cols-2">
-                                <div className="p-6 flex flex-col justify-center">
-                                    <Trophy className="h-12 w-12 text-accent mb-2"/>
-                                    <CardTitle className="text-3xl font-black">The Pro League</CardTitle>
-                                    <CardDescription className="text-lg mt-1">Season 1 is now open for registration.</CardDescription>
-                                    <div className="mt-4 grid grid-cols-2 gap-4 items-center">
-                                        <div>
-                                            <p className="text-5xl font-black text-primary">1 ETH</p>
-                                            <p className="text-muted-foreground font-semibold">Grand Prize</p>
-                                        </div>
-                                        <div>
-                                            <p className="text-sm font-bold text-muted-foreground text-center">Players Registered</p>
-                                            <div className="flex justify-center items-center mt-2 gap-2">
-                                                <div className="flex -space-x-3 rtl:space-x-reverse">
-                                                    {mockUsers.slice(0, 5).map(user => (
-                                                        <Avatar key={user.id} className="border-2 border-secondary h-10 w-10">
-                                                            <AvatarImage src={user.avatarUrl} />
-                                                            <AvatarFallback>{user.name.substring(0,2)}</AvatarFallback>
-                                                        </Avatar>
-                                                    ))}
-                                                </div>
-                                                <span className="font-bold text-lg">5 / 23</span>
+                        <h2 className="text-2xl font-bold mb-4">All Games</h2>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            {gameLinks.map(game => (
+                                <Link href={game.href} key={game.href}>
+                                    <Card className="hover:bg-secondary/50 transition-colors h-full">
+                                        <CardHeader className="flex flex-row items-center justify-between">
+                                            <div className="flex items-center gap-3">
+                                                <game.icon className="h-8 w-8 text-primary"/>
+                                                <CardTitle className="text-xl">{game.label}</CardTitle>
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="bg-secondary/50 p-6 flex flex-col justify-center gap-4">
-                                    <CardTitle className="text-center">Register Now</CardTitle>
-                                    <Button size="lg" variant="outline" className="w-full">Register with Crypto (1 ETH)</Button>
-                                </div>
-                            </div>
-                        </Card>
+                                            <ChevronRight className="h-5 w-5 text-muted-foreground" />
+                                        </CardHeader>
+                                        <CardContent>
+                                            <p className="text-muted-foreground">{game.description}</p>
+                                        </CardContent>
+                                    </Card>
+                                </Link>
+                            ))}
+                        </div>
                     </section>
+
                 </div>
 
                 {/* Sidebar: Live Activity */}
@@ -119,6 +115,20 @@ export default function Home() {
                            Luckiest Users
                         </h2>
                         <LuckiestUsers />
+                    </section>
+                    <section>
+                        <h2 className="text-2xl font-bold mb-4">Need Help?</h2>
+                        <Card>
+                            <CardHeader>
+                                <CardTitle className="flex items-center gap-2"><HelpCircle className="text-primary"/> Support</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <p className="text-muted-foreground">Have questions or need help with the app? Our support team is here for you.</p>
+                            </CardContent>
+                            <CardFooter>
+                                <Button variant="outline" className="w-full">Contact Support</Button>
+                            </CardFooter>
+                        </Card>
                     </section>
                 </aside>
 

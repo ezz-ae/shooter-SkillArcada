@@ -33,6 +33,10 @@ export const useAuth = create<AuthState>()(
       login: (method) => {
         // In a real app, this would involve a complex authentication flow.
         // Here, we simulate a successful login and assign a random lucky number and avatar.
+        
+        // If user is already authenticated, do nothing.
+        if (get().isAuthenticated) return;
+
         const randomLuckyNumber = String(Math.floor(1000 + Math.random() * 9000));
         const randomAvatar = mockUsers[Math.floor(Math.random() * mockUsers.length)].avatarUrl;
         
@@ -59,7 +63,7 @@ export const useAuth = create<AuthState>()(
       setIsLoggingIn: (isLoggingIn) => set({ isLoggingIn }),
     }),
     {
-      name: 'luckshot-auth-storage-v3',
+      name: 'luckshot-auth-storage-v4', // Incremented version
       storage: createJSONStorage(() => localStorage),
     }
   )
