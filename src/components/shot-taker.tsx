@@ -33,7 +33,7 @@ import { cn } from "@/lib/utils";
 import { Calculator } from "./calculator";
 import { ChartContainer } from "./ui/chart";
 import { DrawPad } from "./draw-pad";
-import { Target, HelpCircle, Check, Gem } from "lucide-react";
+import { Target, HelpCircle, Check, Gem, DollarSign } from "lucide-react";
 import { ChessBoard } from "./chess-board";
 
 interface ShotTakerProps {
@@ -521,7 +521,7 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
             </div>
             <div className="relative z-10 flex flex-col items-center justify-center h-full">
               <div className="flex items-center gap-2">
-                <Gem className="h-6 w-6 text-primary" />
+                <DollarSign className="h-6 w-6 text-primary" />
                 <span className={cn(
                   "font-black tracking-wider text-foreground shimmer-text",
                   view === 'full' ? "text-3xl lg:text-4xl" : "text-4xl lg:text-6xl"
