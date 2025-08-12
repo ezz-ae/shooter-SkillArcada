@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useEffect, useState, useRef, useMemo } from "react";
+import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -39,11 +39,11 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
   const [selectedPrice, setSelectedPrice] = useState<number | null>(null);
   const [capturedTime, setCapturedTime] = useState<Date | null>(null);
 
-  // For digit-pause game
-  const [digits, setDigits] = useState([0, 0, 0]);
-  const [lockedDigits, setLockedDigits] = useState<number[]>([]);
-  const [isGameActive, setIsGameActive] = useState(false);
-  const digitIntervals = useRef<NodeJS.Timeout[]>([]);
+  // For reel-pause game
+  const [reelNumbers, setReelNumbers] = useState<number[]>(Array(12).fill(0));
+  const [isReelPaused, setIsReelPaused] = useState(false);
+  const [selectedReelIndices, setSelectedReelIndices] = useState<number[]>([]);
+  const reelInterval = useRef<NodeJS.Timeout>();
 
   // For riddle-calc game
   const [isRiddleDialogOpen, setIsRiddleDialogOpen] = useState(false);
@@ -64,7 +64,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
 
   useEffect(() => {
     let isMounted = true;
-    if (product.game !== 'digit-pause' && product.game !== 'riddle-calc') {
+    if (product.game !== 'reel-pause' && product.game !== 'riddle-calc') {
       const priceInterval = setInterval(() => {
         if (!isMounted) return;
         setCurrentPrice(getNewPrice);
@@ -80,19 +80,17 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
   // Cleanup intervals on component unmount
   useEffect(() => {
     return () => {
-        stopDigitGame();
-        if (timerInterval.current) {
-          clearInterval(timerInterval.current);
-        }
+        if (reelInterval.current) clearInterval(reelInterval.current);
+        if (timerInterval.current) clearInterval(timerInterval.current);
     }
   }, []);
 
   useEffect(() => {
-    // Start the digit game automatically for the digit-pause product
-    if (product.game === 'digit-pause' && !isGameActive) {
-      startDigitGame();
+    // Start the reel game automatically
+    if (product.game === 'reel-pause' && !isReelPaused) {
+      startReelGame();
     }
-  }, [product.game, isGameActive]);
+  }, [product.game, isReelPaused]);
   
   useEffect(() => {
     if (isRiddleDialogOpen && riddleTimer > 0) {
@@ -108,29 +106,21 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
     }
   }, [isRiddleDialogOpen, riddleTimer]);
 
-  const startDigitGame = () => {
-    setIsGameActive(true);
-    // Clear any existing intervals before starting new ones
-    stopDigitGame();
+  const startReelGame = () => {
+    setIsReelPaused(false);
+    if (reelInterval.current) clearInterval(reelInterval.current);
+    reelInterval.current = setInterval(() => {
+        setReelNumbers(prev => prev.map(() => Math.floor(Math.random() * 10)));
+    }, 100);
+  }
 
-    digitIntervals.current = [0, 1, 2].map(index => {
-      return setInterval(() => {
-        setDigits(prev => {
-            const newDigits = [...prev];
-            newDigits[index] = Math.floor(Math.random() * 10);
-            return newDigits;
-        });
-      }, 75);
-    });
-  };
-
-  const stopDigitGame = () => {
-    digitIntervals.current.forEach(clearInterval);
-    digitIntervals.current = [];
-  };
+  const stopReelGame = () => {
+    if (reelInterval.current) clearInterval(reelInterval.current);
+    setIsReelPaused(true);
+  }
 
   const handleShot = () => {
-    if (product.game === 'digit-pause' || product.game === 'riddle-calc') {
+    if (product.game === 'reel-pause' || product.game === 'riddle-calc') {
       return;
     }
     
@@ -197,51 +187,30 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
     setSelectedPrice(null);
   }
 
-  const handleDigitClick = (index: number) => {
-    if (lockedDigits.length !== index || !isGameActive) {
-      return;
-    }
+  const handleReelNumberClick = (index: number) => {
+    if (!isReelPaused || selectedReelIndices.length >= 3) return;
 
-    if (lockedDigits.length === 0) {
-      if (hasTakenFirstShot) {
-        if (walletBalance < SHOT_COST) {
-            toast({
-                variant: "destructive",
-                title: "Insufficient Funds",
-                description: `You need at least $${SHOT_COST.toFixed(2)} to play.`,
-            });
-            return;
+    setSelectedReelIndices(prev => {
+        if (prev.includes(index)) {
+            return prev.filter(i => i !== index);
         }
-        spendFromWallet(SHOT_COST);
-      } else {
-        toast({
-          title: "Your First Shot is Free!",
-          description: "Lock in your price!",
-        });
-        setHasTakenFirstShot();
-      }
-    }
-    
-    const newLockedDigits = [...lockedDigits, digits[index]];
-    setLockedDigits(newLockedDigits);
-    clearInterval(digitIntervals.current[index]);
+        return [...prev, index];
+    })
+  }
 
-    if (newLockedDigits.length === 3) {
-      stopDigitGame();
-      setIsGameActive(false);
-      setCapturedPrices([Number(newLockedDigits.join(''))]);
-    }
-  };
+  const handleReelShot = () => {
+    if (selectedReelIndices.length !== 3) return;
 
-  const handleConfirmDigitPauseShot = () => {
-     const priceToPay = Number(lockedDigits.join(''));
-     if (walletBalance < priceToPay) {
+    const priceString = selectedReelIndices.map(i => reelNumbers[i]).join('');
+    const priceToPay = Number(priceString);
+
+    if (walletBalance < priceToPay) {
       toast({
         variant: "destructive",
         title: "Insufficient Funds",
         description: `You cannot afford to vault this item for $${priceToPay.toFixed(2)}.`,
       });
-      resetDigitGame();
+      resetReelGame();
       return;
     }
     
@@ -255,14 +224,13 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
       title: "Item Vaulted!",
       description: `${product.name} has been added to your vault for $${priceToPay.toFixed(2)}.`,
     });
-    resetDigitGame();
+    resetReelGame();
   }
 
-  const resetDigitGame = () => {
-      setLockedDigits([]);
-      setDigits([0,0,0]);
-      setCapturedPrices([]);
-      startDigitGame();
+  const resetReelGame = () => {
+    setSelectedReelIndices([]);
+    setIsReelPaused(false);
+    startReelGame();
   }
   
   const handleRiddleStart = () => {
@@ -297,47 +265,39 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
   const timerColor = riddleTimer <= 60 ? "text-destructive" : "text-foreground";
 
   const CardComponent = isPage ? 'div' : Card;
-  const isGameCard = product.game === 'digit-pause' || product.game === 'riddle-calc';
+  const isGameCard = product.game === 'reel-pause' || product.game === 'riddle-calc';
 
   const discountPercent = ((product.marketPrice - currentPrice) / product.marketPrice) * 100;
   const discountColor = discountPercent > 0 ? "text-accent" : "text-[hsl(var(--chart-4))]";
   
   const renderGameFooter = () => {
-    if (product.game === 'digit-pause') {
-      if (lockedDigits.length < 3) {
+    if (product.game === 'reel-pause') {
         return (
-          <div className="flex w-full items-center justify-center gap-2">
-            <div className="h-16 w-8 flex-shrink-0 rounded-lg bg-secondary flex items-center justify-center text-2xl font-black text-primary-foreground">
-              $
+            <div className="w-full flex flex-col gap-2">
+                <div className="grid grid-cols-4 gap-2">
+                    {reelNumbers.map((num, index) => (
+                        <button key={index}
+                            onClick={() => handleReelNumberClick(index)}
+                            disabled={!isReelPaused || selectedReelIndices.length >= 3 && !selectedReelIndices.includes(index)}
+                            className={cn(
+                                "h-10 border rounded-md flex items-center justify-center text-2xl font-mono transition-all",
+                                isReelPaused ? "cursor-pointer" : "cursor-default",
+                                isReelPaused && selectedReelIndices.includes(index) && "bg-primary text-primary-foreground",
+                                isReelPaused && "blur-sm",
+                                isReelPaused && selectedReelIndices.includes(index) && "blur-none"
+                            )}
+                        >{num}</button>
+                    ))}
+                </div>
+                {!isReelPaused ? (
+                    <Button onClick={stopReelGame} className="w-full h-12 text-lg font-bold">Pause</Button>
+                ) : (
+                    <Button onClick={handleReelShot} disabled={selectedReelIndices.length !== 3} className="w-full h-12 text-lg font-bold">
+                        Shot
+                    </Button>
+                )}
             </div>
-            <div className="flex w-full justify-center items-center gap-2 relative">
-                {[0, 1, 2].map(index => {
-                    const isLocked = lockedDigits.length > index;
-                    const isNext = lockedDigits.length === index;
-                    return (
-                      <button
-                        key={index}
-                        onClick={() => handleDigitClick(index)}
-                        disabled={!isNext}
-                        className={cn(
-                          "h-16 w-1/3 rounded-lg flex items-center justify-center text-5xl font-black tabular-nums transition-all bg-secondary text-primary-foreground",
-                          isNext && "cursor-pointer hover:bg-primary/80",
-                        )}
-                      >
-                        {isLocked ? lockedDigits[index] : digits[index]}
-                      </button>
-                    );
-                })}
-            </div>
-          </div>
-        );
-      }
-      return (
-          <div className="w-full flex flex-col gap-2 items-center">
-              <Button onClick={handleConfirmDigitPauseShot} className="w-full h-16 text-2xl font-black">Take the Shot for ${lockedDigits.join('')}!</Button>
-              <Button onClick={resetDigitGame} variant="outline">Try Again</Button>
-          </div>
-      );
+        )
     }
     
     if (product.game === 'riddle-calc') {
@@ -521,5 +481,3 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
     </>
   );
 }
-
-    

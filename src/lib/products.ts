@@ -17,7 +17,7 @@ export const mockProducts: Product[] = [
     marketPrice: 1299.0,
     imageUrl: 'https://placehold.co/600x400/333333/FFFFFF/png?text=iPhone+16',
     dataAiHint: 'iphone mockup',
-    game: 'digit-pause',
+    game: 'reel-pause',
   },
   {
     id: 'prod_crypto_01',

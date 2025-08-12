@@ -6,8 +6,8 @@ import { mockProducts } from "@/lib/products";
 import { cn } from "@/lib/utils";
 
 export default function Home() {
-  const gameProduct = mockProducts.find(p => p.game === 'digit-pause');
-  const regularProducts = mockProducts.filter(p => p.game !== 'digit-pause');
+  const gameProduct = mockProducts.find(p => p.game === 'reel-pause');
+  const regularProducts = mockProducts.filter(p => p.game !== 'reel-pause');
 
   return (
     <div className="container mx-auto px-4 py-8">
