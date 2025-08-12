@@ -24,10 +24,11 @@ export default function LuckgirlsPage() {
         'time-challenge': Puzzle,
         'pink-cups': Shuffle,
         'snake-and-stairs': ArrowRight,
+        'story-match': Puzzle,
     }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 lucky-pink">
       <div className="text-center mb-8">
         <h1 className="text-4xl font-black tracking-tight lg:text-5xl bg-gradient-to-r from-pink-400 to-purple-500 text-transparent bg-clip-text">
           Luckgirls Games
@@ -41,7 +42,7 @@ export default function LuckgirlsPage() {
         {girlGames.map((game) => {
             const Icon = game.game ? gameIcons[game.game as keyof typeof gameIcons] : Puzzle;
             return (
-                 <Card key={game.id} className="flex flex-col shadow-lg hover:shadow-pink-500/20 transition-shadow duration-300 border-2 border-pink-500">
+                 <Card key={game.id} className="flex flex-col shadow-lg hover:shadow-pink-500/20 transition-shadow duration-300 border-2 border-pink-500/50">
                     <CardHeader className="p-0 relative h-56">
                          <Image src={game.imageUrl} alt={game.name} fill className="object-cover rounded-t-lg" data-ai-hint={game.dataAiHint}/>
                          <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
@@ -49,7 +50,7 @@ export default function LuckgirlsPage() {
                             <h2 className="text-2xl font-bold text-white">{game.name}</h2>
                          </div>
                          <div className="absolute top-2 right-2 bg-background/80 p-2 rounded-lg backdrop-blur-sm">
-                            <Icon className="h-6 w-6 text-pink-500" />
+                            <Icon className="h-6 w-6 text-primary" />
                          </div>
                     </CardHeader>
                     <CardContent className="flex-grow p-4">

@@ -10,6 +10,7 @@ import { Bot, Trophy, PlusCircle, Gamepad2, Swords } from "lucide-react";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useEffect, useState } from "react";
+import { GiPoolTable } from "react-icons/gi";
 
 export default function PoolShotPage() {
   const [users, setUsers] = useState<User[]>([]);
@@ -23,17 +24,17 @@ export default function PoolShotPage() {
   }, []);
 
   const poolChallenges = users.length > 5 ? [
-    { id: 'c1', prize: 40, fee: 5, player1: users[0], player2: users[1], type: 'pool' },
-    { id: 'c2', prize: 100, fee: 10, player1: users[2], player2: null, type: 'pool' },
-    { id: 'c3', prize: 500, fee: 25, player1: users[3], player2: null, type: 'pool' },
-    { id: 'c4', prize: 20, fee: 2, player1: users[4], player2: users[5], type: 'pool' },
+    { id: 'c1', prize: 40, fee: 5, player1: users[0], player2: users[1], type: 'pool' as const },
+    { id: 'c2', prize: 100, fee: 10, player1: users[2], player2: null, type: 'pool' as const },
+    { id: 'c3', prize: 500, fee: 25, player1: users[3], player2: null, type: 'pool' as const },
+    { id: 'c4', prize: 20, fee: 2, player1: users[4], player2: users[5], type: 'pool' as const },
   ] : [];
 
   return (
     <div className="container mx-auto px-4 py-8 flex flex-col items-center">
        <div className="text-center mb-8">
         <h1 className="text-4xl font-black tracking-tight lg:text-5xl flex items-center justify-center gap-4">
-            <Swords size={40} className="text-primary"/> Pool Shot
+            <GiPoolTable size={40} className="text-primary"/> Pool Shot
         </h1>
         <p className="mt-2 text-lg text-muted-foreground max-w-2xl mx-auto">
           Compete in 1-on-1 challenges, join high-stakes leagues, or practice your skills. The felt is waiting.
@@ -92,7 +93,7 @@ export default function PoolShotPage() {
                     </CardContent>
                     <CardFooter className="flex-col gap-2">
                         <Button size="lg" className="w-full">Register Now</Button>
-                    </CardFooter>
+                    </Footer>
                 </Card>
             </TabsContent>
         </Tabs>
