@@ -173,7 +173,7 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
           const newHistory = [...prev.slice(1), { time: prev[prev.length - 1].time + 1, price: newPrice }];
           return newHistory;
         });
-      }, 300 + Math.random() * 400);
+      }, 200 + Math.random() * 200);
 
       return () => {
           isMounted = false;
@@ -520,8 +520,8 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
                   <AreaChart data={priceHistory} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
                     <defs>
                       <linearGradient id="chart-fill" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.1} />
-                        <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0.05} />
+                        <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.05} />
+                        <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0} />
                       </linearGradient>
                     </defs>
                     <Tooltip content={<></>} />
@@ -588,12 +588,8 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
             </div>
           </CardHeader>
         </Link>
-        <CardContent className="flex-grow p-4 pb-2 space-y-2">
-            {isGameCard ? (
-                 <div className="h-32"></div>
-            ) : (
-                renderChart()
-            )}
+        <CardContent className="flex-grow p-4 pb-2 space-y-2 min-h-[8.5rem]">
+            {renderChart()}
         </CardContent>
         <CardFooter className="p-4 pt-2 flex-col items-center">
           {renderActions()}
