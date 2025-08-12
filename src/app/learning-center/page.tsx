@@ -13,7 +13,7 @@ export default function LearningCenterPage() {
             Learning Center
           </CardTitle>
           <CardDescription>
-            Your complete guide to understanding Luckshots.
+            Your complete guide to understanding ShoterShots.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -27,7 +27,7 @@ export default function LearningCenterPage() {
                 </div>
               </AccordionTrigger>
               <AccordionContent className="prose dark:prose-invert max-w-none pl-12 space-y-4">
-                <h4>Luckshots (Dynamic Pricing)</h4>
+                <h4>ShoterShots (Dynamic Pricing)</h4>
                 <p>This is the classic game mode. The price of an item changes rapidly. Your goal is to "shot" the price at the perfect moment to capture the best deal. The lower you can capture it, the better. It costs 1 Shot to play.</p>
                 
                 <h4>Brainshots (Skill Games)</h4>
@@ -106,8 +106,12 @@ export default function LearningCenterPage() {
                 </div>
               </AccordionTrigger>
               <AccordionContent className="prose dark:prose-invert max-w-none pl-12">
+                <blockquote>
+                  "Shoter sells his shots because he loves his old life in the universe, but he is not an easy opponent. The challenges are real, but they are fair. We do not and cannot control the outcome of any game. Our role is to provide a stable and secure platform for these exciting challenges."
+                  <cite>- Fon, CEO of ShoterShots</cite>
+                </blockquote>
                 <p>
-                  We are committed to providing a fair and transparent gaming experience. The outcomes of our games are determined by either real-time data (in price-based games) or by player skill (in challenge-based games). We do not and cannot control or influence the outcome of any player's game. Our role is to provide a stable and secure platform for the community to engage in these exciting challenges.
+                  We are committed to providing a transparent gaming experience. The outcomes of our games are determined by either real-time data (in price-based games) or by player skill (in challenge-based games).
                 </p>
               </AccordionContent>
             </AccordionItem>
