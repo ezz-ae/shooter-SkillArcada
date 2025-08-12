@@ -5,9 +5,8 @@ import { useState, useEffect } from "react";
 import { useStore } from "@/lib/store";
 import { VaultItemCard } from "@/components/vault-item-card";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
-import { ArrowLeft, ShoppingCart, Info, Repeat, Gift, Wallet, Target, Gem } from "lucide-react";
+import { ArrowLeft, ShoppingCart, Repeat, Gift, Wallet, Target, Gem, ArrowDown, ArrowUp } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import {
   AlertDialog,
@@ -20,7 +19,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
@@ -33,9 +32,7 @@ export default function VaultPage() {
     confirmShipping, 
     hasSeenVaultInfo, 
     setHasSeenVaultInfo,
-    walletBalance,
-    earnedShots,
-    redeemEarnedShots
+    luckshots,
   } = useStore();
   
   const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
@@ -50,9 +47,6 @@ export default function VaultPage() {
     }
   }, [hasSeenVaultInfo]);
   
-  const earnedShotsValue = isClient ? (earnedShots * 0.5).toFixed(2) : "0.00";
-  const canRedeem = isClient && parseFloat(earnedShotsValue) >= 10;
-
   const getVaultItemKey = (item: { id: string; purchaseTimestamp: number }) => {
     return `${item.id}-${item.purchaseTimestamp}`;
   }
@@ -107,22 +101,6 @@ export default function VaultPage() {
     });
   }
 
-  const handleRedeem = () => {
-    if (!canRedeem) {
-      toast({
-        variant: "destructive",
-        title: "Redemption Failed",
-        description: "You need at least $10.00 in Earned Shots value to redeem.",
-      });
-      return;
-    }
-    redeemEarnedShots();
-    toast({
-      title: "Redemption Successful!",
-      description: `You've added $${earnedShotsValue} to your wallet.`,
-    });
-  }
-
   if (!isClient) {
     return (
         <div className="container mx-auto px-4 py-8">
@@ -162,14 +140,14 @@ export default function VaultPage() {
                 <Repeat className="h-8 w-8 text-primary mt-1"/>
                 <div>
                   <h3 className="font-bold">Trade-In for Value</h3>
-                  <p className="text-sm text-muted-foreground">Don't want an item anymore? Trade it in for its current market value, which fluctuates over time. The money goes straight to your wallet.</p>
+                  <p className="text-sm text-muted-foreground">Don't want an item anymore? Trade it in for its current market value, which fluctuates over time. The value in Shots goes straight to your balance.</p>
                 </div>
               </div>
               <div className="flex items-start gap-4">
                 <Gift className="h-8 w-8 text-accent mt-1"/>
                 <div>
-                  <h3 className="font-bold">Trade-In for Luckshots</h3>
-                   <p className="text-sm text-muted-foreground">Alternatively, you can trade in any item for a flat rate of <span className="font-bold text-accent-foreground">20 Luckshots</span>. A great way to restock if you're running low!</p>
+                  <h3 className="font-bold">Trade-In for a Flat Rate</h3>
+                   <p className="text-sm text-muted-foreground">Alternatively, you can trade in any item for a flat rate of <span className="font-bold text-accent-foreground">20 Shots</span>. A great way to restock if you're running low!</p>
                 </div>
               </div>
             </AlertDialogDescription>
@@ -184,8 +162,8 @@ export default function VaultPage() {
       </AlertDialog>
 
 
-      <h1 className="text-3xl font-bold mb-2">My Vault</h1>
-      <p className="text-muted-foreground mb-6">Items you've purchased. Trade them in for current value or ship them home.</p>
+      <h1 className="text-3xl font-bold mb-2">My Vault & Wallet</h1>
+      <p className="text-muted-foreground mb-6">Manage your items, balance, and shipments.</p>
       
       {vault.length === 0 && (
         <div className="text-center py-20 border-2 border-dashed rounded-lg flex flex-col items-center">
@@ -228,25 +206,24 @@ export default function VaultPage() {
              <div className="sticky top-24 space-y-6">
                 <Card>
                     <CardHeader>
-                        <CardTitle className="flex items-center gap-2"><Wallet className="text-primary"/> Wallet</CardTitle>
+                        <CardTitle className="flex items-center gap-2"><Wallet className="text-primary"/> Balance</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <p className="text-3xl font-black">${isClient ? walletBalance.toFixed(2) : '0.00'}</p>
-                        <p className="text-sm text-muted-foreground">Available to spend or withdraw.</p>
+                        <div className="flex items-baseline gap-2">
+                            <p className="text-4xl font-black">{isClient ? luckshots.toFixed(2) : '0.00'}</p>
+                            <span className="text-muted-foreground font-bold">Shots</span>
+                        </div>
+                        <p className="text-sm text-muted-foreground font-semibold">≈ ${isClient ? luckshots.toFixed(2) : '0.00'} USD</p>
                     </CardContent>
-                </Card>
-                <Card>
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-2"><Gem className="text-accent"/> Earned Shots</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <p className="text-3xl font-black">{isClient ? earnedShots : 0}</p>
-                        <p className="text-sm text-muted-foreground">Value: <span className="font-bold text-foreground">${earnedShotsValue}</span></p>
-                    </CardContent>
-                    <CardFooter>
-                        <Button className="w-full" disabled={!canRedeem} onClick={handleRedeem}>
-                            Redeem to Wallet
-                        </Button>
+                    <CardFooter className="grid grid-cols-2 gap-2">
+                      <Button className="w-full">
+                        <ArrowDown className="mr-2"/>
+                        Deposit
+                      </Button>
+                       <Button variant="outline" className="w-full">
+                        <ArrowUp className="mr-2"/>
+                        Withdraw
+                      </Button>
                     </CardFooter>
                 </Card>
                  <Card>
@@ -262,7 +239,7 @@ export default function VaultPage() {
                                             <Image src={item.imageUrl} alt={item.name} width={48} height={48} className="rounded-md object-cover" data-ai-hint={item.dataAiHint} />
                                             <div>
                                                 <p className="font-semibold text-sm">{item.name}</p>
-                                                <p className="text-xs text-muted-foreground">Paid: ${item.pricePaid.toFixed(2)}</p>
+                                                <p className="text-xs text-muted-foreground">Paid: {item.pricePaid.toFixed(2)} Shots</p>
                                             </div>
                                         </div>
                                         <Button variant="ghost" size="icon" onClick={() => handleMoveToVault(item.shippingId)}>

@@ -37,7 +37,7 @@ export function CryptoLuckGame() {
   const [isGuessLocked, setIsGuessLocked] = useState(false);
   const [isWinner, setIsWinner] = useState<boolean | null>(null);
 
-  const { luckshots, spendLuckshot, addEarnedShots } = useStore();
+  const { luckshots, spendLuckshot, addLuckshots } = useStore();
   const { toast } = useToast();
   
   const timerInterval = useRef<NodeJS.Timeout>();
@@ -90,9 +90,9 @@ export function CryptoLuckGame() {
       if (guessedDirection === actualDirection) {
         // For simplicity, any correct direction is a win for now.
         // A real implementation would compare closeness of price guesses.
-        addEarnedShots(20);
+        addLuckshots(20);
         setIsWinner(true);
-        toast({ title: "You won!", description: "Your prediction was correct. You've earned 20 shots!" });
+        toast({ title: "You won!", description: "Your prediction was correct. You've won 20 Shots!" });
       } else {
         setIsWinner(false);
         toast({ variant: "destructive", title: "You lost!", description: "Your prediction was incorrect." });
@@ -101,7 +101,7 @@ export function CryptoLuckGame() {
     return () => {
       if (timerInterval.current) clearInterval(timerInterval.current);
     }
-  }, [gameState, timer, currentPrice, marketPrice, addEarnedShots, toast, guessedDirection, guessedPrice]);
+  }, [gameState, timer, currentPrice, marketPrice, addLuckshots, toast, guessedDirection, guessedPrice]);
   
   const handleStartGame = () => {
     if (luckshots < 1) {
@@ -141,7 +141,7 @@ export function CryptoLuckGame() {
         return (
             <div className="text-center space-y-2">
                 <div className="flex items-center justify-center gap-2 text-2xl font-bold text-green-500">
-                    <Check size={28} /> You Won 20 Earned Shots!
+                    <Check size={28} /> You Won 20 Shots!
                 </div>
                 <p className="text-muted-foreground">The final price was ${finalPrice?.toFixed(2)}</p>
                 <Button onClick={handleStartGame} size="lg" className="w-full">

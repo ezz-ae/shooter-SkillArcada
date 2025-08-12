@@ -25,7 +25,7 @@ export function PoolShotGame({}: PoolShotGameProps) {
   const tableRef = useRef<HTMLDivElement>(null);
   const powerIntervalRef = useRef<NodeJS.Timeout>();
 
-  const { luckshots, spendLuckshot, addEarnedShots } = useStore();
+  const { luckshots, spendLuckshot, addLuckshots } = useStore();
   const { toast } = useToast();
 
   const prize = level * 10;
@@ -105,7 +105,7 @@ export function PoolShotGame({}: PoolShotGameProps) {
         
         const success = Math.random() < successChance;
         if (success) {
-            addEarnedShots(prize);
+            addLuckshots(prize);
             setGameState('won');
         } else {
             setGameState('lost');
@@ -176,7 +176,7 @@ export function PoolShotGame({}: PoolShotGameProps) {
              return (
                 <div className="text-center w-full space-y-2">
                     <div className="flex items-center justify-center gap-2 text-2xl font-bold text-green-500">
-                        <Check size={28} /> You Won {prize} Earned Shots!
+                        <Check size={28} /> You Won {prize} Shots!
                     </div>
                     <Button onClick={handleNextLevel} size="lg" className="w-full">
                         <TrendingUp className="mr-2 h-5 w-5"/>
@@ -205,7 +205,7 @@ export function PoolShotGame({}: PoolShotGameProps) {
             <CardTitle>Level {level}</CardTitle>
             <div className="text-right">
                 <p className="text-sm text-muted-foreground">Prize</p>
-                <p className="text-2xl font-bold text-primary">{prize} Earned Shots</p>
+                <p className="text-2xl font-bold text-primary">{prize} Shots</p>
             </div>
         </div>
       </CardHeader>

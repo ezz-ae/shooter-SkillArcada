@@ -33,7 +33,7 @@ import { cn } from "@/lib/utils";
 import { Calculator } from "./calculator";
 import { ChartContainer } from "./ui/chart";
 import { DrawPad } from "./draw-pad";
-import { Target, HelpCircle, Check } from "lucide-react";
+import { Target, HelpCircle, Check, Gem } from "lucide-react";
 import { ChessBoard } from "./chess-board";
 
 interface ShotTakerProps {
@@ -94,7 +94,7 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
   const [isChessWon, setIsChessWon] = useState(false);
 
 
-  const { addToVault, walletBalance, spendLuckshot, hasSeenShotInfo, setHasSeenShotInfo, addEarnedShots } = useStore();
+  const { addToVault, luckshots, spendLuckshot, hasSeenShotInfo, setHasSeenShotInfo, addLuckshots } = useStore();
   const { toast } = useToast();
   
   const isGame = product.game && ['reel-pause', 'riddle-calc', 'draw-passcode', 'chess-mate'].includes(product.game);
@@ -155,7 +155,7 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
     }
     
     newPrice = Math.max(1, newPrice); // Floor price
-    newPrice = Math.min(newPrice, marketPrice * 1.1); // Ceiling price
+    newPrice = Math.min(newPrice, product.marketPrice * 1.1); // Ceiling price
 
     priceState.lastChangeTime = now;
     return newPrice;
@@ -269,26 +269,24 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
 
     if (priceToPay === null) return;
     
-    if (walletBalance < priceToPay) {
-      toast({
-        variant: "destructive",
-        title: "Insufficient Funds",
-        description: `You cannot afford to vault this item for $${priceToPay.toFixed(2)}.`,
-      });
-      setIsDialogOpen(false);
-      return;
-    }
-    
-    addToVault({
+    const success = addToVault({
         ...product,
         pricePaid: priceToPay,
         purchaseTimestamp: Date.now(),
       });
 
-    toast({
-      title: "Item Vaulted!",
-      description: `${product.name} has been added to your vault for $${priceToPay.toFixed(2)}.`,
-    });
+    if (success) {
+      toast({
+        title: "Item Vaulted!",
+        description: `${product.name} has been added to your vault for ${priceToPay.toFixed(2)} Shots.`,
+      });
+    } else {
+       toast({
+        variant: "destructive",
+        title: "Insufficient Shots",
+        description: `You cannot afford to vault this item for ${priceToPay.toFixed(2)} Shots.`,
+      });
+    }
     setIsDialogOpen(false);
   };
 
@@ -315,26 +313,24 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
     const priceString = selectedReelIndices.map(i => reelNumbers[i]).join('');
     const priceToPay = Number(priceString);
 
-    if (walletBalance < priceToPay) {
-      toast({
-        variant: "destructive",
-        title: "Insufficient Funds",
-        description: `You cannot afford to vault this item for $${priceToPay.toFixed(2)}.`,
-      });
-      resetReelGame();
-      return;
-    }
-    
-    addToVault({
+    const success = addToVault({
         ...product,
         pricePaid: priceToPay,
         purchaseTimestamp: Date.now(),
       });
-
-    toast({
-      title: "Item Vaulted!",
-      description: `${product.name} has been added to your vault for $${priceToPay.toFixed(2)}.`,
-    });
+    
+    if (success) {
+      toast({
+        title: "Item Vaulted!",
+        description: `${product.name} has been added to your vault for ${priceToPay.toFixed(2)} Shots.`,
+      });
+    } else {
+        toast({
+            variant: "destructive",
+            title: "Insufficient Shots",
+            description: `You cannot afford to vault this item for ${priceToPay.toFixed(2)} Shots.`,
+        });
+    }
     resetReelGame();
   }
 
@@ -382,10 +378,10 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
                             to[1] === CHESS_MATE_MOVE.to[1];
       if (isCorrectMove) {
           setIsChessWon(true);
-          addEarnedShots(CHESS_PRIZE_SHOTS);
+          addLuckshots(CHESS_PRIZE_SHOTS);
           toast({
             title: "Checkmate!",
-            description: `You won ${CHESS_PRIZE_SHOTS} Earned Shots!`,
+            description: `You won ${CHESS_PRIZE_SHOTS} Shots!`,
           });
       } else {
           toast({
@@ -463,7 +459,7 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
                 <Calculator value={calculatorValue} onValueChange={setCalculatorValue} />
                  {isCorrectAnswer ? (
                      <Button onClick={handleRiddleShot} className="w-full h-12 text-lg font-bold">
-                        Take the Shot for ${RIDDLE_ANSWER}!
+                        Take the Shot for {RIDDLE_ANSWER} Shots!
                     </Button>
                  ) : (
                     <Button onClick={handleRiddleStart} className="w-full h-12 text-lg font-bold">Start Riddle</Button>
@@ -479,7 +475,7 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
                 <DrawPad onPatternComplete={setDrawPadValue} />
                 {isCorrectAnswer ? (
                     <Button onClick={handleDrawPasscodeShot} className="w-full h-12 text-lg font-bold">
-                        Take the Shot for ${DRAW_PASSCODE_PRICE}!
+                        Take the Shot for {DRAW_PASSCODE_PRICE} Shots!
                     </Button>
                 ) : (
                     <Button onClick={handleDrawPasscodeStart} className="w-full h-12 text-lg font-bold">Start Challenge</Button>
@@ -537,10 +533,13 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
                 </ChartContainer>
             </div>
             <div className="relative z-10 flex flex-col items-center justify-center h-full">
-              <span className={cn(
-                "font-black tracking-wider text-foreground shimmer-text",
-                 view === 'full' ? "text-3xl lg:text-4xl" : "text-4xl lg:text-6xl"
-                )} style={{'--trend-color': discountPercent > 0 ? 'hsl(var(--accent))' : 'hsl(var(--destructive))'} as React.CSSProperties}>${currentPrice.toFixed(2)}</span>
+              <div className="flex items-center gap-2">
+                <Gem className="h-6 w-6 text-primary" />
+                <span className={cn(
+                  "font-black tracking-wider text-foreground shimmer-text",
+                  view === 'full' ? "text-3xl lg:text-4xl" : "text-4xl lg:text-6xl"
+                  )} style={{'--trend-color': discountPercent > 0 ? 'hsl(var(--accent))' : 'hsl(var(--destructive))'} as React.CSSProperties}>{currentPrice.toFixed(2)}</span>
+              </div>
               <span className={cn("font-bold text-sm", discountColor)}>
                   {discountPercent > 0 ? `+${discountPercent.toFixed(1)}%` : `${discountPercent.toFixed(1)}%`}
               </span>
@@ -675,8 +674,11 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
                         ) : (
                            <div className="bg-black/50 p-4 rounded-lg text-center">
                                 <div className="text-sm text-muted-foreground">Captured Price</div>
-                                <div className="relative text-3xl font-black text-white shimmer-text" style={{'--trend-color': 'hsl(var(--primary))'} as React.CSSProperties}>
-                                    ${capturedPrices[0]?.toFixed(2)}
+                                <div className="flex items-center justify-center gap-2">
+                                  <Gem className="h-6 w-6 text-primary" />
+                                  <div className="relative text-3xl font-black text-white shimmer-text" style={{'--trend-color': 'hsl(var(--primary))'} as React.CSSProperties}>
+                                      {capturedPrices[0]?.toFixed(2)}
+                                  </div>
                                 </div>
                             </div>
                         )}

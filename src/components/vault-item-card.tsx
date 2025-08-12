@@ -6,7 +6,7 @@ import Image from "next/image";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
 import { useStore, type VaultItem } from "@/lib/store";
-import { TrendingDown, TrendingUp, Hourglass, Check, Gift, DollarSign } from "lucide-react";
+import { TrendingDown, TrendingUp, Hourglass, Check, Gift, DollarSign, Gem } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import {
   AlertDialog,
@@ -80,14 +80,15 @@ export function VaultItemCard({
     };
   }, [currentValue, item.purchaseTimestamp, isCoolingDown, item.marketPrice]);
 
-  const handleTradeIn = (tradeInType: 'cash' | 'shots') => {
+  const handleTradeIn = (tradeInType: 'luckshots' | 'shots') => {
     const vaultItemKey = `${item.id}-${item.purchaseTimestamp}`;
-    tradeIn(vaultItemKey, currentValue, tradeInType);
+    const tradeInValue = tradeInType === 'luckshots' ? Math.round(currentValue) : 20;
+    tradeIn(vaultItemKey, tradeInValue, tradeInType);
 
-    if (tradeInType === 'cash') {
+    if (tradeInType === 'luckshots') {
        toast({
         title: "Trade-in Successful!",
-        description: `You received $${currentValue.toFixed(2)} in wallet balance for ${item.name}.`,
+        description: `You received ${tradeInValue} Shots for ${item.name}.`,
       });
     } else {
         toast({
@@ -135,19 +136,19 @@ export function VaultItemCard({
       <CardContent className="flex-grow p-4 pb-2">
         <h3 className="font-bold">{item.name}</h3>
         <p className="text-sm text-muted-foreground">
-          Paid: ${item.pricePaid.toFixed(2)}
+          Paid: {item.pricePaid.toFixed(2)} Shots
         </p>
         <div className="mt-2">
-          <p className="text-sm font-semibold">Current Value:</p>
+          <p className="text-sm font-semibold">Current Value (Shots):</p>
           <div className="flex items-baseline gap-2">
             <span className="text-2xl font-black text-primary">
-              ${currentValue.toFixed(2)}
+              {currentValue.toFixed(2)}
             </span>
             {priceTrend === "up" && <TrendingUp className="h-4 w-4 text-green-500" />}
             {priceTrend === "down" && <TrendingDown className="h-4 w-4 text-destructive" />}
           </div>
           <p className={`text-sm font-bold ${profitColor}`}>
-            {profitLoss >= 0 ? "+" : ""}${profitLoss.toFixed(2)} (
+            {profitLoss >= 0 ? "+" : ""}{profitLoss.toFixed(2)} (
             {profitLossPercent.toFixed(1)}%)
           </p>
         </div>
@@ -173,17 +174,17 @@ export function VaultItemCard({
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <div className="grid grid-cols-2 gap-4 py-4">
-                <AlertDialogAction onClick={() => handleTradeIn('cash')} className="h-auto flex flex-col gap-2 p-4">
-                    <DollarSign className="h-8 w-8 text-primary"/>
+                <AlertDialogAction onClick={() => handleTradeIn('luckshots')} className="h-auto flex flex-col gap-2 p-4">
+                    <Gem className="h-8 w-8 text-primary"/>
                     <div className="flex flex-col items-center">
-                        <span className="font-bold text-lg">${currentValue.toFixed(2)}</span>
-                        <span className="text-xs text-primary-foreground/80">To Wallet</span>
+                        <span className="font-bold text-lg">{Math.round(currentValue)} Shots</span>
+                        <span className="text-xs text-primary-foreground/80">To Balance</span>
                     </div>
                 </AlertDialogAction>
                 <AlertDialogAction onClick={() => handleTradeIn('shots')} className="h-auto flex flex-col gap-2 p-4">
                     <Gift className="h-8 w-8 text-accent"/>
                      <div className="flex flex-col items-center">
-                        <span className="font-bold text-lg">20 Luckshots</span>
+                        <span className="font-bold text-lg">20 Shots</span>
                         <span className="text-xs text-primary-foreground/80">To Balance</span>
                     </div>
                 </AlertDialogAction>
