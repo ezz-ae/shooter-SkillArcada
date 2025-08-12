@@ -39,6 +39,7 @@ export function Footer() {
         <div className="md:col-span-1">
             <h3 className="font-bold text-lg mb-2">Support</h3>
              <ul className="space-y-2">
+                <li><Link href="/learning-center" className="text-sm text-muted-foreground hover:text-foreground">Learning Center</Link></li>
                 <li><Link href="#" className="text-sm text-muted-foreground hover:text-foreground">Contact Us</Link></li>
                 <li><Link href="#" className="text-sm text-muted-foreground hover:text-foreground">FAQ</Link></li>
                 <li><Link href="/terms" className="text-sm text-muted-foreground hover:text-foreground">Terms of Service</Link></li>
