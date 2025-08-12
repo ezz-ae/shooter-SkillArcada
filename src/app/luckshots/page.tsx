@@ -22,8 +22,8 @@ export default function LuckshotsPage() {
         <h1 className="text-4xl font-black tracking-tight lg:text-5xl">
           Luckshots
         </h1>
-        <p className="mt-2 text-lg text-muted-foreground">
-          shot your luck price, all items  in this page are in an ongoing price chaging with killer disscounts up to 99% off. Try to press " shot" for more
+        <p className="mt-2 text-lg text-muted-foreground max-w-2xl mx-auto">
+          Your shot at a killer discount! Item prices are constantly changing. Watch the charts, feel the luck, and hit the 'Shot' button at the perfect moment to capture a low price.
         </p>
       </div>
 

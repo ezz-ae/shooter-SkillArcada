@@ -22,8 +22,8 @@ export default function BrainshotsPage() {
         <h1 className="text-4xl font-black tracking-tight lg:text-5xl">
           Brainshots
         </h1>
-        <p className="mt-2 text-lg text-muted-foreground">
-          Solve puzzles and challenges to unlock incredible prices.
+        <p className="mt-2 text-lg text-muted-foreground max-w-2xl mx-auto">
+          Think you're sharp? Solve puzzles, riddles, and skill-based challenges to unlock incredible, fixed-price deals on amazing items.
         </p>
       </div>
 

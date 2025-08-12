@@ -2,7 +2,7 @@
 "use client";
 
 import Link from "next/link";
-import { Package, BrainCircuit, Heart, Swords, User, LogOut, BookOpen } from "lucide-react";
+import { Package, BrainCircuit, Heart, Swords, User, LogOut, BookOpen, Sparkles } from "lucide-react";
 import { Button } from "./ui/button";
 import { useStore } from "@/lib/store";
 import { useEffect, useState } from "react";
@@ -60,13 +60,16 @@ export function Header() {
           </Link>
           <nav className="hidden md:flex items-center space-x-1">
              <Button variant="ghost" asChild>
-                <Link href="/shotershots">ShoterShots</Link>
+                <Link href="/luckshots">Luckshots</Link>
              </Button>
              <Button variant="ghost" asChild>
                 <Link href="/brainshots">Brainshots</Link>
              </Button>
              <Button variant="ghost" asChild>
                 <Link href="/pool-shot">Pool Shot</Link>
+             </Button>
+             <Button variant="ghost" asChild>
+                <Link href="/ai-adventure">AI Adventure</Link>
              </Button>
              <Button variant="ghost" asChild>
                 <Link href="/learning-center">How to Earn</Link>
