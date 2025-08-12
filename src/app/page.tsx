@@ -89,7 +89,7 @@ export default function Home() {
             
             <div className={cn("space-y-16", showTermsDialog && "blur-sm pointer-events-none")}>
                 
-                <section>
+                <section className="py-12 md:py-24">
                     <DiceGame />
                 </section>
                 

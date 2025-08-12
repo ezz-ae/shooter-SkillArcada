@@ -50,13 +50,13 @@ export function Dice({ isRolling, value, onRollComplete, className }: DiceProps)
     return (
         <div className={cn("flex items-center justify-center", className)}>
              <div className={cn(
-                "h-24 w-24 rounded-lg border-2 flex items-center justify-center transition-all duration-300",
+                "h-28 w-28 sm:h-36 sm:w-36 rounded-lg border-2 flex items-center justify-center transition-all duration-300 shadow-lg",
                 value ? "bg-primary/10 border-primary" : "bg-muted border-dashed",
              )}>
                 <DieIcon className={cn(
-                    "transition-all duration-300",
+                    "transition-transform duration-300",
                     isAnimating ? "animate-tumble" : "text-primary",
-                    "h-16 w-16"
+                    "h-20 w-20 sm:h-24 sm:w-24"
                 )} />
             </div>
         </div>
