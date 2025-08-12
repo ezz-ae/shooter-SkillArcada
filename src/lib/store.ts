@@ -17,10 +17,15 @@ interface StoreState {
   shippingCart: ShippingItem[];
   walletBalance: number;
   shots: number;
+  hasSeenShotInfo: boolean;
+  hasSeenVaultInfo: boolean;
+  hasTradedForShots: boolean;
+  setHasSeenShotInfo: (hasSeen: boolean) => void;
+  setHasSeenVaultInfo: (hasSeen: boolean) => void;
   addShots: (amount: number) => void;
   spendShot: () => boolean;
   addToVault: (item: VaultItem) => void;
-  tradeIn: (vaultItemKey: string, tradeInValue: number) => void;
+  tradeIn: (vaultItemKey: string, tradeInValue: number, tradeInType: 'cash' | 'shots') => void;
   moveToShipping: (vaultItemKeys: string[]) => boolean;
   removeFromShipping: (shippingId: string) => void;
   confirmShipping: () => void;
@@ -38,6 +43,12 @@ export const useStore = create<StoreState>()(
       shippingCart: [],
       walletBalance: 10000.0,
       shots: 5,
+      hasSeenShotInfo: false,
+      hasSeenVaultInfo: false,
+      hasTradedForShots: false,
+
+      setHasSeenShotInfo: (hasSeen: boolean) => set({ hasSeenShotInfo: hasSeen }),
+      setHasSeenVaultInfo: (hasSeen: boolean) => set({ hasSeenVaultInfo: hasSeen }),
 
       addShots: (amount) => {
         set((state) => ({ shots: state.shots + amount }));
@@ -68,11 +79,19 @@ export const useStore = create<StoreState>()(
         }
       },
 
-      tradeIn: (vaultItemKey, tradeInValue) => {
-        set((state) => ({
-          vault: state.vault.filter((item) => getVaultItemKey(item) !== vaultItemKey),
-          walletBalance: state.walletBalance + tradeInValue,
-        }));
+      tradeIn: (vaultItemKey, tradeInValue, tradeInType) => {
+        if (tradeInType === 'cash') {
+          set((state) => ({
+            vault: state.vault.filter((item) => getVaultItemKey(item) !== vaultItemKey),
+            walletBalance: state.walletBalance + tradeInValue,
+          }));
+        } else if (tradeInType === 'shots') {
+          set((state) => ({
+            vault: state.vault.filter((item) => getVaultItemKey(item) !== vaultItemKey),
+            shots: state.shots + 20,
+            hasTradedForShots: true,
+          }));
+        }
       },
       
       moveToShipping: (vaultItemKeys) => {

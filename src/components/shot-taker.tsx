@@ -33,6 +33,7 @@ import { cn } from "@/lib/utils";
 import { Calculator } from "./calculator";
 import { ChartContainer } from "./ui/chart";
 import { DrawPad } from "./draw-pad";
+import { Target, HelpCircle } from "lucide-react";
 
 interface ShotTakerProps {
   product: Product;
@@ -53,6 +54,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
     }))
   );
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isInfoDialogOpen, setIsInfoDialogOpen] = useState(false);
   const [capturedPrices, setCapturedPrices] = useState<number[]>([]);
   const [selectedPrice, setSelectedPrice] = useState<number | null>(null);
   const [capturedTime, setCapturedTime] = useState<Date | null>(null);
@@ -74,7 +76,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
   const [drawPadValue, setDrawPadValue] = useState<number[]>([]);
 
 
-  const { addToVault, walletBalance, spendShot } = useStore();
+  const { addToVault, walletBalance, spendShot, hasSeenShotInfo, setHasSeenShotInfo } = useStore();
   const { toast } = useToast();
   
   const getNewPrice = (price: number) => {
@@ -150,6 +152,11 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
   }
   
   const handleTakeShot = (shotAction: () => void) => {
+    if (!hasSeenShotInfo) {
+      setIsInfoDialogOpen(true);
+      return;
+    }
+
     const shotTaken = spendShot();
     if (shotTaken) {
       shotAction();
@@ -157,7 +164,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
       toast({
         variant: "destructive",
         title: "Out of Shots!",
-        description: `You need at least 1 shot to play. Go to your vault to buy more.`,
+        description: `You need shots to play. Go to your vault to trade-in items for more.`,
       });
     }
   }
@@ -444,6 +451,36 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
           )}
         </CardFooter>
       </CardComponent>
+
+      <AlertDialog open={isInfoDialogOpen} onOpenChange={setIsInfoDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>How to Play</AlertDialogTitle>
+            <AlertDialogDescription className="space-y-4 pt-4">
+               <div className="flex items-start gap-4">
+                  <Target className="h-8 w-8 text-primary mt-1"/>
+                  <div>
+                    <h3 className="font-bold">Take a Shot</h3>
+                    <p className="text-sm text-muted-foreground">Click the 'Shot' button on an item to lock in its current price. This costs 1 Shot from your balance.</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <HelpCircle className="h-8 w-8 text-accent mt-1"/>
+                   <div>
+                    <h3 className="font-bold">Vault or Let Go</h3>
+                    <p className="text-sm text-muted-foreground">Once you take a shot, you can choose to buy the item for the captured price and send it to your Vault, or you can let it go.</p>
+                  </div>
+                </div>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction onClick={() => {
+              setHasSeenShotInfo(true);
+              setIsInfoDialogOpen(false);
+            }}>Let's Go!</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       <AlertDialog open={isDialogOpen} onOpenChange={handleCloseDialog}>
              <AlertDialogContent onEscapeKeyDown={handleCloseDialog}>

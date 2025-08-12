@@ -7,7 +7,7 @@ import { VaultItemCard } from "@/components/vault-item-card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
-import { ArrowLeft, ShoppingCart } from "lucide-react";
+import { ArrowLeft, ShoppingCart, Info, Repeat, Gift } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import {
   AlertDialog,
@@ -24,14 +24,18 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import Link from "next/link";
 
 export default function VaultPage() {
-  const { vault, shippingCart, moveToShipping, removeFromShipping, confirmShipping } = useStore();
+  const { vault, shippingCart, moveToShipping, removeFromShipping, confirmShipping, hasSeenVaultInfo, setHasSeenVaultInfo } = useStore();
   const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
   const [isClient, setIsClient] = useState(false);
   const { toast } = useToast();
+  const [isInfoOpen, setIsInfoOpen] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
-  }, []);
+    if (!hasSeenVaultInfo) {
+      setIsInfoOpen(true);
+    }
+  }, [hasSeenVaultInfo]);
 
   const getVaultItemKey = (item: { id: string; purchaseTimestamp: number }) => {
     return `${item.id}-${item.purchaseTimestamp}`;
@@ -112,6 +116,42 @@ export default function VaultPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <AlertDialog open={isInfoOpen} onOpenChange={(open) => {
+        if (!open) {
+          setIsInfoOpen(false);
+          setHasSeenVaultInfo(true);
+        }
+      }}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Welcome to Your Vault!</AlertDialogTitle>
+            <AlertDialogDescription className="space-y-4 pt-4">
+              <div className="flex items-start gap-4">
+                <Repeat className="h-8 w-8 text-primary mt-1"/>
+                <div>
+                  <h3 className="font-bold">Trade-In for Value</h3>
+                  <p className="text-sm text-muted-foreground">Don't want an item anymore? Trade it in for its current market value, which fluctuates over time. The money goes straight to your wallet.</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-4">
+                <Gift className="h-8 w-8 text-accent mt-1"/>
+                <div>
+                  <h3 className="font-bold">Trade-In for Shots</h3>
+                   <p className="text-sm text-muted-foreground">Alternatively, you can trade in any item for a flat rate of <span className="font-bold text-accent-foreground">20 Shots</span>. A great way to restock if you're running low!</p>
+                </div>
+              </div>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction onClick={() => {
+              setIsInfoOpen(false);
+              setHasSeenVaultInfo(true);
+            }}>Got It!</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+
       <h1 className="text-3xl font-bold mb-2">My Vault</h1>
       <p className="text-muted-foreground mb-6">Items you've purchased. Trade them in for current value or ship them home.</p>
       
@@ -207,5 +247,3 @@ export default function VaultPage() {
     </div>
   );
 }
-
-    

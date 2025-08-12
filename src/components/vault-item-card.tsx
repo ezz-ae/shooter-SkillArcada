@@ -1,12 +1,12 @@
 
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
 import { useStore, type VaultItem } from "@/lib/store";
-import { TrendingDown, TrendingUp, Hourglass, Check } from "lucide-react";
+import { TrendingDown, TrendingUp, Hourglass, Check, Gift, DollarSign } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import {
   AlertDialog,
@@ -20,7 +20,6 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { cn } from "@/lib/utils";
-import type { Product } from "@/lib/products";
 
 interface VaultItemCardProps {
   item: VaultItem;
@@ -50,7 +49,6 @@ export function VaultItemCard({
   
   // This effect simulates the current market value of the item changing over time.
   useEffect(() => {
-    // In a real app, this would come from a WebSocket or regular polling.
     const updatePriceInterval = 5000 + Math.random() * 2000;
     const interval = setInterval(() => {
       const volatility = 0.1; // 10% volatility
@@ -58,11 +56,8 @@ export function VaultItemCard({
       const changeAmount = currentValue * changePercent;
       
       let newValue = currentValue + changeAmount;
-      // Ensure the price doesn't go below a certain threshold of the original market price
       newValue = Math.max(item.marketPrice * 0.5, newValue); 
-      // Ensure price does not go to 0 or negative
       newValue = Math.max(1, newValue);
-
 
       if (newValue > currentValue) setPriceTrend("up");
       else if (newValue < currentValue) setPriceTrend("down");
@@ -85,15 +80,21 @@ export function VaultItemCard({
     };
   }, [currentValue, item.purchaseTimestamp, isCoolingDown, item.marketPrice]);
 
-  const handleTradeIn = () => {
+  const handleTradeIn = (tradeInType: 'cash' | 'shots') => {
     const vaultItemKey = `${item.id}-${item.purchaseTimestamp}`;
-    tradeIn(vaultItemKey, currentValue);
-    toast({
-      title: "Trade-in Successful!",
-      description: `You received $${currentValue.toFixed(
-        2
-      )} in wallet balance for ${item.name}.`,
-    });
+    tradeIn(vaultItemKey, currentValue, tradeInType);
+
+    if (tradeInType === 'cash') {
+       toast({
+        title: "Trade-in Successful!",
+        description: `You received $${currentValue.toFixed(2)} in wallet balance for ${item.name}.`,
+      });
+    } else {
+        toast({
+            title: "Trade-in Successful!",
+            description: `You received 20 Shots for ${item.name}.`,
+        });
+    }
   };
 
   const profitLoss = currentValue - item.pricePaid;
@@ -168,19 +169,27 @@ export function VaultItemCard({
               <AlertDialogHeader>
                 <AlertDialogTitle>Confirm Trade-In?</AlertDialogTitle>
                 <AlertDialogDescription>
-                  You will trade in {item.name} for its current value of{" "}
-                  <span className="font-bold text-foreground">
-                    ${currentValue.toFixed(2)}
-                  </span>
-                  . This amount will be added to your wallet. This action cannot be
-                  undone.
+                    Choose your reward for trading in <strong>{item.name}</strong>. This action cannot be undone.
                 </AlertDialogDescription>
               </AlertDialogHeader>
+              <div className="grid grid-cols-2 gap-4 py-4">
+                <AlertDialogAction onClick={() => handleTradeIn('cash')} className="h-auto flex flex-col gap-2 p-4">
+                    <DollarSign className="h-8 w-8 text-primary"/>
+                    <div className="flex flex-col items-center">
+                        <span className="font-bold text-lg">${currentValue.toFixed(2)}</span>
+                        <span className="text-xs text-primary-foreground/80">To Wallet</span>
+                    </div>
+                </AlertDialogAction>
+                <AlertDialogAction onClick={() => handleTradeIn('shots')} className="h-auto flex flex-col gap-2 p-4">
+                    <Gift className="h-8 w-8 text-accent"/>
+                     <div className="flex flex-col items-center">
+                        <span className="font-bold text-lg">20 Shots</span>
+                        <span className="text-xs text-primary-foreground/80">To Balance</span>
+                    </div>
+                </AlertDialogAction>
+              </div>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={handleTradeIn}>
-                  Confirm Trade-In
-                </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
