@@ -378,5 +378,3 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
     </>
   );
 }
-
-    
