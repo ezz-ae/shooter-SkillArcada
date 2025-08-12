@@ -3,6 +3,7 @@
 
 import { ShotTaker } from "@/components/shot-taker";
 import { mockProducts } from "@/lib/products";
+import { cn } from "@/lib/utils";
 
 export default function Home() {
   const gameProduct = mockProducts.find(p => p.game === 'digit-pause');
@@ -21,16 +22,32 @@ export default function Home() {
 
       <section
         id="products"
-        className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+        className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4"
       >
         {gameProduct && (
-          <div className="sm:col-span-2 lg:col-span-2 xl:col-span-2">
+          <div className="sm:col-span-2 lg:col-span-2">
              <ShotTaker product={gameProduct} />
           </div>
         )}
-        {regularProducts.map((product) => (
-          <ShotTaker key={product.id} product={product} />
-        ))}
+        {regularProducts.map((product, index) => {
+            let className = "";
+            // Let's create a more interesting layout
+            switch (index % 6) {
+                case 1:
+                    className = "lg:col-span-2";
+                    break;
+                case 3:
+                     className = "lg:row-span-2";
+                    break;
+                case 4:
+                    className = "lg:col-span-2";
+                    break;
+            }
+          return (
+          <div key={product.id} className={className}>
+            <ShotTaker product={product} />
+          </div>
+        )})}
       </section>
     </div>
   );

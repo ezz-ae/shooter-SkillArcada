@@ -246,11 +246,11 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
                     <button
                       key={index}
                       onClick={() => handleDigitClick(index)}
-                      disabled={!isClickable}
+                      disabled={!isGameActive || !isClickable}
                       className={cn(
                         "h-16 w-1/3 rounded-lg flex items-center justify-center text-5xl font-black tabular-nums transition-all bg-secondary text-primary-foreground",
-                        isClickable && "cursor-pointer hover:bg-primary/80",
-                        !isClickable && "cursor-not-allowed opacity-50"
+                        isGameActive && isClickable && "cursor-pointer hover:bg-primary/80",
+                        !isGameActive || !isClickable && "cursor-not-allowed opacity-50",
                       )}
                     >
                       {lockedDigits.length > index ? '?' : digits[index]}
@@ -276,7 +276,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
     <>
       <CardComponent
         className={cn(
-          "flex flex-col overflow-hidden transition-all duration-300 group relative",
+          "flex h-full flex-col overflow-hidden transition-all duration-300 group relative",
           !isPage && "shadow-lg",
           isGameCard && "border-primary/50 border-2"
         )}
