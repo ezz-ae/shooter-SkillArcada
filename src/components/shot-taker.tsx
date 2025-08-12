@@ -252,15 +252,16 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
           </div>
           <div className="flex w-full justify-center items-center gap-2 relative">
               {[0, 1, 2].map(index => {
-                  const isClickable = lockedDigits.length === index;
+                  const isClickable = isGameActive && lockedDigits.length === index;
                   return (
                     <button
                       key={index}
                       onClick={() => handleDigitClick(index)}
-                      disabled={!isGameActive || !isClickable}
+                      disabled={!isClickable}
                       className={cn(
                         "h-16 w-1/3 rounded-lg flex items-center justify-center text-5xl font-black tabular-nums transition-all bg-secondary text-primary-foreground",
-                        isGameActive && isClickable && "cursor-pointer hover:bg-primary/80",
+                        isClickable && "cursor-pointer hover:bg-primary/80",
+                        lockedDigits.includes(index) && "!bg-secondary"
                       )}
                     >
                       {lockedDigits.length > index ? '?' : digits[index]}
@@ -346,7 +347,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
             >
               <div className="absolute inset-0 moving-gradient"></div>
               <div className="relative flex items-baseline w-full justify-center">
-                   <span className={cn("font-black", product.game === 'multi-shot' ? "text-xl" : "text-lg")}>
+                   <span className={cn("font-black", product.game === 'multi-shot' ? "text-2xl" : "text-lg")}>
                     {product.game === 'multi-shot' ? 'x3 Shot' : 'Shot'}
                    </span>
               </div>
