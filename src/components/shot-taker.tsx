@@ -230,23 +230,6 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
               </CardTitle>
             </Link>
           )}
-          
-          <div className="flex items-center gap-1">
-            <p className="text-sm font-semibold text-muted-foreground">Value:</p>
-            <div className="flex items-center">
-              {[...Array(3)].map((_, i) => (
-                <Star
-                  key={i}
-                  className={cn(
-                    "h-4 w-4",
-                    i < product.value
-                      ? "text-accent fill-accent"
-                      : "text-muted-foreground/30"
-                  )}
-                />
-              ))}
-            </div>
-          </div>
 
           {isPage && (
              <div className="text-sm text-muted-foreground">Current Market Price</div>
