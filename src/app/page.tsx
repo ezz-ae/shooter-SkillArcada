@@ -121,7 +121,7 @@ export default function Home() {
               </AlertDialogContent>
             </AlertDialog>
             
-            <div className={cn("space-y-12", showTermsDialog && "blur-sm pointer-events-none")}>
+            <div className={cn("space-y-16", showTermsDialog && "blur-sm pointer-events-none")}>
                 
                 {/* Main Content: Challenges and League */}
                 <div className="space-y-8">
@@ -137,7 +137,7 @@ export default function Home() {
                     </section>
                     
                     {/* Trending Games */}
-                     <section className="mt-8">
+                     <section>
                          <h2 className="text-2xl font-bold mb-4">Trending games</h2>
                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
                             {iphoneProduct && 
