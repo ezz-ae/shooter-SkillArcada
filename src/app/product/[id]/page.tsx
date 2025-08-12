@@ -33,7 +33,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
             data-ai-hint={product.dataAiHint}
           />
            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent p-4 pt-8">
-              <h3 className="text-white text-lg font-bold text-center">{product.name}</h3>
+              <h3 className="text-white text-lg font-bold text-center">{product.subtitle}</h3>
            </div>
         </div>
         <div className="flex flex-col">
@@ -44,5 +44,3 @@ export default function ProductPage({ params }: { params: { id: string } }) {
     </div>
   );
 }
-
-    
