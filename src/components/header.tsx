@@ -2,7 +2,7 @@
 "use client";
 
 import Link from "next/link";
-import { Package, Target, BrainCircuit, Heart, Swords, Dice5, User as UserIcon, LogIn, LogOut } from "lucide-react";
+import { Package, Target, BrainCircuit, Heart, Swords, Dice5, User as UserIcon, LogIn, LogOut, LineChart } from "lucide-react";
 import { Button } from "./ui/button";
 import { useStore } from "@/lib/store";
 import { useEffect, useState } from "react";
@@ -37,6 +37,7 @@ export function Header() {
   const navItems = [
     { href: "/luckshots", label: "Luckshots", icon: Dice5 },
     { href: "/brainshots", label: "Brainshots", icon: BrainCircuit },
+    { href: "/crypto-luck", label: "Crypto Luck", icon: LineChart },
     { href: "/pool-shot", label: "Pool Shot", icon: Swords },
     { href: "/luckgirls", label: "Luckgirls", icon: Heart },
   ];
