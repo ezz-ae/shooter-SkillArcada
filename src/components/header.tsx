@@ -18,6 +18,7 @@ import {
   DropdownMenuGroup,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "./ui/avatar";
+import Image from "next/image";
 
 export function Header() {
   const { shots } = useStore();
@@ -37,22 +38,7 @@ export function Header() {
       <div className="container flex h-16 items-center">
         <div className="mr-auto flex items-center">
           <Link href="/" className="mr-6 flex items-center space-x-2">
-            <svg
-              role="img"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="h-6 w-6 text-primary"
-            >
-              <title>ShoterShots Logo</title>
-              <path d="M12 2L14.39 8.36L21 9.27L16.5 13.5L18 19.82L12 16.73L6 19.82L7.5 13.5L3 9.27L9.61 8.36L12 2z" />
-              <circle cx="12" cy="12" r="10" />
-            </svg>
+            <Image src="https://firebasestorage.googleapis.com/v0/b/reodywellness.firebasestorage.app/o/Untitled-4%20(14).png?alt=media&token=01417f92-30fc-4a5a-bb8a-69f3101811f0" alt="ShoterShots Logo" width={32} height={32} />
             <span className="font-bold">ShoterShots</span>
           </Link>
           <nav className="hidden md:flex items-center space-x-1">
