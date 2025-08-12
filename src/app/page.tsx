@@ -151,7 +151,7 @@ export default function Home() {
                                      <ShotTaker product={btcProduct} />
                                 </div>
                             }
-                             <Card className="shadow-2xl border-accent/50 border-2 flex flex-col justify-between relative overflow-hidden">
+                             <Card className="shadow-2xl border-accent/50 border-2 flex flex-col justify-center relative overflow-hidden text-center">
                                 <Image 
                                     src="https://firebasestorage.googleapis.com/v0/b/reodywellness.firebasestorage.app/o/billiard-games.jpeg?alt=media&token=de4a117f-42a2-458b-a3c1-ee185eb544fc" 
                                     alt="Pool table with balls arranged"
@@ -160,19 +160,21 @@ export default function Home() {
                                     className="object-cover blur-sm"
                                 />
                                 <div className="absolute inset-0 bg-black/50" />
-                                <div className="relative flex flex-col h-full p-6 text-white text-center justify-between">
+                                <div className="relative flex flex-col h-full p-6 text-white justify-center">
                                     <CardHeader className="p-0">
-                                        <Trophy className="mx-auto h-16 w-16 text-accent animate-pulse"/>
-                                        <CardTitle className="text-3xl font-black text-shadow-lg">Pool Luck Pros</CardTitle>
+                                        <Trophy className="mx-auto h-12 w-12 text-accent animate-pulse"/>
+                                        <CardTitle className="text-3xl font-black text-shadow-lg mt-2">Pool Luck Pros</CardTitle>
                                         <CardDescription className="text-lg text-white/80">New Season is available</CardDescription>
-                                        <div className="mt-4">
-                                            <p className="text-7xl font-black text-primary text-shadow-lg">One Ethereum</p>
-                                            <p className="font-semibold text-white/90">Grand Prize</p>
-                                        </div>
                                     </CardHeader>
                                     <CardContent className="flex-grow flex flex-col justify-center p-0 my-4">
-                                        <div className="text-white/80 px-4">
-                                            <p>Join the top 32 players from the globe in an open chat event with a live audience.</p>
+                                        <div className="space-y-2">
+                                            <div>
+                                                <p className="text-6xl font-black text-primary text-shadow-lg">One Ethereum</p>
+                                                <p className="font-semibold text-white/90">Grand Prize</p>
+                                            </div>
+                                            <div className="text-white/80 px-4 pt-4">
+                                                <p>Join the top 32 players from the globe in an open chat event with a live audience.</p>
+                                            </div>
                                         </div>
                                     </CardContent>
                                     <CardFooter className="p-0">
@@ -234,3 +236,5 @@ export default function Home() {
         </div>
     );
 }
+
+    
