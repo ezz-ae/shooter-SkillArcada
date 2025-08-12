@@ -4,40 +4,45 @@
 import { useState, useMemo } from 'react';
 import { Button } from './ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
-import { Dices, PlayCircle, HelpCircle, Gamepad2, BrainCircuit, Dice1, Dice2, Dice3, Dice4, Dice5, Dice6 } from 'lucide-react';
+import { Dices, PlayCircle, HelpCircle, Gamepad2, BrainCircuit } from 'lucide-react';
 import { cn } from '@/lib/utils';
-
-const diceIcons = [Dice1, Dice2, Dice3, Dice4, Dice5, Dice6];
+import { Dice } from './dice';
 
 export function DiceGame() {
-    const [rolls, setRolls] = useState<number[]>([]);
+    const [rolls, setRolls] = useState<(number | null)[]>([null, null, null]);
+    const [currentRollIndex, setCurrentRollIndex] = useState(0);
     const [isRolling, setIsRolling] = useState(false);
     
-    const MAX_ROLLS = 3;
-    const rollsLeft = MAX_ROLLS - rolls.length;
+    const rollsLeft = rolls.filter(r => r === null).length;
+    const isGameComplete = rollsLeft === 0;
 
     const handleRoll = () => {
-        if (rollsLeft <= 0 || isRolling) return;
-
+        if (isGameComplete || isRolling) return;
         setIsRolling(true);
-        setTimeout(() => {
-            const newRoll = Math.floor(Math.random() * 6) + 1;
-            setRolls(prev => [...prev, newRoll]);
-            setIsRolling(false);
-        }, 800);
     };
 
+    const handleRollComplete = (value: number) => {
+        setRolls(prev => {
+            const newRolls = [...prev];
+            newRolls[currentRollIndex] = value;
+            return newRolls;
+        });
+        setCurrentRollIndex(prev => prev + 1);
+        setIsRolling(false);
+    }
+
     const handleReset = () => {
-        setRolls([]);
+        setRolls([null, null, null]);
+        setCurrentRollIndex(0);
     };
 
     const luckScore = useMemo(() => {
-        if (rolls.length < MAX_ROLLS) return null;
-        const total = rolls.reduce((sum, roll) => sum + roll, 0);
+        if (!isGameComplete) return null;
+        const total = rolls.reduce((sum, roll) => sum + (roll || 0), 0);
         if (total <= 6) return 'low';
         if (total <= 12) return 'medium';
         return 'high';
-    }, [rolls]);
+    }, [rolls, isGameComplete]);
 
     const renderLuckActions = () => {
         if (!luckScore) return null;
@@ -70,33 +75,20 @@ export function DiceGame() {
                 </CardDescription>
             </CardHeader>
             <CardContent>
-                <div className="flex justify-center items-center gap-4 h-24">
-                    {[...Array(MAX_ROLLS)].map((_, i) => {
-                        const rollValue = rolls[i];
-                        const isRolled = rollValue !== undefined;
-                        const isCurrentlyRolling = i === rolls.length && isRolling;
-
-                        const DieIcon = isRolled ? diceIcons[rollValue - 1] : Dices;
-
-                        return (
-                            <div key={i} className={cn(
-                                "h-20 w-20 rounded-lg border-2 flex items-center justify-center transition-all duration-300",
-                                isRolled ? "bg-primary/10 border-primary" : "bg-muted border-dashed",
-                                isCurrentlyRolling && "animate-pulse"
-                            )}>
-                               <DieIcon className={cn(
-                                    "transition-all duration-500",
-                                    isCurrentlyRolling ? "h-12 w-12 text-primary animate-[spin_0.8s_ease-in-out]" : "h-10 w-10",
-                                    isRolled ? "text-primary" : "text-muted-foreground"
-                               )} />
-                            </div>
-                        )
-                    })}
+                <div className="flex justify-center items-center gap-4 h-32">
+                    {rolls.map((rollValue, i) => (
+                        <Dice 
+                            key={i}
+                            isRolling={isRolling && currentRollIndex === i}
+                            value={rollValue}
+                            onRollComplete={handleRollComplete}
+                        />
+                    ))}
                 </div>
 
-                {luckScore ? (
+                {isGameComplete ? (
                     <div className="mt-4">
-                        <p className="text-lg font-semibold">Your luck score is <span className={cn(luckScore === 'high' && 'text-primary', luckScore === 'low' && 'text-destructive')}>{luckScore.toUpperCase()}</span>!</p>
+                        <p className="text-lg font-semibold">Your luck score is <span className={cn(luckScore === 'high' && 'text-primary', luckScore === 'low' && 'text-destructive')}>{luckScore?.toUpperCase()}</span>!</p>
                        {renderLuckActions()}
                     </div>
                 ) : (

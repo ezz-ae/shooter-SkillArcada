@@ -119,6 +119,13 @@ export default {
             '0%': { transform: 'translateY(-50%) scale(1)', opacity: '1' },
             '100%': { transform: 'translateY(200%) scale(0.5)', opacity: '0' },
         },
+        'tumble': {
+          '0%': { transform: 'scale(1) rotate(0deg)', opacity: '1' },
+          '25%': { transform: 'scale(1.2) rotate(90deg)', opacity: '0.8' },
+          '50%': { transform: 'scale(0.8) rotate(-90deg)', opacity: '0.8' },
+          '75%': { transform: 'scale(1.1) rotate(180deg)', opacity: '0.8' },
+          '100%': { transform: 'scale(1) rotate(0deg)', opacity: '1' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
@@ -132,6 +139,7 @@ export default {
         'cue-stick-release': 'cue-stick-release 0.3s ease-out forwards',
         'cue-ball-release': 'cue-ball-release 1s ease-out forwards',
         '8-ball-sink': '8-ball-sink 1s ease-in forwards 1s',
+        'tumble': 'tumble 0.5s ease-in-out',
       },
     },
   },
