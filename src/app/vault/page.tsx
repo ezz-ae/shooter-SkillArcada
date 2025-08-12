@@ -6,7 +6,7 @@ import { useStore } from "@/lib/store";
 import { VaultItemCard } from "@/components/vault-item-card";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { ArrowLeft, ShoppingCart, Repeat, Gift, Wallet, Target, Gem, ArrowDown, ArrowUp } from "lucide-react";
+import { ArrowLeft, ShoppingCart, Repeat, Gift, Wallet, Landmark, Bitcoin, ArrowDown, ArrowUp } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import {
   AlertDialog,
@@ -19,9 +19,11 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export default function VaultPage() {
   const { 
@@ -226,6 +228,50 @@ export default function VaultPage() {
                       </Button>
                     </CardFooter>
                 </Card>
+
+                 <Card>
+                    <CardHeader>
+                         <CardTitle className="flex items-center gap-2"><Landmark className="text-primary"/> Stake for Rewards</CardTitle>
+                         <CardDescription>
+                            Earn rewards by staking your Shots on major crypto assets.
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        <div>
+                            <Label htmlFor="stake-amount" className="text-xs">Amount to Stake (Shots)</Label>
+                            <Input id="stake-amount" type="number" placeholder="0.00" />
+                        </div>
+                        <div>
+                            <Label htmlFor="stake-asset" className="text-xs">Asset</Label>
+                             <Select>
+                                <SelectTrigger id="stake-asset">
+                                    <SelectValue placeholder="Select an asset" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="btc">
+                                        <div className="flex items-center gap-2">
+                                             <Bitcoin className="h-4 w-4" /> Bitcoin (up to 12% APY)
+                                        </div>
+                                    </SelectItem>
+                                    <SelectItem value="eth">
+                                        <div className="flex items-center gap-2">
+                                             <span className="font-bold">ETH</span> Ethereum (up to 15% APY)
+                                        </div>
+                                    </SelectItem>
+                                    <SelectItem value="sol">
+                                        <div className="flex items-center gap-2">
+                                            <span className="font-bold">SOL</span> Solana (up to 18% APY)
+                                        </div>
+                                    </SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                    </CardContent>
+                    <CardFooter>
+                        <Button className="w-full">Stake Now</Button>
+                    </CardFooter>
+                </Card>
+
                  <Card>
                     <CardHeader>
                         <CardTitle>Ready to Ship ({shippingCart.length}/3)</CardTitle>
