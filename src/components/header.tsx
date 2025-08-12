@@ -2,7 +2,7 @@
 "use client";
 
 import Link from "next/link";
-import { Package, BrainCircuit, Heart, Swords, User, LogOut, BookOpen, Sparkles } from "lucide-react";
+import { Package, BrainCircuit, Heart, Swords, User, LogOut, BookOpen, Sparkles, LineChart } from "lucide-react";
 import { Button } from "./ui/button";
 import { useStore } from "@/lib/store";
 import { useEffect, useState } from "react";
@@ -64,6 +64,9 @@ export function Header() {
              </Button>
              <Button variant="ghost" asChild>
                 <Link href="/brainshots">Brainshots</Link>
+             </Button>
+              <Button variant="ghost" asChild>
+                <Link href="/crypto-luck">Crypto Luck</Link>
              </Button>
              <Button variant="ghost" asChild>
                 <Link href="/pool-shot">Pool Shot</Link>
