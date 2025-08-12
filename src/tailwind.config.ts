@@ -19,6 +19,7 @@ export default {
     extend: {
       fontFamily: {
         sans: ['var(--font-sans)', 'sans-serif'],
+        allura: ['var(--font-allura)', 'cursive'],
       },
       colors: {
         border: 'hsl(var(--border))',
@@ -132,7 +133,7 @@ export default {
         'accordion-up': 'accordion-up 0.2s ease-out',
         'flash-green': 'flash-green 0.7s ease-in-out',
         'flash-red': 'flash-red 0.7s ease-in-out',
-        'shimmer': 'shimmer 1.5s linear infinite',
+        'shimmer': 'shimmer 3s ease-in-out infinite',
         'border-pulse': 'border-pulse 2s infinite',
         'fade-out': 'fade-out 4s ease-out forwards',
         'cue-stick-aim-subtle': 'cue-stick-aim-subtle 1.5s ease-in-out infinite',

@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "./ui/avatar";
 import Image from "next/image";
+import { cn } from "@/lib/utils";
 
 export function Header() {
   const { shots } = useStore();
@@ -38,7 +39,7 @@ export function Header() {
       <div className="container flex h-16 items-center">
         <div className="mr-auto flex items-center">
           <Link href="/" className="mr-6 flex items-center space-x-2">
-            <span className="font-bold">ShoterShots</span>
+            <span className="font-allura text-4xl shimmer-text">ShoterShots</span>
           </Link>
           <nav className="hidden md:flex items-center space-x-1">
              <Button variant="ghost" asChild>
