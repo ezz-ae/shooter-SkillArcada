@@ -4,7 +4,6 @@
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Area, AreaChart, ResponsiveContainer } from "recharts";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -35,7 +34,6 @@ const DOUBLE_SNIPE_COST = 5;
 
 export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
   const [currentPrice, setCurrentPrice] = useState(product.marketPrice);
-  const [priceHistory, setPriceHistory] = useState([{ value: product.marketPrice }]);
   const [animationClass, setAnimationClass] = useState("");
   const [dialogState, setDialogState] = useState<DialogState>('closed');
   const [capturedPrice, setCapturedPrice] = useState(0);
@@ -59,11 +57,6 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
         const changePercent = (Math.random() - 0.5) * volatility;
         let newPrice = prevPrice * (1 + changePercent);
         newPrice = Math.max(1, newPrice);
-
-        setPriceHistory((prevHistory) => {
-          const newHistory = [...prevHistory, { value: newPrice }];
-          return newHistory.length > 20 ? newHistory.slice(-20) : newHistory;
-        });
         
         if (newPrice > prevPrice) {
             setAnimationClass('flash-green');
@@ -75,7 +68,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
 
         return newPrice;
       });
-    }, 1000 + Math.random() * 1000);
+    }, 200 + Math.random() * 300);
 
     return () => {
         isMounted = false;
@@ -157,11 +150,6 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
     handleVault(snipedPrice);
   }
 
-
-  const trendColor = priceHistory.length < 2 || priceHistory[priceHistory.length - 1].value >= priceHistory[priceHistory.length - 2].value
-    ? 'hsl(var(--chart-1))'
-    : 'hsl(var(--destructive))';
-
   const CardComponent = isPage ? 'div' : Card;
 
   return (
@@ -189,7 +177,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
             </CardHeader>
           </Link>
         )}
-        <CardContent className={cn("flex-grow p-4 space-y-2", isPage && "p-0")}>
+        <CardContent className={cn("flex-grow p-4 space-y-2", isPage && "p-0 pt-4")}>
           {!isPage && (
             <Link href={`/product/${product.id}`}>
               <CardTitle className="text-lg font-bold group-hover:text-primary transition-colors truncate">
@@ -198,34 +186,24 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
             </Link>
           )}
 
-          <div className="flex items-end justify-between">
-             <div className="relative text-3xl font-black">
-                <span className="shimmer-text" style={{ '--trend-color': trendColor } as React.CSSProperties}>
-                    ${currentPrice.toFixed(2)}
-                </span>
-             </div>
-             <div className="w-1/3 h-10">
-                <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart data={priceHistory} margin={{ top: 5, right: 0, left: 0, bottom: 0 }}>
-                        <defs>
-                            <linearGradient id={`color-${product.id}`} x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor={trendColor} stopOpacity={0.8}/>
-                                <stop offset="95%" stopColor={trendColor} stopOpacity={0}/>
-                            </linearGradient>
-                        </defs>
-                        <Area type="monotone" dataKey="value" stroke={trendColor} strokeWidth={2} fill={`url(#color-${product.id})`} />
-                    </AreaChart>
-                </ResponsiveContainer>
-             </div>
-          </div>
+          {isPage && (
+             <div className="text-sm text-muted-foreground">Current Market Price</div>
+          )}
+           <div className="relative text-3xl font-black">
+                ${currentPrice.toFixed(2)}
+            </div>
+
         </CardContent>
         <CardFooter className={cn("p-4 pt-0", isPage && "p-0 pt-4")}>
-          <Button
-            className="w-full h-12 text-md font-bold"
+          <button
+            className="w-full h-12 text-md font-bold text-primary-foreground rounded-md relative overflow-hidden bg-secondary"
             onClick={handleShot}
           >
-            Take a Shot! ($1.00)
-          </Button>
+            <div className="absolute inset-0 moving-gradient"></div>
+            <div className="absolute inset-0 flex items-center justify-center price-runner">
+                <span className="font-black text-lg">Take a Shot! ($1.00)</span>
+            </div>
+          </button>
         </CardFooter>
       </CardComponent>
 

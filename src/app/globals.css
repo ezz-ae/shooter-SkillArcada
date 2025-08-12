@@ -79,4 +79,25 @@
         background-size: 200% auto;
         animation: shimmer 2s ease-in-out infinite;
     }
+    .moving-gradient {
+        background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)), hsl(var(--chart-1)), hsl(var(--primary)));
+        background-size: 400% 400%;
+        animation: gradient-animation 5s ease infinite;
+    }
+
+    .price-runner {
+        animation: price-run 3s ease-in-out infinite;
+    }
+}
+
+@keyframes gradient-animation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes price-run {
+    0% { transform: translateX(-40%); }
+    50% { transform: translateX(40%); }
+    100% { transform: translateX(-40%); }
 }
