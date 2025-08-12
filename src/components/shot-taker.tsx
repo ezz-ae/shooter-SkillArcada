@@ -374,9 +374,9 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
         <CardContent className={cn("flex-grow p-4 pb-2 space-y-2", isPage && "p-0 pt-4")}>
           {!isPage && (
              <Link href={`/product/${product.id}`} className="flex-grow">
-              <CardTitle className="text-lg font-bold group-hover:text-primary transition-colors truncate">
-                {product.name}
-              </CardTitle>
+              <p className="text-sm text-muted-foreground truncate group-hover:text-primary transition-colors">
+                {product.description}
+              </p>
             </Link>
           )}
            {isGameCard ? (
@@ -409,10 +409,8 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
                 </div>
              </div>
           )}
-           {isPage && !isGameCard && (
-             <div className="mt-4">
-                {/* Handled in the block above */}
-            </div>
+           {isPage && (
+             <p className="mt-4 text-muted-foreground">{product.description}</p>
            )}
         </CardContent>
         <CardFooter className={cn("p-4 pt-2 flex-col items-center", isPage && "p-0 pt-4")}>

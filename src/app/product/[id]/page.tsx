@@ -35,7 +35,6 @@ export default function ProductPage({ params }: { params: { id: string } }) {
         </div>
         <div className="flex flex-col">
             <h1 className="mb-2 text-3xl font-bold lg:text-4xl">{product.name}</h1>
-            <p className="mb-6 text-muted-foreground">{product.description}</p>
             <ShotTaker product={product} isPage={true} />
         </div>
       </div>
