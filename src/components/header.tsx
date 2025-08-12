@@ -73,10 +73,10 @@ export function Header() {
             
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="secondary" className="flex items-center gap-2">
-                    <Avatar className="h-7 w-7">
+                <Button variant="secondary" className="relative h-9 w-9 rounded-full">
+                    <Avatar className="h-9 w-9">
                         <AvatarFallback className="bg-primary text-primary-foreground text-xs font-bold">
-                          {user.uid.substring(0, 2).toUpperCase()}
+                            <Image src="https://firebasestorage.googleapis.com/v0/b/reodywellness.firebasestorage.app/o/Untitled-5%20(3).png?alt=media&token=5189b36c-c80d-4955-b800-d1e579e3f2e9" alt="User Avatar" fill className="object-cover" />
                         </AvatarFallback>
                     </Avatar>
                 </Button>
