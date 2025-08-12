@@ -1,12 +1,13 @@
 
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
+import { getAuth, signInAnonymously, onAuthStateChanged, type User as FirebaseUser } from 'firebase/auth';
+import { app } from './firebase';
 import { useStore } from './store';
-import { mockUsers } from './user';
 
 interface User {
-  luckyNumber: string;
-  avatarUrl: string;
+  uid: string;
+  isAnonymous: boolean;
 }
 
 interface AuthState {
@@ -15,7 +16,7 @@ interface AuthState {
   user: User | null;
   isNewUser: boolean;
   hasAcceptedTerms: boolean;
-  login: (method: 'whatsapp' | 'wallet') => void;
+  initializeAuth: () => () => void; // Returns the unsubscribe function
   logout: () => void;
   acceptTerms: () => void;
   setIsLoggingIn: (isLoggingIn: boolean) => void;
@@ -23,54 +24,64 @@ interface AuthState {
 
 const initialState = {
   isAuthenticated: false,
-  isLoggingIn: false,
+  isLoggingIn: true,
   user: null,
   isNewUser: true,
   hasAcceptedTerms: false,
 };
 
+const auth = getAuth(app);
+
 export const useAuth = create<AuthState>()(
   persist(
     (set, get) => ({
       ...initialState,
-      login: (method) => {
-        // In a real app, this would involve a complex authentication flow.
-        // Here, we simulate a successful login and assign a random lucky number and avatar.
-        
-        // If user is already authenticated, do nothing.
-        if (get().isAuthenticated) return;
+      initializeAuth: () => {
+        const unsubscribe = onAuthStateChanged(auth, (firebaseUser: FirebaseUser | null) => {
+          if (firebaseUser) {
+            // User is signed in.
+            const isNew = firebaseUser.metadata.creationTime === firebaseUser.metadata.lastSignInTime;
+            
+            if (isNew && get().isNewUser) {
+              useStore.getState().addLuckshots(3);
+            }
 
-        const randomLuckyNumber = String(Math.floor(1000 + Math.random() * 9000));
-        const randomAvatar = mockUsers[Math.floor(Math.random() * mockUsers.length)].avatarUrl;
-        
-        if (get().isNewUser) {
-            // Give 3 free shots to new users
-            useStore.getState().addLuckshots(3);
-        }
-
-        set({ 
-          isAuthenticated: true,
-          isLoggingIn: false,
-          user: { luckyNumber: randomLuckyNumber, avatarUrl: randomAvatar },
+            set({
+              isAuthenticated: true,
+              user: { uid: firebaseUser.uid, isAnonymous: firebaseUser.isAnonymous },
+              isLoggingIn: false,
+              isNewUser: isNew,
+            });
+          } else {
+            // User is signed out or not yet signed in.
+            // Try to sign in anonymously.
+            signInAnonymously(auth).catch((error) => {
+              console.error("Anonymous sign-in failed:", error);
+              set({ isLoggingIn: false });
+            });
+          }
         });
+        return unsubscribe;
       },
-      logout: () => {
-        // Also reset the main store on logout
+      logout: async () => {
+        await auth.signOut();
         useStore.getState().reset();
-        // Keep the isNewUser state on logout, but reset everything else.
         const isNewUser = get().isNewUser;
-        set({ ...initialState, isNewUser });
+        set({ ...initialState, isLoggingIn: false, isNewUser });
       },
       acceptTerms: () => {
-        set({ hasAcceptedTerms: true, isNewUser: false });
+        set({ hasAcceptedTerms: true });
       },
       setIsLoggingIn: (isLoggingIn) => set({ isLoggingIn }),
     }),
     {
-      name: 'luckshot-auth-storage-v5', // Incremented version
+      name: 'luckshot-auth-storage-v7', // Incremented version
       storage: createJSONStorage(() => localStorage),
+      // Only persist non-user-session specific data
+      partialize: (state) => ({
+        hasAcceptedTerms: state.hasAcceptedTerms,
+        isNewUser: state.isNewUser, // Persist isNewUser to avoid re-granting bonus
+      }),
     }
   )
 );
-
-    

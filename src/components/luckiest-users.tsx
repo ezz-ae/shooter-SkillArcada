@@ -3,20 +3,40 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
-import { mockUsers } from "@/lib/user";
+import { User } from "@/lib/user";
 import { Trophy } from "lucide-react";
+import { useEffect, useState } from "react";
 
-const luckyUsers = [
-    { rank: 1, user: mockUsers[2], prize: '500 Shots' },
-    { rank: 2, user: mockUsers[1], prize: '$1000 USD' },
-    { rank: 3, user: mockUsers[4], prize: '100 Shots' },
-    { rank: 4, user: mockUsers[0], prize: 'iPhone 16 Pro' },
-    { rank: 5, user: mockUsers[3], prize: '75 Shots' },
-    { rank: 6, user: mockUsers[5], prize: '$50 USD' },
-];
+interface LuckiestUsersProps {
+    users: User[];
+}
 
+export function LuckiestUsers({ users }: LuckiestUsersProps) {
+    const [luckyUsers, setLuckyUsers] = useState<any[]>([]);
 
-export function LuckiestUsers() {
+    useEffect(() => {
+        if (users.length > 5) {
+            setLuckyUsers([
+                { rank: 1, user: users[2], prize: '500 Shots' },
+                { rank: 2, user: users[1], prize: '$1000 USD' },
+                { rank: 3, user: users[4], prize: '100 Shots' },
+                { rank: 4, user: users[0], prize: 'iPhone 16 Pro' },
+                { rank: 5, user: users[3], prize: '75 Shots' },
+                { rank: 6, user: users[5], prize: '$50 USD' },
+            ]);
+        }
+    }, [users]);
+    
+    if (!luckyUsers.length) {
+        return (
+            <Card>
+                <CardContent className="p-4 text-center text-muted-foreground">
+                    Loading user rankings...
+                </CardContent>
+            </Card>
+        );
+    }
+
     return (
         <Card>
             <CardContent className="p-4 space-y-4">

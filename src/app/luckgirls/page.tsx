@@ -3,14 +3,22 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { mockProducts } from "@/lib/products";
+import { Product, getProducts } from "@/lib/products";
 import { ArrowRight, Mic, MessageSquare, Puzzle, Shuffle, Users } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export default function LuckgirlsPage() {
+    const [girlGames, setGirlGames] = useState<Product[]>([]);
 
-    const girlGames = mockProducts.filter(p => p.category === 'luckgirls');
+    useEffect(() => {
+        async function fetchProducts() {
+            const allProducts = await getProducts();
+            setGirlGames(allProducts.filter(p => p.category === 'luckgirls'));
+        }
+        fetchProducts();
+    }, []);
 
     const gameIcons = {
         'time-challenge': Puzzle,

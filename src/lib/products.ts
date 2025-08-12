@@ -1,4 +1,7 @@
 
+import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import { app } from './firebase';
+
 export interface Product {
   id: string;
   name: string;
@@ -11,18 +14,18 @@ export interface Product {
   category?: 'luckshot' | 'brainshot' | 'luckgirls';
 }
 
+const db = getFirestore(app);
+
+export async function getProducts(): Promise<Product[]> {
+  const productsCol = collection(db, 'products');
+  const productsSnapshot = await getDocs(productsCol);
+  const productsList = productsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
+  return productsList;
+}
+
+// Keep one or two products for fallback or initial state if needed
 export const mockProducts: Product[] = [
-  {
-    id: 'prod_card_01',
-    name: '$100 Amazon Gift Card',
-    subtitle: '$100 Gift Card',
-    description: 'A prepaid gift card with a $100 balance, redeemable for millions of items on Amazon.com.',
-    marketPrice: 100.0,
-    imageUrl: 'https://placehold.co/600x400/232F3E/FFFFFF/png?text=Amazon',
-    dataAiHint: 'gift card',
-    category: 'luckshot',
-  },
-  {
+    {
     id: 'prod_phone_01',
     name: 'iPhone 16 Pro',
     subtitle: 'The Ultimate Smartphone',
@@ -43,141 +46,5 @@ export const mockProducts: Product[] = [
     dataAiHint: 'bitcoin crypto',
     game: 'riddle-calc',
     category: 'brainshot',
-  },
-   {
-    id: 'prod_chess_01',
-    name: 'One-Move Mate',
-    subtitle: 'A Royal Challenge',
-    description: 'Find the checkmate in one move to win a massive prize. All pieces share a single, minimalist design, distinguished only by their names. Focus on the position, not the pieces.',
-    marketPrice: 250.0,
-    imageUrl: 'https://placehold.co/600x400/769656/eeeed2/png?text=Chess',
-    dataAiHint: 'chess board',
-    game: 'chess-mate',
-    category: 'brainshot',
-  },
-   {
-    id: 'prod_girls_01',
-    name: 'Fashion Puzzle',
-    subtitle: 'Style in Time',
-    description: 'Arrange the fashion items in the correct order before time runs out. A test of speed and style!',
-    marketPrice: 50.0,
-    imageUrl: 'https://placehold.co/600x400/f472b6/ffffff/png?text=Style+Puzzle',
-    dataAiHint: 'fashion puzzle',
-    game: 'time-challenge',
-    category: 'luckgirls',
-  },
-   {
-    id: 'prod_girls_02',
-    name: 'Pink Cup Game',
-    subtitle: 'Quick Eyes, Big Prize',
-    description: 'Follow the coin under the shuffling pink cups. Pick the right one to win!',
-    marketPrice: 25.0,
-    imageUrl: 'https://placehold.co/600x400/ec4899/ffffff/png?text=Pink+Cups',
-    dataAiHint: 'pink cups',
-    game: 'pink-cups',
-    category: 'luckgirls',
-  },
-   {
-    id: 'prod_girls_03',
-    name: 'Serpent & Ladders',
-    subtitle: 'Card-driven classic',
-    description: 'A new take on a classic game. Draw cards to move, climb ladders, and avoid the snakes. Chat live with your opponent and the audience!',
-    marketPrice: 100.0,
-    imageUrl: 'https://placehold.co/600x400/8b5cf6/ffffff/png?text=S&L',
-    dataAiHint: 'board game',
-    game: 'snake-and-stairs',
-    category: 'luckgirls',
-  },
-  {
-    id: 'prod_phone_02',
-    name: 'Samsung Galaxy S25 Ultra',
-    subtitle: 'The Android Powerhouse',
-    description: 'The pinnacle of Android technology, with a stunning display, pro-grade cameras, and powerful AI features.',
-    marketPrice: 1350.0,
-    imageUrl: 'https://placehold.co/600x400/1C1C1C/E0E0E0/png?text=Galaxy',
-    dataAiHint: 'android phone',
-    game: 'draw-passcode',
-    category: 'brainshot',
-  },
-  {
-    id: 'prod_card_04',
-    name: '$250 Mastercard Prepaid Card',
-    subtitle: '$250 Prepaid Card',
-    description: 'A prepaid card loaded with $250 that can be used anywhere Mastercard is accepted.',
-    marketPrice: 250.0,
-    imageUrl: 'https://placehold.co/600x400/EB001B/FFFFFF/png?text=Mastercard',
-    dataAiHint: 'credit card',
-    game: 'multi-shot',
-    category: 'luckshot',
-  },
-  {
-    id: 'prod_card_05',
-    name: '$200 PayPal Voucher',
-    subtitle: '$200 Voucher',
-    description: 'A voucher for $200 to be added to your PayPal balance. Use it for online shopping or send money to friends.',
-    marketPrice: 200.0,
-    imageUrl: 'https://placehold.co/600x400/003087/FFFFFF/png?text=PayPal',
-    dataAiHint: 'paypal logo',
-    category: 'luckshot',
-  },
-  {
-    id: 'prod_crypto_03',
-    name: '$500 USDT Voucher',
-    subtitle: '$500 USDT Voucher',
-    description: 'A voucher for 500 USDT (Tether). A stablecoin pegged to the US dollar, perfect for stable crypto holdings.',
-    marketPrice: 500.0,
-    imageUrl: 'https://placehold.co/600x400/26A17B/FFFFFF/png?text=USDT',
-    dataAiHint: 'usdt crypto',
-    category: 'luckshot',
-  },
-  {
-    id: 'prod_crypto_02',
-    name: '$500 Ethereum Voucher',
-    subtitle: '$500 ETH Voucher',
-    description: 'A voucher redeemable for $500 worth of Ethereum. Perfect for exploring NFTs, dApps, and DeFi.',
-    marketPrice: 500.0,
-    imageUrl: 'https://placehold.co/600x400/3C3C3D/FFFFFF/png?text=ETH',
-    dataAiHint: 'ethereum crypto',
-    category: 'luckshot',
-  },
-  {
-    id: 'prod_phone_03',
-    name: 'Google Pixel 9 Pro',
-    subtitle: 'Google AI in Your Hand',
-    description: 'Experience Google\'s AI-powered camera and the clean, fast Android OS in its purest form.',
-    marketPrice: 1199.0,
-    imageUrl: 'https://placehold.co/600x400/7C7C7C/FFFFFF/png?text=Pixel',
-    dataAiHint: 'google pixel',
-    category: 'luckshot',
-  },
-  {
-    id: 'prod_card_02',
-    name: '$100 Steam Gift Card',
-    subtitle: '$100 Gaming Card',
-    description: 'A gift card with a $100 balance for the ultimate PC gaming platform. Buy games, DLC, and more.',
-    marketPrice: 100.0,
-    imageUrl: 'https://placehold.co/600x400/1B2838/FFFFFF/png?text=Steam',
-    dataAiHint: 'steam logo',
-    category: 'luckshot',
-  },
-  {
-    id: 'prod_card_03',
-    name: '$150 Visa Prepaid Card',
-    subtitle: '$150 Prepaid Card',
-    description: 'A versatile prepaid card with a $150 balance. Use it online or in-store wherever Visa is accepted.',
-    marketPrice: 150.0,
-    imageUrl: 'https://placehold.co/600x400/1A1F71/FFFFFF/png?text=VISA',
-    dataAiHint: 'visa card',
-    category: 'luckshot',
-  },
-  {
-    id: 'prod_card_06',
-    name: '$100 Binance Gift Card',
-    subtitle: '$100 BUSD Voucher',
-    description: 'A gift card for the Binance crypto exchange, perfect for trading or holding various cryptocurrencies.',
-    marketPrice: 100.0,
-    imageUrl: 'https://placehold.co/600x400/F0B90B/000000/png?text=Binance',
-    dataAiHint: 'binance crypto',
-    category: 'luckshot',
   },
 ];

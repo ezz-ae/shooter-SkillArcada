@@ -2,7 +2,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { mockUsers } from "@/lib/user";
+import { User, getUsers } from "@/lib/user";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Trophy, BrainCircuit, LineChart, Swords, Heart, Dices, Users, DollarSign, FileText } from "lucide-react";
 import { ActivityFeed } from "@/components/activity-feed";
@@ -11,7 +11,7 @@ import { useState, useEffect } from "react";
 import { LuckiestUsers } from "@/components/luckiest-users";
 import { DiceGame } from "@/components/dice-game";
 import { ShotTaker } from "@/components/shot-taker";
-import { mockProducts } from "@/lib/products";
+import { Product, getProducts } from "@/lib/products";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { PoolChallengeCard } from "@/components/pool-challenge-card";
@@ -31,23 +31,37 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { GameLinkCard } from "@/components/game-link-card";
 
 export default function Home() {
-    const { isAuthenticated, user, login, isNewUser, hasAcceptedTerms, acceptTerms } = useAuth();
-    const [openChallenges, setOpenChallenges] = useState([
-      { id: 'c1', prize: 40, fee: 5, player1: mockUsers[0], player2: null },
-      { id: 'c2', prize: 100, fee: 10, player1: mockUsers[2], player2: null },
-      { id: 'c3', prize: 500, fee: 25, player1: mockUsers[3], player2: null },
-    ]);
+    const { isAuthenticated, user, initializeAuth, isNewUser, hasAcceptedTerms, acceptTerms, isLoggingIn } = useAuth();
+    const [products, setProducts] = useState<Product[]>([]);
+    const [users, setUsers] = useState<User[]>([]);
+    const [openChallenges, setOpenChallenges] = useState<any[]>([]);
     const [isAgreed, setIsAgreed] = useState(false);
     
-    // Auto-login for guest users
     useEffect(() => {
-        if (!isAuthenticated) {
-            login('wallet'); // Or 'whatsapp', doesn't matter for guest flow
-        }
-    }, [isAuthenticated, login]);
+        const unsubscribe = initializeAuth();
+        return () => unsubscribe();
+    }, [initializeAuth]);
+    
+    useEffect(() => {
+        async function fetchData() {
+            const fetchedProducts = await getProducts();
+            const fetchedUsers = await getUsers();
+            setProducts(fetchedProducts);
+            setUsers(fetchedUsers);
 
-    const iphoneProduct = mockProducts.find(p => p.id === 'prod_phone_01');
-    const btcProduct = mockProducts.find(p => p.id === 'prod_crypto_01');
+            if (fetchedUsers.length > 3) {
+                setOpenChallenges([
+                  { id: 'c1', prize: 40, fee: 5, player1: fetchedUsers[0], player2: null },
+                  { id: 'c2', prize: 100, fee: 10, player1: fetchedUsers[2], player2: null },
+                  { id: 'c3', prize: 500, fee: 25, player1: fetchedUsers[3], player2: null },
+                ]);
+            }
+        }
+        fetchData();
+    }, []);
+
+    const iphoneProduct = products.find(p => p.id === 'prod_phone_01');
+    const btcProduct = products.find(p => p.id === 'prod_crypto_01');
     
     const gameLinks = [
       { href: "/luckshots", label: "Luckshots", icon: Dices, description: "Classic price drop action." },
@@ -61,12 +75,11 @@ export default function Home() {
         setOpenChallenges(prev => {
             const dismissedChallenge = prev.find(c => c.id === id);
             if (!dismissedChallenge) return prev;
-            // Move the dismissed challenge to the end of the array
             return [...prev.filter(c => c.id !== id), dismissedChallenge];
         });
     };
 
-    if (!isAuthenticated || !user) {
+    if (isLoggingIn || !isAuthenticated || !user) {
         return (
              <div className="container mx-auto px-4 py-8 flex items-center justify-center min-h-[calc(100vh-8rem)]">
                 <div className="animate-pulse">
@@ -215,14 +228,14 @@ export default function Home() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                      <section>
                         <h2 className="text-2xl font-bold mb-4">Live Activity</h2>
-                        <ActivityFeed />
+                        <ActivityFeed users={users} />
                     </section>
                      <section>
                         <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
                            <Trophy className="text-yellow-400" />
                            Luckiest Users
                         </h2>
-                        <LuckiestUsers />
+                        <LuckiestUsers users={users} />
                     </section>
                 </div>
 

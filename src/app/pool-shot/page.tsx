@@ -5,19 +5,30 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PoolChallengeCard } from "@/components/pool-challenge-card";
-import { mockUsers } from "@/lib/user";
+import { User, getUsers } from "@/lib/user";
 import { Bot, Trophy, PlusCircle, Gamepad2 } from "lucide-react";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useEffect, useState } from "react";
 
 export default function PoolShotPage() {
+  const [users, setUsers] = useState<User[]>([]);
+  
+  useEffect(() => {
+    async function fetchUsers() {
+      const fetchedUsers = await getUsers();
+      setUsers(fetchedUsers);
+    }
+    fetchUsers();
+  }, []);
 
-  const challenges = [
-    { id: 'c1', prize: 40, fee: 5, player1: mockUsers[0], player2: mockUsers[1] },
-    { id: 'c2', prize: 100, fee: 10, player1: mockUsers[2], player2: null },
-    { id: 'c3', prize: 500, fee: 25, player1: mockUsers[3], player2: null },
-    { id: 'c4', prize: 20, fee: 2, player1: mockUsers[4], player2: mockUsers[5] },
-  ]
+  const challenges = users.length > 5 ? [
+    { id: 'c1', prize: 40, fee: 5, player1: users[0], player2: users[1] },
+    { id: 'c2', prize: 100, fee: 10, player1: users[2], player2: null },
+    { id: 'c3', prize: 500, fee: 25, player1: users[3], player2: null },
+    { id: 'c4', prize: 20, fee: 2, player1: users[4], player2: users[5] },
+  ] : [];
+
   return (
     <div className="container mx-auto px-4 py-8 flex flex-col items-center">
        <div className="text-center mb-8">
@@ -69,14 +80,14 @@ export default function PoolShotPage() {
                             <p className="text-sm font-bold text-muted-foreground">Players Registered</p>
                             <div className="flex justify-center items-center mt-2 gap-2">
                                 <div className="flex -space-x-4 rtl:space-x-reverse">
-                                    {mockUsers.slice(0, 5).map(user => (
+                                    {users.slice(0, 5).map(user => (
                                         <Avatar key={user.id} className="border-2 border-background">
                                             <AvatarImage src={user.avatarUrl} />
                                             <AvatarFallback>{user.name.substring(0,2)}</AvatarFallback>
                                         </Avatar>
                                     ))}
                                 </div>
-                                <span className="font-bold text-lg">5 / 23</span>
+                                <span className="font-bold text-lg">5 / 32</span>
                             </div>
                         </div>
                     </CardContent>

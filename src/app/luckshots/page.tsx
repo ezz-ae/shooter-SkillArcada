@@ -2,11 +2,19 @@
 "use client";
 
 import { ShotTaker } from "@/components/shot-taker";
-import { mockProducts } from "@/lib/products";
+import { Product, getProducts } from "@/lib/products";
+import { useEffect, useState } from "react";
 
 export default function LuckshotsPage() {
-  
-  const luckshotProducts = mockProducts.filter(p => !p.category || p.category === 'luckshot');
+  const [luckshotProducts, setLuckshotProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    async function fetchProducts() {
+      const allProducts = await getProducts();
+      setLuckshotProducts(allProducts.filter(p => !p.category || p.category === 'luckshot'));
+    }
+    fetchProducts();
+  }, []);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -15,7 +23,7 @@ export default function LuckshotsPage() {
           Luckshots
         </h1>
         <p className="mt-2 text-lg text-muted-foreground">
-          shot your luck price, all items  in this page are in an ongoing price chaging with killer disscounts up to 99% off. Try  to press " shot" for more
+          shot your luck price, all items  in this page are in an ongoing price chaging with killer disscounts up to 99% off. Try to press " shot" for more
         </p>
       </div>
 

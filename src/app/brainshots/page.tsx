@@ -2,11 +2,19 @@
 "use client";
 
 import { ShotTaker } from "@/components/shot-taker";
-import { mockProducts } from "@/lib/products";
+import { Product, getProducts } from "@/lib/products";
+import { useEffect, useState } from "react";
 
 export default function BrainshotsPage() {
-  
-  const brainshotProducts = mockProducts.filter(p => p.category === 'brainshot');
+  const [brainshotProducts, setBrainshotProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    async function fetchProducts() {
+      const allProducts = await getProducts();
+      setBrainshotProducts(allProducts.filter(p => p.category === 'brainshot'));
+    }
+    fetchProducts();
+  }, []);
 
   return (
     <div className="container mx-auto px-4 py-8">

@@ -21,24 +21,17 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
-
 export function Header() {
-  const { vault, luckshots } = useStore();
-  const { isAuthenticated, user, logout, login } = useAuth();
+  const { luckshots } = useStore();
+  const { isAuthenticated, user, logout, initializeAuth } = useAuth();
   const [isClient, setIsClient] = useState(false);
-  const pathname = usePathname();
 
   useEffect(() => {
     setIsClient(true);
-  }, []);
-  
-  useEffect(() => {
-    if (isClient && !isAuthenticated) {
-        login('wallet'); // Auto-login guest user
-    }
-  }, [isClient, isAuthenticated, login]);
+    const unsubscribe = initializeAuth();
+    return () => unsubscribe();
+  }, [initializeAuth]);
 
-  const vaultItemCount = isClient ? vault.length : 0;
   const displayShots = isClient ? luckshots.toFixed(2) : '0.00';
 
   const gameNavItems = [
@@ -133,12 +126,12 @@ export function Header() {
               <DropdownMenuTrigger asChild>
                 <Button variant="secondary" className="flex items-center gap-2">
                     <Avatar className="h-7 w-7">
-                        <AvatarImage src={user.avatarUrl} alt={user.luckyNumber} />
+                        {/* Fallback for anonymous users or users without avatar */}
                         <AvatarFallback className="bg-primary text-primary-foreground text-xs font-bold">
-                          {user.luckyNumber.substring(0, 2).toUpperCase()}
+                          {user.uid.substring(0, 2).toUpperCase()}
                         </AvatarFallback>
                     </Avatar>
-                    <span className="font-mono hidden md:inline">{user.luckyNumber}</span>
+                    <span className="font-mono hidden md:inline">{user.uid.substring(0, 6)}...</span>
                     <ChevronDown className="h-4 w-4"/>
                 </Button>
               </DropdownMenuTrigger>

@@ -3,15 +3,31 @@
 
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { mockProducts } from "@/lib/products";
+import { Product, getProducts } from "@/lib/products";
 import Link from "next/link";
 import { ArrowLeft, HelpCircle, Gamepad2, Zap, Tag, Clock, TrendingUp } from "lucide-react";
 import { ShotTaker } from "@/components/shot-taker";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { useEffect, useState } from "react";
 
 export default function ProductPage({ params }: { params: { id: string } }) {
-  const product = mockProducts.find((p) => p.id === params.id);
+  const [product, setProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchProduct() {
+      const allProducts = await getProducts();
+      const foundProduct = allProducts.find((p) => p.id === params.id) || null;
+      setProduct(foundProduct);
+      setLoading(false);
+    }
+    fetchProduct();
+  }, [params.id]);
+
+  if (loading) {
+    return <div>Loading...</div>; // Or a proper skeleton loader
+  }
 
   if (!product) {
     notFound();
