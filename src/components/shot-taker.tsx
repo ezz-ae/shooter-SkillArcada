@@ -325,7 +325,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
                           isLocked && "!bg-secondary"
                         )}
                       >
-                        {isLocked ? '?' : digits[index]}
+                        {isLocked ? lockedDigits[index] : digits[index]}
                       </button>
                     );
                 })}
@@ -335,7 +335,8 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
       }
       return (
           <div className="w-full flex flex-col gap-2 items-center">
-              <Button onClick={handleConfirmDigitPauseShot} className="w-full h-16 text-2xl font-black">Take the Shot!</Button>
+              <Button onClick={handleConfirmDigitPauseShot} className="w-full h-16 text-2xl font-black">Take the Shot for ${lockedDigits.join('')}!</Button>
+              <Button onClick={resetDigitGame} variant="outline">Try Again</Button>
           </div>
       );
     }
@@ -507,10 +508,10 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
                 </DialogHeader>
                 <div className="py-4 space-y-4">
                      <p className="text-lg font-mono p-4 bg-secondary rounded-md text-center">
-                        if you got a pen you win
+                        If you have a pen, you win.
                     </p>
                     <p className="text-lg font-mono p-4 bg-secondary rounded-md text-center">
-                        we brougt a handrad by two to erarn ten sold with a fivty off for only half.
+                        We bought a hundred for two, to earn ten. Sold with fifty off, for only half then.
                     </p>
                 </div>
                 <div className={cn("text-center text-4xl font-black font-mono", timerColor)}>
