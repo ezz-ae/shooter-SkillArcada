@@ -1,6 +1,6 @@
 
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
-import { app } from './firebase';
+import { app } from './firebase'; // Import the initialized app
 
 export interface Product {
   id: string;
@@ -14,13 +14,15 @@ export interface Product {
   category?: 'luckshot' | 'brainshot' | 'luckgirls';
 }
 
-const db = getFirestore(app);
+const db = getFirestore(app); // Use the imported app
 
 export async function getProducts(): Promise<Product[]> {
-  const productsCol = collection(db, 'products');
-  const productsSnapshot = await getDocs(productsCol);
-  const productsList = productsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
-  return productsList;
+  // Mock data for products. In a real app, this would fetch from Firestore.
+  // const productsCol = collection(db, 'products');
+  // const productsSnapshot = await getDocs(productsCol);
+  // const productsList = productsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
+  // return productsList;
+  return Promise.resolve(mockProducts);
 }
 
 // Keep one or two products for fallback or initial state if needed
@@ -46,6 +48,82 @@ export const mockProducts: Product[] = [
     dataAiHint: 'bitcoin crypto',
     game: 'riddle-calc',
     category: 'brainshot',
+  },
+  {
+    id: 'prod_headset_01',
+    name: 'VR Headset',
+    subtitle: 'Immersive Virtual Reality',
+    description: 'Step into new worlds with this high-end VR headset, featuring stunning visuals and intuitive controls.',
+    marketPrice: 499.0,
+    imageUrl: 'https://placehold.co/600x400/5E35B1/FFFFFF/png?text=VR',
+    dataAiHint: 'vr headset',
+    game: 'draw-passcode',
+    category: 'brainshot',
+  },
+  {
+    id: 'prod_console_01',
+    name: 'Gaming Console',
+    subtitle: 'Next-Generation Gaming',
+    description: 'Experience lightning-fast loading and breathtaking graphics with the latest gaming console.',
+    marketPrice: 599.0,
+    imageUrl: 'https://placehold.co/600x400/1E88E5/FFFFFF/png?text=Console',
+    dataAiHint: 'gaming console',
+    game: 'multi-shot',
+    category: 'luckshot',
+  },
+   {
+    id: 'prod_chess_01',
+    name: '500 Shots Prize',
+    subtitle: 'Solve for Checkmate',
+    description: 'A special chess puzzle. Find the checkmate in one move to win a massive prize of 500 Shots.',
+    marketPrice: 500,
+    imageUrl: 'https://placehold.co/600x400/795548/FFFFFF/png?text=Chess',
+    dataAiHint: 'chess board',
+    game: 'chess-mate',
+    category: 'brainshot',
+  },
+  {
+    id: 'prod_laptop_01',
+    name: 'Gaming Laptop',
+    subtitle: 'Power on the Go',
+    description: 'A high-performance gaming laptop with a top-of-the-line GPU and a high-refresh-rate screen.',
+    marketPrice: 1999.0,
+    imageUrl: 'https://placehold.co/600x400/43A047/FFFFFF/png?text=Laptop',
+    dataAiHint: 'gaming laptop',
+    category: 'luckshot',
+  },
+   {
+    id: 'prod_luckgirl_01',
+    name: 'Time Challenge',
+    subtitle: 'Beat the clock!',
+    description: 'A fast-paced puzzle game. Solve as many mini-puzzles as you can before the time runs out.',
+    marketPrice: 10,
+    imageUrl: 'https://placehold.co/600x400/f472b6/ffffff/png?text=Time',
+    dataAiHint: 'stopwatch clock',
+    game: 'time-challenge',
+    category: 'luckgirls',
+  },
+  {
+    id: 'prod_luckgirl_02',
+    name: 'Pink Cups',
+    subtitle: 'Find the lucky cup!',
+    description: 'A classic shell game with a fun twist. Keep your eye on the pink cup to win the prize.',
+    marketPrice: 10,
+    imageUrl: 'https://placehold.co/600x400/ec4899/ffffff/png?text=Cups',
+    dataAiHint: 'pink cups',
+    game: 'pink-cups',
+    category: 'luckgirls',
+  },
+   {
+    id: 'prod_luckgirl_03',
+    name: 'Snake and Stairs',
+    subtitle: 'Social board game',
+    description: 'A social board game where you can chat with your opponent and the audience. Roll the dice and climb to victory!',
+    marketPrice: 10,
+    imageUrl: 'https://placehold.co/600x400/8b5cf6/ffffff/png?text=Board',
+    dataAiHint: 'board game',
+    game: 'snake-and-stairs',
+    category: 'luckgirls',
   },
   {
     id: 'prod_adventure_01',

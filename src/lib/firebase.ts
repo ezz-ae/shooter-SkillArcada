@@ -15,9 +15,9 @@ export const firebaseConfig = {
 
 
 // Initialize Firebase
-const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 
-// Initialize Firebase Analytics
+// Initialize Firebase Analytics if supported
 const analytics = isSupported().then(yes => yes ? getAnalytics(app) : null);
 
 export { app, analytics };
