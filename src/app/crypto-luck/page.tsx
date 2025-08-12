@@ -2,24 +2,9 @@
 "use client";
 
 import { CryptoLuckGame } from "@/components/crypto-luck-game";
-import { ActivityFeed } from "@/components/activity-feed";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { User, getUsers } from "@/lib/user";
-import { Bitcoin, History } from "lucide-react";
-import { useEffect, useState } from "react";
-import { LuckiestUsers } from "@/components/luckiest-users";
-import { TopGames } from "@/components/top-games";
+import { Bitcoin } from "lucide-react";
 
 export default function CryptoLuckPage() {
-  const [users, setUsers] = useState<User[]>([]);
-
-  useEffect(() => {
-    async function fetchData() {
-        const allUsers = await getUsers();
-        setUsers(allUsers);
-    }
-    fetchData();
-  }, []);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -32,25 +17,8 @@ export default function CryptoLuckPage() {
         </p>
       </div>
 
-      <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2">
-            <CryptoLuckGame />
-        </div>
-
-        <div className="lg:col-span-1 space-y-6">
-            <div>
-                <h3 className="text-lg font-bold flex items-center gap-2 mb-2"><History /> Live Activity</h3>
-                <ActivityFeed users={users} />
-            </div>
-             <div>
-                <h3 className="text-lg font-bold flex items-center gap-2 mb-2">Luckiest Users Today</h3>
-                <LuckiestUsers users={users} />
-            </div>
-             <div>
-                <h3 className="text-lg font-bold flex items-center gap-2 mb-2">Top Games by Win Rate</h3>
-                <TopGames />
-            </div>
-        </div>
+      <div className="w-full max-w-3xl mx-auto">
+        <CryptoLuckGame />
       </div>
     </div>
   );

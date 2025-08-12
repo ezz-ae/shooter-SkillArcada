@@ -56,6 +56,9 @@ export function Header() {
              <Button variant="ghost" asChild>
                 <Link href="/ai-adventure">AI Adventure</Link>
              </Button>
+              <Button variant="ghost" asChild>
+                <Link href="/shots-hub">Shots Hub</Link>
+             </Button>
              <Button variant="ghost" asChild>
                 <Link href="/learning-center">How to Earn</Link>
              </Button>
