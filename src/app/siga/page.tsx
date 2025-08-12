@@ -19,7 +19,7 @@ export default function SigaPage() {
             <Grid className="h-16 w-16 mx-auto text-primary"/>
           <CardTitle>Coming Soon!</CardTitle>
           <CardDescription>
-            The classic game of Siga is being prepared for the digital table. Get ready to outmaneuver your opponents.
+            The classic game of Siga is being prepared for the digital table. Get ready to outmaneuver your opponent.
           </CardDescription>
         </CardHeader>
         <CardContent>

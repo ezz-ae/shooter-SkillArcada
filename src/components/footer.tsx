@@ -32,7 +32,7 @@ export function Footer() {
 
       setIsPlaying(true);
       try {
-        const response = await textToSpeech("Welcome to Luckshots! Looking for a challenge? Join the queue to find an opponent.");
+        const response = await textToSpeech("Welcome to ShoterShots! My grandma used to say, a little bit of luck can change everything. Let's get this W!");
         const audioPlayer = new Audio(response.audioDataUri);
         setAudio(audioPlayer);
         audioPlayer.play();
@@ -53,8 +53,8 @@ export function Footer() {
     <footer className="border-t mt-12 py-8 bg-secondary/50">
       <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8">
         <div className="md:col-span-1">
-            <h3 className="font-bold text-lg mb-2">Luckshots</h3>
-            <p className="text-sm text-muted-foreground">Your shot at unbelievable prices. All safe, all fun.</p>
+            <h3 className="font-bold text-lg mb-2">ShoterShots</h3>
+            <p className="text-sm text-muted-foreground">Your shot at unbelievable prices, powered by our resident gamegang mega, Shoter.</p>
         </div>
         <div className="md:col-span-1">
             <h3 className="font-bold text-lg mb-2">Games</h3>
@@ -83,16 +83,16 @@ export function Footer() {
                 <CardHeader>
                     <CardTitle className="text-base flex items-center gap-2">
                         <MessageSquare className="text-primary"/>
-                        Entry Chat
+                        A Message from Shoter
                     </CardTitle>
                 </CardHeader>
                 <CardContent>
                     <p className="text-xs text-muted-foreground">
-                        Have 10 minutes to challenge someone? Hear our greeting.
+                        Hear a special greeting from our resident AI.
                     </p>
                     <Button className="w-full mt-2" size="sm" variant="outline" onClick={handlePlayGreeting} disabled={isPlaying}>
-                      {isPlaying ? <Loader className="animate-spin" /> : <Volume2 />}
-                      {isPlaying ? 'Playing...' : 'Play Greeting'}
+                      {isPlaying ? <Loader className="animate-spin h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+                      <span className="ml-2">{isPlaying ? 'Playing...' : 'Play Greeting'}</span>
                     </Button>
                 </CardContent>
             </Card>

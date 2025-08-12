@@ -19,7 +19,7 @@ export default function CardGamesPage() {
             <Layers className="h-16 w-16 mx-auto text-primary"/>
           <CardTitle>Coming Soon!</CardTitle>
           <CardDescription>
-            The deck is being shuffled and the tables are being prepared. Get ready for high-stakes action.
+            The digital deck is being shuffled and the tables are being prepared. Get ready for high-stakes action.
           </CardDescription>
         </CardHeader>
         <CardContent>

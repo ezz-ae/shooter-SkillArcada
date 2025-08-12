@@ -35,7 +35,7 @@ export default function VaultPage() {
     confirmShipping, 
     hasSeenVaultInfo, 
     setHasSeenVaultInfo,
-    luckshots,
+    shots,
   } = useStore();
   
   const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
@@ -168,22 +168,9 @@ export default function VaultPage() {
       <h1 className="text-3xl font-bold mb-2">My Vault & Wallet</h1>
       <p className="text-muted-foreground mb-6">Manage your items, balance, and shipments.</p>
       
-      {vault.length === 0 && (
-        <div className="text-center py-20 border-2 border-dashed rounded-lg flex flex-col items-center">
-          <div className="bg-primary/10 p-4 rounded-full mb-4">
-            <ShoppingCart className="h-12 w-12 text-primary" />
-          </div>
-          <h2 className="text-xl font-semibold">Your Vault is Empty</h2>
-          <p className="text-muted-foreground mt-2">Go find some lucky deals!</p>
-          <Button asChild className="mt-4">
-            <Link href="/">Start Shopping</Link>
-          </Button>
-        </div>
-      )}
-
       <div className="grid grid-cols-1 gap-8 md:grid-cols-12">
-        <div className={cn("grid gap-8", vault.length > 0 ? "md:col-span-8" : "md:col-span-12")}>
-            {vault.length > 0 && (
+        <div className="md:col-span-8 space-y-8">
+            {vault.length > 0 ? (
                 <div>
                     <div className="flex justify-between items-center mb-4">
                         <h2 className="text-2xl font-bold">Your Items ({vault.length})</h2>
@@ -202,10 +189,21 @@ export default function VaultPage() {
                         ))}
                     </div>
                 </div>
+            ) : (
+                <div className="text-center py-20 border-2 border-dashed rounded-lg flex flex-col items-center">
+                    <div className="bg-primary/10 p-4 rounded-full mb-4">
+                        <ShoppingCart className="h-12 w-12 text-primary" />
+                    </div>
+                    <h2 className="text-xl font-semibold">Your Vault is Empty</h2>
+                    <p className="text-muted-foreground mt-2">Win some games to get items!</p>
+                    <Button asChild className="mt-4">
+                        <Link href="/">Explore Games</Link>
+                    </Button>
+                </div>
             )}
         </div>
 
-        <div className={cn(vault.length > 0 ? "md:col-span-4" : "hidden")}>
+        <div className="md:col-span-4">
              <div className="sticky top-24 space-y-6">
                 <Card>
                     <CardHeader>
@@ -213,10 +211,10 @@ export default function VaultPage() {
                     </CardHeader>
                     <CardContent>
                         <div className="flex items-baseline gap-2">
-                            <p className="text-4xl font-black">{isClient ? luckshots.toFixed(2) : '0.00'}</p>
+                            <p className="text-4xl font-black">{isClient ? shots.toFixed(2) : '0.00'}</p>
                             <span className="text-muted-foreground font-bold">Shots</span>
                         </div>
-                        <p className="text-sm text-muted-foreground font-semibold">≈ ${isClient ? luckshots.toFixed(2) : '0.00'} USD</p>
+                        <p className="text-sm text-muted-foreground font-semibold">≈ ${isClient ? shots.toFixed(2) : '0.00'} USD</p>
                     </CardContent>
                     <CardFooter className="grid grid-cols-2 gap-2">
                       <Button className="w-full">

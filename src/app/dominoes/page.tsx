@@ -19,7 +19,7 @@ export default function DominoesPage() {
             <RectangleHorizontal className="h-16 w-16 mx-auto text-primary"/>
           <CardTitle>Coming Soon!</CardTitle>
           <CardDescription>
-            The digital dominoes table is being set up. Get ready to draw your tiles and dominate the board.
+            The digital dominoes are being set up. Get ready to draw your tiles and dominate the board.
           </CardDescription>
         </CardHeader>
         <CardContent>
