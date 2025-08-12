@@ -346,7 +346,9 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
             >
               <div className="absolute inset-0 moving-gradient"></div>
               <div className="relative flex items-baseline w-full justify-center">
-                   <span className="font-black text-lg">{product.game === 'multi-shot' ? 'x3 Shot' : 'Shot'}</span>
+                   <span className={cn("font-black", product.game === 'multi-shot' ? "text-xl" : "text-lg")}>
+                    {product.game === 'multi-shot' ? 'x3 Shot' : 'Shot'}
+                   </span>
               </div>
             </button>
           )}
