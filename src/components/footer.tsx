@@ -41,7 +41,7 @@ export function Footer() {
              <ul className="space-y-2">
                 <li><Link href="#" className="text-sm text-muted-foreground hover:text-foreground">Contact Us</Link></li>
                 <li><Link href="#" className="text-sm text-muted-foreground hover:text-foreground">FAQ</Link></li>
-                <li><Link href="#" className="text-sm text-muted-foreground hover:text-foreground">Terms of Service</Link></li>
+                <li><Link href="/terms" className="text-sm text-muted-foreground hover:text-foreground">Terms of Service</Link></li>
             </ul>
         </div>
         <div className="md:col-span-1">
@@ -64,3 +64,5 @@ export function Footer() {
     </footer>
   );
 }
+
+    

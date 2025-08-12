@@ -4,10 +4,9 @@
 import { Button } from "@/components/ui/button";
 import { mockUsers } from "@/lib/user";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Trophy, PlusCircle, Gamepad2, Star, BrainCircuit, LineChart, Swords, Heart, Dices, ChevronRight, HelpCircle, Users, DollarSign } from "lucide-react";
+import { Trophy, BrainCircuit, LineChart, Swords, Heart, Dices, ChevronRight, Users, DollarSign, FileText } from "lucide-react";
 import { ActivityFeed } from "@/components/activity-feed";
 import { useAuth } from "@/lib/auth";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useState, useEffect } from "react";
 import { LuckiestUsers } from "@/components/luckiest-users";
 import { DiceGame } from "@/components/dice-game";
@@ -19,9 +18,18 @@ import { PoolChallengeCard } from "@/components/pool-challenge-card";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { TopGames } from "@/components/top-games";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 export default function Home() {
-    const { isAuthenticated, user, login } = useAuth();
+    const { isAuthenticated, user, login, isNewUser, hasAcceptedTerms, acceptTerms } = useAuth();
     const [openChallenges, setOpenChallenges] = useState([
       { id: 'c1', prize: 40, fee: 5, player1: mockUsers[0], player2: null },
       { id: 'c2', prize: 100, fee: 10, player1: mockUsers[2], player2: null },
@@ -75,10 +83,34 @@ export default function Home() {
             </div>
         );
     }
+    
+    const showTermsDialog = isNewUser && !hasAcceptedTerms;
 
     return (
         <div className="container mx-auto px-4 py-8">
-            <div className="space-y-12">
+            <AlertDialog open={showTermsDialog}>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle className="flex items-center gap-2">
+                    <FileText className="text-primary"/>
+                    Welcome to Luckshots!
+                  </AlertDialogTitle>
+                  <AlertDialogDescription className="pt-2">
+                    Before you can play, please review and accept our terms of service. Our games involve spending and winning "Shots," which have a real-world value.
+                    <br/><br/>
+                    By clicking "Accept," you agree to our{' '}
+                    <Link href="/terms" target="_blank" className="underline hover:text-primary">
+                        Terms of Service
+                    </Link>.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogAction onClick={acceptTerms}>Accept & Play</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+            
+            <div className={cn("space-y-12", showTermsDialog && "blur-sm pointer-events-none")}>
                 
                 {/* Main Content: Challenges and League */}
                 <div className="space-y-8">
@@ -175,7 +207,7 @@ export default function Home() {
                     </section>
                      <section>
                         <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
-                           <Star className="text-yellow-400" />
+                           <Trophy className="text-yellow-400" />
                            Luckiest Users
                         </h2>
                         <LuckiestUsers />
@@ -191,3 +223,5 @@ export default function Home() {
         </div>
     );
 }
+
+    

@@ -14,8 +14,10 @@ interface AuthState {
   isLoggingIn: boolean;
   user: User | null;
   isNewUser: boolean;
+  hasAcceptedTerms: boolean;
   login: (method: 'whatsapp' | 'wallet') => void;
   logout: () => void;
+  acceptTerms: () => void;
   setIsLoggingIn: (isLoggingIn: boolean) => void;
 }
 
@@ -24,6 +26,7 @@ const initialState = {
   isLoggingIn: false,
   user: null,
   isNewUser: true,
+  hasAcceptedTerms: false,
 };
 
 export const useAuth = create<AuthState>()(
@@ -49,22 +52,25 @@ export const useAuth = create<AuthState>()(
           isAuthenticated: true,
           isLoggingIn: false,
           user: { luckyNumber: randomLuckyNumber, avatarUrl: randomAvatar },
-          isNewUser: false, // Mark as not a new user after first login
         });
       },
       logout: () => {
         // Also reset the main store on logout
         useStore.getState().reset();
         // Keep the isNewUser state on logout, but reset everything else.
-        // This is a bit tricky, so we grab isNewUser before setting initial state.
         const isNewUser = get().isNewUser;
         set({ ...initialState, isNewUser });
+      },
+      acceptTerms: () => {
+        set({ hasAcceptedTerms: true, isNewUser: false });
       },
       setIsLoggingIn: (isLoggingIn) => set({ isLoggingIn }),
     }),
     {
-      name: 'luckshot-auth-storage-v4', // Incremented version
+      name: 'luckshot-auth-storage-v5', // Incremented version
       storage: createJSONStorage(() => localStorage),
     }
   )
 );
+
+    
