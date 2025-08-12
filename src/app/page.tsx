@@ -108,7 +108,7 @@ export default function Home() {
                                 </div>
                             }
                             <Card className="shadow-2xl border-accent/50 border-2 flex flex-col justify-between overflow-hidden relative">
-                                <Image src="https://placehold.co/600x400/166534/FFFFFF" alt="Pool table" fill className="object-cover z-0" data-ai-hint="pool table top view" />
+                                <Image src="https://placehold.co/600x400/000000/FFFFFF" alt="Pool table with balls" fill className="object-cover z-0" data-ai-hint="pool balls black table" />
                                 <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/60 to-black/80 z-10" />
                                 <div className="relative z-20 flex flex-col flex-grow text-white p-6">
                                     <CardHeader className="text-center p-0">
@@ -117,16 +117,16 @@ export default function Home() {
                                         <CardDescription className="text-lg text-white/80">Season 1 is now open for registration.</CardDescription>
                                     </CardHeader>
                                     <CardContent className="text-center flex-grow flex flex-col justify-center p-0 pt-6">
-                                        <p className="text-5xl font-black text-primary">1 ETH</p>
-                                        <p className="text-white/80 font-semibold">Grand Prize</p>
+                                        <p className="text-white/80 font-semibold">The Luckypro will receive</p>
+                                        <p className="text-7xl font-black text-primary">1 ETH</p>
                                         <div className="flex items-center justify-center gap-2 mt-4 text-white/80">
                                             <Users className="h-5 w-5" />
-                                            <span className="font-bold">23 Players</span>
+                                            <span className="font-bold">32 Players</span>
                                         </div>
                                     </CardContent>
                                     <CardFooter className="p-0 pt-6">
-                                        <Button size="lg" className="w-full" variant="secondary" asChild>
-                                            <Link href="/pool-shot">View League</Link>
+                                        <Button size="lg" className="w-full" variant="secondary">
+                                            Free Registration Test
                                         </Button>
                                     </CardFooter>
                                 </div>
