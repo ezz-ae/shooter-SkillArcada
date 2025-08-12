@@ -6,6 +6,7 @@ export interface Product {
   marketPrice: number;
   imageUrl: string;
   dataAiHint: string;
+  allowDoubleSnipe?: boolean;
 }
 
 export const mockProducts: Product[] = [
@@ -17,6 +18,7 @@ export const mockProducts: Product[] = [
     marketPrice: 2500.0,
     imageUrl: 'https://placehold.co/600x400/000000/FFFFFF/png?text=Arcade',
     dataAiHint: 'vintage arcade',
+    allowDoubleSnipe: true,
   },
   {
     id: 'prod_002',
@@ -80,6 +82,7 @@ export const mockProducts: Product[] = [
     marketPrice: 4800.0,
     imageUrl: 'https://placehold.co/600x400/0000FF/FFFFFF/png?text=Book',
     dataAiHint: 'rare book',
+    allowDoubleSnipe: true,
   },
   {
     id: 'prod_009',
@@ -188,5 +191,6 @@ export const mockProducts: Product[] = [
     marketPrice: 15000.0,
     imageUrl: 'https://placehold.co/600x400/FF4500/FFFFFF/png?text=Fusion',
     dataAiHint: 'fusion generator',
+    allowDoubleSnipe: true,
   },
 ];

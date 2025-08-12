@@ -21,27 +21,39 @@ import { useStore } from "@/lib/store";
 import type { Product } from "@/lib/products";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { Dices } from "lucide-react";
 
 interface ShotTakerProps {
   product: Product;
   isPage?: boolean;
 }
 
+type DialogState = 'closed' | 'initialShot' | 'doubleSnipe';
+
 const SHOT_COST = 1;
+const DOUBLE_SNIPE_COST = 5;
 
 export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
   const [currentPrice, setCurrentPrice] = useState(product.marketPrice);
   const [priceHistory, setPriceHistory] = useState([{ value: product.marketPrice }]);
   const [animationClass, setAnimationClass] = useState("");
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [dialogState, setDialogState] = useState<DialogState>('closed');
   const [capturedPrice, setCapturedPrice] = useState(0);
+
+  // For double snipe
+  const [snipePrice1, setSnipePrice1] = useState(0);
+  const [snipePrice2, setSnipePrice2] = useState(0);
 
   const { addToVault, walletBalance, spendFromWallet } = useStore();
   const { toast } = useToast();
   const cardRef = useRef<HTMLDivElement>(null);
+  const snipeIntervalRef = useRef<NodeJS.Timeout>();
+
 
   useEffect(() => {
+    let isMounted = true;
     const interval = setInterval(() => {
+      if (!isMounted) return;
       setCurrentPrice((prevPrice) => {
         const volatility = 0.1;
         const changePercent = (Math.random() - 0.5) * volatility;
@@ -65,7 +77,13 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
       });
     }, 1000 + Math.random() * 1000);
 
-    return () => clearInterval(interval);
+    return () => {
+        isMounted = false;
+        clearInterval(interval)
+        if (snipeIntervalRef.current) {
+            clearInterval(snipeIntervalRef.current);
+        }
+    };
   }, []);
 
   const handleShot = () => {
@@ -79,32 +97,66 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
     }
     spendFromWallet(SHOT_COST);
     setCapturedPrice(currentPrice);
-    setIsDialogOpen(true);
+    setDialogState('initialShot');
   };
   
-  const handleVault = () => {
-    if (walletBalance < capturedPrice) {
+  const handleVault = (priceToPay: number) => {
+    if (walletBalance < priceToPay) {
       toast({
         variant: "destructive",
         title: "Insufficient Funds",
-        description: `You cannot afford to vault this item for $${capturedPrice.toFixed(2)}.`,
+        description: `You cannot afford to vault this item for $${priceToPay.toFixed(2)}.`,
       });
-      setIsDialogOpen(false);
+      setDialogState('closed');
       return;
     }
     
     addToVault({
         ...product,
-        pricePaid: capturedPrice,
+        pricePaid: priceToPay,
         purchaseTimestamp: Date.now(),
       });
 
     toast({
       title: "Item Vaulted!",
-      description: `${product.name} has been added to your vault for $${capturedPrice.toFixed(2)}.`,
+      description: `${product.name} has been added to your vault for $${priceToPay.toFixed(2)}.`,
     });
-    setIsDialogOpen(false);
+    setDialogState('closed');
   };
+
+  const startDoubleSnipe = () => {
+    if (walletBalance < DOUBLE_SNIPE_COST) {
+        toast({
+            variant: "destructive",
+            title: "Insufficient Funds",
+            description: `You need $${DOUBLE_SNIPE_COST.toFixed(2)} for a Double Snipe.`,
+        });
+        return;
+    }
+    spendFromWallet(DOUBLE_SNIPE_COST);
+    setDialogState('doubleSnipe');
+
+    const generateNewPrices = () => {
+        const volatility = 0.25; // Higher volatility for the snipe
+        let newPrice1 = capturedPrice * (1 + (Math.random() - 0.5) * volatility);
+        let newPrice2 = capturedPrice * (1 + (Math.random() - 0.5) * volatility);
+        newPrice1 = Math.max(1, newPrice1);
+        newPrice2 = Math.max(1, newPrice2);
+        setSnipePrice1(newPrice1);
+        setSnipePrice2(newPrice2);
+    };
+
+    generateNewPrices();
+    snipeIntervalRef.current = setInterval(generateNewPrices, 100);
+  }
+
+  const handleSnipe = (snipedPrice: number) => {
+    if (snipeIntervalRef.current) {
+      clearInterval(snipeIntervalRef.current);
+    }
+    handleVault(snipedPrice);
+  }
+
 
   const trendColor = priceHistory.length < 2 || priceHistory[priceHistory.length - 1].value >= priceHistory[priceHistory.length - 2].value
     ? 'hsl(var(--chart-1))'
@@ -177,19 +229,53 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
         </CardFooter>
       </CardComponent>
 
-      <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <AlertDialogContent>
-              <AlertDialogHeader>
-              <AlertDialogTitle>You Shot at ${capturedPrice.toFixed(2)}!</AlertDialogTitle>
-              <AlertDialogDescription>
-                  You've locked in the price for {product.name}. Do you want to vault it now? This will cost an additional ${capturedPrice.toFixed(2)} from your wallet.
-              </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-              <AlertDialogCancel>Let it go</AlertDialogCancel>
-              <AlertDialogAction onClick={handleVault}>Vault It!</AlertDialogAction>
-              </AlertDialogFooter>
-          </AlertDialogContent>
+      <AlertDialog open={dialogState !== 'closed'} onOpenChange={(open) => !open && setDialogState('closed')}>
+        {dialogState === 'initialShot' && (
+             <AlertDialogContent>
+                <AlertDialogHeader>
+                    <AlertDialogTitle>You Shot at ${capturedPrice.toFixed(2)}!</AlertDialogTitle>
+                    <AlertDialogDescription>
+                        You've locked in the price for {product.name}. You can vault it now, or try a Double Snipe for a better price!
+                    </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter className="gap-2">
+                    <Button variant="secondary" onClick={() => setDialogState('closed')}>Let it go</Button>
+                    <Button variant="default" onClick={() => handleVault(capturedPrice)}>Vault It! (${capturedPrice.toFixed(2)})</Button>
+                    {product.allowDoubleSnipe && (
+                        <Button variant="destructive" onClick={startDoubleSnipe}>
+                            <Dices className="mr-2 h-4 w-4" />
+                            Double Snipe (${DOUBLE_SNIPE_COST.toFixed(2)})
+                        </Button>
+                    )}
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        )}
+        {dialogState === 'doubleSnipe' && (
+            <AlertDialogContent>
+                <AlertDialogHeader>
+                    <AlertDialogTitle>Double Snipe!</AlertDialogTitle>
+                    <AlertDialogDescription>
+                        Two new prices are available. Click to snipe the one you want! Quick!
+                    </AlertDialogDescription>
+                </AlertDialogHeader>
+                <div className="flex justify-around gap-4 p-4">
+                    <Button size="lg" className="h-24 text-2xl" onClick={() => handleSnipe(snipePrice1)}>
+                       ${snipePrice1.toFixed(2)}
+                    </Button>
+                     <Button size="lg" className="h-24 text-2xl" onClick={() => handleSnipe(snipePrice2)}>
+                        ${snipePrice2.toFixed(2)}
+                    </Button>
+                </div>
+                 <AlertDialogFooter>
+                    <AlertDialogCancel onClick={() => {
+                        if (snipeIntervalRef.current) clearInterval(snipeIntervalRef.current);
+                        setDialogState('closed');
+                    }}>
+                        Cancel
+                    </AlertDialogCancel>
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        )}
       </AlertDialog>
     </>
   );
