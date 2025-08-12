@@ -55,6 +55,9 @@ export function Header() {
                 <Link href="/pool-shot">Pool Shot</Link>
              </Button>
              <Button variant="ghost" asChild>
+                <Link href="/shoter-and-girls">Shoter & Girls</Link>
+             </Button>
+             <Button variant="ghost" asChild>
                 <Link href="/ai-adventure">AI Adventure</Link>
              </Button>
               <Button variant="ghost" asChild>
