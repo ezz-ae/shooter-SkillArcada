@@ -322,7 +322,6 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
                         className={cn(
                           "h-16 w-1/3 rounded-lg flex items-center justify-center text-5xl font-black tabular-nums transition-all bg-secondary text-primary-foreground",
                           isNext && "cursor-pointer hover:bg-primary/80",
-                          isLocked && "!bg-secondary"
                         )}
                       >
                         {isLocked ? lockedDigits[index] : digits[index]}
@@ -394,7 +393,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
             </Link>
           )}
            {isGameCard ? (
-             <p className="text-sm text-muted-foreground h-10"></p> 
+             <div className="text-sm text-muted-foreground min-h-[2.5rem]" />
            ) : (
              <div className="flex items-baseline gap-2">
                 <span className="text-2xl font-black tracking-wider text-white shimmer-text" style={{'--trend-color': 'hsl(var(--primary))'} as React.CSSProperties}>${currentPrice.toFixed(2)}</span>
@@ -522,3 +521,5 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
     </>
   );
 }
+
+    
