@@ -181,17 +181,29 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
                     <AlertDialogTitle className="text-center">You Got a Shot!</AlertDialogTitle>
                 </AlertDialogHeader>
                 
-                <div className="relative h-64 w-full my-4">
+                <div className="relative h-64 w-full my-4 rounded-lg overflow-hidden shadow-lg">
                     <Image
                         src={product.imageUrl}
                         alt={product.name}
                         fill
-                        className="rounded-lg object-cover shadow-lg"
+                        className="object-cover"
                         data-ai-hint={product.dataAiHint}
                     />
-                     <div className="absolute bottom-2 right-2 bg-black/50 text-white p-2 rounded-md text-sm font-mono">
-                        {capturedTime?.toLocaleTimeString()}
-                    </div>
+                     <div className="absolute inset-0 bg-black/20 flex flex-col justify-between p-4">
+                        <div className="text-right">
+                           <div className="bg-black/50 text-white p-2 rounded-md text-sm font-mono inline-block">
+                             {capturedTime?.toLocaleTimeString()}
+                           </div>
+                        </div>
+
+                        <div className="bg-black/50 p-4 rounded-lg text-center">
+                            <div className="text-sm text-muted-foreground">Captured Price</div>
+                            <div className="relative text-3xl font-black text-white">
+                                ${capturedPrice.toFixed(2)}
+                            </div>
+                        </div>
+
+                     </div>
                 </div>
 
                 <AlertDialogDescription className="text-center">
