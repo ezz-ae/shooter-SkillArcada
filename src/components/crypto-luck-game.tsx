@@ -15,11 +15,17 @@ import { Input } from "./ui/input";
 const GAME_DURATION_SECONDS = 180; // 3 minutes
 
 type GameState = 'idle' | 'playing' | 'finished';
+type Trend = 'upward' | 'downward' | 'stable';
 
 interface GameResult {
     isWinner: boolean;
     prize: number;
     accuracy: number;
+}
+
+interface PriceModel {
+    trend: Trend;
+    stepsRemaining: number;
 }
 
 export function CryptoLuckGame() {
@@ -44,10 +50,46 @@ export function CryptoLuckGame() {
   
   const timerInterval = useRef<NodeJS.Timeout>();
   const priceInterval = useRef<NodeJS.Timeout>();
+  const priceModel = useRef<PriceModel>({ trend: 'stable', stepsRemaining: 0 });
 
   const getNewPrice = useCallback((price: number) => {
-    const volatility = 0.005; // 0.5% volatility
-    const changePercent = (Math.random() - 0.5) * volatility;
+    let { trend, stepsRemaining } = priceModel.current;
+
+    // Check if we need to change the trend
+    if (stepsRemaining <= 0) {
+      const random = Math.random();
+      if (random < 0.3) {
+        trend = 'upward';
+        stepsRemaining = 5 + Math.floor(Math.random() * 10); // 5-15 steps
+      } else if (random < 0.6) {
+        trend = 'downward';
+        stepsRemaining = 5 + Math.floor(Math.random() * 10);
+      } else {
+        trend = 'stable';
+        stepsRemaining = 3 + Math.floor(Math.random() * 5); // 3-8 steps
+      }
+    } else {
+        stepsRemaining--;
+    }
+
+    priceModel.current = { trend, stepsRemaining };
+
+    const majorVolatility = 0.003; // More dramatic swings
+    const minorVolatility = 0.001;
+    let changePercent = 0;
+
+    switch (trend) {
+        case 'upward':
+            changePercent = (Math.random() * majorVolatility) + (minorVolatility / 2);
+            break;
+        case 'downward':
+            changePercent = -(Math.random() * majorVolatility) - (minorVolatility / 2);
+            break;
+        case 'stable':
+            changePercent = (Math.random() - 0.5) * minorVolatility;
+            break;
+    }
+
     let newPrice = price * (1 + changePercent);
     newPrice = Math.max(1, newPrice);
     return newPrice;
