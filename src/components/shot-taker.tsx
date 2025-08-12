@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -14,12 +14,14 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "./ui/card";
 import { useStore } from "@/lib/store";
 import type { Product } from "@/lib/products";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { Calculator } from "./calculator";
 
 interface ShotTakerProps {
   product: Product;
@@ -27,6 +29,8 @@ interface ShotTakerProps {
 }
 
 const SHOT_COST = 1;
+const RIDDLE_ANSWER = 80;
+const RIDDLE_TIMER_SECONDS = 300; // 5 minutes
 
 export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
   const [currentPrice, setCurrentPrice] = useState(product.marketPrice);
@@ -41,6 +45,12 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
   const [isGameActive, setIsGameActive] = useState(false);
   const digitIntervals = useRef<NodeJS.Timeout[]>([]);
 
+  // For riddle-calc game
+  const [isRiddleDialogOpen, setIsRiddleDialogOpen] = useState(false);
+  const [riddleTimer, setRiddleTimer] = useState(RIDDLE_TIMER_SECONDS);
+  const [calculatorValue, setCalculatorValue] = useState("");
+  const timerInterval = useRef<NodeJS.Timeout>();
+
   const { addToVault, walletBalance, spendFromWallet, hasTakenFirstShot, setHasTakenFirstShot } = useStore();
   const { toast } = useToast();
   
@@ -54,7 +64,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
 
   useEffect(() => {
     let isMounted = true;
-    if (product.game !== 'digit-pause') {
+    if (product.game !== 'digit-pause' && product.game !== 'riddle-calc') {
       const priceInterval = setInterval(() => {
         if (!isMounted) return;
         setCurrentPrice(getNewPrice);
@@ -71,15 +81,32 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
   useEffect(() => {
     return () => {
         stopDigitGame();
+        if (timerInterval.current) {
+          clearInterval(timerInterval.current);
+        }
     }
   }, []);
 
   useEffect(() => {
-    // Start the game automatically for the digit-pause product
+    // Start the digit game automatically for the digit-pause product
     if (product.game === 'digit-pause' && !isGameActive) {
       startDigitGame();
     }
   }, [product.game, isGameActive]);
+  
+  useEffect(() => {
+    if (isRiddleDialogOpen && riddleTimer > 0) {
+      timerInterval.current = setInterval(() => {
+        setRiddleTimer(prev => prev - 1);
+      }, 1000);
+    } else if (riddleTimer === 0) {
+      if (timerInterval.current) clearInterval(timerInterval.current);
+      setIsRiddleDialogOpen(false);
+    }
+    return () => {
+      if (timerInterval.current) clearInterval(timerInterval.current);
+    }
+  }, [isRiddleDialogOpen, riddleTimer]);
 
   const startDigitGame = () => {
     setIsGameActive(true);
@@ -103,7 +130,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
   };
 
   const handleShot = () => {
-    if (product.game === 'digit-pause') {
+    if (product.game === 'digit-pause' || product.game === 'riddle-calc') {
       return;
     }
     
@@ -136,8 +163,8 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
     setIsDialogOpen(true);
   };
   
-  const handleVault = () => {
-    const priceToPay = product.game === 'multi-shot' ? selectedPrice : capturedPrices[0];
+  const handleVault = (price?: number) => {
+    const priceToPay = price ?? (product.game === 'multi-shot' ? selectedPrice : capturedPrices[0]);
 
     if (priceToPay === null) return;
     
@@ -202,6 +229,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
     if (newLockedDigits.length === 3) {
       stopDigitGame();
       setIsGameActive(false);
+      setCapturedPrices([Number(newLockedDigits.join(''))]);
     }
   };
 
@@ -233,55 +261,103 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
   const resetDigitGame = () => {
       setLockedDigits([]);
       setDigits([0,0,0]);
+      setCapturedPrices([]);
       startDigitGame();
   }
+  
+  const handleRiddleStart = () => {
+    if (hasTakenFirstShot) {
+      if (walletBalance < SHOT_COST) {
+        toast({
+          variant: 'destructive',
+          title: 'Insufficient Funds',
+          description: `You need at least $${SHOT_COST.toFixed(2)} to play.`,
+        });
+        return;
+      }
+      spendFromWallet(SHOT_COST);
+    } else {
+       toast({
+        title: "Your First Shot is Free!",
+        description: "Solve the riddle to set the price!",
+      });
+      setHasTakenFirstShot();
+    }
+    setRiddleTimer(RIDDLE_TIMER_SECONDS);
+    setIsRiddleDialogOpen(true);
+  }
 
+  const handleRiddleShot = () => {
+    handleVault(RIDDLE_ANSWER);
+    setCalculatorValue("");
+  }
+  
+  const minutes = Math.floor(riddleTimer / 60);
+  const seconds = riddleTimer % 60;
+  const timerColor = riddleTimer <= 60 ? "text-destructive" : "text-foreground";
 
   const CardComponent = isPage ? 'div' : Card;
-  const isGameCard = product.game === 'digit-pause';
+  const isGameCard = product.game === 'digit-pause' || product.game === 'riddle-calc';
 
   const discountPercent = ((product.marketPrice - currentPrice) / product.marketPrice) * 100;
   const discountColor = discountPercent > 0 ? "text-accent" : "text-[hsl(var(--chart-4))]";
-
+  
   const renderGameFooter = () => {
-    if (lockedDigits.length < 3) {
+    if (product.game === 'digit-pause') {
+      if (lockedDigits.length < 3) {
+        return (
+          <div className="flex w-full items-center justify-center gap-2">
+            <div className="h-16 w-8 flex-shrink-0 rounded-lg bg-secondary flex items-center justify-center text-2xl font-black text-primary-foreground">
+              $
+            </div>
+            <div className="flex w-full justify-center items-center gap-2 relative">
+                {[0, 1, 2].map(index => {
+                    const isLocked = lockedDigits.length > index;
+                    const isNext = lockedDigits.length === index;
+                    return (
+                      <button
+                        key={index}
+                        onClick={() => handleDigitClick(index)}
+                        disabled={!isNext}
+                        className={cn(
+                          "h-16 w-1/3 rounded-lg flex items-center justify-center text-5xl font-black tabular-nums transition-all bg-secondary text-primary-foreground",
+                          isNext && "cursor-pointer hover:bg-primary/80",
+                          isLocked && "!bg-secondary"
+                        )}
+                      >
+                        {isLocked ? '?' : digits[index]}
+                      </button>
+                    );
+                })}
+            </div>
+          </div>
+        );
+      }
       return (
-        <div className="flex w-full items-center justify-center gap-2">
-          <div className="h-16 w-8 flex-shrink-0 rounded-lg bg-secondary flex items-center justify-center text-2xl font-black text-primary-foreground">
-            $
+          <div className="w-full flex flex-col gap-2 items-center">
+              <Button onClick={handleConfirmDigitPauseShot} className="w-full h-16 text-2xl font-black">Take the Shot!</Button>
           </div>
-          <div className="flex w-full justify-center items-center gap-2 relative">
-              {[0, 1, 2].map(index => {
-                  const isClickable = isGameActive && lockedDigits.length === index;
-                  return (
-                    <button
-                      key={index}
-                      onClick={() => handleDigitClick(index)}
-                      disabled={!isClickable}
-                      className={cn(
-                        "h-16 w-1/3 rounded-lg flex items-center justify-center text-5xl font-black tabular-nums transition-all bg-secondary text-primary-foreground",
-                        isClickable && "cursor-pointer hover:bg-primary/80",
-                        lockedDigits.includes(index) && "!bg-secondary"
-                      )}
-                    >
-                      {lockedDigits.length > index ? '?' : digits[index]}
-                    </button>
-                  );
-              })}
-          </div>
-        </div>
       );
     }
     
-    return (
-        <div className="w-full flex flex-col gap-2 items-center">
-            <div className="w-full flex gap-2">
-                <Button onClick={handleConfirmDigitPauseShot} className="w-full h-16 text-2xl font-black">Take the Shot!</Button>
+    if (product.game === 'riddle-calc') {
+        const isCorrectAnswer = calculatorValue === String(RIDDLE_ANSWER);
+        return (
+             <div className="w-full flex flex-col gap-2">
+                <Calculator value={calculatorValue} onValueChange={setCalculatorValue} />
+                 {isCorrectAnswer ? (
+                     <Button onClick={handleRiddleShot} className="w-full h-12 text-lg font-bold">
+                        Take the Shot for ${RIDDLE_ANSWER}!
+                    </Button>
+                 ) : (
+                    <Button onClick={handleRiddleStart} className="w-full h-12 text-lg font-bold">Start Riddle</Button>
+                 )}
             </div>
-        </div>
-    );
-  }
+        )
+    }
 
+    return null;
+  }
 
   return (
     <>
@@ -317,7 +393,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
             </Link>
           )}
            {isGameCard ? (
-             <p className="text-sm text-muted-foreground h-5"></p> 
+             <p className="text-sm text-muted-foreground h-10"></p> 
            ) : (
              <div className="flex items-baseline gap-2">
                 <span className="text-2xl font-black tracking-wider text-white shimmer-text" style={{'--trend-color': 'hsl(var(--primary))'} as React.CSSProperties}>${currentPrice.toFixed(2)}</span>
@@ -328,7 +404,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
           )}
            {isPage && (
              <div className="mt-4">
-               {!isGameCard && (
+               {product.game === 'regular' || !product.game && (
                  <>
                     <span className="text-3xl font-black tracking-wider text-white shimmer-text" style={{'--trend-color': 'hsl(var(--primary))'} as React.CSSProperties}>${currentPrice.toFixed(2)}</span>
                     <span className={cn("ml-2 font-bold", discountColor)}>
@@ -416,10 +492,32 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
                 
                 <AlertDialogFooter className="gap-2 sm:gap-0 sm:flex-row sm:justify-center">
                     <AlertDialogCancel onClick={handleCloseDialog}>Let it go</AlertDialogCancel>
-                    <AlertDialogAction onClick={handleVault} disabled={product.game === 'multi-shot' && selectedPrice === null}>Vault It!</AlertDialogAction>
+                    <AlertDialogAction onClick={() => handleVault()} disabled={product.game === 'multi-shot' && selectedPrice === null}>Vault It!</AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>
       </AlertDialog>
+
+       <Dialog open={isRiddleDialogOpen} onOpenChange={setIsRiddleDialogOpen}>
+            <DialogContent className="max-w-md select-none">
+                <DialogHeader>
+                    <DialogTitle>Solve the Riddle to Set the Price</DialogTitle>
+                     <DialogDescription>
+                        Use the calculator on the item card to enter your answer.
+                    </DialogDescription>
+                </DialogHeader>
+                <div className="py-4 space-y-4">
+                     <p className="text-lg font-mono p-4 bg-secondary rounded-md text-center">
+                        if you got a pen you win
+                    </p>
+                    <p className="text-lg font-mono p-4 bg-secondary rounded-md text-center">
+                        we brougt a handrad by two to erarn ten sold with a fivty off for only half.
+                    </p>
+                </div>
+                <div className={cn("text-center text-4xl font-black font-mono", timerColor)}>
+                    {String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}
+                </div>
+            </DialogContent>
+        </Dialog>
     </>
   );
 }

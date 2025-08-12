@@ -6,7 +6,7 @@ export interface Product {
   marketPrice: number;
   imageUrl: string;
   dataAiHint: string;
-  game?: 'reel-pause' | 'digit-pause' | 'multi-shot';
+  game?: 'reel-pause' | 'digit-pause' | 'multi-shot' | 'riddle-calc';
 }
 
 export const mockProducts: Product[] = [
@@ -110,6 +110,7 @@ export const mockProducts: Product[] = [
     marketPrice: 7800.0,
     imageUrl: 'https://placehold.co/600x400/87CEEB/000000/png?text=Drone',
     dataAiHint: 'weather drone',
+    game: 'riddle-calc',
   },
   {
     id: 'prod_011',
