@@ -152,8 +152,8 @@ export default function ProductPage({ params }: { params: { id: string } }) {
                     >
                          <defs>
                             <linearGradient id="fillGreen" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor="hsl(var(--chart-2))" stopOpacity={0.8}/>
-                                <stop offset="95%" stopColor="hsl(var(--chart-2))" stopOpacity={0.1}/>
+                                <stop offset="5%" stopColor="hsl(var(--chart-1))" stopOpacity={0.8}/>
+                                <stop offset="95%" stopColor="hsl(var(--chart-1))" stopOpacity={0.1}/>
                             </linearGradient>
                             <linearGradient id="fillRed" x1="0" y1="0" x2="0" y2="1">
                                 <stop offset="5%" stopColor="hsl(var(--destructive))" stopOpacity={0.8}/>
@@ -176,7 +176,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
                             type="natural"
                             fill={priceTrend === "down" ? "url(#fillRed)" : "url(#fillGreen)"}
                             fillOpacity={0.4}
-                            stroke={priceTrend === "down" ? "hsl(var(--destructive))" : "hsl(var(--chart-2))"}
+                            stroke={priceTrend === "down" ? "hsl(var(--destructive))" : "hsl(var(--chart-1))"}
                             strokeWidth={2}
                             dot={false}
                         />
