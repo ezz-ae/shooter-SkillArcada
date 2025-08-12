@@ -121,17 +121,16 @@ export function ProductCard({ product }: ProductCardProps) {
                     priceColor
                   )}
                 >
-                  {isPending && priceHistory.length <= 1 ? (
-                    <Hourglass className="h-7 w-7 animate-spin" />
-                  ) : (
-                    `$${currentPrice.toFixed(2)}`
-                  )}
+                  {`$${currentPrice.toFixed(2)}`}
                 </div>
                 <div className="flex items-center transition-opacity duration-500">
-                  {priceTrend === "up" && (
+                  {isPending && priceHistory.length > 1 && (
+                    <Hourglass className="h-5 w-5 animate-spin" />
+                  )}
+                  {!isPending && priceTrend === "up" && (
                     <TrendingUp className="h-5 w-5 text-green-500" />
                   )}
-                  {priceTrend === "down" && (
+                  {!isPending && priceTrend === "down" && (
                     <TrendingDown className="h-5 w-5 text-destructive" />
                   )}
                 </div>

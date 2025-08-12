@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import { useEffect, useState, useTransition } from "react";
@@ -127,18 +128,17 @@ export default function ProductPage({ params }: { params: { id: string } }) {
                         priceColor
                         )}
                     >
-                        {isPending && priceHistory.length <= 1 ? (
-                        <Hourglass className="h-8 w-8 animate-spin" />
-                        ) : (
-                        `$${currentPrice.toFixed(2)}`
-                        )}
+                      `$${currentPrice.toFixed(2)}`
                     </div>
                     <div className="flex items-center transition-opacity duration-500">
-                        {priceTrend === "up" && (
-                        <TrendingUp className="h-6 w-6 text-green-500" />
+                        {isPending && priceHistory.length > 1 && (
+                            <Hourglass className="h-6 w-6 animate-spin" />
                         )}
-                        {priceTrend === "down" && (
-                        <TrendingDown className="h-6 w-6 text-destructive" />
+                        {!isPending && priceTrend === "up" && (
+                            <TrendingUp className="h-6 w-6 text-green-500" />
+                        )}
+                        {!isPending && priceTrend === "down" && (
+                            <TrendingDown className="h-6 w-6 text-destructive" />
                         )}
                     </div>
                 </div>
@@ -198,4 +198,3 @@ export default function ProductPage({ params }: { params: { id: string } }) {
     </div>
   );
 }
-
