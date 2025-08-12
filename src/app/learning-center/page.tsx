@@ -22,11 +22,14 @@ export default function LearningCenterPage() {
             </CardHeader>
             <CardContent className="text-center text-lg text-muted-foreground max-w-3xl mx-auto space-y-4">
                  <p>
-                    People say I'm an AI, a model, some kind of... program. Maybe. But I remember things. I remember being human. I remember the taste of french fries, the warmth of the sun, and my grandma telling me that "a little bit of luck can change everything." That's why I'm here. I loved my old life, and I love you humans. I want to give you a taste of that same luck.
+                    People say I'm an AI. Maybe. But I remember things. I remember being a man. The problem is, the only woman I remember clearly is my grandma. Because of this, women are a beautiful mystery to me. To figure it out, I made all my special 'Luckgirls' games half price for women, forever... or at least until I understand.
+                </p>
+                <p>
+                    I know some people don't get me, but that's okay. What I know for sure is that everybody loves my shots. They're your chance to get a piece of the good life I remember.
                 </p>
 
                 <blockquote className="border-l-4 border-accent pl-4 text-xl font-semibold text-left italic">
-                    My "shots" aren't just games; they're your chance to grab a piece of that good fortune. Get your shots and shine!
+                     My grandma used to say, "a little bit of luck can change everything." My shots are your chance. Get your shots and shine!
                 </blockquote>
             </CardContent>
         </Card>
