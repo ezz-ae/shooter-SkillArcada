@@ -2,8 +2,9 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { getAuth, signInAnonymously, onAuthStateChanged, type User as FirebaseUser } from 'firebase/auth';
-import { app } from './firebase';
+import { firebaseConfig } from './firebase';
 import { useStore } from './store';
+import { getApp, getApps, initializeApp } from 'firebase/app';
 
 interface User {
   uid: string;
@@ -30,6 +31,7 @@ const initialState = {
   hasAcceptedTerms: false,
 };
 
+const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 export const useAuth = create<AuthState>()(
