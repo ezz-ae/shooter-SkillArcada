@@ -65,18 +65,18 @@ export function PoolChallengeCard({ challenge, onDismiss }: PoolChallengeCardPro
        )}
        <CardHeader>
          <div className="flex justify-around items-center">
-            <div className="flex flex-col items-center gap-2">
+            <div className="flex flex-col items-center gap-2 text-center w-24">
                 <Avatar className="h-16 w-16 border-4 border-primary">
                     <AvatarImage src={player1.avatarUrl} alt={player1.name} />
                     <AvatarFallback>{player1.name.substring(0,2)}</AvatarFallback>
                 </Avatar>
-                <span className="font-semibold text-sm">{player1.name}</span>
+                <span className="font-semibold text-sm truncate w-full">{player1.name}</span>
             </div>
             <div className="text-center">
                 <p className="text-muted-foreground text-xs">VS</p>
                 <p className="font-black text-2xl text-primary">POOL</p>
             </div>
-             <div className="flex flex-col items-center gap-2">
+             <div className="flex flex-col items-center gap-2 text-center w-24">
                 <Avatar className="h-16 w-16 border-4 border-secondary data-[waiting=true]:border-dashed" data-waiting={isWaiting}>
                     {player2 ? (
                         <>
@@ -87,11 +87,11 @@ export function PoolChallengeCard({ challenge, onDismiss }: PoolChallengeCardPro
                         <AvatarFallback>?</AvatarFallback>
                     )}
                 </Avatar>
-                <span className="font-semibold text-sm">{player2 ? player2.name : 'Waiting...'}</span>
+                <span className="font-semibold text-sm truncate w-full">{player2 ? player2.name : 'Waiting...'}</span>
             </div>
         </div>
       </CardHeader>
-      <CardContent className="flex-grow text-center">
+      <CardContent className="flex-grow text-center flex flex-col justify-center">
          {isWaiting && (
             <div className="flex justify-center items-center gap-2 mb-2">
                 <Zap className="h-5 w-5 text-yellow-500 animate-ping" />

@@ -168,7 +168,7 @@ export default function Home() {
                 </div>
 
                 {/* Sidebar: Live Activity & Social */}
-                <aside className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                      <section>
                         <h2 className="text-2xl font-bold mb-4">Live Activity</h2>
                         <ActivityFeed />
@@ -180,7 +180,7 @@ export default function Home() {
                         </h2>
                         <LuckiestUsers />
                     </section>
-                </aside>
+                </div>
 
                 <section>
                     <h2 className="text-2xl font-bold mb-4">Top Winning Games</h2>

@@ -580,7 +580,7 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
             </div>
           </CardHeader>
         </Link>
-        <CardContent className="flex-grow p-4 pb-2 space-y-2 min-h-[8.5rem]">
+        <CardContent className="flex-grow p-4 pb-2 space-y-2">
             {renderChart()}
         </CardContent>
         <CardFooter className="p-4 pt-2 flex-col items-center">
@@ -661,7 +661,7 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
                            <div className="bg-black/50 p-4 rounded-lg text-center">
                                 <div className="text-sm text-muted-foreground">Captured Price</div>
                                 <div className="flex items-center justify-center gap-2">
-                                  <Gem className="h-6 w-6 text-primary" />
+                                  <DollarSign className="h-6 w-6 text-primary" />
                                   <div className="relative text-3xl font-black text-white shimmer-text" style={{'--trend-color': 'hsl(var(--primary))'} as React.CSSProperties}>
                                       {capturedPrices[0]?.toFixed(2)}
                                   </div>
@@ -734,7 +734,7 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
                             <circle cx="80" cy="20" r="4" fill="hsl(var(--foreground))" fillOpacity="0.5" />
                             <circle cx="20" cy="50" r="4" fill="hsl(var(--foreground))" fillOpacity="0.5" />
                             <circle cx="50" cy="50" r="4" fill="hsl(var(--foreground))" fillOpacity="0.5" />
-                            <circle cx="80" cy="50" r="4" fill="hsl(var(--foreground))" fillOpacity="0.5" />
+                            <circle cx="80" cy="80" r="4" fill="hsl(var(--foreground))" fillOpacity="0.5" />
                             <circle cx="20" cy="80" r="4" fill="hsl(var(--foreground))" fillOpacity="0.5" />
                             <circle cx="50" cy="80" r="4" fill="hsl(var(--foreground))" fillOpacity="0.5" />
                             <circle cx="80" cy="80" r="4" fill="hsl(var(--foreground))" fillOpacity="0.5" />

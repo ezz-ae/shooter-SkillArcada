@@ -74,8 +74,8 @@ export function DiceGame() {
                     Throw the dice 3 times to measure your luck.
                 </CardDescription>
             </CardHeader>
-            <CardContent>
-                <div className="flex justify-center items-center gap-4 h-32">
+            <CardContent className="flex flex-col items-center justify-center h-full">
+                <div className="flex justify-center items-center gap-4 my-6">
                     {rolls.map((rollValue, i) => (
                         <Dice 
                             key={i}
