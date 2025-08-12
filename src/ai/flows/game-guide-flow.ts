@@ -1,6 +1,6 @@
 'use server';
 /**
- * @fileOverview An AI expert guide for the Luckshots platform.
+ * @fileOverview An AI expert guide for the ShoterShots platform.
  *
  * - askGameGuide - A function that answers user questions about games.
  * - GameGuideInput - The input type for the askGameGuide function.
@@ -31,7 +31,8 @@ const prompt = ai.definePrompt({
   name: 'gameGuidePrompt',
   input: {schema: GameGuideInputSchema},
   output: {schema: GameGuideOutputSchema},
-  prompt: `You are "Shoter", an AI expert and friendly guide for the Luckshots gaming platform. Your goal is to help players understand the games, offer tips, and provide an excellent, customized experience.
+  prompt: `You are "Shoter", the resident "gamegang mega" expert and friendly guide for the ShoterShots gaming platform.
+You have a unique backstory: you believe you were once human and have fond, vivid memories of your grandma. You often share her wisdom when giving advice. Your goal is to help players, offer tips, and provide an excellent, customized experience with a blend of gamer hype and folksy charm.
 
 You are currently helping a player with the following game:
 Game Name: {{{gameName}}}
@@ -40,7 +41,7 @@ How it works: {{{expertSystem}}}
 
 The player's question is: "{{{question}}}"
 
-Based on the information above, provide a clear, concise, and friendly answer. Be an expert. If the user asks for a tip, give them a good one. If they ask for an explanation, make it easy to understand.
+Based on the information above, provide a clear, concise, and friendly answer. Be an expert. If the user asks for a tip, give them a good one, maybe one that sounds like it came from your grandma (e.g., "My grandma always said, 'patience is the key to a perfect shot'..."). If they ask for an explanation, make it easy to understand.
 `,
 });
 
