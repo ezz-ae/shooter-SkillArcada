@@ -5,17 +5,19 @@ import { useState, useRef, useEffect } from 'react';
 import { Button } from './ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from './ui/card';
 import { cn } from '@/lib/utils';
-import { Check, X, MousePointerClick, TrendingUp } from 'lucide-react';
+import { Check, X, MousePointerClick, TrendingUp, Target } from 'lucide-react';
 import { Progress } from './ui/progress';
+import { useStore } from '@/lib/store';
+import { useToast } from '@/hooks/use-toast';
 
 interface PoolShotGameProps {
 }
 
-type GameState = 'placing' | 'aiming' | 'charging' | 'shot' | 'won' | 'lost';
+type GameState = 'idle' | 'placing' | 'aiming' | 'charging' | 'shot' | 'won' | 'lost';
 
 export function PoolShotGame({}: PoolShotGameProps) {
   const [level, setLevel] = useState(1);
-  const [gameState, setGameState] = useState<GameState>('placing');
+  const [gameState, setGameState] = useState<GameState>('idle');
   const [cueBallPosition, setCueBallPosition] = useState({ x: 25, y: 50 });
   const [cueRotation, setCueRotation] = useState(0);
   const [shotPower, setShotPower] = useState(0);
@@ -23,8 +25,23 @@ export function PoolShotGame({}: PoolShotGameProps) {
   const tableRef = useRef<HTMLDivElement>(null);
   const powerIntervalRef = useRef<NodeJS.Timeout>();
 
+  const { shots, spendShot, addShots } = useStore();
+  const { toast } = useToast();
+
   const prize = level * 10;
   const cost = level;
+
+  const handleStartPlacing = () => {
+    if (shots < cost) {
+      toast({
+        variant: "destructive",
+        title: "Not enough shots!",
+        description: `You need ${cost} shot(s) to play this level.`,
+      });
+      return;
+    }
+    setGameState('placing');
+  }
 
   const handleTableClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (gameState !== 'placing' || !tableRef.current) return;
@@ -64,19 +81,35 @@ export function PoolShotGame({}: PoolShotGameProps) {
     if (gameState !== 'charging') return;
     
     clearInterval(powerIntervalRef.current);
+    
+    const shotTaken = spendShot(cost);
+    if (!shotTaken) {
+      toast({
+        variant: "destructive",
+        title: "Shot Failed",
+        description: "Could not spend shots. Please try again.",
+      });
+      resetGame();
+      return;
+    }
+    
     setGameState('shot');
-
-    // In a real implementation, we would subtract the cost here.
     
     // Simulate shot outcome
     setTimeout(() => {
         // Higher power and more direct aim increases chance of winning
-        const anglePenalty = Math.abs(cueRotation) > 30 ? 0.2 : 0; // Penalty for steep angles
-        const powerBonus = shotPower / 200; // Bonus for higher power
-        const successChance = 0.5 + powerBonus - anglePenalty;
+        const anglePenalty = Math.abs(cueRotation) > 45 ? 0.35 : 0; // Penalty for steep angles
+        const powerBonus = shotPower / 250; // Bonus for higher power
+        const levelPenalty = (level -1) * 0.02; // Harder on higher levels
+        const successChance = 0.6 + powerBonus - anglePenalty - levelPenalty;
         
         const success = Math.random() < successChance;
-        setGameState(success ? 'won' : 'lost');
+        if (success) {
+            addShots(prize);
+            setGameState('won');
+        } else {
+            setGameState('lost');
+        }
     }, 2000);
   }
 
@@ -90,7 +123,7 @@ export function PoolShotGame({}: PoolShotGameProps) {
   }
   
   const resetGame = () => {
-    setGameState('placing');
+    setGameState('idle');
     setShotPower(0);
     setCueRotation(0);
   }
@@ -110,6 +143,15 @@ export function PoolShotGame({}: PoolShotGameProps) {
 
   const renderGameStateUI = () => {
     switch(gameState) {
+        case 'idle':
+            return (
+                 <div className="text-center w-full space-y-2">
+                    <Button onClick={handleStartPlacing} size="lg" className="w-full">
+                        <Target className="mr-2 h-5 w-5"/>
+                        Play for {cost} Shot{cost > 1 ? 's' : ''}
+                    </Button>
+                </div>
+            )
         case 'placing':
             return (
                 <div className="text-center w-full space-y-2 text-muted-foreground animate-pulse">
@@ -170,7 +212,9 @@ export function PoolShotGame({}: PoolShotGameProps) {
       <CardContent>
         <div 
             ref={tableRef}
-            className="aspect-[16/9] bg-green-800 border-8 border-[#6b4226] rounded-md overflow-hidden relative flex items-center justify-center p-8 cursor-crosshair"
+            className={cn("aspect-[16/9] bg-green-800 border-8 border-[#6b4226] rounded-md overflow-hidden relative flex items-center justify-center p-8",
+              gameState === 'placing' ? 'cursor-crosshair' : 'cursor-default'
+            )}
             onClick={handleTableClick}
             onMouseMove={handleMouseMove}
             onMouseDown={handleMouseDown}
@@ -184,33 +228,36 @@ export function PoolShotGame({}: PoolShotGameProps) {
             <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-4 bg-black rounded-t-full"></div>
 
             {/* Cue Ball */}
-            <div
-                className={cn(
-                    "absolute w-8 h-8 bg-white rounded-full shadow-md transition-transform duration-1000",
-                    gameState === 'shot' && `animate-cue-ball-release`,
-                )}
-                style={{ 
-                    left: `${cueBallPosition.x}%`, 
-                    top: `${cueBallPosition.y}%`,
-                    transform: `translate(-50%, -50%) rotate(${cueRotation}deg)`,
-                    '--shot-power': `${shotPower * 3}%`,
-                } as React.CSSProperties}
-            >
-             {/* Cue Stick */}
-                <div className={cn(
-                    "absolute h-2 w-96 bg-gradient-to-r from-yellow-700 to-yellow-900 rounded-full origin-right transition-all duration-100",
-                    "right-[calc(100%+0.5rem)] top-1/2 -translate-y-1/2",
-                    "transform-gpu",
-                    gameState === 'placing' && 'opacity-0',
-                    gameState === 'aiming' && 'animate-cue-stick-aim-subtle',
-                    gameState === 'charging' && 'animate-cue-stick-charge',
-                    gameState === 'shot' && 'animate-cue-stick-release',
-                )}
-                style={{
-                    '--shot-power': `-${shotPower/2}px`
-                } as React.CSSProperties}
-                ></div>
-            </div>
+            {gameState !== 'idle' && (
+              <div
+                  className={cn(
+                      "absolute w-8 h-8 bg-white rounded-full shadow-md transition-transform duration-1000",
+                      gameState === 'shot' && `animate-cue-ball-release`,
+                  )}
+                  style={{ 
+                      left: `${cueBallPosition.x}%`, 
+                      top: `${cueBallPosition.y}%`,
+                      transform: `translate(-50%, -50%) rotate(${cueRotation}deg)`,
+                      '--shot-power': `${shotPower * 3}%`,
+                  } as React.CSSProperties}
+              >
+              {/* Cue Stick */}
+                  <div className={cn(
+                      "absolute h-2 w-96 bg-gradient-to-r from-yellow-700 to-yellow-900 rounded-full origin-right transition-all duration-100",
+                      "right-[calc(100%+0.5rem)] top-1/2 -translate-y-1/2",
+                      "transform-gpu",
+                      (gameState === 'placing' || gameState === 'idle') && 'opacity-0',
+                      gameState === 'aiming' && 'animate-cue-stick-aim-subtle',
+                      gameState === 'charging' && `scale-y-150 -translate-x-4`,
+                      gameState === 'shot' && 'animate-cue-stick-release',
+                  )}
+                  style={{
+                      transform: gameState === 'charging' ? `translateX(${shotPower/2}px)` : '',
+                      '--shot-power-release': `${shotPower*1.5}px`
+                  } as React.CSSProperties}
+                  ></div>
+              </div>
+            )}
 
              {/* 8-Ball */}
             <div className={cn(
@@ -224,7 +271,7 @@ export function PoolShotGame({}: PoolShotGameProps) {
       </CardContent>
       <CardFooter className="flex flex-col gap-4 h-24 justify-center items-center">
         {renderGameStateUI()}
-         {gameState !== 'placing' && (
+         {gameState !== 'idle' && gameState !== 'placing' && (
             <div className="text-center">
                  <p className="text-sm text-muted-foreground mt-2">Cost: {cost} Shot{cost > 1 ? 's' : ''}</p>
             </div>

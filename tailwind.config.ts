@@ -102,18 +102,14 @@ export default {
           '0%, 100%': { transform: 'translateX(0)' },
           '50%': { transform: 'translateX(-5px)' },
         },
-        'cue-stick-charge': {
-          '0%': { transform: 'translateX(-5px)' },
-          '100%': { transform: 'translateX(var(--shot-power))' },
-        },
         'cue-stick-release': {
-          '0%': { transform: 'translateX(var(--shot-power))' },
-          '20%': { transform: 'translateX(20px)', opacity: '1' },
-          '100%': { transform: 'translateX(20px)', opacity: '0' },
+          '0%': { transform: 'translateX(0)', opacity: '1' },
+          '20%': { transform: 'translateX(var(--shot-power-release))', opacity: '1' },
+          '100%': { transform: 'translateX(var(--shot-power-release))', opacity: '0' },
         },
         'cue-ball-release': {
-            '0%': { transform: 'translate(-50%, -50%)' },
-            '100%': { transform: 'translate(calc(var(--shot-power) - 50%), -50%)' },
+            '0%': { transform: 'translate(-50%, -50%) rotate(0deg)' },
+            '100%': { transform: 'translate(calc(var(--shot-power) - 50%), -50%) rotate(720deg)' },
         },
         '8-ball-sink': {
             '0%': { transform: 'translateY(-50%) scale(1)', opacity: '1' },
@@ -129,7 +125,6 @@ export default {
         'border-pulse': 'border-pulse 2s infinite',
         'fade-out': 'fade-out 4s ease-out forwards',
         'cue-stick-aim-subtle': 'cue-stick-aim-subtle 1.5s ease-in-out infinite',
-        'cue-stick-charge': 'cue-stick-charge 0.5s ease-out forwards',
         'cue-stick-release': 'cue-stick-release 0.3s ease-out forwards',
         'cue-ball-release': 'cue-ball-release 1s ease-out forwards',
         '8-ball-sink': '8-ball-sink 1s ease-in forwards 1s',

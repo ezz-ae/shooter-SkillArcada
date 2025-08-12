@@ -23,7 +23,7 @@ interface StoreState {
   setHasSeenShotInfo: (hasSeen: boolean) => void;
   setHasSeenVaultInfo: (hasSeen: boolean) => void;
   addShots: (amount: number) => void;
-  spendShot: () => boolean;
+  spendShot: (amount?: number) => boolean;
   addToVault: (item: VaultItem) => void;
   tradeIn: (vaultItemKey: string, tradeInValue: number, tradeInType: 'cash' | 'shots') => void;
   moveToShipping: (vaultItemKeys: string[]) => boolean;
@@ -54,10 +54,10 @@ export const useStore = create<StoreState>()(
         set((state) => ({ shots: state.shots + amount }));
       },
 
-      spendShot: () => {
+      spendShot: (amount = 1) => {
         const currentShots = get().shots;
-        if (currentShots > 0) {
-          set({ shots: currentShots - 1 });
+        if (currentShots >= amount) {
+          set({ shots: currentShots - amount });
           return true;
         }
         return false;
