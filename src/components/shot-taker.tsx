@@ -227,7 +227,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
           >
             <div className="absolute inset-0 moving-gradient"></div>
             <div className="relative flex items-baseline w-full justify-center">
-                 <span className="font-black text-lg">{isGameCard ? "Set The Price" : "Shot"}</span>
+                 <span className="font-black text-lg">{isGameCard ? "Price" : "Shot"}</span>
             </div>
           </button>
         </CardFooter>
