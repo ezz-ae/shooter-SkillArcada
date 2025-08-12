@@ -85,7 +85,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
   };
 
   const handleShot = () => {
-    if (hasTakenFirstShot) {
+    if (product.game !== 'digit-pause' && hasTakenFirstShot) {
       if (walletBalance < SHOT_COST) {
           toast({
               variant: "destructive",
@@ -95,7 +95,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
           return;
       }
       spendFromWallet(SHOT_COST);
-    } else {
+    } else if (product.game !== 'digit-pause') {
       toast({
         title: "Your First Shot is Free!",
         description: "You've captured an item. Now choose whether to vault it!",
@@ -193,29 +193,30 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
         )}
         <CardContent className={cn("flex-grow p-4 pb-2 space-y-2", isPage && "p-0 pt-4")}>
           {!isPage && (
-            <div className="space-y-2">
-               <Link href={`/product/${product.id}`} className="flex-grow">
-                <CardTitle className="text-lg font-bold group-hover:text-primary transition-colors truncate">
-                  {product.name}
-                </CardTitle>
-              </Link>
-              {!isGameCard && (
-                 <div className="flex items-baseline gap-2">
-                    <span className="text-2xl font-black tracking-wider text-white shimmer-text" style={{'--trend-color': 'hsl(var(--primary))'} as React.CSSProperties}>${currentPrice.toFixed(2)}</span>
-                    <span className={cn("font-bold", discountColor)}>
-                        {Math.abs(discountPercent).toFixed(1)}%
-                    </span>
-                 </div>
-              )}
-            </div>
+             <Link href={`/product/${product.id}`} className="flex-grow">
+              <CardTitle className="text-lg font-bold group-hover:text-primary transition-colors truncate">
+                {product.name}
+              </CardTitle>
+            </Link>
           )}
-           {isGameCard && <p className="text-sm text-primary">Special timed event! Click fast to set your price!</p>}
-           {isPage && !isGameCard && (
-             <div className="mt-4">
-              <span className="text-3xl font-black tracking-wider text-white shimmer-text" style={{'--trend-color': 'hsl(var(--primary))'} as React.CSSProperties}>${currentPrice.toFixed(2)}</span>
-               <span className={cn("ml-2 font-bold", discountColor)}>
-                    {Math.abs(discountPercent).toFixed(1)}%
+           {isGameCard ? <p className="text-sm text-primary">Special timed event! Click fast to set your price!</p> : (
+             <div className="flex items-baseline gap-2">
+                <span className="text-2xl font-black tracking-wider text-white shimmer-text" style={{'--trend-color': 'hsl(var(--primary))'} as React.CSSProperties}>${currentPrice.toFixed(2)}</span>
+                <span className={cn("font-bold", discountColor)}>
+                    {discountPercent.toFixed(1)}%
                 </span>
+             </div>
+          )}
+           {isPage && (
+             <div className="mt-4">
+               {!isGameCard && (
+                 <>
+                    <span className="text-3xl font-black tracking-wider text-white shimmer-text" style={{'--trend-color': 'hsl(var(--primary))'} as React.CSSProperties}>${currentPrice.toFixed(2)}</span>
+                    <span className={cn("ml-2 font-bold", discountColor)}>
+                          {discountPercent.toFixed(1)}%
+                      </span>
+                 </>
+               )}
             </div>
            )}
         </CardContent>
@@ -226,7 +227,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
           >
             <div className="absolute inset-0 moving-gradient"></div>
             <div className="relative flex items-baseline w-full justify-center">
-                 <span className="font-black text-lg">Shot</span>
+                 <span className="font-black text-lg">{isGameCard ? "Set The Price" : "Shot"}</span>
             </div>
           </button>
         </CardFooter>
@@ -260,7 +261,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
                     <AlertDialogFooter className="gap-2 sm:gap-0 sm:flex-row sm:justify-center">
                         <AlertDialogCancel onClick={handleCloseDialog}>Let it go</AlertDialogCancel>
                         <AlertDialogAction onClick={handleVault} disabled={lockedDigits.length !== 3}>
-                           Vault It!
+                           Take the Shot!
                         </AlertDialogAction>
                     </AlertDialogFooter>
                   </>
