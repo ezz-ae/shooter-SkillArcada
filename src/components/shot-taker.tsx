@@ -40,7 +40,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
   const [capturedTime, setCapturedTime] = useState<Date | null>(null);
 
   // For reel-pause game
-  const [reelNumbers, setReelNumbers] = useState<number[]>(Array(16).fill(0));
+  const [reelNumbers, setReelNumbers] = useState<number[]>(Array(24).fill(0));
   const [isReelPaused, setIsReelPaused] = useState(false);
   const [selectedReelIndices, setSelectedReelIndices] = useState<number[]>([]);
   const reelInterval = useRef<NodeJS.Timeout>();
