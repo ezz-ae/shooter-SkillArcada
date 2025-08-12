@@ -97,7 +97,22 @@ export default {
           '0%': { opacity: '1' },
           '80%': { opacity: '1' },
           '100%': { opacity: '0' },
-        }
+        },
+        'cue-stick-aim': {
+          '0%, 100%': { transform: 'translateX(0)' },
+          '50%': { transform: 'translateX(-20px)' },
+        },
+        'cue-stick-shot': {
+          '0%': { transform: 'translateX(-20px)' },
+          '20%': { transform: 'translateX(50px)' },
+          '100%': { transform: 'translateX(50px)' },
+        },
+        'cue-ball-shot': {
+          '0%': { transform: 'translateX(0)' },
+          '20%': { transform: 'translateX(0)' },
+          '70%': { transform: 'translateX(250%)' },
+          '100%': { transform: 'translateX(250%)' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
@@ -107,6 +122,9 @@ export default {
         'shimmer': 'shimmer 1.5s linear infinite',
         'border-pulse': 'border-pulse 2s infinite',
         'fade-out': 'fade-out 4s ease-out forwards',
+        'cue-stick-aim': 'cue-stick-aim 1s ease-in-out infinite',
+        'cue-stick-shot': 'cue-stick-shot 1s ease-out forwards',
+        'cue-ball-shot': 'cue-ball-shot 1.5s ease-out forwards 0.2s',
       },
     },
   },

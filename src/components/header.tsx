@@ -46,6 +46,12 @@ export function Header() {
           </Link>
         </div>
         <div className="flex flex-1 items-center justify-end space-x-2">
+           <Button variant="ghost" asChild>
+              <Link href="/pool-shot" className="relative">
+                <Target className="h-5 w-5 mr-2" />
+                <span>Pool Shot</span>
+              </Link>
+          </Button>
           <div className="flex items-center space-x-2 text-sm font-medium p-2 bg-secondary rounded-md">
             <Wallet className="h-5 w-5 text-primary" />
             <span>Wallet: ${displayBalance}</span>
