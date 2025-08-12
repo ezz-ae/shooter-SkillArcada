@@ -60,10 +60,10 @@ export default function Home() {
 
     return (
         <div className="container mx-auto px-4 py-8">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="space-y-12">
                 
                 {/* Main Content: Challenges and League */}
-                <div className="lg:col-span-2 space-y-8">
+                <div className="space-y-8">
                     {/* Test Your Luck */}
                     <section>
                         <DiceGame />
@@ -72,7 +72,7 @@ export default function Home() {
                     {/* Featured Games */}
                     <section>
                          <h2 className="text-2xl font-bold mb-4">Featured Games</h2>
-                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                             {iphoneProduct && <ShotTaker product={iphoneProduct} />}
                             {btcProduct && <ShotTaker product={btcProduct} />}
                          </div>
@@ -81,7 +81,7 @@ export default function Home() {
                      {/* All Games */}
                     <section>
                         <h2 className="text-2xl font-bold mb-4">All Games</h2>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                             {gameLinks.map(game => (
                                 <Link href={game.href} key={game.href}>
                                     <Card className="hover:bg-secondary/50 transition-colors h-full">
@@ -104,7 +104,7 @@ export default function Home() {
                 </div>
 
                 {/* Sidebar: Live Activity */}
-                <aside className="space-y-8">
+                <aside className="grid grid-cols-1 md:grid-cols-2 gap-8">
                      <section>
                         <h2 className="text-2xl font-bold mb-4">Live Activity</h2>
                         <ActivityFeed />
@@ -115,20 +115,6 @@ export default function Home() {
                            Luckiest Users
                         </h2>
                         <LuckiestUsers />
-                    </section>
-                    <section>
-                        <h2 className="text-2xl font-bold mb-4">Need Help?</h2>
-                        <Card>
-                            <CardHeader>
-                                <CardTitle className="flex items-center gap-2"><HelpCircle className="text-primary"/> Support</CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                <p className="text-muted-foreground">Have questions or need help with the app? Our support team is here for you.</p>
-                            </CardContent>
-                            <CardFooter>
-                                <Button variant="outline" className="w-full">Contact Support</Button>
-                            </CardFooter>
-                        </Card>
                     </section>
                 </aside>
 
