@@ -43,6 +43,7 @@ interface ShotTakerProps {
 }
 
 const RIDDLE_ANSWER = 80;
+const MATH_MONEY_ANSWER = 42;
 const RIDDLE_TIMER_SECONDS = 300; // 5 minutes
 const DRAW_PASSCODE_ANSWER = '0,3,6,7,8'; // L-shape on 3x3 grid
 const DRAW_PASSCODE_PRICE = 99;
@@ -370,7 +371,8 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
   }
 
   const handleRiddleShot = () => {
-    handleVault(RIDDLE_ANSWER);
+    const gameAnswer = product.id === 'prod_math_01' ? MATH_MONEY_ANSWER : RIDDLE_ANSWER;
+    handleVault(gameAnswer);
     setCalculatorValue("");
     setIsRiddleDialogOpen(false);
   }
@@ -511,16 +513,17 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
     }
     
     if (product.game === 'riddle-calc') {
-        const isCorrectAnswer = calculatorValue === String(RIDDLE_ANSWER);
+        const gameAnswer = product.id === 'prod_math_01' ? MATH_MONEY_ANSWER : RIDDLE_ANSWER;
+        const isCorrectAnswer = calculatorValue === String(gameAnswer);
         return (
              <div className="w-full flex flex-col gap-2">
                 <Calculator value={calculatorValue} onValueChange={setCalculatorValue} />
                  {isCorrectAnswer ? (
                      <Button onClick={handleRiddleShot} className="w-full h-12 text-lg font-bold">
-                        Take the Shot for {RIDDLE_ANSWER} Shots!
+                        Take the Shot for {gameAnswer} Shots!
                     </Button>
                  ) : (
-                    <Button onClick={handleRiddleStart} className="w-full h-12 text-lg font-bold">Start Riddle</Button>
+                    <Button onClick={handleRiddleStart} className="w-full h-12 text-lg font-bold">Start Challenge</Button>
                  )}
             </div>
         )
@@ -747,18 +750,26 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
        <Dialog open={isRiddleDialogOpen} onOpenChange={setIsRiddleDialogOpen}>
             <DialogContent className="max-w-md select-none">
                 <DialogHeader>
-                    <DialogTitle>Solve the Riddle to Set the Price</DialogTitle>
+                    <DialogTitle>Solve the Puzzle to Set the Price</DialogTitle>
                      <DialogDescription>
                         Use the calculator on the item card to enter your answer.
                     </DialogDescription>
                 </DialogHeader>
                 <div className="py-4 space-y-4">
-                     <p className="text-lg font-mono p-4 bg-secondary rounded-md text-center">
-                        If you have a pen, you win.
-                    </p>
-                    <p className="text-lg font-mono p-4 bg-secondary rounded-md text-center">
-                        We bought a hundred for two, to earn ten. Sold with fifty off, for only half then.
-                    </p>
+                    {product.id === 'prod_math_01' ? (
+                        <p className="text-lg font-mono p-4 bg-secondary rounded-md text-center">
+                            (10 + 5) * 3 - 3 = ?
+                        </p>
+                    ) : (
+                        <>
+                            <p className="text-lg font-mono p-4 bg-secondary rounded-md text-center">
+                                If you have a pen, you win.
+                            </p>
+                            <p className="text-lg font-mono p-4 bg-secondary rounded-md text-center">
+                                We bought a hundred for two, to earn ten. Sold with fifty off, for only half then.
+                            </p>
+                        </>
+                    )}
                 </div>
                 <div className={cn("text-center text-4xl font-black font-mono", timerColor)}>
                     {String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}

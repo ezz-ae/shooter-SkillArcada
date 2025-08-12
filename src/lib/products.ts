@@ -50,6 +50,17 @@ export const mockProducts: Product[] = [
     category: 'brainshot',
   },
   {
+    id: 'prod_math_01',
+    name: 'MathMoney Challenge',
+    subtitle: 'Win $100!',
+    description: "Solve the math problem to win a $100 prize, credited as 100 Shots to your account.",
+    marketPrice: 100.0,
+    imageUrl: 'https://placehold.co/600x400/2196F3/FFFFFF/png?text=Math',
+    dataAiHint: 'math equations',
+    game: 'riddle-calc',
+    category: 'brainshot',
+  },
+  {
     id: 'prod_headset_01',
     name: 'VR Headset',
     subtitle: 'Immersive Virtual Reality',
