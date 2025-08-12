@@ -33,16 +33,15 @@ export default function LuckgirlsPage() {
         {girlGames.map((game) => {
             const Icon = game.game ? gameIcons[game.game as keyof typeof gameIcons] : Puzzle;
             return (
-                 <Card key={game.id} className="flex flex-col shadow-lg hover:shadow-primary/20 transition-shadow duration-300">
+                 <Card key={game.id} className="flex flex-col shadow-lg hover:shadow-pink-500/20 transition-shadow duration-300 border-2 border-pink-500">
                     <CardHeader className="p-0 relative h-56">
                          <Image src={game.imageUrl} alt={game.name} fill className="object-cover rounded-t-lg" data-ai-hint={game.dataAiHint}/>
                          <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
                          <div className="absolute bottom-0 left-0 p-4">
                             <h2 className="text-2xl font-bold text-white">{game.name}</h2>
-                            <p className="text-sm text-white/80">{game.subtitle}</p>
                          </div>
                          <div className="absolute top-2 right-2 bg-background/80 p-2 rounded-lg backdrop-blur-sm">
-                            <Icon className="h-6 w-6 text-primary" />
+                            <Icon className="h-6 w-6 text-pink-500" />
                          </div>
                     </CardHeader>
                     <CardContent className="flex-grow p-4">
