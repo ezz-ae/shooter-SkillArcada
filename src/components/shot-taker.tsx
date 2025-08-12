@@ -86,54 +86,58 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
       lastChangeTime: Date.now(),
       timeInDiscountZone: 0,
       currentTrend: 'stable', // 'stable', 'diving', 'climbing'
+      isHovering: false,
+      hoverStartTime: 0,
   }).current;
 
   const getNewPrice = useCallback((price: number, marketPrice: number) => {
     const now = Date.now();
     const discount = (marketPrice - price) / marketPrice;
-    
-    // Rule enforcement for discount zones
-    if (discount > 0.5 && now - priceState.lastChangeTime > 1000) { // Over 50% discount
+
+    // --- Trend Management ---
+
+    // Rule: Force price up if it stays in a deep discount zone for too long
+    if (discount > 0.5 && now - priceState.lastChangeTime > 1000) { // Over 50% discount for >1s
         priceState.currentTrend = 'climbing';
-        return marketPrice * (0.5 + Math.random() * 0.4); // Jump back up
-    }
-    if (discount > 0.4 && now - priceState.lastChangeTime > 2000) { // Over 40% discount
+    } else if (discount > 0.4 && now - priceState.lastChangeTime > 2000) { // Over 40% discount for >2s
         priceState.currentTrend = 'climbing';
-        return marketPrice * (0.6 + Math.random() * 0.3); // Jump back up
     }
 
-    // Resting in the safe zone
-    if (discount < 0.1 && priceState.currentTrend !== 'diving') { // Under 10% discount
-        if (Math.random() < 0.3) { // 30% chance to just stay put for a bit
-            priceState.currentTrend = 'stable';
-            return price;
-        }
+    // Rule: Chance to change trend when in the "safe" zone (low discount)
+    if (discount < 0.1 && priceState.currentTrend !== 'diving') { 
         if (Math.random() < 0.1) { // 10% chance to start diving
-            priceState.currentTrend = 'diving';
+            // If user is hovering for too long, make it less likely to dive
+            const hoverDuration = priceState.isHovering ? now - priceState.hoverStartTime : 0;
+            if (hoverDuration < 5000) { // Only dive if hover is less than 5 seconds
+                 priceState.currentTrend = 'diving';
+            }
         }
     }
-    
+
+    // --- Price Calculation based on Trend ---
     let newPrice;
-    const majorVolatility = 0.3 + Math.random() * 0.4; // Very volatile
+    const majorVolatility = 0.3 + Math.random() * 0.4;
     const minorVolatility = 0.05;
 
     if (priceState.currentTrend === 'diving') {
         newPrice = price * (1 - majorVolatility * Math.random());
-        if (discount > 0.6 || Math.random() < 0.2) { // If discount gets big, or 20% chance, start climbing
+        // If discount gets big, or random chance, start climbing back up
+        if (discount > 0.6 || Math.random() < 0.2) { 
             priceState.currentTrend = 'climbing';
         }
     } else if (priceState.currentTrend === 'climbing') {
         newPrice = price * (1 + majorVolatility * Math.random() * 0.5);
-         if (discount < 0.1) { // Once it reaches the safe zone
+         // Once it reaches the safe zone, stabilize
+         if (discount < 0.1) { 
             priceState.currentTrend = 'stable';
         }
-    } else { // 'stable' or random walk
+    } else { // 'stable' trend
         const changePercent = (Math.random() - 0.5) * minorVolatility;
         newPrice = price * (1 + changePercent);
     }
     
-    newPrice = Math.max(1, newPrice); // Never go below $1
-    newPrice = Math.min(newPrice, marketPrice * 1.1); // Cap at 110% of market price
+    newPrice = Math.max(1, newPrice); // Floor price
+    newPrice = Math.min(newPrice, marketPrice * 1.1); // Ceiling price
 
     priceState.lastChangeTime = now;
     return newPrice;
@@ -471,6 +475,15 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
       )
   }
 
+  const handleMouseEnter = () => {
+    priceState.isHovering = true;
+    priceState.hoverStartTime = Date.now();
+  }
+  const handleMouseLeave = () => {
+    priceState.isHovering = false;
+    priceState.hoverStartTime = 0;
+  }
+
   if (view === 'chart') {
     return renderChart();
   }
@@ -482,6 +495,8 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
   return (
     <>
       <Card
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
         className={cn(
           "flex h-full flex-col overflow-hidden transition-all duration-300 group relative",
           view === 'full' && "shadow-lg",
@@ -673,5 +688,3 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
     </>
   );
 }
-
-    
