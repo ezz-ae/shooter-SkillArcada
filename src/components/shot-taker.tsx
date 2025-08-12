@@ -164,6 +164,9 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
   const CardComponent = isPage ? 'div' : Card;
   const isGameCard = product.game === 'digit-pause';
 
+  const discountPercent = ((product.marketPrice - currentPrice) / product.marketPrice) * 100;
+  const discountColor = discountPercent > 0 ? "text-green-500" : "text-destructive";
+
   return (
     <>
       <CardComponent
@@ -190,16 +193,19 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
         )}
         <CardContent className={cn("flex-grow p-4 pb-2 space-y-2", isPage && "p-0 pt-4")}>
           {!isPage && (
-            <div className="flex justify-between items-start">
-              <Link href={`/product/${product.id}`} className="flex-grow">
+            <div className="space-y-2">
+               <Link href={`/product/${product.id}`} className="flex-grow">
                 <CardTitle className="text-lg font-bold group-hover:text-primary transition-colors truncate">
                   {product.name}
                 </CardTitle>
               </Link>
               {!isGameCard && (
-                <div className="flex-shrink-0 ml-2">
-                   <span className="text-lg font-black tracking-wider text-white shimmer-text" style={{'--trend-color': 'hsl(var(--primary))'} as React.CSSProperties}>${currentPrice.toFixed(2)}</span>
-                </div>
+                 <div className="flex items-baseline gap-2">
+                    <span className="text-2xl font-black tracking-wider text-white shimmer-text" style={{'--trend-color': 'hsl(var(--primary))'} as React.CSSProperties}>${currentPrice.toFixed(2)}</span>
+                    <span className={cn("font-bold", discountColor)}>
+                        {discountPercent > 0 ? '▼' : '▲'}{Math.abs(discountPercent).toFixed(1)}%
+                    </span>
+                 </div>
               )}
             </div>
           )}
@@ -207,6 +213,9 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
            {isPage && !isGameCard && (
              <div className="mt-4">
               <span className="text-3xl font-black tracking-wider text-white shimmer-text" style={{'--trend-color': 'hsl(var(--primary))'} as React.CSSProperties}>${currentPrice.toFixed(2)}</span>
+               <span className={cn("ml-2 font-bold", discountColor)}>
+                    {discountPercent > 0 ? '▼' : '▲'}{Math.abs(discountPercent).toFixed(1)}%
+                </span>
             </div>
            )}
         </CardContent>
@@ -300,5 +309,3 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
     </>
   );
 }
-
-    
