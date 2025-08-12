@@ -6,9 +6,7 @@ import { mockProducts } from "@/lib/products";
 import { cn } from "@/lib/utils";
 
 export default function Home() {
-  const gameProduct = mockProducts.find(p => p.game === 'reel-pause');
-  const regularProducts = mockProducts.filter(p => p.game !== 'reel-pause');
-
+  
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="text-center mb-8">
@@ -24,25 +22,23 @@ export default function Home() {
         id="products"
         className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4"
       >
-        {gameProduct && (
-          <div className="sm:col-span-2 lg:col-span-2">
-             <ShotTaker product={gameProduct} />
-          </div>
-        )}
-        {regularProducts.map((product, index) => {
+        {mockProducts.map((product, index) => {
             let className = "";
-            // Let's create a more interesting layout
-            switch (index % 6) {
-                case 1:
-                    className = "lg:col-span-2";
-                    break;
-                case 3:
-                     className = "lg:row-span-2";
-                    break;
-                case 4:
-                    className = "lg:col-span-2";
-                    break;
+            // Make special games larger
+            if (product.game === 'reel-pause' || product.game === 'multi-shot') {
+                className = "lg:col-span-2";
             }
+
+            // Create an interesting masonry layout
+            if (!className) {
+                switch (index % 7) {
+                    case 3:
+                    case 6:
+                        className = "lg:row-span-2";
+                        break;
+                }
+            }
+            
           return (
           <div key={product.id} className={className}>
             <ShotTaker product={product} />
