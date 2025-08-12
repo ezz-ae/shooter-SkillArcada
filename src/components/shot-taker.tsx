@@ -240,19 +240,23 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
             $
           </div>
           <div className="flex w-full justify-center items-center gap-2 relative">
-              {[0, 1, 2].map(index => (
-                  <button
-                  key={index}
-                  onClick={() => handleDigitClick(index)}
-                  disabled={lockedDigits.length !== index}
-                  className={cn(
-                    "h-16 w-1/3 rounded-lg flex items-center justify-center text-5xl font-black tabular-nums disabled:opacity-50 disabled:cursor-not-allowed transition-all",
-                    "bg-secondary text-primary-foreground hover:enabled:bg-primary/80"
-                  )}
-                  >
-                  {lockedDigits.length > index ? '?' : digits[index]}
-                  </button>
-              ))}
+              {[0, 1, 2].map(index => {
+                  const isClickable = lockedDigits.length === index;
+                  return (
+                    <button
+                      key={index}
+                      onClick={() => handleDigitClick(index)}
+                      disabled={!isClickable}
+                      className={cn(
+                        "h-16 w-1/3 rounded-lg flex items-center justify-center text-5xl font-black tabular-nums transition-all bg-secondary text-primary-foreground",
+                        isClickable && "cursor-pointer hover:bg-primary/80",
+                        !isClickable && "cursor-not-allowed opacity-50"
+                      )}
+                    >
+                      {lockedDigits.length > index ? '?' : digits[index]}
+                    </button>
+                  );
+              })}
           </div>
         </div>
       );
@@ -301,7 +305,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
             </Link>
           )}
            {isGameCard ? (
-             <p className="text-sm text-muted-foreground h-5">Special timed price game. Hit the digits!</p> 
+             <p className="text-sm text-muted-foreground h-5"></p> 
            ) : (
              <div className="flex items-baseline gap-2">
                 <span className="text-2xl font-black tracking-wider text-white shimmer-text" style={{'--trend-color': 'hsl(var(--primary))'} as React.CSSProperties}>${currentPrice.toFixed(2)}</span>
