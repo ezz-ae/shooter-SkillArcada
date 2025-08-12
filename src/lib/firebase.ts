@@ -1,6 +1,5 @@
 
 import { initializeApp, getApps, getApp } from 'firebase/app';
-import { getAnalytics, isSupported } from 'firebase/analytics';
 import 'dotenv/config';
 
 // Your web app's Firebase configuration
@@ -17,8 +16,5 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
-
-// Initialize Firebase Analytics if supported
-const analytics = isSupported().then(yes => yes ? getAnalytics(app) : null);
 
 export { app };
