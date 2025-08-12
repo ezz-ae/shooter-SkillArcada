@@ -24,17 +24,17 @@ export default function Home() {
       >
         {mockProducts.map((product, index) => {
             let className = "";
-            // Make special games larger
+            // Make special games larger, but in a structured way
             if (product.game === 'reel-pause' || product.game === 'multi-shot') {
                 className = "lg:col-span-2";
             }
 
-            // Create an interesting masonry layout
+            // Create an interesting masonry layout that is more predictable
             if (!className) {
                 switch (index % 7) {
                     case 3:
                     case 6:
-                        className = "lg:row-span-2";
+                        className = "lg:col-span-2 lg:row-span-1";
                         break;
                 }
             }
