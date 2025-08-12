@@ -15,6 +15,8 @@ export default function ProductPage({ params }: { params: { id: string } }) {
     notFound();
   }
 
+  const isGame = product.game && ['reel-pause', 'riddle-calc', 'draw-passcode'].includes(product.game);
+
   return (
     <div className="container mx-auto max-w-4xl px-4 py-8">
       <div className="mb-6">
@@ -37,7 +39,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
            </div>
         </div>
         <div className="flex flex-col">
-            <h1 className="mb-2 text-3xl font-bold lg:text-4xl">{product.name}</h1>
+            {!isGame && <h1 className="mb-2 text-3xl font-bold lg:text-4xl">{product.name}</h1>}
             <ShotTaker product={product} isPage={true} />
         </div>
       </div>
