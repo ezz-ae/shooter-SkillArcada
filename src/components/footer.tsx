@@ -3,11 +3,18 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BrainCircuit, Dices, Heart, LineChart, MessageSquare, Swords } from "lucide-react";
+import { textToSpeech } from "@/ai/flows/tts-flow";
+import { BrainCircuit, Dices, Heart, LineChart, MessageSquare, Swords, Volume2, Loader } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 export function Footer() {
     
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
+    const { toast } = useToast();
+
     const gameLinks = [
       { href: "/luckshots", label: "Luckshots", icon: Dices },
       { href: "/brainshots", label: "Brainshots", icon: BrainCircuit },
@@ -15,6 +22,32 @@ export function Footer() {
       { href: "/pool-shot", label: "Pool Shot", icon: Swords },
       { href: "/luckgirls", label: "Luckgirls", icon: Heart },
     ];
+
+    const handlePlayGreeting = async () => {
+      if (isPlaying) {
+        audio?.pause();
+        setIsPlaying(false);
+        return;
+      }
+
+      setIsPlaying(true);
+      try {
+        const response = await textToSpeech("Welcome to Luckshots! Looking for a challenge? Join the queue to find an opponent.");
+        const audioPlayer = new Audio(response.audioDataUri);
+        setAudio(audioPlayer);
+        audioPlayer.play();
+        audioPlayer.onended = () => {
+          setIsPlaying(false);
+        };
+      } catch (error) {
+         toast({
+          variant: "destructive",
+          title: "Audio Failed",
+          description: "Could not generate the greeting audio. Please try again later."
+        });
+        setIsPlaying(false);
+      }
+    }
     
   return (
     <footer className="border-t mt-12 py-8 bg-secondary/50">
@@ -55,9 +88,12 @@ export function Footer() {
                 </CardHeader>
                 <CardContent>
                     <p className="text-xs text-muted-foreground">
-                        Have 10 minutes to challenge someone? Chat with other players here.
+                        Have 10 minutes to challenge someone? Hear our greeting.
                     </p>
-                    <Button className="w-full mt-2" size="sm" variant="outline">Join Chat</Button>
+                    <Button className="w-full mt-2" size="sm" variant="outline" onClick={handlePlayGreeting} disabled={isPlaying}>
+                      {isPlaying ? <Loader className="animate-spin" /> : <Volume2 />}
+                      {isPlaying ? 'Playing...' : 'Play Greeting'}
+                    </Button>
                 </CardContent>
             </Card>
         </div>
