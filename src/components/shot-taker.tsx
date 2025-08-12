@@ -256,7 +256,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
 
                                 <div className="bg-black/50 p-4 rounded-lg text-center">
                                     <div className="text-sm text-muted-foreground">Captured Price</div>
-                                    <div className="relative text-3xl font-black text-white">
+                                    <div className="relative text-3xl font-black text-white shimmer-text" style={{'--trend-color': 'hsl(var(--primary))'} as React.CSSProperties}>
                                         ${capturedPrice.toFixed(2)}
                                     </div>
                                 </div>
