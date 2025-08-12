@@ -5,12 +5,13 @@ import { Button } from "@/components/ui/button";
 import { mockUsers } from "@/lib/user";
 import { PoolChallengeCard } from "@/components/pool-challenge-card";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Bot, Trophy, PlusCircle, Gamepad2 } from "lucide-react";
+import { Bot, Trophy, PlusCircle, Gamepad2, Star } from "lucide-react";
 import { ActivityFeed } from "@/components/activity-feed";
 import { useAuth } from "@/lib/auth";
 import { LoginModal } from "@/components/login-modal";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useState } from "react";
+import { LuckiestUsers } from "@/components/luckiest-users";
 
 export default function Home() {
     const { isAuthenticated, user, isLoggingIn } = useAuth();
@@ -111,6 +112,13 @@ export default function Home() {
                      <section>
                         <h2 className="text-2xl font-bold mb-4">Live Activity</h2>
                         <ActivityFeed />
+                    </section>
+                     <section>
+                        <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
+                           <Star className="text-yellow-400" />
+                           Luckiest Users
+                        </h2>
+                        <LuckiestUsers />
                     </section>
                 </aside>
 
