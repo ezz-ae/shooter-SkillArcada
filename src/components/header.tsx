@@ -47,17 +47,12 @@ export function Header() {
         <div className="flex flex-1 items-center justify-end space-x-4">
           <div className="flex items-center space-x-2 text-sm font-medium p-2 bg-secondary rounded-md">
             <Wallet className="h-5 w-5 text-primary" />
-            <span>${displayBalance}</span>
+            <span>Wallet: ${displayBalance}</span>
           </div>
-          <Button variant="ghost" size="icon" asChild>
-            <Link href="/vault" className="relative">
+          <Button variant="ghost" asChild>
+            <Link href="/vault" className="relative flex items-center space-x-2 text-sm font-medium p-2 bg-secondary rounded-md">
               <Package className="h-5 w-5" />
-              {vaultItemCount > 0 && (
-                <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-accent text-xs font-bold text-accent-foreground">
-                  {vaultItemCount}
-                </span>
-              )}
-              <span className="sr-only">Open Vault</span>
+              <span>Vault ({vaultItemCount})</span>
             </Link>
           </Button>
         </div>
