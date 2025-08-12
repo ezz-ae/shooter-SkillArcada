@@ -515,7 +515,8 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
                 data-ai-hint={product.dataAiHint}
               />
               <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent p-4 pt-8">
-                <h3 className="text-white text-lg font-bold text-center">{product.subtitle}</h3>
+                 <h3 className="text-white text-lg font-bold text-center">{product.name}</h3>
+                <h3 className="text-white/80 text-sm font-semibold text-center">{product.subtitle}</h3>
               </div>
             </div>
           </CardHeader>
