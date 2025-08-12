@@ -9,15 +9,18 @@ import { useStore } from "@/lib/store";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { ChartContainer } from "./ui/chart";
-import { ArrowDown, ArrowUp, Bitcoin, Check, Gamepad, Target, X } from "lucide-react";
+import { Bitcoin, Check, Gamepad, Target, X, Trophy } from "lucide-react";
 import { Input } from "./ui/input";
-import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
-import { Label } from "./ui/label";
 
 const GAME_DURATION_SECONDS = 180; // 3 minutes
 
 type GameState = 'idle' | 'playing' | 'finished';
-type Direction = 'up' | 'down';
+
+interface GameResult {
+    isWinner: boolean;
+    prize: number;
+    accuracy: number;
+}
 
 export function CryptoLuckGame() {
   const [gameState, setGameState] = useState<GameState>('idle');
@@ -33,9 +36,8 @@ export function CryptoLuckGame() {
   const [finalPrice, setFinalPrice] = useState<number | null>(null);
   
   const [guessedPrice, setGuessedPrice] = useState("");
-  const [guessedDirection, setGuessedDirection] = useState<Direction>('up');
   const [isGuessLocked, setIsGuessLocked] = useState(false);
-  const [isWinner, setIsWinner] = useState<boolean | null>(null);
+  const [gameResult, setGameResult] = useState<GameResult | null>(null);
 
   const { luckshots, spendLuckshot, addLuckshots } = useStore();
   const { toast } = useToast();
@@ -81,25 +83,40 @@ export function CryptoLuckGame() {
       }, 1000);
     } else if (timer <= 0 && gameState === 'playing') {
       stopIntervals();
+      const finalPriceValue = currentPrice;
       setGameState('finished');
-      setFinalPrice(currentPrice);
+      setFinalPrice(finalPriceValue);
 
-      // Determine winner
-      const actualDirection = currentPrice > marketPrice ? 'up' : 'down';
+      if (!isGuessLocked || !guessedPrice) {
+        setGameResult({ isWinner: false, prize: 0, accuracy: 0 });
+        toast({ variant: "destructive", title: "Time's up!", description: "You didn't lock in a guess." });
+        return;
+      }
       
-      if (isGuessLocked && guessedDirection === actualDirection) {
-        addLuckshots(20);
-        setIsWinner(true);
-        toast({ title: "You won!", description: "Your prediction was correct. You've won 20 Shots!" });
+      const numericalGuessedPrice = parseFloat(guessedPrice);
+      const difference = Math.abs(finalPriceValue - numericalGuessedPrice);
+      const accuracy = (difference / finalPriceValue); // lower is better
+      
+      let prize = 0;
+      if (accuracy <= 0.01) { // Within 1%
+        prize = 50;
+      } else if (accuracy <= 0.05) { // Within 5%
+        prize = 10;
+      }
+      
+      if (prize > 0) {
+        addLuckshots(prize);
+        setGameResult({ isWinner: true, prize, accuracy });
+        toast({ title: "You won!", description: `Your prediction was very accurate! You've won ${prize} Shots!` });
       } else {
-        setIsWinner(false);
-        toast({ variant: "destructive", title: "You lost!", description: "Your prediction was incorrect." });
+        setGameResult({ isWinner: false, prize: 0, accuracy });
+        toast({ variant: "destructive", title: "You lost!", description: "Your prediction wasn't close enough this time." });
       }
     }
     return () => {
       if (timerInterval.current) clearInterval(timerInterval.current);
     }
-  }, [gameState, timer, currentPrice, marketPrice, addLuckshots, toast, guessedDirection, isGuessLocked]);
+  }, [gameState, timer, currentPrice, marketPrice, addLuckshots, toast, isGuessLocked, guessedPrice]);
   
   const handleStartGame = () => {
     if (luckshots < 1) {
@@ -117,7 +134,7 @@ export function CryptoLuckGame() {
     setIsGuessLocked(false);
     setGuessedPrice("");
     setFinalPrice(null);
-    setIsWinner(null);
+    setGameResult(null);
   };
 
   const handleLockGuess = () => {
@@ -133,13 +150,14 @@ export function CryptoLuckGame() {
   const seconds = timer % 60;
   
   const renderGameResult = () => {
-    if (gameState !== 'finished') return null;
+    if (gameState !== 'finished' || !gameResult) return null;
 
-    if (isWinner) {
+    if (gameResult.isWinner) {
         return (
             <div className="text-center space-y-2">
-                <div className="flex items-center justify-center gap-2 text-2xl font-bold text-green-500">
-                    <Check size={28} /> You Won 20 Shots!
+                <div className={cn("flex items-center justify-center gap-2 text-2xl font-bold", gameResult.prize >= 50 ? "text-primary" : "text-green-500")}>
+                    {gameResult.prize >= 50 ? <Trophy size={28} /> : <Check size={28} />} 
+                    You Won {gameResult.prize} Shots!
                 </div>
                 <p className="text-muted-foreground">The final price was ${finalPrice?.toFixed(2)}</p>
                 <Button onClick={handleStartGame} size="lg" className="w-full">
@@ -152,9 +170,9 @@ export function CryptoLuckGame() {
     return (
         <div className="text-center space-y-2">
             <div className="flex items-center justify-center gap-2 text-2xl font-bold text-destructive">
-                <X size={28} /> You Lost!
+                <X size={28} /> Not Close Enough!
             </div>
-            <p className="text-muted-foreground">The final price was ${finalPrice?.toFixed(2)}</p>
+            <p className="text-muted-foreground">The final price was ${finalPrice?.toFixed(2)}. Your guess was ${parseFloat(guessedPrice).toFixed(2)}</p>
             <Button onClick={handleStartGame} size="lg" className="w-full">
                 Play Again
             </Button>
@@ -204,28 +222,14 @@ export function CryptoLuckGame() {
         )}
         {gameState === 'playing' && (
             <div className="w-full space-y-4">
-                <div className="grid grid-cols-3 gap-4">
-                    <Input 
-                        type="number"
-                        placeholder="Your price guess"
-                        className="col-span-2 h-12 text-lg"
-                        value={guessedPrice}
-                        onChange={(e) => setGuessedPrice(e.target.value)}
-                        disabled={isGuessLocked}
-                    />
-                    <div className="col-span-1">
-                        <RadioGroup defaultValue="up" className="flex h-full items-center justify-around rounded-md border" onValueChange={(v: Direction) => setGuessedDirection(v)} disabled={isGuessLocked}>
-                            <Label htmlFor="up" className="flex flex-col items-center justify-center gap-1 cursor-pointer p-2 rounded-md has-[:checked]:bg-primary has-[:checked]:text-primary-foreground h-full w-full">
-                                <ArrowUp className="h-5 w-5" />
-                                <RadioGroupItem value="up" id="up" className="sr-only"/>
-                            </Label>
-                            <Label htmlFor="down" className="flex flex-col items-center justify-center gap-1 cursor-pointer p-2 rounded-md has-[:checked]:bg-primary has-[:checked]:text-primary-foreground h-full w-full">
-                                <ArrowDown className="h-5 w-5" />
-                                <RadioGroupItem value="down" id="down" className="sr-only"/>
-                            </Label>
-                        </RadioGroup>
-                    </div>
-                </div>
+                 <Input 
+                    type="number"
+                    placeholder="Your price guess"
+                    className="h-12 text-lg text-center"
+                    value={guessedPrice}
+                    onChange={(e) => setGuessedPrice(e.target.value)}
+                    disabled={isGuessLocked}
+                />
                 <Button onClick={handleLockGuess} size="lg" className="w-full" disabled={isGuessLocked}>
                     <Target className="mr-2"/>
                     {isGuessLocked ? 'Guess Locked!' : 'Lock in Guess'}
@@ -238,5 +242,3 @@ export function CryptoLuckGame() {
     </Card>
   );
 }
-
-    
