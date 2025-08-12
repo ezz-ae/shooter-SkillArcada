@@ -227,8 +227,8 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
 
     if (lockedDigits.length < 3) {
       return (
-         <div className="flex justify-center items-center gap-2 w-full">
-            {isGameActive && <button onClick={resetDigitGame} className="absolute right-2 top-2 text-muted-foreground hover:text-foreground"><X size={18}/></button>}
+         <div className="flex justify-center items-center gap-2 w-full relative">
+            {isGameActive && <button onClick={resetDigitGame} className="absolute right-[-8px] top-[-8px] text-muted-foreground hover:text-foreground"><X size={18}/></button>}
             {[0, 1, 2].map(index => (
                 <button
                 key={index}
@@ -236,7 +236,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
                 disabled={lockedDigits.length !== index}
                 className="h-16 w-1/3 bg-secondary rounded-lg flex items-center justify-center text-5xl font-black text-primary-foreground tabular-nums disabled:opacity-50 disabled:cursor-not-allowed transition-all"
                 >
-                {lockedDigits.length > index ? lockedDigits[index] : digits[index]}
+                {lockedDigits.length > index ? '?' : digits[index]}
                 </button>
             ))}
         </div>
@@ -245,12 +245,8 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
     
     return (
         <div className="w-full flex flex-col gap-2 items-center">
-            <div className="text-center">
-                Final Price: <span className="font-bold text-2xl text-primary">${Number(lockedDigits.join(''))}</span>
-            </div>
             <div className="w-full flex gap-2">
-                <Button variant="outline" onClick={resetDigitGame} className="w-full">Cancel</Button>
-                <Button onClick={handleConfirmDigitPauseShot} className="w-full">Take the Shot!</Button>
+                <Button onClick={handleConfirmDigitPauseShot} className="w-full h-16 text-2xl font-black">Take the Shot!</Button>
             </div>
         </div>
     );
