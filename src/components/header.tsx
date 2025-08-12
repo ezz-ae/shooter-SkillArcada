@@ -2,7 +2,7 @@
 "use client";
 
 import Link from "next/link";
-import { Package, Target, BrainCircuit, Heart, Swords, Dice5, User, LogOut, LineChart, Gamepad2, ChevronDown, DoorOpen } from "lucide-react";
+import { Package, Target, BrainCircuit, Heart, Swords, Dice5, User, LogOut, LineChart, Gamepad2, ChevronDown, DoorOpen, Grid } from "lucide-react";
 import { Button } from "./ui/button";
 import { useStore } from "@/lib/store";
 import { useEffect, useState } from "react";
@@ -20,6 +20,7 @@ import {
   DropdownMenuGroup,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { FaChess } from "react-icons/fa";
 
 export function Header() {
   const { luckshots } = useStore();
@@ -39,13 +40,14 @@ export function Header() {
     { href: "/brainshots", label: "Brainshots", icon: BrainCircuit },
     { href: "/crypto-luck", label: "Crypto Luck", icon: LineChart },
     { href: "/pool-shot", label: "Pool Shot", icon: Swords },
+    { href: "/chess", label: "Chess", icon: FaChess as any },
+    { href: "/board-games", label: "Board Games", icon: Grid },
     { href: "/luckgirls", label: "Luckgirls", icon: Heart },
   ];
 
   const challengeNavItems = [
-    { href: "/pool-shot", label: "All Challenges", icon: Swords },
-    { href: "/pool-shot", label: "My Challenges", icon: User },
-    { href: "/pool-shot", label: "Open Challenges", icon: DoorOpen },
+    { href: "/pool-shot", label: "Pool Challenges", icon: Swords },
+    { href: "/chess", label: "Chess Challenges", icon: FaChess as any },
   ]
 
   return (
@@ -168,3 +170,5 @@ export function Header() {
     </header>
   );
 }
+
+    

@@ -29,6 +29,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Checkbox } from "@/components/ui/checkbox";
 import { GameLinkCard } from "@/components/game-link-card";
+import { GiChessKing } from "react-icons/gi";
+import { FaChess } from "react-icons/fa";
 
 export default function Home() {
     const { isAuthenticated, user, initializeAuth, isNewUser, hasAcceptedTerms, acceptTerms, isLoggingIn } = useAuth();
@@ -51,9 +53,9 @@ export default function Home() {
 
             if (fetchedUsers.length > 3) {
                 setOpenChallenges([
-                  { id: 'c1', prize: 40, fee: 5, player1: fetchedUsers[0], player2: null },
-                  { id: 'c2', prize: 100, fee: 10, player1: fetchedUsers[2], player2: null },
-                  { id: 'c3', prize: 500, fee: 25, player1: fetchedUsers[3], player2: null },
+                  { id: 'c1', prize: 40, fee: 5, player1: fetchedUsers[0], player2: null, type: 'pool' },
+                  { id: 'c2', prize: 100, fee: 10, player1: fetchedUsers[2], player2: null, type: 'pool' },
+                  { id: 'c3', prize: 500, fee: 25, player1: fetchedUsers[3], player2: null, type: 'chess' },
                 ]);
             }
         }
@@ -68,10 +70,10 @@ export default function Home() {
       { href: "/brainshots", label: "Brainshots", icon: BrainCircuit, description: "Puzzles and skill challenges." },
       { href: "/crypto-luck", label: "Crypto Luck", icon: LineChart, description: "Predict the market to win." },
       { href: "/pool-shot", label: "Pool Shot", icon: Swords, description: "1-on-1 skill-based pool." },
+      { href: "/chess", label: "Chess", icon: FaChess as any, description: "1-on-1 chess challenges." },
+      { href: "/board-games", label: "Board Games", icon: Grid, description: "Siga, Dominoes and more." },
       { href: "/luckgirls", label: "Luckgirls", icon: Heart, description: "Fun, social, and exciting games." },
       { href: "/ai-adventure", label: "AI Adventure", icon: Sparkles, description: "AI-powered story game." },
-      { href: "/siga", label: "Siga", icon: Grid, description: "Classic Filipino strategy game." },
-      { href: "/dominoes", label: "Dominoes", icon: RectangleHorizontal, description: "Timeless tile-based fun." },
       { href: "/card-games", label: "Card Games", icon: Layers, description: "Poker, and more." },
     ];
 
@@ -252,3 +254,5 @@ export default function Home() {
         </div>
     );
 }
+
+    
