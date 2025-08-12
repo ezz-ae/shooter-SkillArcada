@@ -357,7 +357,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
              <div className="flex flex-col">
                 <span className="text-3xl font-black tracking-wider text-white shimmer-text" style={{'--trend-color': 'hsl(var(--primary))'} as React.CSSProperties}>${currentPrice.toFixed(2)}</span>
                 <span className={cn("font-bold text-sm", discountColor)}>
-                    {discountPercent > 0 && '+'}{discountPercent.toFixed(1)}% vs Market
+                    {discountPercent > 0 && '+'}{discountPercent.toFixed(1)}%
                 </span>
              </div>
           )}
@@ -367,7 +367,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
                  <div className="flex flex-col">
                     <span className="text-4xl font-black tracking-wider text-white shimmer-text" style={{'--trend-color': 'hsl(var(--primary))'} as React.CSSProperties}>${currentPrice.toFixed(2)}</span>
                     <span className={cn("mt-1 font-bold", discountColor)}>
-                          {discountPercent > 0 && '+'}{discountPercent.toFixed(1)}% vs Market
+                          {discountPercent > 0 && '+'}{discountPercent.toFixed(1)}%
                       </span>
                  </div>
                )}
