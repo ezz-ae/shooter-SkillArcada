@@ -6,7 +6,6 @@ import Image from "next/image";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
 import { useStore, type VaultItem } from "@/lib/store";
-import { fetchUpdatedPrice } from "@/app/actions";
 import { TrendingDown, TrendingUp, Hourglass, Check } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import {
@@ -35,11 +34,10 @@ export function VaultItemCard({
   isSelected,
   onSelect,
 }: VaultItemCardProps) {
-  const [currentPrice, setCurrentPrice] = useState(item.pricePaid);
+  const [currentValue, setCurrentValue] = useState(item.pricePaid);
   const [priceTrend, setPriceTrend] = useState<"up" | "down" | "stale">(
     "stale"
   );
-  const [isPending, startTransition] = useTransition();
   const { tradeIn } = useStore();
   const { toast } = useToast();
 
@@ -48,27 +46,30 @@ export function VaultItemCard({
   const [cooldownRemaining, setCooldownRemaining] = useState(
     Math.max(0, TRADE_IN_COOLDOWN_MS - timeSincePurchase)
   );
-
+  
+  // This effect simulates the current market value of the item changing over time.
   useEffect(() => {
-    const updatePriceInterval = 5000 + Math.random() * 2000; // Stagger updates between 5-7 seconds
+    // In a real app, this would come from a WebSocket or regular polling.
+    const updatePriceInterval = 5000 + Math.random() * 2000;
     const interval = setInterval(() => {
-      startTransition(async () => {
-        try {
-          const newPriceData = await fetchUpdatedPrice({
-            currentPrice: currentPrice,
-          });
-          const newPrice = newPriceData.newPrice;
+      const volatility = 0.1; // 10% volatility
+      const changePercent = (Math.random() - 0.5) * volatility;
+      const changeAmount = currentValue * changePercent;
+      
+      let newValue = currentValue + changeAmount;
+      // Ensure the price doesn't go below a certain threshold of the original market price
+      newValue = Math.max(item.marketPrice * 0.5, newValue); 
+      // Ensure price does not go to 0 or negative
+      newValue = Math.max(1, newValue);
 
-          if (newPrice > currentPrice) setPriceTrend("up");
-          else if (newPrice < currentPrice) setPriceTrend("down");
-          else setPriceTrend("stale");
 
-          setCurrentPrice(newPrice);
-        } catch (error) {
-           console.error("Failed to update price for", item.name);
-        }
-      });
-    }, updatePriceInterval); 
+      if (newValue > currentValue) setPriceTrend("up");
+      else if (newValue < currentValue) setPriceTrend("down");
+      else setPriceTrend("stale");
+
+      setCurrentValue(newValue);
+
+    }, updatePriceInterval);
 
     let cooldownTimer: NodeJS.Timeout;
     if (isCoolingDown) {
@@ -81,20 +82,20 @@ export function VaultItemCard({
       clearInterval(interval);
       if (cooldownTimer) clearInterval(cooldownTimer);
     };
-  }, [currentPrice, item.purchaseTimestamp, isCoolingDown, item.name]);
+  }, [currentValue, item.purchaseTimestamp, isCoolingDown, item.marketPrice]);
 
   const handleTradeIn = () => {
     const vaultItemKey = `${item.id}-${item.purchaseTimestamp}`;
-    tradeIn(vaultItemKey, currentPrice);
+    tradeIn(vaultItemKey, currentValue);
     toast({
       title: "Trade-in Successful!",
-      description: `You received $${currentPrice.toFixed(
+      description: `You received $${currentValue.toFixed(
         2
       )} in wallet balance for ${item.name}.`,
     });
   };
 
-  const profitLoss = currentPrice - item.pricePaid;
+  const profitLoss = currentValue - item.pricePaid;
   const profitLossPercent = (profitLoss / item.pricePaid) * 100;
   const profitColor =
     profitLoss > 0
@@ -132,13 +133,13 @@ export function VaultItemCard({
       <CardContent className="flex-grow p-4 pb-2">
         <h3 className="font-bold">{item.name}</h3>
         <p className="text-sm text-muted-foreground">
-          Paid: ${item.pricePaid.toFixed(2)}
+          Paid: ${item.pricePaid.toFixed(2)} with {item.discountApplied}% off
         </p>
         <div className="mt-2">
           <p className="text-sm font-semibold">Current Value:</p>
           <div className="flex items-baseline gap-2">
             <span className="text-2xl font-black text-primary">
-              ${currentPrice.toFixed(2)}
+              ${currentValue.toFixed(2)}
             </span>
             {priceTrend === "up" && <TrendingUp className="h-4 w-4 text-green-500" />}
             {priceTrend === "down" && <TrendingDown className="h-4 w-4 text-destructive" />}
@@ -168,7 +169,7 @@ export function VaultItemCard({
                 <AlertDialogDescription>
                   You will trade in {item.name} for its current value of{" "}
                   <span className="font-bold text-foreground">
-                    ${currentPrice.toFixed(2)}
+                    ${currentValue.toFixed(2)}
                   </span>
                   . This amount will be added to your wallet. This action cannot be
                   undone.

@@ -1,5 +1,3 @@
-
-
 "use client";
 
 import { useEffect, useState, useTransition } from "react";
@@ -9,103 +7,56 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useStore } from "@/lib/store";
 import { mockProducts, type Product } from "@/lib/products";
-import { fetchUpdatedPrice } from "@/app/actions";
-import { TrendingDown, TrendingUp, Hourglass } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
-import {
-  ChartContainer,
-} from "@/components/ui/chart";
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis, Tooltip as RechartsTooltip } from "recharts";
-import { cn } from "@/lib/utils";
-import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import Link from "next/link";
+import { Progress } from "@/components/ui/progress";
+
 
 export default function ProductPage({ params }: { params: { id: string } }) {
   const product = mockProducts.find((p) => p.id === params.id);
-  const [priceHistory, setPriceHistory] = useState(
-    product ? [{ time: 0, price: product.marketPrice }] : []
-  );
-  const [priceTrend, setPriceTrend] = useState<"up" | "down" | "stale">(
-    "stale"
-  );
-  const [isPending, startTransition] = useTransition();
-  const [priceFlashKey, setPriceFlashKey] = useState(0);
   const { addToVault } = useStore();
   const { toast } = useToast();
-
-  const currentPrice = priceHistory.at(-1)?.price ?? product?.marketPrice ?? 0;
+  const [discount, setDiscount] = useState(0);
 
   useEffect(() => {
-    if (!product) return;
-    const updateInterval = 100 + Math.random() * 400;
-
     const interval = setInterval(() => {
-      startTransition(async () => {
-        try {
-          const newPriceData = await fetchUpdatedPrice({
-            currentPrice: currentPrice,
-          });
-          const newPrice = newPriceData.newPrice;
-
-          setPriceTrend(
-            newPrice > currentPrice
-              ? "up"
-              : newPrice < currentPrice
-              ? "down"
-              : "stale"
-          );
-          setPriceFlashKey(prev => prev + 1); // Trigger re-render for animation
-          setPriceHistory((prev) => {
-            const newHistory = [
-              ...prev,
-              { time: prev.length, price: newPrice },
-            ];
-            // Keep the last 30 data points for the chart
-            if (newHistory.length > 30) {
-              return newHistory.slice(newHistory.length - 30);
-            }
-            return newHistory;
-          });
-        } catch (error) {
-          console.error("Failed to update price for", product.name);
-        }
-      });
-    }, updateInterval);
+      setDiscount(Math.floor(Math.random() * 99) + 1);
+    }, 100 + Math.random() * 200); // Rapid, random updates
 
     return () => clearInterval(interval);
-  }, [currentPrice, product]);
+  }, []);
 
   if (!product) {
     notFound();
   }
 
   const handleBuy = () => {
-    addToVault({
-      ...product,
-      pricePaid: currentPrice,
-      purchaseTimestamp: Date.now(),
-    });
+    const finalPrice = product.marketPrice * (1 - discount / 100);
+    addToVault(
+      {
+        ...product,
+        pricePaid: finalPrice,
+        purchaseTimestamp: Date.now(),
+      },
+      discount
+    );
     toast({
-      title: "Item Vaulted!",
-      description: `${product.name} has been added to your vault.`,
+      title: `Item Vaulted with a ${discount}% discount!`,
+      description: `${product.name} has been added to your vault for $${finalPrice.toFixed(2)}.`,
     });
   };
 
-  const priceAnimationClass =
-    priceTrend === "up"
-      ? "animated-text-up"
-      : priceTrend === "down"
-      ? "animated-text-down"
-      : "";
+  const finalPrice = product.marketPrice * (1 - discount / 100);
 
   return (
     <div className="container mx-auto max-w-4xl px-4 py-8">
-        <div className="mb-6">
-            <Link href="/" className="flex items-center text-sm text-muted-foreground hover:text-foreground">
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Back to all products
-            </Link>
-        </div>
+      <div className="mb-6">
+        <Link href="/" className="flex items-center text-sm text-muted-foreground hover:text-foreground">
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Back to all products
+        </Link>
+      </div>
       <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
         <div className="relative h-96 w-full md:h-full">
           <Image
@@ -119,82 +70,48 @@ export default function ProductPage({ params }: { params: { id: string } }) {
         <div className="flex flex-col">
           <h1 className="mb-2 text-3xl font-bold lg:text-4xl">{product.name}</h1>
           <p className="mb-6 text-muted-foreground">{product.description}</p>
-          
+
           <Card className="mb-6">
             <CardHeader>
-                <p className="text-sm text-muted-foreground">Current Price</p>
-                <div className="flex items-baseline gap-2">
-                     <div
-                        key={priceFlashKey}
-                        className={cn(
-                        "text-4xl font-black transition-colors duration-300",
-                        priceAnimationClass
-                        )}
-                    >
-                      ${currentPrice.toFixed(2)}
-                    </div>
-                    <div className="flex items-center transition-opacity duration-500">
-                        {isPending && priceHistory.length > 1 && (
-                            <Hourglass className="h-6 w-6 animate-spin" />
-                        )}
-                        {!isPending && priceTrend === "up" && (
-                            <TrendingUp className="h-6 w-6 text-green-400" />
-                        )}
-                        {!isPending && priceTrend === "down" && (
-                            <TrendingDown className="h-6 w-6 text-destructive" />
-                        )}
-                    </div>
+              <p className="text-sm text-muted-foreground">Market Price</p>
+              <div className="flex items-baseline gap-2">
+                <div className="text-4xl font-black">
+                  ${product.marketPrice.toFixed(2)}
                 </div>
+              </div>
             </CardHeader>
             <CardContent>
-                 <ChartContainer config={{}} className="h-40 w-full">
-                    <AreaChart
-                        accessibilityLayer
-                        data={priceHistory}
-                        margin={{ top: 5, right: 20, left: 0, bottom: 0 }}
-                    >
-                         <defs>
-                            <linearGradient id="fillGreen" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor="hsl(var(--chart-1))" stopOpacity={0.8}/>
-                                <stop offset="95%" stopColor="hsl(var(--chart-1))" stopOpacity={0.1}/>
-                            </linearGradient>
-                            <linearGradient id="fillRed" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor="hsl(var(--destructive))" stopOpacity={0.8}/>
-                                <stop offset="95%" stopColor="hsl(var(--destructive))" stopOpacity={0.1}/>
-                            </linearGradient>
-                        </defs>
-                        <CartesianGrid vertical={false} stroke="hsl(var(--border))" strokeDasharray="3 3" />
-                         <YAxis domain={['dataMin - (dataMin * 0.05)', 'dataMax + (dataMax * 0.05)']} hide />
-                         <RechartsTooltip 
-                            contentStyle={{
-                                background: "hsl(var(--background))",
-                                borderColor: "hsl(var(--border))",
-                                borderRadius: "var(--radius)",
-                            }}
-                            labelFormatter={(label) => `Update #${label}`}
-                            formatter={(value:any) => [`$${value.toFixed(2)}`, "Price"]}
-                        />
-                        <Area
-                            dataKey="price"
-                            type="natural"
-                            fill={priceTrend === "down" ? "url(#fillRed)" : "url(#fillGreen)"}
-                            fillOpacity={0.4}
-                            stroke={priceTrend === "down" ? "hsl(var(--destructive))" : "hsl(var(--chart-1))"}
-                            strokeWidth={2}
-                            dot={false}
-                        />
-                    </AreaChart>
-                </ChartContainer>
+              <p className="text-sm text-muted-foreground">
+                Current potential price after discount
+              </p>
+              <div className="flex items-baseline gap-2">
+                <div className="text-2xl font-bold text-primary">
+                  ${finalPrice.toFixed(2)}
+                </div>
+                <div className="flex items-center text-sm font-bold text-green-400">
+                  ({discount}% off)
+                </div>
+              </div>
             </CardContent>
           </Card>
 
           <Button
             size="lg"
-            className="w-full"
+            className="w-full h-14 text-lg font-bold relative overflow-hidden"
             onClick={handleBuy}
-            disabled={isPending && priceHistory.length <= 1}
           >
-            Buy & Vault It!
+            <div className="absolute inset-0 w-full h-full">
+               <Progress value={discount} className="h-full rounded-md" />
+               <div 
+                 className="absolute inset-0 bg-primary/30"
+                 style={{
+                    clipPath: `polygon(0 0, ${discount}% 0, ${discount}% 100%, 0% 100%)`
+                 }}
+                />
+            </div>
+            <span className="z-10 relative flex items-center justify-center">
+                Buy &amp; Vault It! ({discount}%)
+            </span>
           </Button>
         </div>
       </div>

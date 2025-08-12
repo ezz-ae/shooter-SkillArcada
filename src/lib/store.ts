@@ -6,6 +6,7 @@ import type { Product } from "./products";
 export interface VaultItem extends Product {
   pricePaid: number;
   purchaseTimestamp: number;
+  discountApplied: number;
 }
 
 export interface ShippingItem extends VaultItem {
@@ -16,7 +17,7 @@ interface StoreState {
   vault: VaultItem[];
   shippingCart: ShippingItem[];
   walletBalance: number;
-  addToVault: (item: VaultItem) => void;
+  addToVault: (item: Omit<VaultItem, 'discountApplied'>, discount: number) => void;
   tradeIn: (vaultItemKey: string, tradeInValue: number) => void;
   moveToShipping: (vaultItemKeys: string[]) => boolean;
   removeFromShipping: (shippingId: string) => void;
@@ -32,9 +33,9 @@ export const useStore = create<StoreState>()(
     (set, get) => ({
       vault: [],
       shippingCart: [],
-      walletBalance: 1000.0, // Start with some money
+      walletBalance: 10000.0, // Start with more money for testing
 
-      addToVault: (item) => {
+      addToVault: (item, discount) => {
         if (get().vault.length >= 20) {
           // Limit vault size
           return;
@@ -42,7 +43,7 @@ export const useStore = create<StoreState>()(
         const currentBalance = get().walletBalance;
         if (currentBalance >= item.pricePaid) {
           set((state) => ({
-            vault: [...state.vault, item],
+            vault: [...state.vault, { ...item, discountApplied: discount }],
             walletBalance: state.walletBalance - item.pricePaid,
           }));
         }
