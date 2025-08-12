@@ -22,29 +22,11 @@ export default function Home() {
         id="products"
         className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4"
       >
-        {mockProducts.map((product, index) => {
-          // This creates a more robust and visually pleasing masonry layout pattern
-          // that is less dependent on the order of products.
-          const patternIndex = index % 10;
-          let className = "";
-
-          if (product.game === 'reel-pause' || product.game === 'multi-shot' || product.game === 'riddle-calc') {
-            className = "lg:col-span-2";
-          } else {
-            switch (patternIndex) {
-              case 3:
-              case 7:
-                className = "lg:col-span-2";
-                break;
-            }
-          }
-            
-          return (
-            <div key={product.id} className={className}>
-              <ShotTaker product={product} />
-            </div>
-          )
-        })}
+        {mockProducts.map((product) => (
+          <div key={product.id}>
+            <ShotTaker product={product} />
+          </div>
+        ))}
       </section>
     </div>
   );
