@@ -18,7 +18,7 @@ interface StoreState {
   walletBalance: number;
   hasTakenFirstShot: boolean;
   setHasTakenFirstShot: () => void;
-  addToVault: (item: Omit<VaultItem, 'discountApplied'>, discount?: number) => void;
+  addToVault: (item: VaultItem) => void;
   tradeIn: (vaultItemKey: string, tradeInValue: number) => void;
   moveToShipping: (vaultItemKeys: string[]) => boolean;
   removeFromShipping: (shippingId: string) => void;

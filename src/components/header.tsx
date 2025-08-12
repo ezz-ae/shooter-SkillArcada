@@ -49,9 +49,9 @@ export function Header() {
             <Wallet className="h-5 w-5 text-primary" />
             <span>Wallet: ${displayBalance}</span>
           </div>
-          <Button variant="ghost" asChild>
-            <Link href="/vault" className="relative flex items-center space-x-2 text-sm font-medium p-2 bg-secondary rounded-md">
-              <Package className="h-5 w-5" />
+          <Button variant="outline" asChild>
+            <Link href="/vault" className="relative">
+              <Package className="h-5 w-5 mr-2" />
               <span>Vault ({vaultItemCount})</span>
             </Link>
           </Button>

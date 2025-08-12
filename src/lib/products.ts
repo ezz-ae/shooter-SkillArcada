@@ -6,9 +6,6 @@ export interface Product {
   marketPrice: number;
   imageUrl: string;
   dataAiHint: string;
-  value: number; // 1, 2, or 3 stars
-  allowDoubleSnipe?: boolean;
-  gameMode?: 'doubleSnipe' | 'reelPause';
 }
 
 export const mockProducts: Product[] = [
@@ -20,8 +17,6 @@ export const mockProducts: Product[] = [
     marketPrice: 2500.0,
     imageUrl: 'https://placehold.co/600x400/000000/FFFFFF/png?text=Arcade',
     dataAiHint: 'vintage arcade',
-    value: 3,
-    gameMode: 'reelPause',
   },
   {
     id: 'prod_002',
@@ -31,7 +26,6 @@ export const mockProducts: Product[] = [
     marketPrice: 750.0,
     imageUrl: 'https://placehold.co/600x400/2E2E2E/E0E0E0/png?text=Sneakers',
     dataAiHint: 'holographic sneakers',
-    value: 2,
   },
   {
     id: 'prod_003',
@@ -41,7 +35,6 @@ export const mockProducts: Product[] = [
     marketPrice: 120.5,
     imageUrl: 'https://placehold.co/600x400/1A4D2E/F5EFE6/png?text=Plant',
     dataAiHint: 'smart planter',
-    value: 1,
   },
   {
     id: 'prod_004',
@@ -51,7 +44,6 @@ export const mockProducts: Product[] = [
     marketPrice: 199.99,
     imageUrl: 'https://placehold.co/600x400/4C0B33/F0E4F0/png?text=Gastronomy',
     dataAiHint: 'gastronomy kit',
-    value: 2,
   },
   {
     id: 'prod_005',
@@ -61,7 +53,6 @@ export const mockProducts: Product[] = [
     marketPrice: 1850.0,
     imageUrl: 'https://placehold.co/600x400/0D1B2A/E0E1DD/png?text=Hoverboard',
     dataAiHint: 'futuristic hoverboard',
-    value: 3,
   },
   {
     id: 'prod_006',
@@ -71,7 +62,6 @@ export const mockProducts: Product[] = [
     marketPrice: 350.0,
     imageUrl: 'https://placehold.co/600x400/D4A276/3F2B2B/png?text=Clock',
     dataAiHint: 'nixie clock',
-    value: 2,
   },
   {
     id: 'prod_007',
@@ -81,7 +71,6 @@ export const mockProducts: Product[] = [
     marketPrice: 3200.0,
     imageUrl: 'https://placehold.co/600x400/C0C0C0/000000/png?text=Robot',
     dataAiHint: 'robot chef',
-    value: 3,
   },
   {
     id: 'prod_008',
@@ -91,8 +80,6 @@ export const mockProducts: Product[] = [
     marketPrice: 4800.0,
     imageUrl: 'https://placehold.co/600x400/0000FF/FFFFFF/png?text=Book',
     dataAiHint: 'rare book',
-    value: 3,
-    gameMode: 'doubleSnipe',
   },
   {
     id: 'prod_009',
@@ -102,7 +89,6 @@ export const mockProducts: Product[] = [
     marketPrice: 1250.75,
     imageUrl: 'https://placehold.co/600x400/7FFF00/000000/png?text=DNA',
     dataAiHint: 'science kit',
-    value: 2,
   },
   {
     id: 'prod_010',
@@ -112,7 +98,6 @@ export const mockProducts: Product[] = [
     marketPrice: 7800.0,
     imageUrl: 'https://placehold.co/600x400/87CEEB/000000/png?text=Drone',
     dataAiHint: 'weather drone',
-    value: 3,
   },
   {
     id: 'prod_011',
@@ -122,7 +107,6 @@ export const mockProducts: Product[] = [
     marketPrice: 220.0,
     imageUrl: 'https://placehold.co/600x400/DA70D6/FFFFFF/png?text=Yoga',
     dataAiHint: 'yoga mat',
-    value: 1,
   },
   {
     id: 'prod_012',
@@ -132,7 +116,6 @@ export const mockProducts: Product[] = [
     marketPrice: 85.0,
     imageUrl: 'https://placehold.co/600x400/708090/FFFFFF/png?text=Pen',
     dataAiHint: 'space pen',
-    value: 1,
   },
   {
     id: 'prod_013',
@@ -142,7 +125,6 @@ export const mockProducts: Product[] = [
     marketPrice: 150.0,
     imageUrl: 'https://placehold.co/600x400/483D8B/FFFFFF/png?text=Galaxy',
     dataAiHint: 'hologram projector',
-    value: 1,
   },
   {
     id: 'prod_014',
@@ -152,7 +134,6 @@ export const mockProducts: Product[] = [
     marketPrice: 280.0,
     imageUrl: 'https://placehold.co/600x400/BDB76B/000000/png?text=Ring',
     dataAiHint: 'smart ring',
-    value: 2,
   },
   {
     id: 'prod_015',
@@ -162,7 +143,6 @@ export const mockProducts: Product[] = [
     marketPrice: 180.5,
     imageUrl: 'https://placehold.co/600x400/556B2F/FFFFFF/png?text=Bonsai',
     dataAiHint: 'levitating planter',
-    value: 1,
   },
   {
     id: 'prod_016',
@@ -172,7 +152,6 @@ export const mockProducts: Product[] = [
     marketPrice: 5500.0,
     imageUrl: 'https://placehold.co/600x400/ADD8E6/000000/png?text=Sleep',
     dataAiHint: 'sleep pod',
-    value: 3,
   },
   {
     id: 'prod_017',
@@ -182,7 +161,6 @@ export const mockProducts: Product[] = [
     marketPrice: 95.99,
     imageUrl: 'https://placehold.co/600x400/00FFFF/000000/png?text=Clean',
     dataAiHint: 'ultrasonic cleaner',
-    value: 1,
   },
   {
     id: 'prod_018',
@@ -192,7 +170,6 @@ export const mockProducts: Product[] = [
     marketPrice: 2100.0,
     imageUrl: 'https://placehold.co/600x400/F5DEB3/000000/png?text=Bot',
     dataAiHint: 'delivery robot',
-    value: 2,
   },
   {
     id: 'prod_019',
@@ -202,7 +179,6 @@ export const mockProducts: Product[] = [
     marketPrice: 620.0,
     imageUrl: 'https://placehold.co/600x400/2F4F4F/FFFFFF/png?text=Jacket',
     dataAiHint: 'smart jacket',
-    value: 2,
   },
   {
     id: 'prod_020',
@@ -212,7 +188,5 @@ export const mockProducts: Product[] = [
     marketPrice: 15000.0,
     imageUrl: 'https://placehold.co/600x400/FF4500/FFFFFF/png?text=Fusion',
     dataAiHint: 'fusion generator',
-    value: 3,
-    gameMode: 'doubleSnipe',
   },
 ];

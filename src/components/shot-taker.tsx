@@ -14,7 +14,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Button } from "./ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "./ui/card";
 import { useStore } from "@/lib/store";
 import type { Product } from "@/lib/products";
@@ -39,7 +38,6 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
   const { toast } = useToast();
   const cardRef = useRef<HTMLDivElement>(null);
 
-
   useEffect(() => {
     let isMounted = true;
     const interval = setInterval(() => {
@@ -60,7 +58,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
 
         return newPrice;
       });
-    }, 200 + Math.random() * 300);
+    }, 1000 + Math.random() * 1000); // Update every 1-2 seconds
 
     return () => {
         isMounted = false;
@@ -147,7 +145,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
             </CardHeader>
           </Link>
         )}
-        <CardContent className={cn("flex-grow p-4 space-y-2", isPage && "p-0 pt-4")}>
+        <CardContent className={cn("flex-grow p-4 pb-0 space-y-2", isPage && "p-0 pt-4")}>
           {!isPage && (
             <Link href={`/product/${product.id}`}>
               <CardTitle className="text-lg font-bold group-hover:text-primary transition-colors truncate">
@@ -164,7 +162,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
             </div>
 
         </CardContent>
-        <CardFooter className={cn("p-4 pt-0", isPage && "p-0 pt-4")}>
+        <CardFooter className={cn("p-4", isPage && "p-0 pt-4")}>
           <button
             className="w-full h-12 text-md font-bold text-primary-foreground rounded-md relative overflow-hidden bg-secondary flex items-center justify-center"
             onClick={handleShot}
@@ -210,7 +208,7 @@ export function ShotTaker({ product, isPage = false }: ShotTakerProps) {
                     You've captured <span className="font-bold text-foreground">{product.name}</span>! Vault it now for <span className="font-bold text-foreground">${capturedPrice.toFixed(2)}</span> or let it go.
                 </AlertDialogDescription>
                 
-                <AlertDialogFooter className="gap-2 sm:gap-0 sm:flex-row sm:justify-end sm:space-x-2">
+                <AlertDialogFooter className="gap-2 sm:gap-0 sm:flex-row sm:justify-center">
                     <AlertDialogCancel onClick={handleCloseDialog}>Let it go</AlertDialogCancel>
                     <AlertDialogAction onClick={handleVault}>Vault It!</AlertDialogAction>
                 </AlertDialogFooter>
