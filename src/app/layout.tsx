@@ -13,7 +13,7 @@ const allura = Allura({ subsets: ["latin"], weight: "400", variable: "--font-all
 
 
 export const metadata: Metadata = {
-  title: "Luckshots",
+  title: "ShooterGun",
   description: "Your shot at unbelievable prices.",
 };
 

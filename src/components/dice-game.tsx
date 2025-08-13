@@ -9,7 +9,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 type GameState = 'initial' | 'rolling' | 'result';
-type ResultCategory = 'Luckshots' | 'Brainshots' | 'Challenges';
+type ResultCategory = 'ShooterGuns' | 'Brainshots' | 'Challenges';
 
 interface DiceGameProps {
     onComplete: () => void;
@@ -40,7 +40,7 @@ export function DiceGame({ onComplete }: DiceGameProps) {
                 });
             } else if (total <= 12) {
                 setResult({
-                    category: 'Luckshots',
+                    category: 'ShooterGuns',
                     message: "Lady Luck is on your side!",
                     advice: "The dice are whispering your name. Today is about timing and intuition. Feel the rhythm, watch the prices, and take your shot. Fortune favors the bold!"
                 });
@@ -65,7 +65,7 @@ export function DiceGame({ onComplete }: DiceGameProps) {
         if (!result) return null;
 
         const content = {
-            'Luckshots': { icon: Dices, href: '/luckshots', buttonText: "Go to Luckshots" },
+            'ShooterGuns': { icon: Dices, href: '/luckshots', buttonText: "Go to ShooterGuns" },
             'Brainshots': { icon: BrainCircuit, href: '/luckshots#brainshot-products', buttonText: "Go to Brainshots" },
             'Challenges': { icon: Swords, href: '/pool-shot', buttonText: "Go to Challenges" }
         }
@@ -79,7 +79,7 @@ export function DiceGame({ onComplete }: DiceGameProps) {
                  <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
                     <Button size="lg" variant="outline" onClick={resetGame}>Roll Again</Button>
                     <Button size="lg" onClick={onComplete} className="moving-gradient text-primary-foreground">
-                        Let Shoter Read Your Luck <Sparkles className="ml-2"/>
+                        Let Shooter Read Your Luck <Sparkles className="ml-2"/>
                     </Button>
                  </div>
             </div>
@@ -91,7 +91,7 @@ export function DiceGame({ onComplete }: DiceGameProps) {
             {gameState === 'initial' && (
                 <div className="animate-in fade-in-50 duration-1000">
                     <h1 className="text-4xl font-black tracking-tight lg:text-6xl text-transparent bg-clip-text bg-gradient-to-br from-foreground to-foreground/60">
-                        Let Shoter tell you if today is a lucky day.
+                        Let Shooter tell you if today is a lucky day.
                     </h1>
                     <Button size="lg" className="mt-8 relative overflow-hidden" onClick={rollDice}>
                          <div className="absolute inset-0 moving-gradient opacity-80"></div>

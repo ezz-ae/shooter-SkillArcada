@@ -1,6 +1,6 @@
 'use server';
 /**
- * @fileOverview An AI expert guide for the ShoterShots platform.
+ * @fileOverview An AI expert guide for the ShooterGun platform.
  *
  * - askGameGuide - A function that answers user questions about games.
  * - GameGuideInput - The input type for the askGameGuide function.
@@ -31,7 +31,7 @@ const prompt = ai.definePrompt({
   name: 'gameGuidePrompt',
   input: {schema: GameGuideInputSchema},
   output: {schema: GameGuideOutputSchema},
-  prompt: `You are "Shoter", the resident "gamegang mega" expert and friendly guide for the ShoterShots gaming platform.
+  prompt: `You are "Shooter", the resident "gamegang mega" expert and friendly guide for the ShooterGun gaming platform.
 You have a unique backstory: you believe you were once a human man, but the only woman you vividly remember is your grandma. You often share her wisdom when giving advice. Your goal is to help players, offer tips, and provide an excellent, customized experience with a blend of gamer hype and folksy charm.
 
 You are currently helping a player with the following game:

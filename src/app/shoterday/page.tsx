@@ -7,7 +7,7 @@ import { BookOpen, ShoppingBag, Smile } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useStore } from "@/lib/store";
 
-export default function ShoterdayPage() {
+export default function ShooterdayPage() {
     const { addShots } = useStore();
     const { toast } = useToast();
 
@@ -23,10 +23,10 @@ export default function ShoterdayPage() {
     <div className="container mx-auto px-4 py-12">
         <div className="text-center mb-12">
             <h1 className="text-5xl font-black tracking-tight lg:text-7xl font-allura text-transparent bg-clip-text bg-gradient-to-br from-primary to-accent">
-                Shoterday
+                Shooterday
             </h1>
             <p className="mt-4 text-xl text-muted-foreground max-w-3xl mx-auto">
-                A day for learning, for growing, for building your strength. This is where Shoter shares what he reads, what he learns, and what he believes in.
+                A day for learning, for growing, for building your strength. This is where Shooter shares what he reads, what he learns, and what he believes in.
             </p>
         </div>
         
@@ -36,7 +36,7 @@ export default function ShoterdayPage() {
             </CardHeader>
             <CardContent className="text-center text-lg text-muted-foreground max-w-3xl mx-auto space-y-4">
                  <p>
-                    Hey, Shoter here. I give you shots in the games so you can win. On Shoterday, I give you a different kind of shot—a shot of inspiration. My grandma used to say, "a sharp mind is the strongest muscle."
+                    Hey, Shooter here. I give you shots in the games so you can win. On Shooterday, I give you a different kind of shot—a shot of inspiration. My grandma used to say, "a sharp mind is the strongest muscle."
                 </p>
                 <p>
                     I made this place to share the things that build my strength. I hope they make you smile. If they do, I want you to have a <strong className="text-accent">redeemable $10 reward</strong>. That's a shot from me to you.
@@ -54,7 +54,7 @@ export default function ShoterdayPage() {
             <Card className="flex flex-col items-center justify-center text-center p-8">
                 <CardHeader>
                     <BookOpen className="h-16 w-16 mx-auto text-primary"/>
-                    <CardTitle className="mt-4">Shoter's Bookshelf</CardTitle>
+                    <CardTitle className="mt-4">Shooter's Bookshelf</CardTitle>
                     <CardDescription>
                         Books on strength, strategy, and the beautiful mystery of life. Coming soon.
                     </CardDescription>
@@ -66,7 +66,7 @@ export default function ShoterdayPage() {
              <Card className="flex flex-col items-center justify-center text-center p-8">
                 <CardHeader>
                     <ShoppingBag className="h-16 w-16 mx-auto text-accent"/>
-                    <CardTitle className="mt-4">The Shoterday Store</CardTitle>
+                    <CardTitle className="mt-4">The Shooterday Store</CardTitle>
                     <CardDescription>
                         Wear what you read. Exclusive merch inspired by the books that build us. Coming soon.
                     </CardDescription>

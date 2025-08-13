@@ -7,9 +7,9 @@ import { Product, getProducts } from "@/lib/products";
 import { ArrowRight, Mic, MessageSquare, Puzzle, Shuffle, Users } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { ShoterChat } from "@/components/shoter-chat";
+import { ShooterChat } from "@/components/shooter-chat";
 
-export default function ShoterAndGirlsPage() {
+export default function ShooterAndGirlsPage() {
     const [girlGames, setGirlGames] = useState<Product[]>([]);
 
     useEffect(() => {
@@ -31,7 +31,7 @@ export default function ShoterAndGirlsPage() {
     <div className="w-full bg-black text-white py-12">
         <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto mb-12">
-                <ShoterChat />
+                <ShooterChat />
             </div>
 
              <div className="text-center mb-8">

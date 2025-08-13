@@ -9,7 +9,7 @@ export default function LearningCenterPage() {
       <div className="text-center mb-12">
           <Bot className="h-20 w-20 mx-auto text-primary" />
         <h1 className="text-4xl font-black tracking-tight lg:text-5xl mt-4">
-          How to Earn with Shoter
+          How to Earn with Shooter
         </h1>
         <p className="text-lg text-muted-foreground mt-2">
           A message from your resident gamegang mega.
@@ -18,7 +18,7 @@ export default function LearningCenterPage() {
 
        <Card className="mb-8 bg-secondary/30 border-primary/20">
             <CardHeader>
-                <CardTitle className="text-2xl font-bold text-center">Hey! Shoter here. Let's get this W!</CardTitle>
+                <CardTitle className="text-2xl font-bold text-center">Hey! Shooter here. Let's get this W!</CardTitle>
             </CardHeader>
             <CardContent className="text-center text-lg text-muted-foreground max-w-3xl mx-auto space-y-4">
                  <p>
@@ -38,12 +38,12 @@ export default function LearningCenterPage() {
         <Card>
             <CardHeader>
                 <CardTitle className="flex items-center gap-3"><Dices className="text-primary"/>The Games: Find Your Edge</CardTitle>
-                <CardDescription>Every game on ShoterShots is a different kind of challenge. Find what fits your style.</CardDescription>
+                <CardDescription>Every game on ShooterGun is a different kind of challenge. Find what fits your style.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
                 <div className="grid md:grid-cols-2 gap-4">
                     <div className="p-4 bg-secondary/50 rounded-lg">
-                        <h3 className="font-bold flex items-center gap-2 mb-1"><Target className="text-accent h-5 w-5"/> Luckshots</h3>
+                        <h3 className="font-bold flex items-center gap-2 mb-1"><Target className="text-accent h-5 w-5"/> ShooterGuns</h3>
                         <p className="text-sm text-muted-foreground">Pure timing and luck. Item prices change constantly. Hit the 'Shot' button at the perfect moment to capture a low price.</p>
                     </div>
                      <div className="p-4 bg-secondary/50 rounded-lg">
@@ -79,7 +79,7 @@ export default function LearningCenterPage() {
 
         <Card>
             <CardHeader>
-                <CardTitle className="flex items-center gap-3"><Bot className="text-primary"/>The AI: Shoter's Edge</CardTitle>
+                <CardTitle className="flex items-center gap-3"><Bot className="text-primary"/>The AI: Shooter's Edge</CardTitle>
                 <CardDescription>I use what I learn to make things more fun and fair for you.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">

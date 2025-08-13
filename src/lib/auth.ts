@@ -87,7 +87,7 @@ export const useAuth = create<AuthState>()(
       setIsLoggingIn: (isLoggingIn) => set({ isLoggingIn }),
     }),
     {
-      name: 'luckshot-auth-storage-v8', // Incremented version
+      name: 'shootergun-auth-storage-v1',
       storage: createJSONStorage(() => localStorage),
       // Only persist non-user-session specific data
       partialize: (state) => ({

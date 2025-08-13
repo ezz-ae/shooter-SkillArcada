@@ -17,7 +17,7 @@ export default function TermsPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="prose dark:prose-invert max-w-none">
-          <p>Welcome to ShoterShots! By using our platform, you agree to these terms. Please read them carefully.</p>
+          <p>Welcome to ShooterGun! By using our platform, you agree to these terms. Please read them carefully.</p>
 
           <h2>1. The "Shots" Currency</h2>
           <p>
@@ -27,7 +27,7 @@ export default function TermsPage() {
 
           <h2>2. Game Rules</h2>
           
-          <h3>Luckshots (Dynamic Pricing)</h3>
+          <h3>ShooterGuns (Dynamic Pricing)</h3>
           <ul>
             <li>The price of items in this category changes dynamically.</li>
             <li>Clicking the "Shot" button costs 1 Shot and captures the current price of the item.</li>
@@ -46,7 +46,7 @@ export default function TermsPage() {
           <h2>3. The Vault & Shipping</h2>
           <ul>
             <li>Won items are stored in your virtual "Vault."</li>
-            <li>Items in the vault can be traded in for a fluctuating value in Shots or for a flat-rate amount of legacy "ShoterShots."</li>
+            <li>Items in the vault can be traded in for a fluctuating value in Shots or for a flat-rate amount of legacy "ShooterGun."</li>
             <li>You can select up to 3 items from your vault to move to your shipping cart.</li>
             <li>Once you confirm a shipment, the items are considered finalized and cannot be returned to the vault.</li>
           </ul>
@@ -60,7 +60,7 @@ export default function TermsPage() {
 
           <h2>5. Limitation of Liability</h2>
           <p>
-            ShoterShots is provided "as is." While we strive for a fair and fun environment, we are not responsible for any losses incurred. All transactions are final.
+            ShooterGun is provided "as is." While we strive for a fair and fun environment, we are not responsible for any losses incurred. All transactions are final.
           </p>
 
           <p>

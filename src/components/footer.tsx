@@ -20,10 +20,10 @@ export function Footer() {
     }, []);
     
     const gameLinks = [
-      { href: "/luckshots", label: "Luckshots", icon: Dices },
+      { href: "/luckshots", label: "ShooterGuns", icon: Dices },
       { href: "/crypto-luck", label: "Crypto Luck", icon: LineChart },
       { href: "/pool-shot", label: "Pool Shot", icon: Swords },
-      { href: "/shoter-and-girls", label: "Shoter & Girls", icon: Heart },
+      { href: "/shoter-and-girls", label: "Shooter & Girls", icon: Heart },
     ];
     
   return (
@@ -36,9 +36,9 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="flex flex-col gap-4">
               <Link href="/">
-                  <span className="font-allura text-4xl text-foreground">ShoterShots</span>
+                  <span className="font-allura text-4xl text-foreground">ShooterGun</span>
               </Link>
-              <p className="text-sm text-muted-foreground">Your shot at unbelievable prices, powered by our resident gamegang mega, Shoter.</p>
+              <p className="text-sm text-muted-foreground">Your shot at unbelievable prices, powered by our resident gamegang mega, Shooter.</p>
           </div>
           <div className="grid grid-cols-2 gap-8">
               <div>

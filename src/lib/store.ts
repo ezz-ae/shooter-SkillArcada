@@ -137,7 +137,7 @@ export const useStore = create<StoreState>()(
       }
     }),
     {
-      name: "shotershots-storage-v2", 
+      name: "shootergun-storage-v1", 
       storage: createJSONStorage(() => localStorage), 
     }
   )

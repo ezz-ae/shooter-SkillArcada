@@ -35,14 +35,14 @@ export function Header() {
         <div className="mr-auto flex items-center">
            <MobileNav />
           <Link href="/" className="mr-6 flex items-center space-x-2">
-            <span className="font-allura text-4xl shimmer-text">ShoterShots</span>
+            <span className="font-allura text-4xl shimmer-text">ShooterGun</span>
           </Link>
           <nav className="hidden md:flex items-center space-x-1">
              <Button variant="ghost" asChild>
-                <Link href="/shoterday">Shoterday</Link>
+                <Link href="/shoterday">Shooterday</Link>
              </Button>
              <Button variant="ghost" asChild>
-                <Link href="/luckshots">Luckshots</Link>
+                <Link href="/luckshots">ShooterGuns</Link>
              </Button>
              <Button variant="ghost" asChild>
                 <Link href="/crypto-luck">Crypto Luck</Link>
@@ -51,7 +51,7 @@ export function Header() {
                 <Link href="/pool-shot">Pool Shot</Link>
              </Button>
              <Button variant="ghost" asChild>
-                <Link href="/shoter-and-girls">Shoter & Girls</Link>
+                <Link href="/shoter-and-girls">Shooter & Girls</Link>
              </Button>
              <Button variant="ghost" asChild>
                 <Link href="/ai-adventure">AI Adventure</Link>

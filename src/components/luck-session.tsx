@@ -40,7 +40,7 @@ export function LuckSession() {
             console.error("Luck analysis failed:", error);
             toast({
                 variant: "destructive",
-                title: "Shoter is Resting",
+                title: "Shooter is Resting",
                 description: "Couldn't perform the luck analysis right now. Please try again in a moment."
             });
             setSessionState('preferences');
@@ -55,7 +55,7 @@ export function LuckSession() {
                 return (
                     <div className="text-center animate-in fade-in-50 duration-1000">
                         <h1 className="text-4xl font-black tracking-tight lg:text-6xl text-transparent bg-clip-text bg-gradient-to-br from-foreground to-foreground/60">
-                            Let Shoter read your luck.
+                            Let Shooter read your luck.
                         </h1>
                         <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
                            Our resident gamegang mega wants to give you a personalized luck session.
@@ -89,7 +89,7 @@ export function LuckSession() {
                 return (
                     <div className="text-center animate-in fade-in-50 duration-1000 flex flex-col items-center gap-4">
                         <Loader2 className="h-16 w-16 animate-spin text-primary" />
-                        <p className="text-lg text-muted-foreground">Shoter is consulting the cards...</p>
+                        <p className="text-lg text-muted-foreground">Shooter is consulting the cards...</p>
                     </div>
                 )
             case 'reading':
@@ -98,7 +98,7 @@ export function LuckSession() {
                     <div className="max-w-4xl w-full animate-in fade-in-50 duration-1000 space-y-8">
                         <div className="text-center">
                             <h2 className="text-3xl font-bold tracking-tight lg:text-4xl text-transparent bg-clip-text bg-gradient-to-br from-foreground to-foreground/60">
-                                Shoter's Reading
+                                Shooter's Reading
                             </h2>
                         </div>
                         <div className="grid md:grid-cols-3 gap-8 text-center">

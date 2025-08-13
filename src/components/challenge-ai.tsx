@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -35,7 +36,7 @@ export function ChallengeAI() {
             toast({
                 variant: "destructive",
                 title: "Analysis Failed",
-                description: "The AI Shoter couldn't generate a challenge right now. Please try again."
+                description: "The AI Shooter couldn't generate a challenge right now. Please try again."
             });
         } finally {
             setIsLoading(false);
@@ -48,7 +49,7 @@ export function ChallengeAI() {
                 <Bot className="mx-auto h-12 w-12 text-accent"/>
                 <CardTitle className="text-3xl font-black text-center">AI Challenge Suggester</CardTitle>
                 <CardDescription className="text-lg text-center mt-1">
-                    Let our AI Shoter analyze a conversation and give you a free, personalized test!
+                    Let our AI Shooter analyze a conversation and give you a free, personalized test!
                 </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -75,7 +76,7 @@ export function ChallengeAI() {
                         <div className="p-4 bg-secondary/50 rounded-lg">
                             <h4 className="font-bold flex items-center mb-2 text-lg">
                                 <Gamepad2 className="mr-2 h-5 w-5 text-accent"/>
-                                Shoter's Suggested Challenge
+                                Shooter's Suggested Challenge
                             </h4>
                             <p className="text-muted-foreground">{result.suggestedChallenge}</p>
                         </div>
