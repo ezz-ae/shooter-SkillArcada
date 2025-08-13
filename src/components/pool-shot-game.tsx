@@ -248,8 +248,7 @@ export function PoolShotGame() {
             {/* 8-Ball */}
             <div className={cn(
                 "absolute w-8 h-8 rounded-full shadow-md flex items-center justify-center text-white font-bold text-xs transition-all duration-1000",
-                "bg-black left-[75%] top-1/2 -translate-x-1/2 -translate-y-1/2",
-                gameState === 'shot' && gameState === 'won' && "animate-8-ball-sink"
+                "bg-black left-[75%] top-1/2 -translate-x-1/2 -translate-y-1/2"
             )}>
                 8
             </div>

@@ -40,8 +40,7 @@ export function Dice({ value, isRolling, delay = 0 }: DiceProps) {
 
     return (
         <div className={cn(
-            "aspect-square w-20 sm:w-32 rounded-lg bg-card border-2 shadow-lg flex items-center justify-center relative transition-transform duration-500",
-            isRolling && "animate-tumble"
+            "aspect-square w-20 sm:w-32 rounded-lg bg-card border-2 shadow-lg flex items-center justify-center relative transition-transform duration-500"
         )}>
            {dotPositions[displayValue].map(([top, left], i) => (
                 <div 
