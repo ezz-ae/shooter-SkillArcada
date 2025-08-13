@@ -1,7 +1,6 @@
 
 "use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
@@ -24,32 +23,9 @@ interface PoolChallengeCardProps {
   onDismiss?: () => void;
 }
 
-const CHALLENGE_DURATION_SECONDS = 5 * 60; // 5 minutes
-
 export function PoolChallengeCard({ challenge, onDismiss }: PoolChallengeCardProps) {
   const { id, prize, fee, player1, player2, type } = challenge;
   const isWaiting = player2 === null;
-
-  const [timeLeft, setTimeLeft] = useState(CHALLENGE_DURATION_SECONDS);
-
-  useEffect(() => {
-    if (!isWaiting) return;
-
-    const timer = setInterval(() => {
-      setTimeLeft((prevTime) => {
-        if (prevTime <= 1) {
-            // In a real app, you might fetch a new challenge here
-            return CHALLENGE_DURATION_SECONDS;
-        }
-        return prevTime - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [isWaiting]);
-
-  const minutes = Math.floor(timeLeft / 60);
-  const seconds = timeLeft % 60;
 
   const renderIcon = () => {
     return <Swords className="h-6 w-6 text-primary"/>;
@@ -85,8 +61,8 @@ export function PoolChallengeCard({ challenge, onDismiss }: PoolChallengeCardPro
                  {isWaiting && (
                     <div className="flex justify-center items-center gap-2 mt-2">
                         <Zap className="h-5 w-5 text-yellow-500 animate-ping" />
-                        <p className={cn("font-mono text-xl font-bold", timeLeft < 60 && "text-destructive")}>
-                           {String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}
+                        <p className="font-mono text-xl font-bold">
+                           LIVE
                         </p>
                     </div>
                 )}
@@ -112,7 +88,7 @@ export function PoolChallengeCard({ challenge, onDismiss }: PoolChallengeCardPro
       </CardContent>
       <CardFooter className="flex-col gap-2">
          <Button asChild className="w-full">
-            <Link href={`/pool-shot/challenge/${id}`}>
+            <Link href={`/${type}-shot/challenge/${id}`}>
                 {isWaiting ? 'Accept Challenge' : 'View Match'}
             </Link>
         </Button>
