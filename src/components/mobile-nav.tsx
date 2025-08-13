@@ -4,7 +4,7 @@
 import { useState } from "react"
 import Link, { LinkProps } from "next/link"
 import { useRouter } from "next/navigation"
-import { Menu, Swords, Dices, LineChart, Heart, Bot, Flame, BookOpen, BrainCircuit, Gamepad2 } from "lucide-react"
+import { Menu, Swords, Dices, LineChart, Heart, Bot, Flame, BookOpen, BrainCircuit, Gamepad2, Sun } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -19,6 +19,7 @@ export function MobileNav() {
   const [open, setOpen] = useState(false)
 
   const gameLinks = [
+    { href: "/shoterday", label: "Shoterday", icon: Sun },
     { href: "/luckshots", label: "Luckshots", icon: Dices },
     { href: "/crypto-luck", label: "Crypto Luck", icon: LineChart },
     { href: "/pool-shot", label: "Pool Shot", icon: Gamepad2 },

@@ -39,6 +39,9 @@ export function Header() {
           </Link>
           <nav className="hidden md:flex items-center space-x-1">
              <Button variant="ghost" asChild>
+                <Link href="/shoterday">Shoterday</Link>
+             </Button>
+             <Button variant="ghost" asChild>
                 <Link href="/luckshots">Luckshots</Link>
              </Button>
              <Button variant="ghost" asChild>
