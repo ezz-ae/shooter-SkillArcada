@@ -621,32 +621,13 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
         )}
       >
         <Link href={`/product/${product.id}`} className="contents">
-          <CardHeader className="p-0">
-            <div className="relative h-48 w-full overflow-hidden">
-              <Image
-                src={product.imageUrl}
-                alt={product.name}
-                fill
-                className="object-cover transition-transform duration-500 group-hover:scale-105"
-                data-ai-hint={product.dataAiHint}
-              />
-               <div className="absolute top-2 right-2 z-10">
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                       <Button variant="secondary" size="icon" className="h-8 w-8 rounded-full">
-                        <Info className="h-4 w-4 text-muted-foreground" />
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p className="max-w-xs">{product.expertSystem}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div>
-              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent p-4 pt-8">
-                 <h3 className="text-white text-lg font-bold text-center">{product.name}</h3>
-              </div>
+          <CardHeader className="p-4 flex flex-row justify-between items-start">
+            <div className="space-y-1">
+                <h3 className="font-bold text-lg leading-tight">{product.name}</h3>
+                <p className="text-xs text-muted-foreground">{product.subtitle}</p>
+            </div>
+            <div className="p-2 bg-primary/10 rounded-full">
+                <Gem className="h-5 w-5 text-primary" />
             </div>
           </CardHeader>
         </Link>
@@ -694,15 +675,9 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
                     <AlertDialogTitle className="text-center">You Got a Shot!</AlertDialogTitle>
                 </AlertDialogHeader>
                 
-                <div className="relative h-64 w-full my-4 rounded-lg overflow-hidden shadow-lg">
-                    <Image
-                        src={product.imageUrl}
-                        alt={product.name}
-                        fill
-                        className="object-cover"
-                        data-ai-hint={product.dataAiHint}
-                    />
-                     <div className="absolute inset-0 bg-black/40 flex flex-col justify-between p-4">
+                <div className="relative h-64 w-full my-4 rounded-lg overflow-hidden shadow-lg bg-secondary flex items-center justify-center">
+                    <Gem className="h-24 w-24 text-primary animate-pulse" />
+                     <div className="absolute inset-0 bg-black/10 flex flex-col justify-between p-4">
                         <div className="text-right">
                         <div className="bg-black/50 text-white p-2 rounded-md text-sm font-mono inline-block">
                             {capturedTime?.toLocaleTimeString()}

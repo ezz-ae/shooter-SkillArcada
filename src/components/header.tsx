@@ -67,12 +67,18 @@ export function Header() {
         <div className="flex flex-1 items-center justify-end space-x-2">
           {isClient && isAuthenticated && user ? (
             <>
+            <Button variant="ghost" size="icon" asChild>
+                <Link href="/vault">
+                    <Package />
+                    <span className="sr-only">Vault</span>
+                </Link>
+            </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="secondary" className="relative h-9 w-9 rounded-full">
                     <Avatar className="h-9 w-9">
                         <AvatarFallback className="bg-primary text-primary-foreground text-xs font-bold">
-                            <Image src="https://firebasestorage.googleapis.com/v0/b/reodywellness.firebasestorage.app/o/Untitled-4%20(14).png?alt=media&token=01417f92-30fc-4a5a-bb8a-69f3101811f0" alt="User Avatar" fill className="object-cover" />
+                            {user.uid.substring(0,2).toUpperCase()}
                         </AvatarFallback>
                     </Avatar>
                 </Button>

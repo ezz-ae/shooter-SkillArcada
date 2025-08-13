@@ -6,7 +6,7 @@ import { useStore } from "@/lib/store";
 import { VaultItemCard } from "@/components/vault-item-card";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { ArrowLeft, ShoppingCart, Repeat, Gift, Wallet, PlusCircle } from "lucide-react";
+import { ArrowLeft, ShoppingCart, Repeat, Gift, Wallet, PlusCircle, Gem } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import {
   AlertDialog,
@@ -247,7 +247,9 @@ export default function VaultPage() {
                                 {shippingCart.map(item => (
                                     <div key={item.shippingId} className="flex items-center justify-between p-2 bg-secondary/50 rounded-lg">
                                         <div className="flex items-center gap-4">
-                                            <Image src={item.imageUrl} alt={item.name} width={48} height={48} className="rounded-md object-cover" data-ai-hint={item.dataAiHint} />
+                                            <div className="h-12 w-12 rounded-md bg-muted flex items-center justify-center">
+                                                <Gem className="h-6 w-6 text-muted-foreground" />
+                                            </div>
                                             <div>
                                                 <p className="font-semibold text-sm">{item.name}</p>
                                                 <p className="text-xs text-muted-foreground">Paid: {item.pricePaid.toFixed(2)} Shots</p>

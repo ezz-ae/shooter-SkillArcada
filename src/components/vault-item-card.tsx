@@ -6,7 +6,7 @@ import Image from "next/image";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
 import { useStore, type VaultItem } from "@/lib/store";
-import { TrendingDown, TrendingUp, Hourglass, Check, Gem, Repeat } from "lucide-react";
+import { TrendingDown, TrendingUp, Hourglass, Check, Gem, Repeat, Gift } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import {
   AlertDialog,
@@ -116,19 +116,13 @@ export function VaultItemCard({
         {isSelected && <Check className="h-4 w-4 text-accent" />}
       </button>
 
-      <CardHeader className="p-0">
-        <div className="relative h-48 w-full">
-          <Image
-            src={item.imageUrl}
-            alt={item.name}
-            fill
-            className="object-cover"
-            data-ai-hint={item.dataAiHint}
-          />
-        </div>
+      <CardHeader className="p-4 flex flex-row items-start justify-between">
+         <h3 className="font-bold pr-8">{item.name}</h3>
+         <div className="p-2 bg-primary/10 rounded-full">
+            <Gem className="h-5 w-5 text-primary" />
+         </div>
       </CardHeader>
       <CardContent className="flex-grow p-4 pb-2">
-        <h3 className="font-bold">{item.name}</h3>
         <p className="text-sm text-muted-foreground">
           Paid: {item.pricePaid.toFixed(2)} Shots
         </p>

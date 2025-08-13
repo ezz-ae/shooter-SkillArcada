@@ -1,3 +1,4 @@
+
 "use client";
 
 import Image from "next/image";
@@ -51,25 +52,10 @@ export default function ProductPage({ params }: { params: { id: string } }) {
       </div>
 
        <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-        <div className="relative h-96 w-full overflow-hidden rounded-lg shadow-lg md:h-[500px]">
-           <Image
-            src={product.imageUrl}
-            alt={product.name}
-            fill
-            className="object-cover"
-            data-ai-hint={product.dataAiHint}
-          />
-           <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent p-4 pt-12">
-              <h1 className="text-white text-3xl lg:text-4xl font-black text-center">{product.name}</h1>
-              <h3 className="text-white/80 text-lg font-bold text-center">{product.subtitle}</h3>
-           </div>
-        </div>
-        <div className="flex flex-col space-y-8">
-           <div>
-            <h2 className="text-sm uppercase text-muted-foreground font-semibold mb-2">Live Price</h2>
-            <ShotTaker product={product} view="chart" />
-           </div>
-           <Card>
+        <div className="flex flex-col space-y-4">
+            <h1 className="text-3xl lg:text-4xl font-black">{product.name}</h1>
+            <h3 className="text-lg font-bold text-muted-foreground">{product.subtitle}</h3>
+             <Card>
               <CardHeader>
                   <CardTitle>Product Details</CardTitle>
               </CardHeader>
@@ -104,31 +90,37 @@ export default function ProductPage({ params }: { params: { id: string } }) {
               </CardContent>
            </Card>
         </div>
-      </div>
+        <div className="flex flex-col space-y-8">
+           <div>
+            <h2 className="text-sm uppercase text-muted-foreground font-semibold mb-2">Live Price</h2>
+            <ShotTaker product={product} view="chart" />
+           </div>
+           
+           <Card className="mt-12">
+            <CardHeader>
+                <CardTitle className="flex items-center gap-2"><Zap className="h-6 w-6 text-primary" /> Product Luckshot</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <div className="grid grid-cols-1 gap-6 items-center">
+                    <div className="bg-secondary/50 p-6 rounded-lg">
+                        <h4 className="font-bold flex items-center mb-2 text-lg">
+                            {product.game ? <Gamepad2 className="mr-2 h-5 w-5" /> : <HelpCircle className="mr-2 h-5 w-5" />}
+                            How It Works
+                        </h4>
+                        <div className="text-muted-foreground space-y-2">
+                            {renderHowToPlay()}
+                        </div>
+                    </div>
 
-       <Card className="mt-12">
-        <CardHeader>
-            <CardTitle className="flex items-center gap-2"><Zap className="h-6 w-6 text-primary" /> Product Luckshot</CardTitle>
-        </CardHeader>
-        <CardContent>
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 items-center">
-                <div className="bg-secondary/50 p-6 rounded-lg">
-                    <h4 className="font-bold flex items-center mb-2 text-lg">
-                         {product.game ? <Gamepad2 className="mr-2 h-5 w-5" /> : <HelpCircle className="mr-2 h-5 w-5" />}
-                        How It Works
-                    </h4>
-                    <div className="text-muted-foreground space-y-2">
-                         {renderHowToPlay()}
+                    <div className="p-4">
+                    <ShotTaker product={product} view="actions" />
                     </div>
                 </div>
+            </CardContent>
+        </Card>
+        </div>
+      </div>
 
-                <div className="p-4">
-                  <ShotTaker product={product} view="actions" />
-                </div>
-            </div>
-        </CardContent>
-       </Card>
-       
         <Card className="mt-12">
             <CardHeader>
                 <CardTitle className="flex items-center gap-2">
