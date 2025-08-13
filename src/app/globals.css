@@ -5,25 +5,25 @@
 
 @layer base {
   :root {
-    --background: 0 0% 94.1%; /* Very Light Gray */
+    --background: 0 0% 94%; /* Light Gray #F0F0F0 */
     --foreground: 224 71.4% 4.1%;
     --card: 0 0% 100%;
     --card-foreground: 224 71.4% 4.1%;
     --popover: 0 0% 100%;
     --popover-foreground: 224 71.4% 4.1%;
-    --primary: 180 100% 25.1%; /* Teal */
+    --primary: 180 100% 25%; /* Teal #008080 */
     --primary-foreground: 180 100% 98%;
     --secondary: 240 4.8% 95.9%;
     --secondary-foreground: 240 5.9% 10%;
     --muted: 240 4.8% 95.9%;
     --muted-foreground: 240 3.8% 46.1%;
-    --accent: 39 100% 50%; /* Orange */
+    --accent: 39 100% 50%; /* Orange #FFA500 */
     --accent-foreground: 39 100% 10%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
     --border: 240 5.9% 90%;
     --input: 240 5.9% 90%;
-    --ring: 180 100% 25.1%; /* Teal */
+    --ring: 180 100% 25%;
     --radius: 0.5rem;
     --chart-1: 180 80% 55%;
     --chart-2: 160 60% 45%;
@@ -51,37 +51,10 @@
     --destructive-foreground: 210 20% 98%;
     --border: 220 13% 25%;
     --input: 220 13% 25%;
-    --ring: 180 100% 35%; /* Teal */
+    --ring: 180 100% 35%;
     --chart-1: 180 80% 55%;
     --chart-2: 160 60% 45%;
     --chart-3: 38 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
-  }
-  
-  .lucky-pink {
-    --background: 330 80% 98%;
-    --foreground: 330 40% 10%;
-    --card: 330 80% 100%;
-    --card-foreground: 330 40% 10%;
-    --popover: 330 80% 100%;
-    --popover-foreground: 330 40% 10%;
-    --primary: 330 80% 55%;
-    --primary-foreground: 330 90% 98%;
-    --secondary: 330 50% 96%;
-    --secondary-foreground: 330 40% 10%;
-    --muted: 330 50% 96%;
-    --muted-foreground: 330 30% 46%;
-    --accent: 300 80% 60%;
-    --accent-foreground: 300 40% 10%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 330 50% 91%;
-    --input: 330 50% 91%;
-    --ring: 330 80% 55%;
-    --chart-1: 330 80% 55%;
-    --chart-2: 300 60% 45%;
-    --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
   }
@@ -110,7 +83,7 @@
       background-image: linear-gradient(to right, hsl(var(--primary)) 0%, hsl(var(--accent)) 50%, hsl(var(--primary)) 100%);
       animation: gradient-animation 4s ease infinite;
   }
-  .multi-shot-card {
+   .multi-shot-card {
       @apply border-purple-500/50;
       background: radial-gradient(circle at top left, hsl(var(--primary)/0.1), transparent 40%),
                   radial-gradient(circle at bottom right, hsl(var(--accent)/0.1), transparent 40%);
@@ -135,4 +108,9 @@
 @keyframes flash-green {
   0%, 100% { box-shadow: 0 0 0px hsl(var(--primary) / 0); }
   50% { box-shadow: 0 0 15px 5px hsl(var(--primary) / 0.7); }
+}
+
+@keyframes fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
 }
