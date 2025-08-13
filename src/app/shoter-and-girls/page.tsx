@@ -48,7 +48,7 @@ export default function ShoterAndGirlsPage() {
                     const Icon = game.game ? gameIcons[game.game as keyof typeof gameIcons] : Puzzle;
                     return (
                         <Card key={game.id} className="flex flex-col shadow-lg bg-black border-2 border-pink-500/50 hover:border-pink-400 hover:shadow-pink-500/20 transition-all duration-300">
-                            <CardHeader className="relative h-56">
+                            <CardHeader className="relative h-56 p-0">
                                 <Image src={game.imageUrl} alt={game.name} fill className="object-cover rounded-t-lg" data-ai-hint={game.dataAiHint}/>
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
                                 <div className="absolute bottom-0 left-0 p-4">
