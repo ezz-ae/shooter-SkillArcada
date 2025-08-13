@@ -28,10 +28,11 @@ import { cn } from "@/lib/utils";
 import { Calculator } from "./calculator";
 import { ChartContainer } from "./ui/chart";
 import { DrawPad } from "./draw-pad";
-import { Target, HelpCircle, Check, Gem, DollarSign, Info } from "lucide-react";
+import { Target, HelpCircle, Check, Gem, DollarSign, Info, Flame } from "lucide-react";
 import { ChessBoard } from "./chess-board";
 import { MazeGame } from "./maze-game";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
+import { Badge } from "./ui/badge";
 
 interface ShotTakerProps {
   product: Product;
@@ -441,6 +442,22 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
   const discountPercent = ((product.marketPrice - currentPrice) / product.marketPrice) * 100;
   const discountColor = discountPercent > 0 ? "text-green-500" : "text-red-500";
   
+  const renderGameStatus = () => {
+    if (!product.status) return null;
+    let variant: "default" | "secondary" | "destructive" | "outline" = "secondary";
+    let icon = null;
+    if (product.status === 'Hot') {
+      variant = 'destructive';
+      icon = <Flame className="h-3 w-3 mr-1" />;
+    }
+    
+    return (
+      <Badge variant={variant} className="absolute -top-2 -right-2 text-xs">
+        {icon}{product.status}
+      </Badge>
+    )
+  }
+
   const renderActions = () => {
     if (product.game === 'maze-draw') {
         return (
@@ -620,6 +637,7 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
           product.game === 'multi-shot' && 'multi-shot-card'
         )}
       >
+         {renderGameStatus()}
          <CardHeader className="p-4 flex flex-row justify-between items-start">
             <div className="space-y-1">
                 <Link href={`/product/${product.id}`} className="contents">

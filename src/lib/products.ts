@@ -13,6 +13,7 @@ export interface Product {
   expertSystem: string;
   game?: 'reel-pause' | 'multi-shot' | 'riddle-calc' | 'draw-passcode' | 'chess-mate' | 'time-challenge' | 'pink-cups' | 'snake-and-stairs' | 'ai-adventure' | 'maze-draw' | 'story-match' | 'mirror-game';
   category?: 'luckshot' | 'brainshot' | 'luckgirls' | 'chess';
+  status?: 'Hot' | 'New' | 'Testing';
 }
 
 const db = getFirestore(app); // Use the imported, initialized app
@@ -39,6 +40,7 @@ export const mockProducts: Product[] = [
     expertSystem: 'The price is hidden behind a fast-spinning reel of numbers. Click the "Pause" button to freeze the reel at the perfect moment. Then, select three digits to form your price. Can you time it right to score a massive discount?',
     game: 'reel-pause',
     category: 'brainshot',
+    status: 'Hot',
   },
   {
     id: 'prod_crypto_01',
@@ -75,6 +77,7 @@ export const mockProducts: Product[] = [
     expertSystem: 'A secret pattern is the key. Click "Start Challenge" and a pattern will flash on screen. Memorize it, then draw it on the 3x3 grid. If you replicate it correctly, you unlock the chance to buy the item for a steal.',
     game: 'draw-passcode',
     category: 'brainshot',
+    status: 'New',
   },
    {
     id: 'prod_maze_01',
@@ -99,6 +102,7 @@ export const mockProducts: Product[] = [
     expertSystem: 'Shooter creates a pattern on a grid. It is revealed for a moment. You must perfectly mirror his pattern on your own grid to win this prize for free.',
     game: 'mirror-game',
     category: 'brainshot',
+    status: 'Testing',
   },
   {
     id: 'prod_console_01',
@@ -111,6 +115,7 @@ export const mockProducts: Product[] = [
     expertSystem: 'Instead of one, you get three shots at a great price! Click the "x3 Shot" button to capture three different prices simultaneously. Review the three options and pick the best one to add to your vault. More chances, more luck!',
     game: 'multi-shot',
     category: 'luckshot',
+    status: 'Hot',
   },
    {
     id: 'prod_chess_01',

@@ -2,7 +2,9 @@
 "use client";
 
 import { GameLinkCard } from "@/components/game-link-card";
+import { ChallengeAI } from "@/components/challenge-ai";
 import { Grid, RectangleHorizontal } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function BoardGamesPage() {
   
@@ -22,16 +24,21 @@ export default function BoardGamesPage() {
         </p>
       </div>
 
-      <div className="max-w-2xl mx-auto flex flex-col gap-4">
-        {boardGames.map(game => (
-          <GameLinkCard
-            key={game.href}
-            href={game.href}
-            icon={game.icon}
-            label={game.label}
-            description={game.description}
-          />
-        ))}
+      <div className="grid md:grid-cols-2 gap-8 items-start">
+        <div className="flex flex-col gap-4">
+          {boardGames.map(game => (
+            <GameLinkCard
+              key={game.href}
+              href={game.href}
+              icon={game.icon}
+              label={game.label}
+              description={game.description}
+            />
+          ))}
+        </div>
+        <div>
+            <ChallengeAI />
+        </div>
       </div>
     </div>
   );

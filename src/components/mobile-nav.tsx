@@ -21,10 +21,10 @@ export function MobileNav() {
   const gameLinks = [
     { href: "/shoterday", label: "Shooterday", icon: Sun },
     { href: "/luckshots", label: "ShooterGuns", icon: Dices },
+    { href: "/luckgirls", label: "Luckgirls", icon: Heart },
     { href: "/crypto-luck", label: "Crypto Luck", icon: LineChart },
     { href: "/shooter-mirror", label: "Mirror Game", icon: HelpingHand },
     { href: "/pool-shot", label: "Pool Shot", icon: Gamepad2 },
-    { href: "/shooter-man", label: "ShooterMan", icon: User },
     { href: "/ai-adventure", label: "AI Adventure", icon: Bot },
     { href: "/shots-hub", label: "Shots Hub", icon: Flame },
     { href: "/learning-center", label: "How to Earn", icon: BookOpen },
@@ -51,7 +51,10 @@ export function MobileNav() {
                 <Link 
                     key={link.href} 
                     href={link.href} 
-                    className="flex items-center gap-3 text-lg font-semibold text-muted-foreground hover:text-foreground"
+                    className={cn(
+                        "flex items-center gap-3 text-lg font-semibold text-muted-foreground hover:text-foreground",
+                        link.label === "Luckgirls" && "text-pink-500 hover:text-pink-600"
+                    )}
                     onClick={() => setOpen(false)}
                 >
                     <link.icon className="h-5 w-5" />
