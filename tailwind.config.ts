@@ -111,10 +111,6 @@ export default {
           '20%': { transform: 'translateX(var(--shot-power-release))', opacity: '1' },
           '100%': { transform: 'translateX(var(--shot-power-release))', opacity: '0' },
         },
-        'cue-ball-release': {
-            '0%': { transform: 'translate(-50%, -50%) rotate(0deg)' },
-            '100%': { transform: 'translate(calc(var(--shot-power) - 50%), -50%) rotate(720deg)' },
-        },
         '8-ball-sink': {
             '0%': { transform: 'translateY(-50%) scale(1)', opacity: '1' },
             '100%': { transform: 'translateY(200%) scale(0.5)', opacity: '0' },
@@ -137,7 +133,6 @@ export default {
         'fade-out': 'fade-out 4s ease-out forwards',
         'cue-stick-aim-subtle': 'cue-stick-aim-subtle 1.5s ease-in-out infinite',
         'cue-stick-release': 'cue-stick-release 0.3s ease-out forwards',
-        'cue-ball-release': 'cue-ball-release 1s ease-out forwards',
         '8-ball-sink': '8-ball-sink 1s ease-in forwards 1s',
         'tumble': 'tumble 0.5s ease-in-out',
       },

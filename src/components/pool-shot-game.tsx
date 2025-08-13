@@ -264,7 +264,7 @@ export function PoolShotGame() {
                       transform: `translate(-50%, -50%)`,
                       transition: 'transform 1s ease-out',
                       ...(gameState === 'shot' && {
-                          transform: `translate(calc(${shotPower * 3}% - 50%), calc(${cueRotation/2}% - 50%)) rotate(360deg)`
+                          transform: `translate(calc(${shotPower * 3}% - 50%), -50%) rotate(360deg)`
                       })
                   }}
               >

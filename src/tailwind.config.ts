@@ -108,9 +108,9 @@ export default {
           '50%': { transform: 'translateX(-5px)' },
         },
         'cue-stick-release': {
-          '0%': { transform: 'rotate(var(--cue-rotation-deg)) translateX(0)', opacity: '1' },
-          '20%': { transform: 'rotate(var(--cue-rotation-deg)) translateX(var(--shot-power-release))', opacity: '1' },
-          '100%': { transform: 'rotate(var(--cue-rotation-deg)) translateX(var(--shot-power-release))', opacity: '0' },
+          '0%': { transform: 'translateX(0)', opacity: '1' },
+          '20%': { transform: 'translateX(var(--shot-power-release))', opacity: '1' },
+          '100%': { transform: 'translateX(var(--shot-power-release))', opacity: '0' },
         },
         '8-ball-sink': {
             '0%': { transform: 'translateY(-50%) scale(1)', opacity: '1' },

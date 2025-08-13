@@ -164,9 +164,9 @@
 }
 
 @keyframes cue-stick-release {
-    '0%': { transform: 'rotate(var(--cue-rotation-deg)) translateX(0)', opacity: '1' },
-    '20%': { transform: 'rotate(var(--cue-rotation-deg)) translateX(var(--shot-power-release))', opacity: '1' },
-    '100%': { transform: 'rotate(var(--cue-rotation-deg)) translateX(var(--shot-power-release))', opacity: '0' },
+    '0%': { transform: 'translateX(0)', opacity: '1' },
+    '20%': { transform: 'translateX(var(--shot-power-release))', opacity: '1' },
+    '100%': { transform: 'translateX(var(--shot-power-release))', opacity: '0' },
 }
 
 @keyframes 8-ball-sink {
