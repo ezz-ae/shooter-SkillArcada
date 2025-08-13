@@ -45,29 +45,31 @@ export function ActivityFeed({ users }: ActivityFeedProps) {
     }
 
     return (
-        <Card>
+        <Card className="h-[234px] overflow-hidden">
             <CardContent className="p-0">
-                <div className="divide-y">
-                    {mockActivities.map(activity => (
-                        <div key={activity.id} className={cn(
-                            "flex items-center gap-3 p-3 transition-colors",
-                            (activity as any).highlight && "bg-primary/10"
-                            )}>
-                            <Avatar className="h-10 w-10 border-2 border-secondary">
-                                <AvatarImage src={activity.user.avatarUrl} alt={activity.user.name} />
-                                <AvatarFallback>{activity.user.name.substring(0, 2)}</AvatarFallback>
-                            </Avatar>
-                            <div className="flex-grow">
-                                <p className="text-sm">
-                                    <span className="font-semibold">{activity.user.name}</span>
-                                    {` ${activity.action} `}
-                                    <span className="font-bold">{activity.details}</span>
-                                </p>
-                                <p className="text-xs text-muted-foreground">{activity.time}</p>
+                <div className="relative flex h-full flex-col overflow-hidden">
+                    <div className="animate-marquee flex flex-col">
+                        {[...mockActivities, ...mockActivities].map((activity, index) => (
+                             <div key={`${activity.id}-${index}`} className={cn(
+                                "flex items-center shrink-0 gap-3 p-3 transition-colors h-[78px] border-b",
+                                (activity as any).highlight && "bg-primary/10"
+                                )}>
+                                <Avatar className="h-10 w-10 border-2 border-secondary">
+                                    <AvatarImage src={activity.user.avatarUrl} alt={activity.user.name} />
+                                    <AvatarFallback>{activity.user.name.substring(0, 2)}</AvatarFallback>
+                                </Avatar>
+                                <div className="flex-grow">
+                                    <p className="text-sm">
+                                        <span className="font-semibold">{activity.user.name}</span>
+                                        {` ${activity.action} `}
+                                        <span className="font-bold">{activity.details}</span>
+                                    </p>
+                                    <p className="text-xs text-muted-foreground">{activity.time}</p>
+                                </div>
+                                {actionIcons[activity.action as keyof typeof actionIcons]}
                             </div>
-                            {actionIcons[activity.action as keyof typeof actionIcons]}
-                        </div>
-                    ))}
+                        ))}
+                    </div>
                 </div>
             </CardContent>
         </Card>

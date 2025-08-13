@@ -127,6 +127,10 @@ export default {
           '75%': { transform: 'scale(1.1) rotate(180deg)', opacity: '0.8' },
           '100%': { transform: 'scale(1) rotate(0deg)', opacity: '1' },
         },
+        'marquee': {
+          '0%': { transform: 'translateY(0%)' },
+          '100%': { transform: 'translateY(-50%)' },
+        }
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
@@ -141,6 +145,7 @@ export default {
         'cue-ball-release': 'cue-ball-release 1s ease-out forwards',
         '8-ball-sink': '8-ball-sink 1s ease-in forwards 1s',
         'tumble': 'tumble 0.5s ease-in-out',
+        'marquee': 'marquee 20s linear infinite',
       },
     },
   },
