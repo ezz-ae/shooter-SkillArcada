@@ -116,10 +116,12 @@ export function VaultItemCard({
         {isSelected && <Check className="h-4 w-4 text-accent" />}
       </button>
 
-      <CardHeader className="p-4 flex flex-row items-start justify-between">
-         <h3 className="font-bold pr-8">{item.name}</h3>
-         <div className="p-2 bg-primary/10 rounded-full">
-            <Gem className="h-5 w-5 text-primary" />
+      <CardHeader className="p-4">
+         <div className="flex items-start justify-between gap-4">
+            <h3 className="font-bold">{item.name}</h3>
+            <div className="p-2 bg-primary/10 rounded-full shrink-0">
+                <Gem className="h-5 w-5 text-primary" />
+            </div>
          </div>
       </CardHeader>
       <CardContent className="flex-grow p-4 pb-2">
