@@ -101,7 +101,7 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
   const { addToVault, shots, spendShot, hasSeenShotInfo, setHasSeenShotInfo, addLuckshots } = useStore();
   const { toast } = useToast();
   
-  const isGame = product.game && ['reel-pause', 'riddle-calc', 'draw-passcode', 'chess-mate', 'maze-draw'].includes(product.game);
+  const isGame = product.game && ['reel-pause', 'multi-shot', 'riddle-calc', 'draw-passcode', 'chess-mate', 'maze-draw'].includes(product.game);
   
   // Advanced pricing model state
   const priceState = useRef({

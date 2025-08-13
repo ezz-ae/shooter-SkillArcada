@@ -95,8 +95,8 @@ export default {
           '100%': { backgroundPosition: '-200% center' },
         },
         'border-pulse': {
-          '0%, 100%': { 'box-shadow': '0 0 0 0px hsla(0, 0%, 100%, 0.4)' },
-          '50%': { 'box-shadow': '0 0 0 3px hsla(0, 0%, 100%, 0)' },
+          '0%, 100%': { 'border-color': 'hsl(var(--primary) / 0.5)' },
+          '50%': { 'border-color': 'hsl(var(--accent) / 0.7)' },
         },
         'fade-out': {
           '0%': { opacity: '1' },
