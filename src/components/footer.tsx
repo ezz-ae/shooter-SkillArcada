@@ -28,21 +28,21 @@ export function Footer() {
     ];
     
   return (
-    <footer className="border-t mt-12 py-8 bg-secondary/50">
+    <footer className="border-t bg-background mt-12 py-8">
       <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8">
         <div className="md:col-span-1 flex flex-col gap-4">
              <Link href="/">
-                <Image src="https://firebasestorage.googleapis.com/v0/b/reodywellness.firebasestorage.app/o/Untitled-4%20(13).png?alt=media&token=a7f36634-d0ab-40d5-9607-76ecbf375346" alt="ShoterShots Logo" width={160} height={40} />
+                <span className="font-allura text-4xl text-foreground">ShoterShots</span>
             </Link>
             <p className="text-sm text-muted-foreground">Your shot at unbelievable prices, powered by our resident gamegang mega, Shoter.</p>
         </div>
         <div className="md:col-span-1">
-            <h3 className="font-bold text-lg mb-2">Games</h3>
+            <h3 className="font-bold text-base mb-3">Games</h3>
             <ul className="space-y-2">
                 {gameLinks.map(link => (
                      <li key={link.href}>
                         <Link href={link.href} className="text-sm text-muted-foreground hover:text-foreground flex items-center gap-2">
-                            <link.icon className="h-4 w-4" />
+                            <link.icon className="h-4 w-4 text-primary" />
                             {link.label}
                         </Link>
                     </li>
@@ -50,7 +50,7 @@ export function Footer() {
             </ul>
         </div>
         <div className="md:col-span-1">
-            <h3 className="font-bold text-lg mb-2">Support</h3>
+            <h3 className="font-bold text-base mb-3">Support</h3>
              <ul className="space-y-2">
                 <li><Link href="/learning-center" className="text-sm text-muted-foreground hover:text-foreground">Learning Center</Link></li>
                 <li><Link href="#" className="text-sm text-muted-foreground hover:text-foreground">Contact Us</Link></li>
@@ -59,7 +59,7 @@ export function Footer() {
             </ul>
         </div>
         <div className="md:col-span-1">
-             <h3 className="font-bold text-lg mb-2">Live Wins</h3>
+             <h3 className="font-bold text-base mb-3">Live Wins</h3>
              <ActivityFeed users={users} />
         </div>
       </div>
