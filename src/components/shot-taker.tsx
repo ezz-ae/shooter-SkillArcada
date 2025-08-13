@@ -30,7 +30,7 @@ import { ChartContainer } from "./ui/chart";
 import { DrawPad } from "./draw-pad";
 import { Target, HelpCircle, Check, Gem, DollarSign, Info } from "lucide-react";
 import { ChessBoard } from "./chess-board";
-import { MazeGame } from "./maze-draw";
+import { MazeGame } from "./maze-game";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
 
 interface ShotTakerProps {
