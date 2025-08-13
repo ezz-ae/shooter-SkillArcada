@@ -3,33 +3,23 @@
 
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./ui/card";
-import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
 import { generateChallenge, GenerateChallengeOutput } from "@/ai/flows/challenge-flow";
 import { Bot, Loader, TestTube, Gamepad2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 export function ChallengeAI() {
-    const [conversation, setConversation] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [result, setResult] = useState<GenerateChallengeOutput | null>(null);
     const { toast } = useToast();
 
     const handleTestMe = async () => {
-        if (!conversation.trim()) {
-            toast({
-                variant: "destructive",
-                title: "Conversation is empty",
-                description: "Please paste a conversation to be analyzed."
-            });
-            return;
-        }
-
         setIsLoading(true);
         setResult(null);
 
         try {
-            const response = await generateChallenge({ conversation });
+            // Using a default conversation starter to showcase the feature
+            const response = await generateChallenge({ conversation: "I'm feeling adventurous today and looking for a real challenge!" });
             setResult(response);
         } catch (error) {
             console.error("Challenge AI failed:", error);
@@ -53,14 +43,7 @@ export function ChallengeAI() {
                 </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-                <Textarea 
-                    placeholder="Paste a conversation here..."
-                    value={conversation}
-                    onChange={(e) => setConversation(e.target.value)}
-                    rows={6}
-                    className="text-base"
-                />
-                <Button onClick={handleTestMe} disabled={isLoading} size="lg" className="w-full">
+                 <Button onClick={handleTestMe} disabled={isLoading} size="lg" className="w-full">
                     {isLoading ? <Loader className="animate-spin" /> : "Test Me!"}
                 </Button>
 
