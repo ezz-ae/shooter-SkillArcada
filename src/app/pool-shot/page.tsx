@@ -30,7 +30,7 @@ export default function PoolShotPage() {
   ] : [];
 
   return (
-    <div className="container mx-auto px-4 py-8 flex flex-col items-center">
+    <div className="container mx-auto px-4 py-8">
        <div className="text-center mb-8">
         <h1 className="text-4xl font-black tracking-tight lg:text-5xl flex items-center justify-center gap-4">
             <Swords size={40} className="text-primary"/> Pool Shot
@@ -40,7 +40,7 @@ export default function PoolShotPage() {
         </p>
       </div>
 
-      <div className="w-full max-w-5xl">
+      <div className="w-full max-w-5xl mx-auto">
          <div className="flex justify-end mb-4">
             <Button size="lg">
                 <PlusCircle className="mr-2"/>
@@ -53,7 +53,7 @@ export default function PoolShotPage() {
                 <TabsTrigger value="leagues">Leagues</TabsTrigger>
             </TabsList>
             <TabsContent value="pool-challenges" className="mt-6">
-                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {poolChallenges.filter(c => !c.player2).map(challenge => (
                         <PoolChallengeCard key={challenge.id} challenge={challenge} />
                     ))}
