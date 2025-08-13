@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useState, useRef, useCallback } from "react";
@@ -29,7 +30,7 @@ import { ChartContainer } from "./ui/chart";
 import { DrawPad } from "./draw-pad";
 import { Target, HelpCircle, Check, Gem, DollarSign, Info } from "lucide-react";
 import { ChessBoard } from "./chess-board";
-import { MazeGame } from "./maze-game";
+import { MazeGame } from "./maze-draw";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
 
 interface ShotTakerProps {
