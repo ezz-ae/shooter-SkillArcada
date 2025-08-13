@@ -1,3 +1,4 @@
+
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
 import { app } from './firebase'; // Import the initialized app
 
@@ -140,7 +141,7 @@ export const mockProducts: Product[] = [
     subtitle: 'Beat the clock!',
     description: 'A fast-paced puzzle game. Solve as many mini-puzzles as you can before the time runs out.',
     marketPrice: 10,
-    imageUrl: 'https://firebasestorage.googleapis.com/v0/b/reodywellness.firebasestorage.app/o/Untitled-4%20(12).png?alt=media&token=0d933b65-cb91-44c1-9d7e-776e9752afe0',
+    imageUrl: 'https://placehold.co/600x400/FF69B4/FFFFFF.png',
     dataAiHint: 'anime girl pink hair',
     expertSystem: 'A fast-paced puzzle game. Solve as many mini-puzzles as you can before the time runs out.',
     game: 'time-challenge',
@@ -152,7 +153,7 @@ export const mockProducts: Product[] = [
     subtitle: 'Find the lucky cup!',
     description: 'A classic shell game with a fun twist. Keep your eye on the pink cup to win the prize.',
     marketPrice: 10,
-    imageUrl: 'https://firebasestorage.googleapis.com/v0/b/reodywellness.firebasestorage.app/o/Untitled-4%20(10).png?alt=media&token=10a3cb7f-a155-40ed-8f6f-241aa7e47d2f',
+    imageUrl: 'https://placehold.co/600x400/9370DB/FFFFFF.png',
     dataAiHint: 'anime girl purple hair',
     expertSystem: 'A classic shell game with a fun twist. Keep your eye on the pink cup to win the prize.',
     game: 'pink-cups',
@@ -164,7 +165,7 @@ export const mockProducts: Product[] = [
     subtitle: 'Social board game',
     description: 'A social board game where you can chat with your opponent and the audience. Roll the dice and climb to victory!',
     marketPrice: 10,
-    imageUrl: 'https://firebasestorage.googleapis.com/v0/b/reodywellness.firebasestorage.app/o/Untitled-4%20(13).png?alt=media&token=a7f36634-d0ab-40d5-9607-76ecbf375346',
+    imageUrl: 'https://placehold.co/600x400/1E90FF/FFFFFF.png',
     dataAiHint: 'anime girl blue hair',
     expertSystem: 'A social board game where you can chat with your opponent and the audience. Roll the dice and climb to victory!',
     game: 'snake-and-stairs',
@@ -176,7 +177,7 @@ export const mockProducts: Product[] = [
     subtitle: 'Connect the narrative',
     description: 'A social deduction game where players match story snippets to win. Who is telling the truth?',
     marketPrice: 10,
-    imageUrl: 'https://firebasestorage.googleapis.com/v0/b/reodywellness.firebasestorage.app/o/Untitled-4%20(9).png?alt=media&token=e552ca90-1154-43e6-b339-e0dc8f353dc9',
+    imageUrl: 'https://placehold.co/600x400/FFD700/000000.png',
     dataAiHint: 'anime girl blonde hair',
     expertSystem: 'A social deduction game where players match story snippets to win. Who is telling the truth?',
     game: 'story-match',
