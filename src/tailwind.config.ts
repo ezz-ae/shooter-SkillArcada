@@ -1,4 +1,3 @@
-
 import type {Config} from 'tailwindcss';
 
 export default {
@@ -87,11 +86,30 @@ export default {
           '50%': { backgroundPosition: '100% 50%' },
           '100%': { backgroundPosition: '0% 50%' },
         },
+        'shimmer': {
+          'to': { backgroundPosition: '-200% 0' }
+        },
+        'border-pulse': {
+          '0%, 100%': { borderColor: 'hsl(var(--accent) / 0.5)' },
+          '50%': { borderColor: 'hsl(var(--accent) / 1)' },
+        },
+        'flash-green': {
+            '0%, 100%': { boxShadow: '0 0 0px hsl(var(--primary) / 0)' },
+            '50%': { boxShadow: '0 0 15px 5px hsl(var(--primary) / 0.7)' },
+        },
+        'fade-out': {
+          'from': { opacity: '1' },
+          'to': { opacity: '0' },
+        }
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
-        'gradient-animation': 'gradient-animation 5s ease infinite',
+        'gradient-animation': 'gradient-animation 4s ease infinite',
+        'shimmer': 'shimmer 5s linear infinite',
+        'border-pulse': 'border-pulse 2s infinite',
+        'flash-green': 'flash-green 1s ease-in-out',
+        'fade-out': 'fade-out 2s ease-in-out forwards',
       },
     },
   },
