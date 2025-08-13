@@ -5,11 +5,11 @@
 
 @layer base {
   :root {
-    --background: 210 20% 96.1%;
+    --background: 0 0% 94.1%;
     --foreground: 224 71.4% 4.1%;
-    --card: 210 20% 96.1%;
+    --card: 0 0% 94.1%;
     --card-foreground: 224 71.4% 4.1%;
-    --popover: 210 20% 96.1%;
+    --popover: 0 0% 94.1%;
     --popover-foreground: 224 71.4% 4.1%;
     --primary: 180 100% 25.1%;
     --primary-foreground: 210 20% 98%;
@@ -17,7 +17,7 @@
     --secondary-foreground: 220.9 39.3% 11%;
     --muted: 220 14.3% 95.9%;
     --muted-foreground: 220 8.9% 46.1%;
-    --accent: 38 92% 50%;
+    --accent: 38 100% 50%;
     --accent-foreground: 48 95.8% 11.2%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 20% 98%;
@@ -45,7 +45,7 @@
     --secondary-foreground: 210 20% 98%;
     --muted: 215 27.9% 16.9%;
     --muted-foreground: 217.9 10.6% 64.9%;
-    --accent: 38 92% 50%;
+    --accent: 38 100% 50%;
     --accent-foreground: 48 95.8% 11.2%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 20% 98%;
@@ -58,7 +58,7 @@
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
   }
-
+  
   .lucky-pink {
     --background: 330 80% 98%;
     --foreground: 330 40% 10%;
