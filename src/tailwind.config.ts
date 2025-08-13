@@ -134,7 +134,6 @@ export default {
         'fade-out': 'fade-out 4s ease-out forwards',
         'cue-stick-aim-subtle': 'cue-stick-aim-subtle 1.5s ease-in-out infinite',
         'cue-stick-release': 'cue-stick-release 0.3s ease-out forwards',
-        'cue-ball-release': 'cue-ball-release 1s ease-out forwards',
         '8-ball-sink': '8-ball-sink 1s ease-in forwards 1s',
         'tumble': 'tumble 0.5s ease-in-out',
       },
@@ -142,5 +141,3 @@ export default {
   },
   plugins: [require('tailwindcss-animate')],
 } satisfies Config;
-
-    
