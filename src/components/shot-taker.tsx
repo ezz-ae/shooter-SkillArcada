@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useState, useRef, useCallback } from "react";
@@ -6,11 +7,6 @@ import Link from "next/link";
 import {
   Area,
   AreaChart,
-  CartesianGrid,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
 } from "recharts";
 import {
   AlertDialog,
@@ -24,7 +20,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "./ui/button";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "./ui/card";
+import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
 import { useStore } from "@/lib/store";
 import type { Product } from "@/lib/products";
 import { useToast } from "@/hooks/use-toast";
@@ -32,9 +28,10 @@ import { cn } from "@/lib/utils";
 import { Calculator } from "./calculator";
 import { ChartContainer } from "./ui/chart";
 import { DrawPad } from "./draw-pad";
-import { Target, HelpCircle, Check, Gem, DollarSign } from "lucide-react";
+import { Target, HelpCircle, Check, Gem, DollarSign, Info } from "lucide-react";
 import { ChessBoard } from "./chess-board";
 import { MazeGame } from "./maze-game";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
 
 interface ShotTakerProps {
   product: Product;
@@ -574,7 +571,6 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
                         <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0} />
                       </linearGradient>
                     </defs>
-                    <Tooltip content={<div />} />
                     <Area type="monotone" dataKey="price" stroke="hsl(var(--primary))" strokeWidth={2} fill="url(#chart-fill)" />
                   </AreaChart>
                 </ChartContainer>
@@ -634,6 +630,20 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
                 data-ai-hint={product.dataAiHint}
               />
+               <div className="absolute top-2 right-2 z-10">
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                       <Button variant="secondary" size="icon" className="h-8 w-8 rounded-full">
+                        <Info className="h-4 w-4 text-muted-foreground" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p className="max-w-xs">{product.expertSystem}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
               <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent p-4 pt-8">
                  <h3 className="text-white text-lg font-bold text-center">{product.name}</h3>
               </div>

@@ -6,7 +6,7 @@ import { useStore } from "@/lib/store";
 import { VaultItemCard } from "@/components/vault-item-card";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { ArrowLeft, ShoppingCart, Repeat, Gift, Wallet, Landmark, Bitcoin, ArrowDown, ArrowUp, PlusCircle } from "lucide-react";
+import { ArrowLeft, ShoppingCart, Repeat, Gift, Wallet, PlusCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import {
   AlertDialog,
@@ -17,11 +17,12 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
 
 export default function VaultPage() {
   const { 
@@ -33,6 +34,7 @@ export default function VaultPage() {
     hasSeenVaultInfo, 
     setHasSeenVaultInfo,
     shots,
+    addShots
   } = useStore();
   
   const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
@@ -57,7 +59,7 @@ export default function VaultPage() {
       if (newSet.has(vaultItemKey)) {
         newSet.delete(vaultItemKey);
       } else {
-        newSet.add(vaultItemKey);
+        newSet.add(newSet.has(vaultItemKey) ? prev : vaultItemKey);
       }
       return newSet;
     });
@@ -206,7 +208,6 @@ export default function VaultPage() {
                 <Card className="shadow-lg">
                     <CardHeader>
                         <CardTitle className="flex items-center justify-between"><span className="flex items-center gap-2"><Wallet className="text-primary"/> Balance</span>
-                        <Button size="icon" variant="ghost"><PlusCircle/></Button>
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
@@ -215,17 +216,25 @@ export default function VaultPage() {
                             <span className="text-muted-foreground font-bold">Shots</span>
                         </div>
                         <p className="text-sm text-muted-foreground font-semibold">≈ ${isClient ? shots.toFixed(2) : '0.00'} USD</p>
+                         <Tabs defaultValue="deposit" className="w-full mt-4">
+                            <TabsList className="grid w-full grid-cols-2">
+                                <TabsTrigger value="deposit">Deposit</TabsTrigger>
+                                <TabsTrigger value="withdraw">Withdraw</TabsTrigger>
+                            </TabsList>
+                            <TabsContent value="deposit" className="mt-4">
+                                <div className="space-y-2">
+                                    <Input type="number" placeholder="Shots amount" />
+                                    <Button className="w-full" onClick={() => addShots(50)}>Buy 50 Shots</Button>
+                                </div>
+                            </TabsContent>
+                            <TabsContent value="withdraw" className="mt-4">
+                                <div className="space-y-2">
+                                    <Input type="number" placeholder="Shots amount" />
+                                    <Button variant="outline" className="w-full">Withdraw Shots</Button>
+                                </div>
+                            </TabsContent>
+                         </Tabs>
                     </CardContent>
-                    <CardFooter className="grid grid-cols-2 gap-2">
-                      <Button className="w-full">
-                        <ArrowDown className="mr-2"/>
-                        Deposit
-                      </Button>
-                       <Button variant="outline" className="w-full">
-                        <ArrowUp className="mr-2"/>
-                        Withdraw
-                      </Button>
-                    </CardFooter>
                 </Card>
                 
                 <Card>

@@ -51,21 +51,21 @@ export function LuckSession() {
             case 'intro':
                 return (
                     <div className="text-center animate-in fade-in-50 duration-1000">
-                        <h1 className="text-4xl font-black tracking-tight lg:text-6xl text-transparent bg-clip-text bg-gradient-to-br from-white to-stone-400">
+                        <h1 className="text-4xl font-black tracking-tight lg:text-6xl text-transparent bg-clip-text bg-gradient-to-br from-foreground to-foreground/60">
                             Let Shoter read your luck.
                         </h1>
                         <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
                            Our resident gamegang mega wants to give you a personalized luck session.
                         </p>
                         <Button size="lg" className="mt-8" onClick={handleStart}>
-                            HOW LUCKY I AM <ArrowRight className="ml-2"/>
+                            HOW LUCKY AM I <ArrowRight className="ml-2"/>
                         </Button>
                     </div>
                 )
             case 'preferences':
                 return (
                      <div className="text-center animate-in fade-in-50 duration-1000">
-                        <h2 className="text-3xl font-bold tracking-tight lg:text-4xl text-transparent bg-clip-text bg-gradient-to-br from-white to-stone-400">
+                        <h2 className="text-3xl font-bold tracking-tight lg:text-4xl text-transparent bg-clip-text bg-gradient-to-br from-foreground to-foreground/60">
                            What matters most to you now?
                         </h2>
                         <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-8">
@@ -94,22 +94,22 @@ export function LuckSession() {
                 return (
                     <div className="max-w-4xl w-full animate-in fade-in-50 duration-1000 space-y-8">
                         <div className="text-center">
-                            <h2 className="text-3xl font-bold tracking-tight lg:text-4xl text-transparent bg-clip-text bg-gradient-to-br from-white to-stone-400">
+                            <h2 className="text-3xl font-bold tracking-tight lg:text-4xl text-transparent bg-clip-text bg-gradient-to-br from-foreground to-foreground/60">
                                 Shoter's Reading
                             </h2>
                         </div>
                         <div className="grid md:grid-cols-3 gap-8 text-center">
-                            <div className="p-4 border-t-2 border-white/10">
+                            <div className="p-4 border-t-2 border-foreground/10">
                                 <h3 className="font-bold text-sm text-muted-foreground mb-2">THE PAST</h3>
-                                <p className="text-white/90 min-h-[6em]">{pastText}</p>
+                                <p className="text-foreground/90 min-h-[6em]">{pastText}</p>
                             </div>
-                             <div className="p-4 border-t-2 border-primary scale-105">
+                             <div className="p-4 border-t-2 border-primary scale-105 bg-secondary rounded-lg shadow-lg">
                                  <h3 className="font-bold text-sm text-primary mb-2">THE PRESENT</h3>
-                                <p className="text-white min-h-[6em]">{presentText}</p>
+                                <p className="text-foreground min-h-[6em]">{presentText}</p>
                             </div>
-                            <div className="p-4 border-t-2 border-white/10">
+                            <div className="p-4 border-t-2 border-foreground/10">
                                 <h3 className="font-bold text-sm text-muted-foreground mb-2">THE FUTURE</h3>
-                                <p className="text-white/90 min-h-[6em]">{futureText}</p>
+                                <p className="text-foreground/90 min-h-[6em]">{futureText}</p>
                             </div>
                         </div>
                         <div className="text-center space-y-4 pt-8">
@@ -123,7 +123,7 @@ export function LuckSession() {
              case 'test':
                  return (
                      <div className="text-center animate-in fade-in-50 duration-1000">
-                        <h2 className="text-3xl font-bold tracking-tight lg:text-4xl text-transparent bg-clip-text bg-gradient-to-br from-white to-stone-400">
+                        <h2 className="text-3xl font-bold tracking-tight lg:text-4xl text-transparent bg-clip-text bg-gradient-to-br from-foreground to-foreground/60">
                            Speed Test Coming Soon!
                         </h2>
                         <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">

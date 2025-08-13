@@ -4,12 +4,11 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Button } from "./ui/button";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "./ui/card";
+import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
 import { User } from "@/lib/user";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Target, X, Zap, Swords } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { FaChess } from "react-icons/fa";
 
 interface Challenge {
     id: string;
@@ -53,9 +52,6 @@ export function PoolChallengeCard({ challenge, onDismiss }: PoolChallengeCardPro
   const seconds = timeLeft % 60;
 
   const renderIcon = () => {
-    if (type === 'chess') {
-        return <FaChess className="h-6 w-6 text-primary"/>;
-    }
     return <Swords className="h-6 w-6 text-primary"/>;
   }
 

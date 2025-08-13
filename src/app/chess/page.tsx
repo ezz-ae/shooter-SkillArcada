@@ -6,11 +6,10 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PoolChallengeCard } from "@/components/pool-challenge-card";
 import { User, getUsers } from "@/lib/user";
-import { Trophy, PlusCircle } from "lucide-react";
+import { Trophy, PlusCircle, Swords } from "lucide-react";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useEffect, useState } from "react";
-import { FaChess } from "react-icons/fa";
 
 export default function ChessPage() {
   const [users, setUsers] = useState<User[]>([]);
@@ -33,7 +32,7 @@ export default function ChessPage() {
     <div className="container mx-auto px-4 py-8">
        <div className="text-center mb-8">
         <h1 className="text-4xl font-black tracking-tight lg:text-5xl flex items-center justify-center gap-4">
-          <FaChess /> Chess Challenges
+          <Swords size={40} className="text-primary"/> Chess Challenges
         </h1>
         <p className="mt-2 text-lg text-muted-foreground max-w-2xl mx-auto">
           Outsmart your opponent in 1-on-1 puzzle speedruns and join high-stakes leagues.

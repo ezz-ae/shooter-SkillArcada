@@ -6,7 +6,7 @@ import Image from "next/image";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
 import { useStore, type VaultItem } from "@/lib/store";
-import { TrendingDown, TrendingUp, Hourglass, Check, Gem } from "lucide-react";
+import { TrendingDown, TrendingUp, Hourglass, Check, Gem, Repeat } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import {
   AlertDialog,
@@ -20,6 +20,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { cn } from "@/lib/utils";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 
 interface VaultItemCardProps {
   item: VaultItem;
@@ -28,6 +29,7 @@ interface VaultItemCardProps {
 }
 
 const TRADE_IN_COOLDOWN_MS = 60 * 1000; // 60 seconds
+const FLAT_TRADE_IN_VALUE = 20;
 
 export function VaultItemCard({
   item,
@@ -80,9 +82,8 @@ export function VaultItemCard({
     };
   }, [currentValue, item.purchaseTimestamp, isCoolingDown, item.marketPrice]);
 
-  const handleTradeIn = () => {
+  const handleTradeIn = (tradeInValue: number) => {
     const vaultItemKey = `${item.id}-${item.purchaseTimestamp}`;
-    const tradeInValue = Math.round(currentValue);
     tradeIn(vaultItemKey, tradeInValue);
 
     toast({
@@ -156,6 +157,7 @@ export function VaultItemCard({
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button variant="outline" className="w-full">
+                <Repeat className="mr-2 h-4 w-4" />
                 Trade-In
               </Button>
             </AlertDialogTrigger>
@@ -163,21 +165,40 @@ export function VaultItemCard({
               <AlertDialogHeader>
                 <AlertDialogTitle>Confirm Trade-In?</AlertDialogTitle>
                 <AlertDialogDescription>
-                    Are you sure you want to trade in <strong>{item.name}</strong> for its current market value? This action cannot be undone.
+                    Choose how you'd like to trade in <strong>{item.name}</strong>. This action cannot be undone.
                 </AlertDialogDescription>
               </AlertDialogHeader>
-              <div className="py-4">
-                <div className="h-auto flex flex-col gap-2 p-4 items-center rounded-lg bg-secondary">
-                    <Gem className="h-8 w-8 text-primary"/>
-                    <div className="flex flex-col items-center">
-                        <span className="font-bold text-lg">{currentValue.toFixed(2)} Shots</span>
-                        <span className="text-xs text-secondary-foreground/80">To Balance</span>
+               <Tabs defaultValue="market" className="w-full mt-2">
+                <TabsList className="grid w-full grid-cols-2">
+                    <TabsTrigger value="market">Market Value</TabsTrigger>
+                    <TabsTrigger value="flat">Flat Rate</TabsTrigger>
+                </TabsList>
+                <TabsContent value="market" className="mt-4">
+                    <div className="h-auto flex flex-col gap-2 p-4 items-center rounded-lg bg-secondary">
+                        <Gem className="h-8 w-8 text-primary"/>
+                        <div className="flex flex-col items-center">
+                            <span className="font-bold text-lg">{currentValue.toFixed(2)} Shots</span>
+                            <span className="text-xs text-secondary-foreground/80">To Balance</span>
+                        </div>
+                        <p className="text-xs text-center text-muted-foreground mt-2">Trade in for the item's current fluctuating market price.</p>
+                         <AlertDialogAction onClick={() => handleTradeIn(currentValue)} className="w-full mt-2">Trade for {currentValue.toFixed(2)} Shots</AlertDialogAction>
                     </div>
-                </div>
-              </div>
-              <AlertDialogFooter>
+                </TabsContent>
+                <TabsContent value="flat" className="mt-4">
+                    <div className="h-auto flex flex-col gap-2 p-4 items-center rounded-lg bg-secondary">
+                        <Gift className="h-8 w-8 text-accent"/>
+                        <div className="flex flex-col items-center">
+                            <span className="font-bold text-lg">{FLAT_TRADE_IN_VALUE.toFixed(2)} Shots</span>
+                            <span className="text-xs text-secondary-foreground/80">To Balance</span>
+                        </div>
+                        <p className="text-xs text-center text-muted-foreground mt-2">Trade in for a fixed, flat rate. Good for a quick restock!</p>
+                        <AlertDialogAction onClick={() => handleTradeIn(FLAT_TRADE_IN_VALUE)} className="w-full mt-2">Trade for {FLAT_TRADE_IN_VALUE.toFixed(2)} Shots</AlertDialogAction>
+                    </div>
+                </TabsContent>
+              </Tabs>
+
+              <AlertDialogFooter className="mt-4">
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={() => handleTradeIn()}>Trade-in for {currentValue.toFixed(2)} Shots</AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
