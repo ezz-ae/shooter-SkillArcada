@@ -114,7 +114,7 @@ export default {
         },
         'cue-ball-release': {
             '0%': { transform: 'translate(-50%, -50%) rotate(0deg)' },
-            '100%': { transform: 'translate(calc(var(--shot-power) - 50%), -50%) rotate(720deg)' },
+            '100%': { transform: 'translate(calc(var(--shot-power) - 50%), calc(${cueRotation/2}% - 50%)) rotate(360deg)' },
         },
         '8-ball-sink': {
             '0%': { transform: 'translateY(-50%) scale(1)', opacity: '1' },
