@@ -30,7 +30,7 @@ import { ChartContainer } from "./ui/chart";
 import { DrawPad } from "./draw-pad";
 import { Target, HelpCircle, Check, Gem, DollarSign, Info } from "lucide-react";
 import { ChessBoard } from "./chess-board";
-import { MazeGame } from "./maze-game";
+import { MazeGame } from "./maze-draw";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
 
 interface ShotTakerProps {
@@ -98,7 +98,7 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
   const [mazeTimer, setMazeTimer] = useState(MAZE_TIMER_SECONDS);
 
 
-  const { addToVault, shots, spendShot, hasSeenShotInfo, setHasSeenShotInfo, addShots } = useStore();
+  const { addToVault, shots, spendShot, hasSeenShotInfo, setHasSeenShotInfo, addLuckshots } = useStore();
   const { toast } = useToast();
   
   const isGame = product.game && ['reel-pause', 'riddle-calc', 'draw-passcode', 'chess-mate', 'maze-draw'].includes(product.game);
@@ -398,10 +398,10 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
                             to[1] === CHESS_MATE_MOVE.to[1];
       if (isCorrectMove) {
           setIsChessWon(true);
-          addShots(CHESS_PRIZE_SHOTS);
+          addLuckshots(CHESS_PRIZE_SHOTS);
           toast({
             title: "Checkmate!",
-            description: `You won ${CHESS_PRIZE_SHOTS} Shots!`,
+            description: `You won ${CHESS_PRIZE_SHOTS} Luckshots!`,
           });
       } else {
           toast({
@@ -609,7 +609,7 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
   }
 
   return (
-    <>
+    <TooltipProvider>
       <Card
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
@@ -620,23 +620,36 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
           product.game === 'multi-shot' && 'multi-shot-card'
         )}
       >
-        <Link href={`/product/${product.id}`} className="contents">
-          <CardHeader className="p-4 flex flex-row justify-between items-start">
+         <CardHeader className="p-4 flex flex-row justify-between items-start">
             <div className="space-y-1">
-                <h3 className="font-bold text-lg leading-tight">{product.name}</h3>
+                <Link href={`/product/${product.id}`} className="contents">
+                    <h3 className="font-bold text-lg leading-tight">{product.name}</h3>
+                </Link>
                 <p className="text-xs text-muted-foreground">{product.subtitle}</p>
             </div>
-            <div className="p-2 bg-primary/10 rounded-full">
-                <Gem className="h-5 w-5 text-primary" />
-            </div>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0">
+                         <Info className="h-4 w-4 text-muted-foreground" />
+                    </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                    <p className="max-w-xs">{product.expertSystem}</p>
+                </TooltipContent>
+            </Tooltip>
           </CardHeader>
-        </Link>
         <CardContent className="flex-grow p-4 pb-2 space-y-2">
-            {renderChart()}
+            {product.game === 'chess-mate' || product.game === 'maze-draw' ? (
+                 <div className="flex justify-center items-center h-full">
+                     {renderActions()}
+                 </div>
+            ) : renderChart()}
         </CardContent>
-        <CardFooter className="p-4 pt-2 flex-col items-center">
-          {renderActions()}
-        </CardFooter>
+        {product.game !== 'chess-mate' && product.game !== 'maze-draw' && (
+            <CardFooter className="p-4 pt-2 flex-col items-center">
+              {renderActions()}
+            </CardFooter>
+        )}
       </Card>
 
       <AlertDialog open={isInfoDialogOpen} onOpenChange={setIsInfoDialogOpen}>
@@ -797,6 +810,6 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
                 </div>
             </DialogContent>
         </Dialog>
-    </>
+    </TooltipProvider>
   );
 }

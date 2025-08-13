@@ -16,12 +16,15 @@ interface StoreState {
   vault: VaultItem[];
   shippingCart: ShippingItem[];
   shots: number; // Represents user's balance. 1 shot = $1 USD
+  luckshots: number; // Represents currency won from skill games
   hasSeenShotInfo: boolean;
   hasSeenVaultInfo: boolean;
   setHasSeenShotInfo: (hasSeen: boolean) => void;
   setHasSeenVaultInfo: (hasSeen: boolean) => void;
   spendShot: (amount?: number) => boolean;
   addShots: (amount: number) => void;
+  spendLuckshot: (amount?: number) => boolean;
+  addLuckshots: (amount: number) => void;
   addToVault: (item: VaultItem) => boolean;
   tradeIn: (vaultItemKey: string, tradeInValue: number) => void;
   moveToShipping: (vaultItemKeys: string[]) => boolean;
@@ -38,6 +41,7 @@ const initialState = {
     vault: [],
     shippingCart: [],
     shots: 0, // Start with 0 shots, new users get a bonus
+    luckshots: 0,
     hasSeenShotInfo: false,
     hasSeenVaultInfo: false,
 };
@@ -62,6 +66,19 @@ export const useStore = create<StoreState>()(
         return false;
       },
       
+      addLuckshots: (amount) => {
+        set((state) => ({ luckshots: state.luckshots + amount }));
+      },
+
+      spendLuckshot: (amount = 1) => {
+        const currentLuckshots = get().luckshots;
+        if (currentLuckshots >= amount) {
+          set({ luckshots: currentLuckshots - amount });
+          return true;
+        }
+        return false;
+      },
+
       addToVault: (item) => {
         const currentShots = get().shots;
         if (currentShots >= item.pricePaid) {
@@ -120,7 +137,7 @@ export const useStore = create<StoreState>()(
       }
     }),
     {
-      name: "shotershots-storage-v1", 
+      name: "shotershots-storage-v2", 
       storage: createJSONStorage(() => localStorage), 
     }
   )

@@ -6,13 +6,28 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PoolChallengeCard } from "@/components/pool-challenge-card";
 import { User, getUsers } from "@/lib/user";
-import { Trophy, PlusCircle, Swords } from "lucide-react";
+import { Trophy, PlusCircle, Swords, Check } from "lucide-react";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useEffect, useState } from "react";
+import { ChessBoard } from "@/components/chess-board";
+import { useStore } from "@/lib/store";
+import { useToast } from "@/hooks/use-toast";
+
+const CHESS_MATE_MOVE = { from: [1, 5], to: [0, 5] };
+const CHESS_PRIZE_SHOTS = 500;
+
+const initialChessBoard = Array(8).fill(null).map(() => Array(8).fill(null));
+initialChessBoard[7][4] = { type: 'King', color: 'black' };
+initialChessBoard[0][4] = { type: 'King', color: 'white' };
+initialChessBoard[1][5] = { type: 'Rook', color: 'white' };
+initialChessBoard[1][7] = { type: 'Rook', color: 'white' };
 
 export default function ChessPage() {
   const [users, setUsers] = useState<User[]>([]);
+  const { addShots, spendShot } = useStore();
+  const { toast } = useToast();
+  const [isChessWon, setIsChessWon] = useState(false);
   
   useEffect(() => {
     async function fetchData() {
@@ -28,6 +43,45 @@ export default function ChessPage() {
     { id: 'chess3', prize: 50, fee: 5, player1: users[0], player2: users[2], type: 'chess' as const },
   ] : [];
 
+  const handleChessMove = (from: [number, number], to: [number, number]) => {
+      if (isChessWon) return;
+
+      const isCorrectMove = from[0] === CHESS_MATE_MOVE.from[0] &&
+                            from[1] === CHESS_MATE_MOVE.from[1] &&
+                            to[0] === CHESS_MATE_MOVE.to[0] &&
+                            to[1] === CHESS_MATE_MOVE.to[1];
+      if (isCorrectMove) {
+          setIsChessWon(true);
+          addShots(CHESS_PRIZE_SHOTS);
+          toast({
+            title: "Checkmate!",
+            description: `You won ${CHESS_PRIZE_SHOTS} Shots!`,
+          });
+      } else {
+          toast({
+            variant: "destructive",
+            title: "Not Quite",
+            description: "That wasn't the winning move. Try again!",
+          });
+      }
+  }
+
+  const handlePlayPuzzle = () => {
+    if (spendShot(50)) {
+        setIsChessWon(false);
+        toast({
+            title: "Good Luck!",
+            description: "The puzzle is now active. Find the checkmate."
+        })
+    } else {
+        toast({
+            variant: "destructive",
+            title: "Not enough Shots!",
+            description: "You need 50 Shots to play this puzzle."
+        })
+    }
+  }
+
   return (
     <div className="container mx-auto px-4 py-8">
        <div className="text-center mb-8">
@@ -40,18 +94,48 @@ export default function ChessPage() {
       </div>
 
       <div className="w-full max-w-5xl mx-auto">
-         <div className="flex justify-end mb-4">
-            <Button size="lg">
-                <PlusCircle className="mr-2"/>
-                Create New Challenge
-            </Button>
-        </div>
-        <Tabs defaultValue="chess-challenges" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="chess-challenges">Public Challenges</TabsTrigger>
+        <Tabs defaultValue="puzzle" className="w-full">
+            <TabsList className="grid w-full grid-cols-3">
+                <TabsTrigger value="puzzle">Daily Puzzle</TabsTrigger>
+                <TabsTrigger value="challenges">Public Challenges</TabsTrigger>
                 <TabsTrigger value="leagues">Leagues</TabsTrigger>
             </TabsList>
-            <TabsContent value="chess-challenges" className="mt-6">
+            <TabsContent value="puzzle" className="mt-6">
+                <Card className="shadow-2xl">
+                    <CardHeader>
+                        <CardTitle>Checkmate in One</CardTitle>
+                        <CardDescription>White to move and win the game. Solve it to win a massive prize!</CardDescription>
+                    </CardHeader>
+                    <CardContent className="flex flex-col md:flex-row items-center gap-8">
+                        <div className="w-full md:w-96">
+                            <ChessBoard 
+                                initialBoard={initialChessBoard}
+                                onMove={handleChessMove}
+                            />
+                        </div>
+                        <div className="text-center space-y-4">
+                            <div>
+                                <p className="text-5xl font-black text-primary">{CHESS_PRIZE_SHOTS} Shots</p>
+                                <p className="text-muted-foreground font-semibold">Prize</p>
+                            </div>
+                            {isChessWon ? (
+                                <div className="p-4 rounded-lg bg-green-500/10 text-green-700 dark:text-green-400 font-bold flex items-center justify-center gap-2">
+                                    <Check /> Puzzle Solved! Prize Awarded.
+                                </div>
+                            ) : (
+                                <Button onClick={handlePlayPuzzle} size="lg">Play Puzzle (50 Shots)</Button>
+                            )}
+                        </div>
+                    </CardContent>
+                </Card>
+            </TabsContent>
+            <TabsContent value="challenges" className="mt-6">
+                <div className="flex justify-end mb-4">
+                    <Button size="lg">
+                        <PlusCircle className="mr-2"/>
+                        Create New Challenge
+                    </Button>
+                </div>
                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {chessChallenges.filter(c => !c.player2).map(challenge => (
                         <PoolChallengeCard key={challenge.id} challenge={challenge} />
