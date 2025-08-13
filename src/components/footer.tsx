@@ -1,54 +1,31 @@
 
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { textToSpeech } from "@/ai/flows/tts-flow";
-import { BrainCircuit, Dices, Heart, LineChart, MessageSquare, Swords, Volume2, Loader } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
-import { useToast } from "@/hooks/use-toast";
 import Image from "next/image";
+import { BrainCircuit, Dices, Heart, LineChart, Swords } from "lucide-react";
+import { ActivityFeed } from "./activity-feed";
+import { User, getUsers } from "@/lib/user";
+import { useEffect, useState } from "react";
 
 export function Footer() {
-    
-    const [isPlaying, setIsPlaying] = useState(false);
-    const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
-    const { toast } = useToast();
+    const [users, setUsers] = useState<User[]>([]);
 
+    useEffect(() => {
+        async function fetchData() {
+            const allUsers = await getUsers();
+            setUsers(allUsers);
+        }
+        fetchData();
+    }, []);
+    
     const gameLinks = [
       { href: "/luckshots", label: "Luckshots", icon: Dices },
       { href: "/brainshots", label: "Brainshots", icon: BrainCircuit },
       { href: "/crypto-luck", label: "Crypto Luck", icon: LineChart },
       { href: "/pool-shot", label: "Pool Shot", icon: Swords },
-      { href: "/luckgirls", label: "Luckgirls", icon: Heart },
+      { href: "/shoter-and-girls", label: "Shoter & Girls", icon: Heart },
     ];
-
-    const handlePlayGreeting = async () => {
-      if (isPlaying) {
-        audio?.pause();
-        setIsPlaying(false);
-        return;
-      }
-
-      setIsPlaying(true);
-      try {
-        const response = await textToSpeech("Welcome to ShoterShots! My grandma used to say, a little bit of luck can change everything. Let's get this W!");
-        const audioPlayer = new Audio(response.audioDataUri);
-        setAudio(audioPlayer);
-        audioPlayer.play();
-        audioPlayer.onended = () => {
-          setIsPlaying(false);
-        };
-      } catch (error) {
-         toast({
-          variant: "destructive",
-          title: "Audio Failed",
-          description: "Could not generate the greeting audio. Please try again later."
-        });
-        setIsPlaying(false);
-      }
-    }
     
   return (
     <footer className="border-t mt-12 py-8 bg-secondary/50">
@@ -82,23 +59,8 @@ export function Footer() {
             </ul>
         </div>
         <div className="md:col-span-1">
-             <Card>
-                <CardHeader>
-                    <CardTitle className="text-base flex items-center gap-2">
-                        <MessageSquare className="text-primary"/>
-                        A Message from Shoter
-                    </CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <p className="text-xs text-muted-foreground">
-                        Hear a special greeting from our resident AI.
-                    </p>
-                    <Button className="w-full mt-2" size="sm" variant="outline" onClick={handlePlayGreeting} disabled={isPlaying}>
-                      {isPlaying ? <Loader className="animate-spin h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
-                      <span className="ml-2">{isPlaying ? 'Playing...' : 'Play Greeting'}</span>
-                    </Button>
-                </CardContent>
-            </Card>
+             <h3 className="font-bold text-lg mb-2">Live Wins</h3>
+             <ActivityFeed users={users} />
         </div>
       </div>
     </footer>
