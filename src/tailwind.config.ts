@@ -98,11 +98,6 @@ export default {
           '0%, 100%': { 'border-color': 'hsl(var(--primary) / 0.5)' },
           '50%': { 'border-color': 'hsl(var(--accent) / 0.7)' },
         },
-        'fade-out': {
-          '0%': { opacity: '1' },
-          '80%': { opacity: '1' },
-          '100%': { opacity: '0' },
-        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
@@ -111,7 +106,6 @@ export default {
         'flash-red': 'flash-red 0.7s ease-in-out',
         'shimmer': 'shimmer 3s ease-in-out infinite',
         'border-pulse': 'border-pulse 2s infinite',
-        'fade-out': 'fade-out 4s ease-out forwards',
       },
     },
   },

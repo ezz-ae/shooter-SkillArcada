@@ -151,9 +151,3 @@
     '0%, 100%': { boxShadow: '0 0 0 0px hsl(var(--destructive) / 0)' },
     '50%': { boxShadow: '0 0 4px 2px hsl(var(--destructive) / 0.7)' },
 }
-
-@keyframes fade-out {
-    '0%': { opacity: '1' },
-    '80%': { opacity: '1' },
-    '100%': { opacity: '0' },
-}
