@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useState, useRef, useCallback } from "react";
@@ -639,17 +638,15 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
             </Tooltip>
           </CardHeader>
         <CardContent className="flex-grow p-4 pb-2 space-y-2">
-            {product.game === 'chess-mate' || product.game === 'maze-draw' ? (
+            {(product.game === 'chess-mate' || product.game === 'maze-draw') ? (
                  <div className="flex justify-center items-center h-full">
                      {renderActions()}
                  </div>
             ) : renderChart()}
         </CardContent>
-        {product.game !== 'chess-mate' && product.game !== 'maze-draw' && (
-            <CardFooter className="p-4 pt-2 flex-col items-center">
-              {renderActions()}
-            </CardFooter>
-        )}
+        <CardFooter className="p-4 pt-2 flex-col items-center">
+          {renderActions()}
+        </CardFooter>
       </Card>
 
       <AlertDialog open={isInfoDialogOpen} onOpenChange={setIsInfoDialogOpen}>
