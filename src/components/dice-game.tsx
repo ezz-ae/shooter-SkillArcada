@@ -4,14 +4,18 @@
 import { useState } from "react";
 import { Dice } from "./dice";
 import { Button } from "./ui/button";
-import { ArrowRight, BrainCircuit, Dices, Swords } from "lucide-react";
+import { ArrowRight, BrainCircuit, Dices, Swords, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 type GameState = 'initial' | 'rolling' | 'result';
 type ResultCategory = 'Luckshots' | 'Brainshots' | 'Challenges';
 
-export function DiceGame() {
+interface DiceGameProps {
+    onComplete: () => void;
+}
+
+export function DiceGame({ onComplete }: DiceGameProps) {
     const [gameState, setGameState] = useState<GameState>('initial');
     const [diceValues, setDiceValues] = useState([1, 1, 1]);
     const [result, setResult] = useState<{category: ResultCategory, message: string, advice: string} | null>(null);
@@ -73,10 +77,10 @@ export function DiceGame() {
                  <h2 className="text-3xl font-bold">{result.message}</h2>
                  <p className="text-muted-foreground text-lg italic">"{result.advice}"</p>
                  <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-                    <Button size="lg" asChild>
-                        <Link href={href}>{buttonText}</Link>
-                    </Button>
                     <Button size="lg" variant="outline" onClick={resetGame}>Roll Again</Button>
+                    <Button size="lg" onClick={onComplete} className="moving-gradient text-primary-foreground">
+                        Let Shoter Read Your Luck <Sparkles className="ml-2"/>
+                    </Button>
                  </div>
             </div>
         )
@@ -87,13 +91,14 @@ export function DiceGame() {
             {gameState === 'initial' && (
                 <div className="animate-in fade-in-50 duration-1000">
                     <h1 className="text-4xl font-black tracking-tight lg:text-6xl text-transparent bg-clip-text bg-gradient-to-br from-foreground to-foreground/60">
-                        Let Shoter Kickstart Your Day.
+                        Let Shoter tell you if today is a lucky day.
                     </h1>
                     <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
                         Roll the dice to see where your luck lies today. This is your first shot. Make it count.
                     </p>
-                    <Button size="lg" className="mt-8" onClick={rollDice}>
-                        TAKE THE SHOT <ArrowRight className="ml-2"/>
+                    <Button size="lg" className="mt-8 relative overflow-hidden" onClick={rollDice}>
+                         <div className="absolute inset-0 moving-gradient opacity-80"></div>
+                         <span className="relative">Roll the Dice</span>
                     </Button>
                 </div>
             )}
