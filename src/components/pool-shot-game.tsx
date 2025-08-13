@@ -276,13 +276,14 @@ export function PoolShotGame() {
                     <div className={cn(
                         "absolute h-1.5 w-96 bg-gradient-to-r from-[#c5a378] to-[#a17e56] rounded-full origin-right transition-all duration-100 shadow-lg",
                         "right-[calc(100%+0.5rem)] top-1/2 -translate-y-1/2",
-                        "transform-gpu",
-                        gameState === 'shot' && 'animate-cue-stick-release',
+                        "transform-gpu"
                     )}
-                    style={{
-                        transform: `rotate(${cueRotation}deg) ${gameState === 'charging' ? `translateX(${shotPower/3}px)` : ''}`,
-                        '--shot-power-release': `${shotPower*1.5}px`
-                    } as React.CSSProperties}>
+                    style={
+                      {
+                        transform: `rotate(${cueRotation}deg) ${gameState === 'charging' ? `translateX(${shotPower/3}px)` : ''} ${gameState === 'shot' ? `translateX(${shotPower*1.5}px)` : ''}`,
+                        transition: gameState === 'shot' ? 'transform 0.1s ease-out' : 'none'
+                      } as React.CSSProperties
+                    }>
                     </div>
                 </div>
             )}
