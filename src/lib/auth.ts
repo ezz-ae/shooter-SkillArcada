@@ -43,7 +43,7 @@ export const useAuth = create<AuthState>()(
         //     const isNew = firebaseUser.metadata.creationTime === firebaseUser.metadata.lastSignInTime;
             
         //     if (isNew && get().isNewUser) {
-        //       useStore.getState().addLuckshots(3);
+        //       useStore.getState().addShots(10); // New user bonus
         //     }
 
         //     set({
@@ -71,6 +71,7 @@ export const useAuth = create<AuthState>()(
             user: { uid: 'temp-user-id', isAnonymous: true },
             isNewUser: false
         })
+        useStore.getState().addShots(10); // Give bonus for demo
         return () => {}; // Return a dummy unsubscribe function
         // --- WORKAROUND END ---
       },
@@ -86,7 +87,7 @@ export const useAuth = create<AuthState>()(
       setIsLoggingIn: (isLoggingIn) => set({ isLoggingIn }),
     }),
     {
-      name: 'luckshot-auth-storage-v7', // Incremented version
+      name: 'luckshot-auth-storage-v8', // Incremented version
       storage: createJSONStorage(() => localStorage),
       // Only persist non-user-session specific data
       partialize: (state) => ({

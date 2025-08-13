@@ -23,7 +23,7 @@ export function PoolShotGame() {
   const powerIntervalRef = useRef<NodeJS.Timeout>();
   const audioRefs = useRef<{ [key: string]: HTMLAudioElement | null }>({}).current;
 
-  const { luckshots, spendLuckshot, addLuckshots } = useStore();
+  const { shots, spendShot, addShots } = useStore();
   const { toast } = useToast();
 
   const prize = level * 10;
@@ -45,11 +45,11 @@ export function PoolShotGame() {
   }, [isMuted, audioRefs]);
 
   const handleStartPlacing = () => {
-    if (luckshots < cost) {
+    if (shots < cost) {
       toast({
         variant: "destructive",
-        title: "Not enough Luckshots!",
-        description: `You need ${cost} Luckshot(s) to play this level.`,
+        title: "Not enough Shots!",
+        description: `You need ${cost} Shot(s) to play this level.`,
       });
       return;
     }
@@ -100,12 +100,12 @@ export function PoolShotGame() {
     
     clearInterval(powerIntervalRef.current);
     
-    const shotTaken = spendLuckshot(cost);
+    const shotTaken = spendShot(cost);
     if (!shotTaken) {
       toast({
         variant: "destructive",
         title: "Shot Failed",
-        description: "Could not spend Luckshots. Please try again.",
+        description: "Could not spend Shots. Please try again.",
       });
       resetGame();
       return;
@@ -126,7 +126,7 @@ export function PoolShotGame() {
         
         const success = Math.random() < successChance;
         if (success) {
-            addLuckshots(prize);
+            addShots(prize);
             playSound('sink');
             setGameState('won');
         } else {
@@ -154,7 +154,7 @@ export function PoolShotGame() {
                  <div className="text-center w-full space-y-2">
                     <Button onClick={handleStartPlacing} size="lg" className="w-full">
                         <Target className="mr-2 h-5 w-5"/>
-                        Play for {cost} Luckshot{cost > 1 ? 's' : ''}
+                        Play for {cost} Shot{cost > 1 ? 's' : ''}
                     </Button>
                 </div>
             )

@@ -98,7 +98,7 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
   const [mazeTimer, setMazeTimer] = useState(MAZE_TIMER_SECONDS);
 
 
-  const { addToVault, shots, spendShot, hasSeenShotInfo, setHasSeenShotInfo, addLuckshots } = useStore();
+  const { addToVault, shots, spendShot, hasSeenShotInfo, setHasSeenShotInfo, addShots } = useStore();
   const { toast } = useToast();
   
   const isGame = product.game && ['reel-pause', 'multi-shot', 'riddle-calc', 'draw-passcode', 'chess-mate', 'maze-draw'].includes(product.game);
@@ -398,10 +398,10 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
                             to[1] === CHESS_MATE_MOVE.to[1];
       if (isCorrectMove) {
           setIsChessWon(true);
-          addLuckshots(CHESS_PRIZE_SHOTS);
+          addShots(CHESS_PRIZE_SHOTS);
           toast({
             title: "Checkmate!",
-            description: `You won ${CHESS_PRIZE_SHOTS} Luckshots!`,
+            description: `You won ${CHESS_PRIZE_SHOTS} Shots!`,
           });
       } else {
           toast({
