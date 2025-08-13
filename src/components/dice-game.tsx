@@ -93,9 +93,6 @@ export function DiceGame({ onComplete }: DiceGameProps) {
                     <h1 className="text-4xl font-black tracking-tight lg:text-6xl text-transparent bg-clip-text bg-gradient-to-br from-foreground to-foreground/60">
                         Let Shoter tell you if today is a lucky day.
                     </h1>
-                    <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
-                        Roll the dice to see where your luck lies today. This is your first shot. Make it count.
-                    </p>
                     <Button size="lg" className="mt-8 relative overflow-hidden" onClick={rollDice}>
                          <div className="absolute inset-0 moving-gradient opacity-80"></div>
                          <span className="relative">Roll the Dice</span>

@@ -41,12 +41,6 @@ export default function PoolShotPage() {
       </div>
 
       <div className="w-full max-w-5xl mx-auto">
-         <div className="flex justify-end mb-4">
-            <Button size="lg">
-                <PlusCircle className="mr-2"/>
-                Create New Challenge
-            </Button>
-        </div>
         <Tabs defaultValue="pool-challenges" className="w-full">
             <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="pool-challenges">Public Challenges</TabsTrigger>
@@ -58,9 +52,13 @@ export default function PoolShotPage() {
                         <PoolChallengeCard key={challenge.id} challenge={challenge} />
                     ))}
                 </div>
-                 <div className="text-center py-16 border-2 border-dashed rounded-lg mt-6">
+                 <div className="text-center py-16 border-2 border-dashed rounded-lg mt-6 flex flex-col items-center gap-4">
                     <h3 className="text-xl font-semibold">No More Open Pool Challenges</h3>
                     <p className="text-muted-foreground mt-2">Why not create one yourself?</p>
+                     <Button size="lg">
+                        <PlusCircle className="mr-2"/>
+                        Create New Challenge
+                    </Button>
                 </div>
             </TabsContent>
             <TabsContent value="leagues" className="mt-6">
