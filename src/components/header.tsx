@@ -39,7 +39,7 @@ export function Header() {
           </Link>
           <nav className="hidden md:flex items-center space-x-1">
              <Button variant="ghost" asChild>
-                <Link href="/shoterday">Shooterday</Link>
+                <Link href="/shooterday">Shooterday</Link>
              </Button>
              <Button variant="ghost" asChild>
                 <Link href="/luckshots">ShooterGuns</Link>

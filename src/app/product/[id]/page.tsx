@@ -98,7 +98,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
            
            <Card className="mt-12">
             <CardHeader>
-                <CardTitle className="flex items-center gap-2"><Zap className="h-6 w-6 text-primary" /> Product Luckshot</CardTitle>
+                <CardTitle className="flex items-center gap-2"><Zap className="h-6 w-6 text-primary" /> Product ShooterGun</CardTitle>
             </CardHeader>
             <CardContent>
                 <div className="grid grid-cols-1 gap-6 items-center">
