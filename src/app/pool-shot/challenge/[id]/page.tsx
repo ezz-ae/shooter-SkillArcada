@@ -38,7 +38,7 @@ export default function PoolChallengePage({ params }: { params: { id: string } }
                             <AvatarImage src={player1.avatarUrl} alt={player1.name} />
                             <AvatarFallback>{player1.name.substring(0,2)}</AvatarFallback>
                         </Avatar>
-                        <h2 className="text-xl font-bold">{player1.name}</h2>
+                        <h2 className="text-lg md:text-xl font-bold">{player1.name}</h2>
                     </div>
 
                     <div className="flex flex-col items-center">
@@ -52,7 +52,7 @@ export default function PoolChallengePage({ params }: { params: { id: string } }
                             <AvatarImage src={player2.avatarUrl} alt={player2.name} />
                             <AvatarFallback>{player2.name.substring(0,2)}</AvatarFallback>
                         </Avatar>
-                        <h2 className="text-xl font-bold">{player2.name}</h2>
+                        <h2 className="text-lg md:text-xl font-bold">{player2.name}</h2>
                     </div>
                 </div>
 

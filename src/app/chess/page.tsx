@@ -115,7 +115,7 @@ export default function ChessPage() {
                         </div>
                         <div className="text-center space-y-4">
                             <div>
-                                <p className="text-5xl font-black text-primary">{CHESS_PRIZE_SHOTS} Shots</p>
+                                <p className="text-3xl md:text-5xl font-black text-primary">{CHESS_PRIZE_SHOTS} Shots</p>
                                 <p className="text-muted-foreground font-semibold">Prize</p>
                             </div>
                             {isChessWon ? (
