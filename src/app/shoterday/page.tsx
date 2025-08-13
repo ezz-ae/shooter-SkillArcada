@@ -4,8 +4,21 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { BookOpen, ShoppingBag, Smile } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { useStore } from "@/lib/store";
 
 export default function ShoterdayPage() {
+    const { addShots } = useStore();
+    const { toast } = useToast();
+
+    const handleClaimSmile = () => {
+        addShots(10);
+        toast({
+            title: "Smile Claimed!",
+            description: "10 Shots have been added to your balance. Thanks for smiling!",
+        });
+    }
+
   return (
     <div className="container mx-auto px-4 py-12">
         <div className="text-center mb-12">
@@ -26,8 +39,14 @@ export default function ShoterdayPage() {
                     Hey, Shoter here. I give you shots in the games so you can win. On Shoterday, I give you a different kind of shot—a shot of inspiration. My grandma used to say, "a sharp mind is the strongest muscle."
                 </p>
                 <p>
-                    I made this place to share the things that build my strength. I hope they make you smile. If they do, use the code <strong className="text-accent">SMILE</strong> on your next checkout. That's a shot from me to you.
+                    I made this place to share the things that build my strength. I hope they make you smile. If they do, I want you to have a <strong className="text-accent">redeemable $10 reward</strong>. That's a shot from me to you.
                 </p>
+                <div className="flex justify-center">
+                    <Button onClick={handleClaimSmile}>
+                        <Smile className="mr-2 h-4 w-4" />
+                        Claim Your Smile (10 Shots)
+                    </Button>
+                </div>
             </CardContent>
         </Card>
 
@@ -60,3 +79,4 @@ export default function ShoterdayPage() {
     </div>
   );
 }
+
