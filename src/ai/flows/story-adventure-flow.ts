@@ -34,26 +34,20 @@ const storyAdventureFlow = ai.defineFlow(
   },
   async (input) => {
     const storyPrompt = `Create a very short, exciting, and adventurous story premise, under 50 words, based on the following item: "${input.productName}". The story must end on a cliffhanger, prompting the user to continue it. Do not title the story.`;
+    
+    // For the purpose of this demo, we will use a placeholder for the image URL
+    // In a real application, you would generate an image here.
+    const imageUrl = `https://placehold.co/600x400.png`;
 
-    const [storyResult, imageResult] = await Promise.all([
-      ai.generate({
+    const storyResult = await ai.generate({
         prompt: storyPrompt,
         model: 'googleai/gemini-1.5-flash',
-      }),
-      ai.generate({
-        model: 'googleai/gemini-2.0-flash-preview-image-generation',
-        prompt: `A dramatic, fantasy, digital painting of an adventurer discovering a "${input.productName}".`,
-        config: {
-          responseModalities: ['TEXT', 'IMAGE'],
-        },
-      })
-    ]);
-
+    });
+    
     const storyText = storyResult.text;
-    const imageUrl = imageResult.media.url;
 
-    if (!storyText || !imageUrl) {
-      throw new Error('Failed to generate story or image.');
+    if (!storyText) {
+      throw new Error('Failed to generate story.');
     }
 
     return {
