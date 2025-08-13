@@ -11,7 +11,7 @@ export interface Product {
   imageUrl: string;
   dataAiHint: string;
   expertSystem: string;
-  game?: 'reel-pause' | 'multi-shot' | 'riddle-calc' | 'draw-passcode' | 'chess-mate' | 'time-challenge' | 'pink-cups' | 'snake-and-stairs' | 'ai-adventure' | 'maze-draw' | 'story-match';
+  game?: 'reel-pause' | 'multi-shot' | 'riddle-calc' | 'draw-passcode' | 'chess-mate' | 'time-challenge' | 'pink-cups' | 'snake-and-stairs' | 'ai-adventure' | 'maze-draw' | 'story-match' | 'mirror-game';
   category?: 'luckshot' | 'brainshot' | 'luckgirls' | 'chess';
 }
 
@@ -89,6 +89,18 @@ export const mockProducts: Product[] = [
     category: 'brainshot',
   },
   {
+    id: 'prod_mirror_01',
+    name: 'Mirror Shard',
+    subtitle: 'A Fragment of Perception',
+    description: 'A beautiful, shimmering shard that seems to reflect more than just light. A prize for those with keen observation.',
+    marketPrice: 25.0,
+    imageUrl: 'https://placehold.co/600x400.png',
+    dataAiHint: 'crystal shard mirror',
+    expertSystem: 'Shooter creates a pattern on a grid. It is revealed for a moment. You must perfectly mirror his pattern on your own grid to win this prize for free.',
+    game: 'mirror-game',
+    category: 'brainshot',
+  },
+  {
     id: 'prod_console_01',
     name: 'Gaming Console',
     subtitle: 'Next-Generation Gaming',
@@ -128,7 +140,7 @@ export const mockProducts: Product[] = [
     id: 'prod_laptop_01',
     name: 'Gaming Laptop',
     subtitle: 'Power on the Go',
-    description: 'A high-performance gaming laptop with a top-of-the-line GPU and a high-refresh-rate screen.',
+    description: 'A high-performance gaming laptop with a top-of-the-line GPU and a high-refresh-rate-screen.',
     marketPrice: 1999.0,
     imageUrl: 'https://placehold.co/600x400.png',
     dataAiHint: 'gaming laptop',

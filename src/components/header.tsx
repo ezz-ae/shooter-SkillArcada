@@ -48,6 +48,9 @@ export function Header() {
                 <Link href="/crypto-luck">Crypto Luck</Link>
              </Button>
              <Button variant="ghost" asChild>
+                <Link href="/shooter-mirror">Mirror Game</Link>
+             </Button>
+             <Button variant="ghost" asChild>
                 <Link href="/pool-shot">Pool Shot</Link>
              </Button>
              <Button variant="ghost" asChild>
