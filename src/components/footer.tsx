@@ -2,7 +2,7 @@
 "use client";
 
 import Link from "next/link";
-import { BrainCircuit, Dices, Heart, LineChart, Swords } from "lucide-react";
+import { BrainCircuit, Dices, Heart, LineChart, Swords, User as UserIcon } from "lucide-react";
 import { ActivityFeed } from "./activity-feed";
 import { User, getUsers } from "@/lib/user";
 import { useEffect, useState } from "react";
@@ -23,7 +23,7 @@ export function Footer() {
       { href: "/luckshots", label: "ShooterGuns", icon: Dices },
       { href: "/crypto-luck", label: "Crypto Luck", icon: LineChart },
       { href: "/pool-shot", label: "Pool Shot", icon: Swords },
-      { href: "/shoter-and-girls", label: "Shooter & Girls", icon: Heart },
+      { href: "/shooter-man", label: "ShooterMan", icon: UserIcon },
     ];
     
   return (

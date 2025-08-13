@@ -9,7 +9,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { ShooterChat } from "@/components/shooter-chat";
 
-export default function ShooterAndGirlsPage() {
+export default function ShooterManPage() {
     const [girlGames, setGirlGames] = useState<Product[]>([]);
 
     useEffect(() => {
