@@ -24,10 +24,9 @@ export default function LuckgirlsPage() {
         }
         fetchProducts();
         
-        // Optional: Reset to previous theme when component unmounts
+        // Reset to the dark theme when the component unmounts
         return () => {
-            // Or set to a default theme like 'dark'
-            // setTheme('dark'); 
+            setTheme('dark'); 
         };
     }, [setTheme]);
 
