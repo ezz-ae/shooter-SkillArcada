@@ -92,7 +92,7 @@ export default function PoolShotPage() {
                     </CardContent>
                     <CardFooter className="flex-col gap-2">
                         <Button size="lg" className="w-full">Register Now</Button>
-                    </Footer>
+                    </CardFooter>
                 </Card>
             </TabsContent>
         </Tabs>
