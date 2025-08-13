@@ -108,13 +108,9 @@ export default {
           '50%': { transform: 'translateX(-5px)' },
         },
         'cue-stick-release': {
-          '0%': { transform: 'translateX(0)', opacity: '1' },
-          '20%': { transform: 'translateX(var(--shot-power-release))', opacity: '1' },
-          '100%': { transform: 'translateX(var(--shot-power-release))', opacity: '0' },
-        },
-        'cue-ball-release': {
-            '0%': { transform: 'translate(-50%, -50%) rotate(0deg)' },
-            '100%': { transform: 'translate(calc(var(--shot-power) - 50%), calc(${cueRotation/2}% - 50%)) rotate(360deg)' },
+          '0%': { transform: 'rotate(var(--cue-rotation-deg)) translateX(0)', opacity: '1' },
+          '20%': { transform: 'rotate(var(--cue-rotation-deg)) translateX(var(--shot-power-release))', opacity: '1' },
+          '100%': { transform: 'rotate(var(--cue-rotation-deg)) translateX(var(--shot-power-release))', opacity: '0' },
         },
         '8-ball-sink': {
             '0%': { transform: 'translateY(-50%) scale(1)', opacity: '1' },
@@ -146,3 +142,5 @@ export default {
   },
   plugins: [require('tailwindcss-animate')],
 } satisfies Config;
+
+    
