@@ -44,7 +44,7 @@ export function DiceGame() {
             message: "My grandma used to say, 'You make your own luck!' Your sharp mind is your greatest asset today.",
             actionLabel: "Go to Brainshots!",
             icon: BrainCircuit,
-            href: "/brainshots",
+            href: "/luckshots#brainshot-products",
             variant: "default" as const
         };
         if (total <= 14) return { 

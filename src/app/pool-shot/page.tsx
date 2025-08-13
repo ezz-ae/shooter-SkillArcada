@@ -10,7 +10,6 @@ import { Bot, Trophy, PlusCircle, Gamepad2, Swords } from "lucide-react";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useEffect, useState } from "react";
-import { GiPoolTable } from "react-icons/gi";
 
 export default function PoolShotPage() {
   const [users, setUsers] = useState<User[]>([]);
@@ -34,7 +33,7 @@ export default function PoolShotPage() {
     <div className="container mx-auto px-4 py-8 flex flex-col items-center">
        <div className="text-center mb-8">
         <h1 className="text-4xl font-black tracking-tight lg:text-5xl flex items-center justify-center gap-4">
-            <GiPoolTable size={40} className="text-primary"/> Pool Shot
+            <Swords size={40} className="text-primary"/> Pool Shot
         </h1>
         <p className="mt-2 text-lg text-muted-foreground max-w-2xl mx-auto">
           Compete in 1-on-1 challenges, join high-stakes leagues, or practice your skills. The felt is waiting.

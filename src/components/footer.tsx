@@ -21,7 +21,6 @@ export function Footer() {
     
     const gameLinks = [
       { href: "/luckshots", label: "Luckshots", icon: Dices },
-      { href: "/brainshots", label: "Brainshots", icon: BrainCircuit },
       { href: "/crypto-luck", label: "Crypto Luck", icon: LineChart },
       { href: "/pool-shot", label: "Pool Shot", icon: Swords },
       { href: "/shoter-and-girls", label: "Shoter & Girls", icon: Heart },
