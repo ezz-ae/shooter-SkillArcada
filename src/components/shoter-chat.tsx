@@ -18,19 +18,15 @@ export function ShoterChat() {
 
     const handleGenerate = async () => {
         if (!conversation.trim()) {
-            toast({
-                variant: "destructive",
-                title: "Conversation is empty",
-                description: "Please paste a conversation to be analyzed."
-            });
-            return;
+            // Pre-populate with a default for demonstration
+            setConversation("I'm feeling lucky today and want to try something new!");
         }
 
         setIsLoading(true);
         setResult(null);
 
         try {
-            const response = await generateChallenge({ conversation });
+            const response = await generateChallenge({ conversation: conversation || "I'm feeling lucky today and want to try something new!" });
             setResult(response);
         } catch (error) {
             console.error("Challenge AI failed:", error);
@@ -50,20 +46,15 @@ export function ShoterChat() {
             isLoading && "border-accent animate-border-pulse"
         )}>
             <CardHeader className="text-center">
-                <Sparkles className="mx-auto h-12 w-12 text-accent"/>
-                <CardTitle className="text-3xl font-black text-white">ShoterChat</CardTitle>
+                <CardTitle className="text-4xl font-black text-white">SAY HI TO SHOTER</CardTitle>
                 <CardDescription className="text-lg text-white/70 mt-1 max-w-2xl mx-auto">
-                    Paste any conversation and our resident gamegang mega, Shoter, will generate a personalized challenge and game suggestion just for you.
+                    Ask Shoter how to win.
                 </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6 px-4 md:px-10">
-                <Textarea 
-                    placeholder="Paste a conversation, a dream you had, or a story you like..."
-                    value={conversation}
-                    onChange={(e) => setConversation(e.target.value)}
-                    rows={8}
-                    className="text-base bg-black border-white/20 text-white focus:ring-accent"
-                />
+                 <Button onClick={handleGenerate} disabled={isLoading} size="lg" className="w-full text-lg py-7 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white font-bold">
+                    {isLoading ? <Loader className="animate-spin" /> : "Ask Shoter"}
+                </Button>
 
                 {result && (
                     <div className="space-y-4 pt-6 border-t border-white/20 animate-in fade-in-50 duration-500">
@@ -84,11 +75,6 @@ export function ShoterChat() {
                     </div>
                 )}
             </CardContent>
-             <CardFooter className="px-4 md:px-10 pb-8">
-                <Button onClick={handleGenerate} disabled={isLoading} size="lg" className="w-full text-lg py-7">
-                    {isLoading ? <Loader className="animate-spin" /> : "Ask Shoter"}
-                </Button>
-            </CardFooter>
         </Card>
     );
 }
