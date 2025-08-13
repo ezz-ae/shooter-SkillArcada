@@ -6,28 +6,59 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PoolChallengeCard } from "@/components/pool-challenge-card";
 import { User, getUsers } from "@/lib/user";
-import { Bot, Trophy, PlusCircle, Gamepad2, Swords } from "lucide-react";
-import Link from "next/link";
+import { Trophy, PlusCircle, Swords } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useEffect, useState } from "react";
+import { CreateChallengeDialog } from "@/components/create-challenge-dialog";
+import { useAuth } from "@/lib/auth";
+
+interface Challenge {
+    id: string;
+    prize: number;
+    fee: number;
+    player1: User;
+    player2: User | null;
+    type: 'pool' | 'chess';
+}
 
 export default function PoolShotPage() {
   const [users, setUsers] = useState<User[]>([]);
+  const { user: currentUser } = useAuth();
+  const [poolChallenges, setPoolChallenges] = useState<Challenge[]>([]);
   
   useEffect(() => {
     async function fetchData() {
       const fetchedUsers = await getUsers();
       setUsers(fetchedUsers);
+      if (fetchedUsers.length > 5) {
+        setPoolChallenges([
+          { id: 'c1', prize: 40, fee: 5, player1: fetchedUsers[0], player2: fetchedUsers[1], type: 'pool' as const },
+          { id: 'c2', prize: 100, fee: 10, player1: fetchedUsers[2], player2: null, type: 'pool' as const },
+          { id: 'c3', prize: 500, fee: 25, player1: fetchedUsers[3], player2: null, type: 'pool' as const },
+          { id: 'c4', prize: 20, fee: 2, player1: fetchedUsers[4], player2: fetchedUsers[5], type: 'pool' as const },
+        ]);
+      }
     }
     fetchData();
   }, []);
 
-  const poolChallenges = users.length > 5 ? [
-    { id: 'c1', prize: 40, fee: 5, player1: users[0], player2: users[1], type: 'pool' as const },
-    { id: 'c2', prize: 100, fee: 10, player1: users[2], player2: null, type: 'pool' as const },
-    { id: 'c3', prize: 500, fee: 25, player1: users[3], player2: null, type: 'pool' as const },
-    { id: 'c4', prize: 20, fee: 2, player1: users[4], player2: users[5], type: 'pool' as const },
-  ] : [];
+  const handleCreateChallenge = (prize: number, fee: number) => {
+    if (!currentUser || !users.length) return;
+    const player1 = users.find(u => u.id === 'user1') ?? users[0]; // mock finding current user
+    const newChallenge: Challenge = {
+        id: `pool-challenge-${Date.now()}`,
+        prize,
+        fee,
+        player1,
+        player2: null,
+        type: 'pool'
+    }
+    setPoolChallenges(prev => [newChallenge, ...prev]);
+  }
+
+  const handleDismissChallenge = (id: string) => {
+    setPoolChallenges(prev => prev.filter(c => c.id !== id));
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -47,19 +78,27 @@ export default function PoolShotPage() {
                 <TabsTrigger value="leagues">Leagues</TabsTrigger>
             </TabsList>
             <TabsContent value="pool-challenges" className="mt-6">
+                 <div className="flex justify-end mb-4">
+                    <CreateChallengeDialog 
+                        gameType="pool" 
+                        onCreate={handleCreateChallenge} 
+                    />
+                </div>
                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {poolChallenges.filter(c => !c.player2).map(challenge => (
-                        <PoolChallengeCard key={challenge.id} challenge={challenge} />
+                        <PoolChallengeCard 
+                            key={challenge.id} 
+                            challenge={challenge} 
+                            onDismiss={challenge.player1.id === currentUser?.uid ? () => handleDismissChallenge(challenge.id) : undefined}
+                        />
                     ))}
                 </div>
-                 <div className="text-center py-16 border-2 border-dashed rounded-lg mt-6 flex flex-col items-center gap-4">
-                    <h3 className="text-xl font-semibold">No More Open Pool Challenges</h3>
-                    <p className="text-muted-foreground mt-2">Why not create one yourself?</p>
-                     <Button size="lg">
-                        <PlusCircle className="mr-2"/>
-                        Create New Challenge
-                    </Button>
-                </div>
+                 {poolChallenges.filter(c => !c.player2).length === 0 && (
+                    <div className="text-center py-16 border-2 border-dashed rounded-lg mt-6 flex flex-col items-center gap-4">
+                        <h3 className="text-xl font-semibold">No More Open Pool Challenges</h3>
+                        <p className="text-muted-foreground mt-2">Why not create one yourself?</p>
+                    </div>
+                )}
             </TabsContent>
             <TabsContent value="leagues" className="mt-6">
                 <Card className="shadow-2xl border-accent/50 border-2">

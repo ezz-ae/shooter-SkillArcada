@@ -13,6 +13,8 @@ import { useEffect, useState } from "react";
 import { ChessBoard } from "@/components/chess-board";
 import { useStore } from "@/lib/store";
 import { useToast } from "@/hooks/use-toast";
+import { CreateChallengeDialog } from "@/components/create-challenge-dialog";
+import { useAuth } from "@/lib/auth";
 
 const CHESS_MATE_MOVE = { from: [1, 5], to: [0, 5] };
 const CHESS_PRIZE_SHOTS = 500;
@@ -23,25 +25,51 @@ initialChessBoard[0][4] = { type: 'King', color: 'white' };
 initialChessBoard[1][5] = { type: 'Rook', color: 'white' };
 initialChessBoard[1][7] = { type: 'Rook', color: 'white' };
 
+interface Challenge {
+    id: string;
+    prize: number;
+    fee: number;
+    player1: User;
+    player2: User | null;
+    type: 'pool' | 'chess';
+}
+
 export default function ChessPage() {
   const [users, setUsers] = useState<User[]>([]);
+  const { user: currentUser } = useAuth();
   const { addShots, spendShot } = useStore();
   const { toast } = useToast();
   const [isChessWon, setIsChessWon] = useState(false);
-  
+  const [chessChallenges, setChessChallenges] = useState<Challenge[]>([]);
+
   useEffect(() => {
     async function fetchData() {
       const fetchedUsers = await getUsers();
       setUsers(fetchedUsers);
+       if (fetchedUsers.length > 3) {
+            setChessChallenges([
+                { id: 'chess1', prize: 250, fee: 25, player1: fetchedUsers[1], player2: null, type: 'chess' as const },
+                { id: 'chess2', prize: 1000, fee: 100, player1: fetchedUsers[3], player2: null, type: 'chess' as const },
+                { id: 'chess3', prize: 50, fee: 5, player1: fetchedUsers[0], player2: fetchedUsers[2], type: 'chess' as const },
+            ]);
+        }
     }
     fetchData();
   }, []);
 
-  const chessChallenges = users.length > 3 ? [
-    { id: 'chess1', prize: 250, fee: 25, player1: users[1], player2: null, type: 'chess' as const },
-    { id: 'chess2', prize: 1000, fee: 100, player1: users[3], player2: null, type: 'chess' as const },
-    { id: 'chess3', prize: 50, fee: 5, player1: users[0], player2: users[2], type: 'chess' as const },
-  ] : [];
+  const handleCreateChallenge = (prize: number, fee: number) => {
+    if (!currentUser || !users.length) return;
+    const player1 = users.find(u => u.id === 'user1') ?? users[0]; // mock finding current user
+    const newChallenge: Challenge = {
+        id: `chess-challenge-${Date.now()}`,
+        prize,
+        fee,
+        player1,
+        player2: null,
+        type: 'chess'
+    }
+    setChessChallenges(prev => [newChallenge, ...prev]);
+  }
 
   const handleChessMove = (from: [number, number], to: [number, number]) => {
       if (isChessWon) return;
@@ -131,20 +159,22 @@ export default function ChessPage() {
             </TabsContent>
             <TabsContent value="challenges" className="mt-6">
                 <div className="flex justify-end mb-4">
-                    <Button size="lg">
-                        <PlusCircle className="mr-2"/>
-                        Create New Challenge
-                    </Button>
+                    <CreateChallengeDialog 
+                        gameType="chess" 
+                        onCreate={handleCreateChallenge} 
+                    />
                 </div>
                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {chessChallenges.filter(c => !c.player2).map(challenge => (
                         <PoolChallengeCard key={challenge.id} challenge={challenge} />
                     ))}
                 </div>
-                 <div className="text-center py-16 border-2 border-dashed rounded-lg mt-6">
-                    <h3 className="text-xl font-semibold">No More Open Chess Challenges</h3>
-                    <p className="text-muted-foreground mt-2">Why not create one yourself?</p>
-                </div>
+                 {chessChallenges.filter(c => !c.player2).length === 0 && (
+                     <div className="text-center py-16 border-2 border-dashed rounded-lg mt-6">
+                        <h3 className="text-xl font-semibold">No More Open Chess Challenges</h3>
+                        <p className="text-muted-foreground mt-2">Why not create one yourself?</p>
+                    </div>
+                )}
             </TabsContent>
             <TabsContent value="leagues" className="mt-6">
                  <Card className="shadow-2xl border-accent/50 border-2">

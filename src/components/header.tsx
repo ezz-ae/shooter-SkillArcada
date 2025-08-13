@@ -2,7 +2,7 @@
 "use client";
 
 import Link from "next/link";
-import { Package, User, LogOut } from "lucide-react";
+import { Package, User, LogOut, MessageSquare } from "lucide-react";
 import { Button } from "./ui/button";
 import { useAuth } from "@/lib/auth";
 import {
@@ -18,10 +18,12 @@ import { Avatar, AvatarFallback } from "./ui/avatar";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { MobileNav } from "./mobile-nav";
+import { ShooterWhisper } from "./shooter-whisper";
 
 export function Header() {
   const { isAuthenticated, user, logout, initializeAuth } = useAuth();
   const [isClient, setIsClient] = useState(false);
+  const [isWhisperOpen, setIsWhisperOpen] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
@@ -30,6 +32,7 @@ export function Header() {
   }, [initializeAuth]);
 
   return (
+    <>
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center">
         <div className="mr-auto flex items-center">
@@ -70,6 +73,10 @@ export function Header() {
         <div className="flex flex-1 items-center justify-end space-x-2">
           {isClient && isAuthenticated && user ? (
             <>
+            <Button variant="ghost" size="icon" onClick={() => setIsWhisperOpen(true)}>
+                <MessageSquare />
+                <span className="sr-only">Whisper to Shooter</span>
+            </Button>
             <Button variant="ghost" size="icon" asChild>
                 <Link href="/vault">
                     <Package />
@@ -117,5 +124,7 @@ export function Header() {
         </div>
       </div>
     </header>
+    <ShooterWhisper isOpen={isWhisperOpen} onOpenChange={setIsWhisperOpen} />
+    </>
   );
 }
