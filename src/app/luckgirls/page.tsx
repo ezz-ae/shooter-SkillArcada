@@ -15,8 +15,8 @@ export default function LuckgirlsPage() {
     const [girlGames, setGirlGames] = useState<Product[]>([]);
 
     useEffect(() => {
-        // Set the lucky-pink theme when the component mounts
-        setTheme('lucky-pink');
+        // Set the pink-dark theme when the component mounts
+        setTheme('pink-dark');
 
         async function fetchProducts() {
             const allProducts = await getProducts();
