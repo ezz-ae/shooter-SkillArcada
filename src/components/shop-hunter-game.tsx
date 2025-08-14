@@ -21,6 +21,7 @@ import { Target, Gem, DollarSign, Loader, Check, X } from "lucide-react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { algorithmicPricing } from "@/ai/flows/algorithmic-pricing-flow";
+import { generateProductImage } from "@/ai/flows/product-image-flow";
 import { Skeleton } from "./ui/skeleton";
 
 export function ShopHunterGame() {
@@ -28,7 +29,9 @@ export function ShopHunterGame() {
     const [isLoadingProducts, setIsLoadingProducts] = useState(true);
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
     const [isHunting, setIsHunting] = useState(false);
-    const [capturedResult, setCapturedResult] = useState<{ product: Product, price: number } | null>(null);
+    const [capturedResult, setCapturedResult] = useState<{ product: Product, price: number, imageUrl: string } | null>(null);
+    const [generatedImageUrl, setGeneratedImageUrl] = useState<string>('');
+    const [isGeneratingImage, setIsGeneratingImage] = useState(false);
     
     const { spendShot, addToVault } = useStore();
     const { toast } = useToast();
@@ -52,12 +55,24 @@ export function ShopHunterGame() {
       fetchAndFilterProducts();
     }, [toast]);
     
-    const handleSelectProduct = (product: Product) => {
+    const handleSelectProduct = async (product: Product) => {
         setSelectedProduct(product);
+        setGeneratedImageUrl('');
+        setIsGeneratingImage(true);
+        try {
+            const { imageUrl } = await generateProductImage({ productName: product.name, dataAiHint: product.dataAiHint });
+            setGeneratedImageUrl(imageUrl);
+        } catch (error) {
+            console.error("Failed to generate image:", error);
+            setGeneratedImageUrl(product.imageUrl); // fallback to placeholder
+            toast({ variant: "destructive", title: "Image Generation Failed", description: "Could not generate a unique image for this product." });
+        } finally {
+            setIsGeneratingImage(false);
+        }
     };
 
     const handleTakeShot = async () => {
-        if (!selectedProduct) return;
+        if (!selectedProduct || !generatedImageUrl) return;
 
         if (!spendShot(1)) {
             toast({ variant: "destructive", title: "Not enough Shots!", description: "You need 1 Shot to play." });
@@ -67,7 +82,7 @@ export function ShopHunterGame() {
         setIsHunting(true);
         try {
             const result = await algorithmicPricing({ marketPrice: selectedProduct.marketPrice });
-            setCapturedResult({ product: selectedProduct, price: result.discountPrice });
+            setCapturedResult({ product: selectedProduct, price: result.discountPrice, imageUrl: generatedImageUrl });
         } catch (error) {
              console.error("Algorithmic pricing failed:", error);
              toast({ variant: "destructive", title: "AI Error", description: "The pricing AI is unavailable. Please try again." });
@@ -83,6 +98,7 @@ export function ShopHunterGame() {
             ...capturedResult.product,
             pricePaid: capturedResult.price,
             purchaseTimestamp: Date.now(),
+            imageUrl: capturedResult.imageUrl, // Save generated image
         });
 
         if (success) {
@@ -102,6 +118,7 @@ export function ShopHunterGame() {
     
     const handleBackToSelection = () => {
         setSelectedProduct(null);
+        setGeneratedImageUrl('');
     }
 
     if (isLoadingProducts) {
@@ -143,14 +160,16 @@ export function ShopHunterGame() {
                 </div>
                  <div className="h-48 bg-secondary/50 rounded-xl overflow-hidden relative shadow-inner flex flex-col items-center justify-center p-4 gap-2">
                      <div className="w-full h-24 relative">
-                        <Image src={selectedProduct.imageUrl} alt={selectedProduct.name} fill className="object-contain" data-ai-hint={selectedProduct.dataAiHint}/>
+                        {isGeneratingImage ? <Skeleton className="w-full h-full" /> : (
+                            <Image src={generatedImageUrl} alt={selectedProduct.name} fill className="object-contain" data-ai-hint={selectedProduct.dataAiHint}/>
+                        )}
                      </div>
                     <p className="text-2xl font-black text-foreground text-center">{selectedProduct.name}</p>
                     <p className="text-sm text-muted-foreground font-semibold">Market Price: ${selectedProduct.marketPrice.toFixed(2)}</p>
                 </div>
 
                  <div>
-                    <Button size="lg" className="w-full h-14 text-lg" onClick={handleTakeShot} disabled={isHunting}>
+                    <Button size="lg" className="w-full h-14 text-lg" onClick={handleTakeShot} disabled={isHunting || isGeneratingImage}>
                         {isHunting ? <Loader className="animate-spin" /> : <><Target className="mr-2 h-6 w-6"/>Take the Shot (1)</>}
                     </Button>
                 </div>
@@ -168,7 +187,7 @@ export function ShopHunterGame() {
                     
                     <div className="relative h-64 w-full my-4 rounded-lg overflow-hidden shadow-lg bg-secondary flex flex-col items-center justify-center p-4 gap-4">
                         <div className="w-full h-24 relative">
-                            <Image src={capturedResult?.product.imageUrl || ''} alt={capturedResult?.product.name || ''} fill className="object-contain" data-ai-hint={capturedResult?.product.dataAiHint}/>
+                            <Image src={capturedResult?.imageUrl || ''} alt={capturedResult?.product.name || ''} fill className="object-contain" data-ai-hint={capturedResult?.product.dataAiHint}/>
                         </div>
                         <p className="text-2xl font-bold">{capturedResult?.product.name}</p>
                         <p className="text-lg text-muted-foreground">for</p>
