@@ -8,12 +8,13 @@ export default function Home() {
   
   return (
     <>
-      <div className="w-full flex items-center justify-center min-h-[calc(100vh-4rem)] bg-background bg-[radial-gradient(hsl(var(--muted-foreground)/0.1)_1px,transparent_1px)] [background-size:16px_16px]">
+      <div className="w-full flex items-center justify-center min-h-[calc(100vh-4rem)] bg-background">
           <LuckSession />
       </div>
-      <div className="py-12">
+      <div className="py-12 bg-background">
         <FeaturedContent />
       </div>
     </>
   );
 }
+
