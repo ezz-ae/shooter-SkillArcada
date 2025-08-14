@@ -119,22 +119,9 @@ export function HitOrMissGame() {
         {/* Product Reel */}
         <div className="h-64 bg-secondary/50 rounded-xl overflow-hidden relative shadow-inner flex items-center justify-center p-4">
             <div className="text-center transition-opacity duration-300">
-                <div className="relative w-40 h-40 mx-auto">
-                    {product?.imageUrl ? (
-                        <Image 
-                            src={product.imageUrl} 
-                            alt={product.name} 
-                            fill
-                            className="object-contain"
-                            data-ai-hint={product.dataAiHint}
-                            key={product.id} // Re-renders the image component on change
-                        />
-                    ) : (
-                        <Skeleton className="w-full h-full" />
-                    )}
-                </div>
-                <p className="font-bold text-xl mt-4 text-foreground truncate">{product?.name}</p>
-                <p className="text-sm text-muted-foreground">{product?.subtitle}</p>
+                <p className="font-black text-4xl lg:text-5xl text-center text-foreground p-4">
+                    {product?.name || <Skeleton className="h-12 w-64" />}
+                </p>
             </div>
         </div>
 
