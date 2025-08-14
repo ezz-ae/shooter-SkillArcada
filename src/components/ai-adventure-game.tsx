@@ -11,13 +11,15 @@ import { Skeleton } from './ui/skeleton';
 import { Sparkles, FileText } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useStore } from '@/lib/store';
+import { generateProductImage } from '@/ai/flows/generate-product-image-flow';
 
 interface AIAdventureGameProps {
     productName: string;
 }
 
 export function AIAdventureGame({ productName }: AIAdventureGameProps) {
-    const [adventure, setAdventure] = useState<StoryAdventureOutput | null>(null);
+    const [story, setStory] = useState('');
+    const [imageUrl, setImageUrl] = useState('');
     const [loading, setLoading] = useState(true);
     const [storyConclusion, setStoryConclusion] = useState("");
     const [submitted, setSubmitted] = useState(false);
@@ -28,8 +30,23 @@ export function AIAdventureGame({ productName }: AIAdventureGameProps) {
         async function getAdventure() {
             try {
                 setLoading(true);
-                const result = await generateStoryAdventure({ productName });
-                setAdventure(result);
+                const [storyResult, imageResult] = await Promise.all([
+                    generateStoryAdventure({ productName }),
+                    generateProductImage({ productName, dataAiHint: "fantasy adventure" })
+                ]);
+
+                if (storyResult.story) {
+                    setStory(storyResult.story);
+                } else {
+                     throw new Error('Failed to generate story.');
+                }
+
+                if (imageResult.imageUrl) {
+                    setImageUrl(imageResult.imageUrl);
+                } else {
+                    setImageUrl('https://placehold.co/600x400.png');
+                }
+
             } catch (error) {
                 console.error("Failed to generate adventure:", error);
                 toast({
@@ -37,6 +54,9 @@ export function AIAdventureGame({ productName }: AIAdventureGameProps) {
                     title: "Generation Failed",
                     description: "Could not generate the AI adventure. Please try refreshing the page."
                 });
+                // Set fallback values on error
+                setStory("A golden key lies on an ancient pedestal, humming with a faint magical energy. You reach out to touch it, and as your fingers make contact, the world around you dissolves into a swirl of colors. What secrets will it unlock?");
+                setImageUrl('https://placehold.co/600x400.png');
             } finally {
                 setLoading(false);
             }
@@ -83,7 +103,7 @@ export function AIAdventureGame({ productName }: AIAdventureGameProps) {
         );
     }
 
-    if (!adventure) {
+    if (!story || !imageUrl) {
         return (
              <Card className="w-full max-w-2xl mx-auto text-center">
                 <CardHeader>
@@ -110,7 +130,7 @@ export function AIAdventureGame({ productName }: AIAdventureGameProps) {
             <CardContent className="space-y-4">
                 <div className="relative h-80 w-full overflow-hidden rounded-lg border shadow-inner">
                     <Image
-                        src={adventure.imageUrl}
+                        src={imageUrl}
                         alt="AI-generated adventure scene"
                         fill
                         className="object-cover"
@@ -118,7 +138,7 @@ export function AIAdventureGame({ productName }: AIAdventureGameProps) {
                     />
                 </div>
                 <blockquote className="border-l-4 border-accent pl-4 italic text-muted-foreground">
-                    {adventure.story}
+                    {story}
                 </blockquote>
                 
                 {submitted ? (

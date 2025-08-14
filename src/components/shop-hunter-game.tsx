@@ -21,8 +21,8 @@ import { Target, Gem, DollarSign, Loader, Check, X } from "lucide-react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { algorithmicPricing } from "@/ai/flows/algorithmic-pricing-flow";
-import { ai } from "@/ai/genkit";
 import { Skeleton } from "./ui/skeleton";
+import { generateProductImage } from "@/ai/flows/generate-product-image-flow";
 
 export function ShopHunterGame() {
     const [products, setProducts] = useState<Product[]>([]);
@@ -60,22 +60,15 @@ export function ShopHunterGame() {
         setGeneratedImageUrl('');
         setIsGeneratingImage(true);
         try {
-             const imagePrompt = `A dramatic, high-quality, professional product photograph of a ${product.name}. The item should be the hero of the shot, centered on a clean, modern, studio-lit background. The lighting should be dramatic and highlight the product's features. Keywords: ${product.dataAiHint}.`;
-
-            const imageGeneration = await ai.generate({
-                model: 'googleai/gemini-2.0-flash-preview-image-generation',
-                prompt: imagePrompt,
-                config: {
-                    responseModalities: ['TEXT', 'IMAGE'],
-                },
+            const result = await generateProductImage({
+                productName: product.name,
+                dataAiHint: product.dataAiHint,
             });
 
-            const imageUrl = imageGeneration.media.url;
-
-            if (!imageUrl) {
+            if (!result.imageUrl) {
               throw new Error("Image generation failed to return a URL.");
             }
-            setGeneratedImageUrl(imageUrl);
+            setGeneratedImageUrl(result.imageUrl);
         } catch (error) {
             console.error("Failed to generate image:", error);
             setGeneratedImageUrl(product.imageUrl); // fallback to placeholder
