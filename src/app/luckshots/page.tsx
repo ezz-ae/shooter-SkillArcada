@@ -6,7 +6,7 @@ import { Product, getProducts } from "@/lib/products";
 import { useEffect, useState } from "react";
 import { BrainCircuit, Target } from "lucide-react";
 
-export default function ShooterGunPage() {
+export default function LuckshotsPage() {
   const [shooterGunProducts, setShooterGunProducts] = useState<Product[]>([]);
   const [brainshotProducts, setBrainshotProducts] = useState<Product[]>([]);
 
