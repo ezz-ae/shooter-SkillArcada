@@ -48,6 +48,9 @@ export function Header() {
                 <Link href="/luckshots">ShooterGuns</Link>
              </Button>
              <Button variant="ghost" asChild>
+                <Link href="/hit-or-miss">Hit or Miss</Link>
+             </Button>
+             <Button variant="ghost" asChild>
                 <Link href="/shooter-man">ShooterMan</Link>
              </Button>
              <Button variant="ghost" asChild>
