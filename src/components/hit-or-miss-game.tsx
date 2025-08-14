@@ -144,7 +144,7 @@ export function HitOrMissGame() {
         <div>
           <Button size="lg" className="w-full h-14 text-lg" onClick={handleTakeShot} disabled={!isSpinning}>
             <Target className="mr-2 h-6 w-6"/>
-            {isSpinning ? 'Take the Shot (1 Shot)' : 'Spinning...'}
+            {isSpinning ? 'Take the Shot' : 'Spinning...'}
           </Button>
         </div>
       </div>

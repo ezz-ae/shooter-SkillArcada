@@ -533,7 +533,7 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
                 <Calculator value={calculatorValue} onValueChange={setCalculatorValue} />
                  {isCorrectAnswer ? (
                      <Button onClick={handleRiddleShot} className="w-full h-12 text-lg font-bold">
-                        Take the Shot for {gameAnswer} Shots!
+                        Shot for {gameAnswer}
                     </Button>
                  ) : (
                     <Button onClick={handleRiddleStart} className="w-full h-12 text-lg font-bold">Start Challenge</Button>
@@ -549,7 +549,7 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
                 <DrawPad onPatternComplete={setDrawPadValue} />
                 {isCorrectAnswer ? (
                     <Button onClick={handleDrawPasscodeShot} className="w-full h-12 text-lg font-bold">
-                        Take the Shot for {DRAW_PASSCODE_PRICE} Shots!
+                        Shot for {DRAW_PASSCODE_PRICE}
                     </Button>
                 ) : (
                     <Button onClick={handleDrawPasscodeStart} className="w-full h-12 text-lg font-bold">Start Challenge</Button>
@@ -561,12 +561,12 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
     // Default shot button
     return (
         <button
-          className="w-full h-16 text-md font-bold text-primary-foreground rounded-md relative overflow-hidden bg-secondary flex items-center justify-center"
+          className="w-full h-16 text-md font-bold text-primary-foreground rounded-md relative overflow-hidden bg-secondary flex items-center justify-center group"
           onClick={handleShot}
         >
-          <div className="absolute inset-0 moving-gradient"></div>
+          <div className="absolute inset-0 moving-gradient opacity-80 group-hover:opacity-100 transition-opacity"></div>
           <div className="relative flex items-baseline w-full justify-center">
-               <span className={cn("font-black", product.game === 'multi-shot' ? "text-2xl" : "text-lg")}>
+               <span className={cn("font-black", product.game === 'multi-shot' ? "text-2xl" : "text-3xl")}>
                 {product.game === 'multi-shot' ? 'x3 Shot' : 'Shot'}
                </span>
           </div>
