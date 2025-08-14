@@ -70,6 +70,7 @@ export default function SigaPage() {
     const winningMove = { from: [1, 2], to: [0, 2] };
 
     const handleSelect = (pos: [number, number]) => {
+        if (isWon) return;
         if (board[pos[0]][pos[1]] === 'p2') { // Player 2's pieces
             setSelectedPiece(pos);
         } else {
@@ -78,6 +79,7 @@ export default function SigaPage() {
     }
     
     const handleMove = (from: [number, number], to: [number, number]) => {
+        if (isWon) return;
         if (from[0] === winningMove.from[0] && from[1] === winningMove.from[1] &&
             to[0] === winningMove.to[0] && to[1] === winningMove.to[1]) {
             

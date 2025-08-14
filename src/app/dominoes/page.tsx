@@ -19,7 +19,7 @@ const DominoPiece = ({ top, bottom, rotation = 0, isSelectable, onClick, isSelec
                 isSelectable && "cursor-pointer hover:border-primary hover:scale-105",
                 isSelected && "border-primary ring-2 ring-primary",
                 isPlaced && "absolute transition-all duration-500",
-                isCorrect && "animate-flash-green border-green-500"
+                isCorrect && "animate-pulse border-green-500"
             )}
             style={{ transform: `rotate(${rotation}deg)` }}
             onClick={onClick}
@@ -103,7 +103,11 @@ export default function DominoesPage() {
                     )}
                     style={{ position: 'absolute', left: '58%', top: '50%', transform: 'translate(-50%, -50%)' }}
                 >
-                    {isWon && <DominoPiece top={5} bottom={4} rotation={90} isCorrect />}
+                    {isWon ? (
+                        <DominoPiece top={4} bottom={5} rotation={90} isCorrect />
+                    ) : (
+                        <span>Place Here</span>
+                    )}
                 </div>
 
                 <DominoPiece top={5} bottom={1} rotation={90} isPlaced style={{ left: '71%', top: '50%', transform: 'translate(-50%, -50%) rotate(90deg)' }} />

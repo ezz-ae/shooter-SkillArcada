@@ -130,6 +130,7 @@ export function ShooterMirror() {
         description: `You won 10 Shots and the ${mirrorProduct?.name}!`,
       });
     } else {
+      setIsGameWon(false);
       toast({
         variant: "destructive",
         title: "Not quite a mirror image.",
@@ -189,7 +190,7 @@ export function ShooterMirror() {
               Play for 1 Shot <ArrowRight className="ml-2" />
             </Button>
           ) : (
-            <Button size="lg" onClick={handleSubmit} disabled={isRevealing}>
+            <Button size="lg" onClick={handleSubmit} disabled={isRevealing || playerPattern.length !== PATTERN_LENGTH}>
                 {isRevealing ? "Memorize..." : "Submit Reflection"}
             </Button>
           )}

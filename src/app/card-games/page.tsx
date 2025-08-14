@@ -50,41 +50,43 @@ export default function CardGamesPage() {
     const currentCard = puzzleSequence[currentStep][0];
 
     const handleGuess = (guess: 'higher' | 'lower') => {
-        if (feedback) return; // Don't allow guesses while feedback is showing
+        if (feedback || isWon) return; // Don't allow guesses while feedback is showing or game is won
 
         const correctGuess = puzzleSequence[currentStep][1];
         
         setIsFlipped(true);
 
-        if (guess === correctGuess) {
-            setFeedback('correct');
-            setTimeout(() => {
-                if (currentStep === puzzleSequence.length - 1) {
-                    setIsWon(true);
-                    addShots(20);
-                     toast({
-                        title: "Royal Flush of Wit!",
-                        description: "You've solved the puzzle! 20 Shots awarded.",
-                    });
-                } else {
-                    setCurrentStep(prev => prev + 1);
+        setTimeout(() => {
+            if (guess === correctGuess) {
+                setFeedback('correct');
+                setTimeout(() => {
+                    if (currentStep === puzzleSequence.length - 1) {
+                        setIsWon(true);
+                        addShots(20);
+                         toast({
+                            title: "Royal Flush of Wit!",
+                            description: "You've solved the puzzle! 20 Shots awarded.",
+                        });
+                    } else {
+                        setCurrentStep(prev => prev + 1);
+                        setIsFlipped(false);
+                    }
+                    setFeedback(null);
+                }, 1500);
+            } else {
+                setFeedback('incorrect');
+                 toast({
+                    variant: "destructive",
+                    title: "Wrong Guess!",
+                    description: "The sequence has been reset.",
+                });
+                setTimeout(() => {
+                    setCurrentStep(0);
                     setIsFlipped(false);
-                }
-                setFeedback(null);
-            }, 1500);
-        } else {
-            setFeedback('incorrect');
-             toast({
-                variant: "destructive",
-                title: "Wrong Guess!",
-                description: "The sequence has been reset.",
-            });
-            setTimeout(() => {
-                setCurrentStep(0);
-                setIsFlipped(false);
-                setFeedback(null);
-            }, 1500);
-        }
+                    setFeedback(null);
+                }, 1500);
+            }
+        }, 500);
     };
 
   return (

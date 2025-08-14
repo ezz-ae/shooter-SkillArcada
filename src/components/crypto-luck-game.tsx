@@ -98,23 +98,7 @@ export function CryptoLuckGame() {
     if (timerInterval.current) clearInterval(timerInterval.current);
   }
 
-  useEffect(() => {
-    if (gameState === 'playing') {
-      priceInterval.current = setInterval(() => {
-        setCurrentPrice(prevPrice => {
-            const newPrice = getNewPrice(prevPrice);
-            setPriceHistory(prevHistory => [...prevHistory.slice(1), { time: prevHistory[prevHistory.length - 1].time + 1, price: newPrice }]);
-            return newPrice;
-        });
-      }, 1000 + Math.random() * 500);
-    }
-    return () => { if (priceInterval.current) clearInterval(priceInterval.current); }
-  }, [gameState, getNewPrice]);
-
-  useEffect(() => {
-    if (gameState === 'playing' && timer > 0) {
-      timerInterval.current = setInterval(() => setTimer(prev => prev - 1), 1000);
-    } else if (timer <= 0 && gameState === 'playing') {
+  const endGame = useCallback(() => {
       stopIntervals();
       setGameState('finished');
       
@@ -152,9 +136,29 @@ export function CryptoLuckGame() {
          toast({ variant: "destructive", title: "Not Close Enough", description: "You had the right direction, but your price was off." });
       }
        setGameResult(result);
+  }, [addShots, toast, currentPrice, marketPrice, directionGuess, guessedPrice, isGuessLocked]);
+
+  useEffect(() => {
+    if (gameState === 'playing') {
+      priceInterval.current = setInterval(() => {
+        setCurrentPrice(prevPrice => {
+            const newPrice = getNewPrice(prevPrice);
+            setPriceHistory(prevHistory => [...prevHistory.slice(1), { time: prevHistory[prevHistory.length - 1].time + 1, price: newPrice }]);
+            return newPrice;
+        });
+      }, 1000 + Math.random() * 500);
+    }
+    return () => { if (priceInterval.current) clearInterval(priceInterval.current); }
+  }, [gameState, getNewPrice]);
+
+  useEffect(() => {
+    if (gameState === 'playing' && timer > 0) {
+      timerInterval.current = setInterval(() => setTimer(prev => prev - 1), 1000);
+    } else if (timer <= 0 && gameState === 'playing') {
+      endGame();
     }
     return () => { if (timerInterval.current) clearInterval(timerInterval.current); }
-  }, [gameState, timer, currentPrice, marketPrice, addShots, toast, isGuessLocked, guessedPrice, directionGuess]);
+  }, [gameState, timer, endGame]);
   
   const handleStartGame = () => {
     if (shots < 1) {
@@ -285,5 +289,3 @@ export function CryptoLuckGame() {
     </Card>
   );
 }
-
-    
