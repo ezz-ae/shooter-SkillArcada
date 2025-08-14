@@ -106,63 +106,77 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
   
   // Advanced pricing model state
   const priceState = useRef({
-      lastChangeTime: Date.now(),
-      timeInDiscountZone: 0,
-      currentTrend: 'stable', // 'stable', 'diving', 'climbing'
       isHovering: false,
       hoverStartTime: 0,
+      currentTrend: 'stable', // 'stable', 'diving', 'climbing'
+      trendSteps: 0, // How long the current trend will last
   }).current;
 
   const getNewPrice = useCallback((price: number, marketPrice: number) => {
     const now = Date.now();
+    let newPrice = price;
     const discount = (marketPrice - price) / marketPrice;
 
     // --- Trend Management ---
-
-    // Rule: Force price up if it stays in a deep discount zone for too long
-    if (discount > 0.5 && now - priceState.lastChangeTime > 1000) { // Over 50% discount for >1s
-        priceState.currentTrend = 'climbing';
-    } else if (discount > 0.4 && now - priceState.lastChangeTime > 2000) { // Over 40% discount for >2s
-        priceState.currentTrend = 'climbing';
-    }
-
-    // Rule: Chance to change trend when in the "safe" zone (low discount)
-    if (discount < 0.1 && priceState.currentTrend !== 'diving') { 
-        if (Math.random() < 0.1) { // 10% chance to start diving
-            // If user is hovering for too long, make it less likely to dive
-            const hoverDuration = priceState.isHovering ? now - priceState.hoverStartTime : 0;
-            if (hoverDuration < 5000) { // Only dive if hover is less than 5 seconds
-                 priceState.currentTrend = 'diving';
-            }
-        }
-    }
-
-    // --- Price Calculation based on Trend ---
-    let newPrice;
-    const majorVolatility = 0.3 + Math.random() * 0.4;
-    const minorVolatility = 0.05;
-
-    if (priceState.currentTrend === 'diving') {
-        newPrice = price * (1 - majorVolatility * Math.random());
-        // If discount gets big, or random chance, start climbing back up
-        if (discount > 0.6 || Math.random() < 0.2) { 
+    if (priceState.trendSteps <= 0) {
+        const random = Math.random();
+        if (random < 0.2) { // 20% chance to start diving
+            priceState.currentTrend = 'diving';
+            priceState.trendSteps = 5 + Math.floor(Math.random() * 10); // Dive for 5-15 steps
+        } else if (random < 0.4) { // 20% chance to start climbing
             priceState.currentTrend = 'climbing';
-        }
-    } else if (priceState.currentTrend === 'climbing') {
-        newPrice = price * (1 + majorVolatility * Math.random() * 0.5);
-         // Once it reaches the safe zone, stabilize
-         if (discount < 0.1) { 
+            priceState.trendSteps = 10 + Math.floor(Math.random() * 15); // Climb for 10-25 steps
+        } else {
             priceState.currentTrend = 'stable';
+            priceState.trendSteps = 3 + Math.floor(Math.random() * 7); // Stable for 3-10 steps
         }
-    } else { // 'stable' trend
-        const changePercent = (Math.random() - 0.5) * minorVolatility;
-        newPrice = price * (1 + changePercent);
+    } else {
+        priceState.trendSteps--;
     }
     
-    newPrice = Math.max(1, newPrice); // Floor price
-    newPrice = Math.min(newPrice, product.marketPrice * 1.1); // Ceiling price
+    // --- Player Interaction Logic (The "Emotion") ---
+    const hoverDuration = priceState.isHovering ? now - priceState.hoverStartTime : 0;
+    
+    // Tease: If player is hovering, slightly increase chance of a small dip
+    let hoverInfluence = 0;
+    if (hoverDuration > 500 && hoverDuration < 3000) { // Hovering for 0.5-3 seconds
+        hoverInfluence = -(Math.random() * 0.01); // Tease with a small dip
+    }
+    // Pull Back: If player hovers too long, pull the price up sharply
+    else if (hoverDuration >= 3000) {
+        priceState.currentTrend = 'climbing';
+        priceState.trendSteps = 5 + Math.floor(Math.random() * 5); // Force a climb
+        hoverInfluence = (Math.random() * 0.2); // Make it jump up
+    }
 
-    priceState.lastChangeTime = now;
+
+    // --- Price Calculation based on Trend ---
+    const majorVolatility = 0.15; // Max % change for big moves
+    const minorVolatility = 0.05; // Max % change for stable moves
+    let changePercent = 0;
+
+    switch(priceState.currentTrend) {
+        case 'diving':
+            changePercent = -(Math.random() * majorVolatility);
+            // If it gets too cheap, start climbing back
+            if (discount > 0.85) priceState.currentTrend = 'climbing';
+            break;
+        case 'climbing':
+            changePercent = (Math.random() * majorVolatility * 0.75); // Climb slightly slower than dive
+            // Once it's near market price, stabilize
+            if (discount < 0.05) priceState.currentTrend = 'stable';
+            break;
+        case 'stable':
+            changePercent = (Math.random() - 0.5) * minorVolatility;
+            break;
+    }
+    
+    newPrice = price * (1 + changePercent + hoverInfluence);
+
+    // Clamp price to reasonable bounds
+    newPrice = Math.max(1, newPrice); // Floor price
+    newPrice = Math.min(newPrice, product.marketPrice * 1.05); // Ceiling price
+
     return newPrice;
 
   }, [priceState, product.marketPrice]);
@@ -178,7 +192,7 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
           const newHistory = [...prev.slice(1), { time: prev[prev.length - 1].time + 1, price: newPrice }];
           return newHistory;
         });
-      }, 200 + Math.random() * 100);
+      }, 250 + Math.random() * 200);
 
       return () => {
           isMounted = false;
