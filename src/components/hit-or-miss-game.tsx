@@ -37,25 +37,28 @@ export function HitOrMissGame() {
   const [isSpinning, setIsSpinning] = useState(true);
   const [capturedResult, setCapturedResult] = useState<{ product: Product, price: number } | null>(null);
 
-  const requestRef = useRef<number>();
+  const animationTimeoutRef = useRef<NodeJS.Timeout>();
 
   const { spendShot, addToVault } = useStore();
   const { toast } = useToast();
 
   const animateReels = useCallback(() => {
+    // Update product and price
     setProductIndex(Math.floor(Math.random() * displayableProducts.length));
     setPrice(Math.floor(Math.random() * 1500) + 1);
     
-    requestRef.current = requestAnimationFrame(animateReels);
+    // Set a random delay for the next update to create a "stop and go" effect
+    const randomDelay = 100 + Math.random() * 400; // between 100ms and 500ms
+    animationTimeoutRef.current = setTimeout(animateReels, randomDelay);
   }, []);
 
   useEffect(() => {
     if (isSpinning) {
-      requestRef.current = requestAnimationFrame(animateReels);
+      animateReels();
     }
     return () => {
-      if (requestRef.current) {
-        cancelAnimationFrame(requestRef.current);
+      if (animationTimeoutRef.current) {
+        clearTimeout(animationTimeoutRef.current);
       }
     };
   }, [isSpinning, animateReels]);
@@ -73,8 +76,8 @@ export function HitOrMissGame() {
     }
 
     setIsSpinning(false);
-    if (requestRef.current) {
-      cancelAnimationFrame(requestRef.current);
+    if (animationTimeoutRef.current) {
+      clearTimeout(animationTimeoutRef.current);
     }
     setCapturedResult({ product: displayableProducts[productIndex], price });
   };
