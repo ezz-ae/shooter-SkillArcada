@@ -22,7 +22,7 @@ export function AIAdventureGame({ productName }: AIAdventureGameProps) {
     const [storyConclusion, setStoryConclusion] = useState("");
     const [submitted, setSubmitted] = useState(false);
     const { toast } = useToast();
-    const { addLuckshots } = useStore();
+    const { addShots } = useStore();
 
     useEffect(() => {
         async function getAdventure() {
@@ -54,7 +54,7 @@ export function AIAdventureGame({ productName }: AIAdventureGameProps) {
             return;
         }
         setSubmitted(true);
-        addLuckshots(25); // Reward for completing
+        addShots(25); // Reward for completing
         toast({
             title: "Adventure Complete!",
             description: "A fantastic conclusion! You've been awarded 25 Shots for your creativity."
