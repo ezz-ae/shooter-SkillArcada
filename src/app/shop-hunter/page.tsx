@@ -12,7 +12,7 @@ export default function ShopHunterPage() {
             <ShoppingCart className="text-primary"/> Shop Hunter
         </h1>
         <p className="mt-2 text-lg text-muted-foreground max-w-2xl mx-auto">
-          Choose your hunting ground. Watch the voucher values and prices change, then take your shot to capture the best deal on a gift card from your favorite store.
+          Choose your target product. Take a shot to let our AI generate a unique, one-time discount price just for you. Will you capture the deal?
         </p>
       </div>
 
