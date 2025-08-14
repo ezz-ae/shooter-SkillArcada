@@ -33,19 +33,19 @@
     --card-foreground: 210 40% 98%;
     --popover: 222 84% 5%;
     --popover-foreground: 210 40% 98%;
-    --primary: 262 88% 66%; /* Vibrant Purple */
+    --primary: 262 88% 76%; /* Lighter Vibrant Purple */
     --primary-foreground: 210 40% 98%;
     --secondary: 217 33% 17%;
     --secondary-foreground: 210 40% 98%;
     --muted: 217 33% 17%;
     --muted-foreground: 215 20% 65%;
-    --accent: 173 95% 50%; /* Bright Cyan */
+    --accent: 173 95% 60%; /* Lighter Bright Cyan */
     --accent-foreground: 222 84% 5%;
     --destructive: 0 63% 31%;
     --destructive-foreground: 210 40% 98%;
     --border: 217 33% 17%;
     --input: 217 33% 17%;
-    --ring: 262 88% 66%;
+    --ring: 262 88% 76%;
   }
 
   .pink-dark {
