@@ -2,10 +2,8 @@
 "use client";
 
 import { useEffect, useState, useRef, useCallback } from "react";
-import Image from "next/image";
 import { Product, mockProducts } from "@/lib/products";
 import { Button } from "./ui/button";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "./ui/card";
 import { useStore } from "@/lib/store";
 import { useToast } from "@/hooks/use-toast";
 import {
@@ -18,8 +16,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { cn } from "@/lib/utils";
-import { Gem, Target } from "lucide-react";
+import { Gem, Target, DollarSign } from "lucide-react";
 import { Skeleton } from "./ui/skeleton";
 
 const displayableProducts = mockProducts.filter(p => 
@@ -39,7 +36,7 @@ export function HitOrMissGame() {
 
   const animationTimeoutRef = useRef<NodeJS.Timeout>();
 
-  const { spendShot, addToVault } = useStore();
+  const { spendShot, addToVault, addShots } = useStore();
   const { toast } = useToast();
 
   const animateReels = useCallback(() => {
@@ -106,6 +103,17 @@ export function HitOrMissGame() {
     handleCloseDialog();
   };
 
+  const handleCashOut = () => {
+    if (!capturedResult) return;
+    const cashOutValue = capturedResult.price * 0.5; // 50% cash out value
+    addShots(cashOutValue);
+    toast({
+        title: "Cashed Out!",
+        description: `You received ${cashOutValue.toFixed(2)} Shots!`
+    });
+    handleCloseDialog();
+  }
+
   const handleCloseDialog = () => {
     setCapturedResult(null);
     setIsSpinning(true);
@@ -159,9 +167,13 @@ export function HitOrMissGame() {
                      You captured <span className="font-bold text-foreground">{capturedResult?.product.name}</span> for <span className="font-bold text-foreground">${capturedResult?.price.toFixed(2)}</span>!
                 </AlertDialogDescription>
                 
-                <AlertDialogFooter className="gap-2 sm:gap-0 sm:flex-row sm:justify-center">
-                    <AlertDialogCancel onClick={handleCloseDialog}>Try Again</AlertDialogCancel>
-                    <AlertDialogAction onClick={handleVault}>Vault It!</AlertDialogAction>
+                <AlertDialogFooter className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                    <AlertDialogCancel onClick={handleCloseDialog} className="w-full">Try Again</AlertDialogCancel>
+                     <Button onClick={handleCashOut} variant="outline" className="w-full">
+                        <DollarSign className="mr-2 h-4 w-4"/>
+                        Cash Out ({(capturedResult?.price ?? 0 * 0.5).toFixed(2)} Shots)
+                    </Button>
+                    <AlertDialogAction onClick={handleVault} className="w-full">Vault It!</AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>
       </AlertDialog>
