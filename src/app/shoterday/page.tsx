@@ -35,12 +35,12 @@ export default function ShoterdayPage() {
                 <CardTitle className="text-2xl font-bold text-center">A Message from the Gamegang President</CardTitle>
             </CardHeader>
             <CardContent className="text-center text-lg text-muted-foreground max-w-3xl mx-auto space-y-4">
-                 <p>
+                 <div>
                     Hey, Shooter here. I give you shots in the games so you can win. On Shoterday, I give you a different kind of shot—a shot of inspiration. My grandma used to say, "a sharp mind is the strongest muscle."
-                </p>
-                <p>
+                </div>
+                <div>
                     I made this place to share the things that build my strength. I hope they make you smile. If they do, I want you to have a <strong className="text-accent">redeemable 10 Shot reward</strong>. That's a shot from me to you.
-                </p>
+                </div>
                 <div className="flex justify-center">
                     <Button onClick={handleClaimSmile}>
                         <Smile className="mr-2 h-4 w-4" />
@@ -64,7 +64,7 @@ export default function ShoterdayPage() {
                 </CardContent>
             </Card>
              <Card className="flex flex-col items-center justify-center text-center p-8">
-                <CardHeader>
+                 <CardHeader>
                     <ShoppingBag className="h-16 w-16 mx-auto text-accent"/>
                     <CardTitle className="mt-4">The Shooterday Store</CardTitle>
                     <CardDescription>
