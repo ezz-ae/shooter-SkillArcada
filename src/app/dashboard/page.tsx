@@ -4,7 +4,7 @@
 import { ActivityFeed } from "@/components/activity-feed";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { User, getUsers } from "@/lib/user";
-import { History, Flame, Trophy, Package, BarChart } from "lucide-react";
+import { History, Flame, Trophy, Package, BarChart, User as UserIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { LuckiestUsers } from "@/components/luckiest-users";
 import { TopGames } from "@/components/top-games";
@@ -36,7 +36,7 @@ export default function DashboardPage() {
        />
 
        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 my-8">
-          <StatCard title="Total Users" value={users.length} icon={User} />
+          <StatCard title="Total Users" value={users.length} icon={UserIcon} />
           <StatCard title="Total Items in Vaults" value={totalItemsInVaults} icon={Package} />
           <StatCard title="Total Wins (Mock)" value="1,203" icon={Trophy} />
           <StatCard title="Shots Spent (24h)" value="4,530" icon={Flame} />
