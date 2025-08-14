@@ -13,6 +13,7 @@ import {z} from 'genkit';
 
 const StoryAdventureInputSchema = z.object({
   productName: z.string().describe('The name of the item the user is trying to win.'),
+  prompt: z.string().optional().describe('An optional custom prompt for image generation.'),
 });
 export type StoryAdventureInput = z.infer<typeof StoryAdventureInputSchema>;
 
@@ -47,9 +48,11 @@ const storyAdventureFlow = ai.defineFlow(
       throw new Error('Failed to generate story.');
     }
 
+    const imagePrompt = input.prompt || `A dramatic, high-quality, professional product photograph of a ${input.productName}. The item should be the hero of the shot, centered on a clean, modern, studio-lit background. The lighting should be dramatic and highlight the product's features.`;
+
     const imageGeneration = await ai.generate({
         model: 'googleai/gemini-2.0-flash-preview-image-generation',
-        prompt: `A dramatic, high-quality, professional product photograph of a ${input.productName}. The item should be the hero of the shot, centered on a clean, modern, studio-lit background. The lighting should be dramatic and highlight the product's features.`,
+        prompt: imagePrompt,
         config: {
             responseModalities: ['TEXT', 'IMAGE'],
         },
