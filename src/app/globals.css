@@ -47,9 +47,7 @@
     --input: 12 6.5% 15.1%;
     --ring: 240 5.9% 10%;
   }
-}
 
-@layer base {
   body {
     @apply bg-background text-foreground;
   }
