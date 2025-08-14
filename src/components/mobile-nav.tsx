@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState } from "react"
@@ -12,6 +13,8 @@ import {
   SheetContent,
   SheetTrigger,
   SheetTitle,
+  SheetHeader,
+  SheetDescription,
 } from "@/components/ui/sheet"
 
 export function MobileNav() {
@@ -44,10 +47,13 @@ export function MobileNav() {
         </Button>
       </SheetTrigger>
       <SheetContent side="left" className="pr-0">
-        <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
-        <Link href="/" className="flex items-center">
-            <span className="font-allura text-4xl text-foreground">ShooterGun</span>
-        </Link>
+        <SheetHeader>
+          <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
+          <SheetDescription className="sr-only">A list of pages on the ShooterGun site.</SheetDescription>
+          <Link href="/" className="flex items-center" onClick={() => setOpen(false)}>
+              <span className="font-allura text-4xl text-foreground">ShooterGun</span>
+          </Link>
+        </SheetHeader>
         <ScrollArea className="my-4 h-[calc(100vh-8rem)] pb-10 pl-6">
           <div className="flex flex-col space-y-3">
              {gameLinks.map(link => (

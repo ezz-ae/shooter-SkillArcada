@@ -67,7 +67,6 @@
   }
 }
 
-/* Custom styles for the app */
 @layer components {
     .shimmer-text {
         -webkit-background-clip: text;
