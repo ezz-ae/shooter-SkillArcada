@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -69,7 +70,7 @@ export default function ShoterdayPage() {
                     <CardDescription>
                         Wear what you read. Exclusive merch inspired by the books that build us. Coming soon.
                     </CardDescription>
-                </Header>
+                </CardHeader>
                 <CardContent>
                     <Button variant="outline" disabled>Shop Merch</Button>
                 </CardContent>
