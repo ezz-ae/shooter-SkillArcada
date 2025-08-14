@@ -5,25 +5,25 @@
 
 @layer base {
   :root {
-    --background: 0 0% 94%; /* Light Gray #F0F0F0 */
-    --foreground: 224 71.4% 4.1%;
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
-    --card-foreground: 224 71.4% 4.1%;
+    --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
-    --popover-foreground: 224 71.4% 4.1%;
-    --primary: 180 100% 25%; /* Teal #008080 */
-    --primary-foreground: 180 100% 98%;
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --accent: 39 100% 50%; /* Orange #FFA500 */
-    --accent-foreground: 39 100% 10%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 180 100% 25%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 39 100% 50%;
+    --accent-foreground: 222.2 47.4% 11.2%;
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 180 100% 25%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
     --radius: 0.5rem;
     --chart-1: 180 80% 55%;
     --chart-2: 160 60% 45%;
@@ -33,25 +33,25 @@
   }
 
   .dark {
-    --background: 220 13% 10%; /* Dark background */
-    --foreground: 210 20% 98%;
-    --card: 220 13% 15%;
-    --card-foreground: 210 20% 98%;
-    --popover: 220 13% 10%;
-    --popover-foreground: 210 20% 98%;
-    --primary: 180 100% 35%; /* Teal */
-    --primary-foreground: 180 100% 98%;
-    --secondary: 220 13% 20%;
-    --secondary-foreground: 210 20% 98%;
-    --muted: 220 13% 20%;
-    --muted-foreground: 217.9 10.6% 64.9%;
-    --accent: 39 100% 50%; /* Orange */
-    --accent-foreground: 39 100% 10%;
+    --background: 224 13% 10%;
+    --foreground: 210 40% 98%;
+    --card: 224 13% 15%;
+    --card-foreground: 210 40% 98%;
+    --popover: 224 13% 10%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 180 100% 35%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 39 100% 50%;
+    --accent-foreground: 210 40% 98%;
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 20% 98%;
-    --border: 220 13% 25%;
-    --input: 220 13% 25%;
-    --ring: 180 100% 35%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 22.5%;
+    --input: 217.2 32.6% 22.5%;
+    --ring: 180 100% 40%;
     --chart-1: 180 80% 55%;
     --chart-2: 160 60% 45%;
     --chart-3: 38 80% 55%;
@@ -61,11 +61,50 @@
 }
 
 @layer base {
-  * {
-    border-color: hsl(var(--border));
-  }
   body {
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));
   }
+}
+
+/* Custom styles for the app */
+@layer components {
+    .shimmer-text {
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-fill-color: transparent;
+        background-image: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)), hsl(var(--primary)));
+        background-size: 200% auto;
+        animation: shimmer 5s linear infinite;
+    }
+    .moving-gradient {
+        background-size: 200% 200%;
+        background-image: linear-gradient(45deg, hsl(var(--primary) / 0.8), hsl(var(--accent) / 0.8), hsl(var(--primary) / 0.8));
+        animation: gradient-animation 5s ease infinite;
+    }
+    .multi-shot-card {
+        border-image-slice: 1;
+        border-image-source: linear-gradient(to right bottom, hsl(var(--primary)), hsl(var(--accent)));
+    }
+}
+@keyframes shimmer {
+  to {
+    background-position: 200% center;
+  }
+}
+@keyframes gradient-animation {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+@keyframes flash-green {
+  0%, 100% { border-color: hsl(var(--border)); }
+  50% { border-color: hsl(140, 80%, 60%); }
+}
+.animate-flash-green {
+    animation: flash-green 1s ease-in-out;
+}
+.perspective-1000 {
+    perspective: 1000px;
 }
