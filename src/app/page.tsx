@@ -1,3 +1,4 @@
+
 "use client";
 
 import { FeaturedContent } from "@/components/featured-content";
