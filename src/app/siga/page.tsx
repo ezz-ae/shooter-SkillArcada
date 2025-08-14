@@ -96,7 +96,7 @@ export default function SigaPage() {
                 description: "You've captured and won the puzzle! 25 Shots awarded.",
             })
         } else {
-            toast({ variant: "destructive", title: "Not the winning move!", description: "There's a better move on the board." });
+            toast({ variant: "destructive", title: "Close!", description: "There's a better move on the board. You can do it!" });
         }
         setSelectedPiece(null);
     }

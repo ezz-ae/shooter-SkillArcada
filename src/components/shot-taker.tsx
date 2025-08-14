@@ -110,6 +110,7 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
       hoverStartTime: 0,
       currentTrend: 'stable', // 'stable', 'diving', 'climbing'
       trendSteps: 0, // How long the current trend will last
+      pulledBack: false, // Did the price just pull back from a long hover?
   }).current;
 
   const getNewPrice = useCallback((price: number, marketPrice: number) => {
@@ -118,9 +119,14 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
     const discount = (marketPrice - price) / marketPrice;
 
     // --- Trend Management ---
-    if (priceState.trendSteps <= 0) {
+    if (priceState.trendSteps <= 0 || priceState.pulledBack) {
+        priceState.pulledBack = false;
         const random = Math.random();
-        if (random < 0.2) { // 20% chance to start diving
+        // After a pull back, offer a small rebound dip to keep player engaged
+        if (priceState.pulledBack && random < 0.7) { 
+            priceState.currentTrend = 'diving';
+            priceState.trendSteps = 1 + Math.floor(Math.random() * 3); // Short dive
+        } else if (random < 0.2) { // 20% chance to start diving
             priceState.currentTrend = 'diving';
             priceState.trendSteps = 5 + Math.floor(Math.random() * 10); // Dive for 5-15 steps
         } else if (random < 0.4) { // 20% chance to start climbing
@@ -147,6 +153,7 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
         priceState.currentTrend = 'climbing';
         priceState.trendSteps = 5 + Math.floor(Math.random() * 5); // Force a climb
         hoverInfluence = (Math.random() * 0.2); // Make it jump up
+        priceState.pulledBack = true;
     }
 
 
@@ -159,7 +166,7 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
         case 'diving':
             changePercent = -(Math.random() * majorVolatility);
             // If it gets too cheap, start climbing back
-            if (discount > 0.85) priceState.currentTrend = 'climbing';
+            if (discount > 0.95) priceState.currentTrend = 'climbing';
             break;
         case 'climbing':
             changePercent = (Math.random() * majorVolatility * 0.75); // Climb slightly slower than dive
@@ -523,7 +530,6 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
                                 "h-10 border rounded-md flex items-center justify-center text-2xl font-mono transition-all",
                                 isReelPaused ? "cursor-pointer" : "cursor-default",
                                 isReelPaused && selectedReelIndices.includes(index) && "bg-primary text-primary-foreground",
-                                isReelPaused && !selectedReelIndices.includes(index) && "blur-sm",
                                 !isReelPaused && "blur-sm opacity-50"
                             )}
                         >{num}</button>

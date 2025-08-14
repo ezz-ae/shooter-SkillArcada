@@ -21,57 +21,22 @@ import { Target, Gift, DollarSign, Check, X } from "lucide-react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 
-const voucherProducts = mockProducts.filter(p => p.category === 'voucher');
-
-const AmazonLogo = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 30" className="w-full h-full object-contain">
-        <text x="5" y="20" fontFamily="Arial, sans-serif" fontSize="16" fontWeight="bold" fill="currentColor">amazon</text>
-        <path d="M20,22 Q50,32 80,22" stroke="hsl(var(--accent))" strokeWidth="2" fill="none" />
-    </svg>
+const displayableProducts = mockProducts.filter(p => 
+    p.category !== 'luckgirls' &&
+    !p.game?.includes('riddle') &&
+    !p.game?.includes('chess') &&
+    !p.game?.includes('maze') &&
+    !p.game?.includes('mirror') &&
+    p.id !== 'prod_console_01'
 );
 
-const WalmartLogo = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 30" className="w-full h-full object-contain">
-        <text x="5" y="20" fontFamily="Arial, sans-serif" fontSize="16" fontWeight="bold" fill="currentColor">Walmart</text>
-        <path d="M75 10 L 78 15 L 75 20 L 72 15 Z" fill="hsl(var(--accent))" />
-        <path d="M80 10 L 83 15 L 80 20 L 77 15 Z" fill="hsl(var(--accent))" />
-        <path d="M85 10 L 88 15 L 85 20 L 82 15 Z" fill="hsl(var(--accent))" />
-    </svg>
-);
-
-const NoonLogo = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 30" className="w-full h-full object-contain">
-        <circle cx="20" cy="15" r="8" fill="hsl(var(--accent))" />
-        <circle cx="35" cy="15" r="8" fill="hsl(var(--accent))" />
-        <text x="50" y="20" fontFamily="Arial, sans-serif" fontSize="16" fontWeight="bold" fill="currentColor">noon</text>
-    </svg>
-);
-
-const TargetLogo = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 30" className="w-full h-full object-contain">
-        <circle cx="15" cy="15" r="10" fill="hsl(var(--destructive))" />
-        <circle cx="15" cy="15" r="6" fill="white" />
-        <circle cx="15" cy="15" r="3" fill="hsl(var(--destructive))" />
-        <text x="30" y="20" fontFamily="Arial, sans-serif" fontSize="16" fontWeight="bold" fill="currentColor">TARGET</text>
-    </svg>
-);
-
-const stores = [
-    { name: "Amazon", LogoComponent: AmazonLogo },
-    { name: "Walmart", LogoComponent: WalmartLogo },
-    { name: "Noon", LogoComponent: NoonLogo },
-    { name: "Target", LogoComponent: TargetLogo },
-];
-
-const voucherValues = [10, 25, 50, 100, 200, 500];
 const shotPrices = [5, 10, 20, 40, 80, 200, 400];
 
 export function ShopHunterGame() {
-    const [selectedStore, setSelectedStore] = useState<(typeof stores)[0] | null>(null);
-    const [voucherValue, setVoucherValue] = useState(voucherValues[0]);
+    const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
     const [shotPrice, setShotPrice] = useState(shotPrices[0]);
     const [isSpinning, setIsSpinning] = useState(false);
-    const [capturedResult, setCapturedResult] = useState<{ store: (typeof stores)[0], value: number, price: number } | null>(null);
+    const [capturedResult, setCapturedResult] = useState<{ product: Product, price: number } | null>(null);
     
     const animationTimeoutRef = useRef<NodeJS.Timeout>();
 
@@ -79,7 +44,6 @@ export function ShopHunterGame() {
     const { toast } = useToast();
     
     const animateReels = useCallback(() => {
-        setVoucherValue(voucherValues[Math.floor(Math.random() * voucherValues.length)]);
         setShotPrice(shotPrices[Math.floor(Math.random() * shotPrices.length)]);
         
         const randomDelay = 100 + Math.random() * 400;
@@ -97,13 +61,13 @@ export function ShopHunterGame() {
         };
     }, [isSpinning, animateReels]);
 
-    const handleSelectStore = (store: (typeof stores)[0]) => {
-        setSelectedStore(store);
+    const handleSelectProduct = (product: Product) => {
+        setSelectedProduct(product);
         setIsSpinning(true);
     };
 
     const handleTakeShot = () => {
-        if (!isSpinning || !selectedStore) return;
+        if (!isSpinning || !selectedProduct) return;
 
         if (!spendShot(1)) {
             toast({ variant: "destructive", title: "Not enough Shots!", description: "You need 1 Shot to play." });
@@ -114,30 +78,22 @@ export function ShopHunterGame() {
         if (animationTimeoutRef.current) {
             clearTimeout(animationTimeoutRef.current);
         }
-        setCapturedResult({ store: selectedStore, value: voucherValue, price: shotPrice });
+        setCapturedResult({ product: selectedProduct, price: shotPrice });
     };
 
     const handleVault = () => {
         if (!capturedResult) return;
-        const product = voucherProducts.find(p => p.marketPrice === capturedResult.value);
-
-        if (!product) {
-            toast({ variant: "destructive", title: "Error", description: "Could not find a matching voucher product." });
-            handleCloseDialog();
-            return;
-        }
         
         const success = addToVault({
-            ...product,
-            name: `$${capturedResult.value} ${capturedResult.store.name} Voucher`,
+            ...capturedResult.product,
             pricePaid: capturedResult.price,
             purchaseTimestamp: Date.now(),
         });
 
         if (success) {
             toast({
-                title: "Voucher Vaulted!",
-                description: `Your voucher has been added to your vault for ${capturedResult.price.toFixed(2)} Shots.`,
+                title: "Item Vaulted!",
+                description: `Your item has been added to your vault for ${capturedResult.price.toFixed(2)} Shots.`,
             });
         } else {
             toast({ variant: "destructive", title: "Insufficient Shots", description: `You cannot afford this for ${capturedResult.price.toFixed(2)} Shots.` });
@@ -147,28 +103,29 @@ export function ShopHunterGame() {
 
     const handleCloseDialog = () => {
         setCapturedResult(null);
-        if (selectedStore) {
+        if (selectedProduct) {
             setIsSpinning(true);
         }
     };
     
     const handleBackToSelection = () => {
-        setSelectedStore(null);
+        setSelectedProduct(null);
         setIsSpinning(false);
     }
 
-    if (!selectedStore) {
+    if (!selectedProduct) {
         return (
-            <Card className="w-full max-w-2xl mx-auto p-4">
+            <Card className="w-full max-w-4xl mx-auto p-4">
                 <CardHeader>
                     <h2 className="text-2xl font-bold text-center">Choose Your Hunting Ground</h2>
                 </CardHeader>
-                <CardContent className="grid grid-cols-2 gap-4">
-                    {stores.map(store => (
-                        <button key={store.name} onClick={() => handleSelectStore(store)} className="p-4 bg-secondary rounded-lg flex flex-col items-center justify-center gap-4 hover:bg-secondary/80 transition-colors h-32">
-                           <div className="w-full h-12 relative text-foreground">
-                             <store.LogoComponent />
+                <CardContent className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    {displayableProducts.map(product => (
+                        <button key={product.id} onClick={() => handleSelectProduct(product)} className="p-4 bg-secondary rounded-lg flex flex-col items-center justify-center gap-2 hover:bg-secondary/80 transition-colors h-40">
+                           <div className="w-full h-16 relative">
+                             <Image src={product.imageUrl} alt={product.name} fill className="object-contain" data-ai-hint={product.dataAiHint}/>
                            </div>
+                           <p className="text-sm font-semibold text-center mt-2">{product.name}</p>
                         </button>
                     ))}
                 </CardContent>
@@ -180,11 +137,14 @@ export function ShopHunterGame() {
         <>
             <div className="w-full max-w-md mx-auto bg-card border-2 border-primary/10 rounded-2xl shadow-2xl p-6 space-y-6">
                 <div className="flex justify-between items-center">
-                    <h2 className="text-xl font-bold">Hunting at {selectedStore.name}</h2>
-                    <Button variant="link" onClick={handleBackToSelection}>Change</Button>
+                    <Button variant="link" onClick={handleBackToSelection}>&larr; Change Product</Button>
                 </div>
-                 <div className="h-24 bg-secondary/50 rounded-xl overflow-hidden relative shadow-inner flex items-center justify-center p-4">
-                    <p className="text-6xl font-black font-mono shimmer-text">${voucherValue.toFixed(2)}</p>
+                 <div className="h-40 bg-secondary/50 rounded-xl overflow-hidden relative shadow-inner flex flex-col items-center justify-center p-4">
+                     <div className="w-full h-20 relative">
+                        <Image src={selectedProduct.imageUrl} alt={selectedProduct.name} fill className="object-contain" data-ai-hint={selectedProduct.dataAiHint}/>
+                     </div>
+                    <p className="text-xl font-black font-mono text-foreground text-center mt-2">{selectedProduct.name}</p>
+                    <p className="text-sm text-muted-foreground font-semibold">Market Price: ${selectedProduct.marketPrice.toFixed(2)}</p>
                 </div>
                  <div className="h-24 w-full bg-secondary/50 rounded-xl overflow-hidden relative shadow-inner flex items-center justify-center">
                     <p className="text-4xl font-black font-mono text-foreground">${shotPrice.toFixed(2)}</p>
@@ -201,22 +161,22 @@ export function ShopHunterGame() {
             <AlertDialog open={!!capturedResult} onOpenChange={(open) => !open && handleCloseDialog()}>
                  <AlertDialogContent onEscapeKeyDown={handleCloseDialog}>
                     <AlertDialogHeader>
-                        <AlertDialogTitle className={cn("text-center", capturedResult && capturedResult.value > capturedResult.price ? "text-primary" : "text-destructive")}>
-                            {capturedResult && capturedResult.value > capturedResult.price ? "Nice Catch!" : "Bad Deal..."}
+                        <AlertDialogTitle className={cn("text-center", capturedResult && capturedResult.product.marketPrice > capturedResult.price ? "text-primary" : "text-destructive")}>
+                            {capturedResult && capturedResult.product.marketPrice > capturedResult.price ? "Nice Catch!" : "Bad Deal..."}
                         </AlertDialogTitle>
                     </AlertDialogHeader>
                     
                     <div className="relative h-64 w-full my-4 rounded-lg overflow-hidden shadow-lg bg-secondary flex flex-col items-center justify-center p-4 gap-4">
-                        <div className="w-full h-16 relative text-foreground">
-                            {capturedResult?.store.LogoComponent ? <capturedResult.store.LogoComponent /> : <p>{capturedResult?.store.name}</p>}
+                        <div className="w-full h-24 relative">
+                            <Image src={capturedResult?.product.imageUrl || ''} alt={capturedResult?.product.name || ''} fill className="object-contain" data-ai-hint={capturedResult?.product.dataAiHint}/>
                         </div>
-                        <p className="text-4xl font-black shimmer-text">${capturedResult?.value.toFixed(2)}</p>
+                        <p className="text-2xl font-bold">{capturedResult?.product.name}</p>
                         <p className="text-lg text-muted-foreground">for</p>
-                        <p className="text-2xl font-bold text-foreground">{capturedResult?.price.toFixed(2)} Shots</p>
+                        <p className="text-4xl font-black shimmer-text">{capturedResult?.price.toFixed(2)} Shots</p>
                     </div>
 
                     <AlertDialogDescription className="text-center">
-                        You captured a <span className="font-bold text-foreground">${capturedResult?.value.toFixed(2)} {capturedResult?.store.name} voucher</span> for <span className="font-bold text-foreground">{capturedResult?.price.toFixed(2)} Shots</span>.
+                        You captured the <span className="font-bold text-foreground">{capturedResult?.product.name}</span> for <span className="font-bold text-foreground">{capturedResult?.price.toFixed(2)} Shots</span>.
                     </AlertDialogDescription>
                     
                     <AlertDialogFooter className="grid grid-cols-1 sm:grid-cols-2 gap-2">

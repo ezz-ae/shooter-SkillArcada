@@ -58,8 +58,8 @@ export default function DominoesPage() {
         } else {
             toast({
                 variant: "destructive",
-                title: "Not that one!",
-                description: "That domino doesn't fit here. Try again.",
+                title: "Close!",
+                description: "That domino doesn't fit here, but you're thinking on the right track.",
             })
         }
     }

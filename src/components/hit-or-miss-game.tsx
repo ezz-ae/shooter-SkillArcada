@@ -33,6 +33,7 @@ export function HitOrMissGame() {
   const [price, setPrice] = useState(0);
   const [isSpinning, setIsSpinning] = useState(true);
   const [capturedResult, setCapturedResult] = useState<{ product: Product, price: number } | null>(null);
+  const wasBadDeal = useRef(false);
 
   const animationTimeoutRef = useRef<NodeJS.Timeout>();
 
@@ -42,7 +43,14 @@ export function HitOrMissGame() {
   const animateReels = useCallback(() => {
     // Update product and price
     setProductIndex(Math.floor(Math.random() * displayableProducts.length));
-    setPrice(Math.floor(Math.random() * 1500) + 1);
+
+    // "Near-miss" logic. If the last deal was bad, make the next few spins more tantalizing.
+    if (wasBadDeal.current) {
+        // Higher chance of a low price appearing
+        setPrice(Math.floor(Math.random() * 200) + 1); 
+    } else {
+        setPrice(Math.floor(Math.random() * 1500) + 1);
+    }
     
     // Set a random delay for the next update to create a "stop and go" effect
     const randomDelay = 100 + Math.random() * 400; // between 100ms and 500ms
@@ -82,6 +90,8 @@ export function HitOrMissGame() {
   const handleVault = () => {
     if (!capturedResult) return;
     
+    wasBadDeal.current = capturedResult.price > capturedResult.product.marketPrice * 0.8;
+
     const success = addToVault({
         ...capturedResult.product,
         pricePaid: capturedResult.price,
@@ -117,6 +127,8 @@ export function HitOrMissGame() {
   const handleCloseDialog = () => {
     setCapturedResult(null);
     setIsSpinning(true);
+    // After a bad deal, the flag is set. After one spin cycle, reset it.
+    setTimeout(() => { wasBadDeal.current = false; }, 2000);
   }
 
   const product = displayableProducts[productIndex];

@@ -26,6 +26,7 @@ interface GameResult {
     guessedPrice: number;
     actualDirection: 'up' | 'down' | 'stable';
     guessedDirection: DirectionGuess;
+    priceAccuracy: number;
 }
 
 interface PriceModel {
@@ -106,13 +107,13 @@ export function CryptoLuckGame() {
       const actualDirection = currentPrice > marketPrice ? 'up' : currentPrice < marketPrice ? 'down' : 'stable';
       const isDirectionCorrect = actualDirection === directionGuess;
       
-      let accuracy = 1;
+      let priceAccuracy = 100;
       if (numericalGuessedPrice > 0) {
         const priceDifference = Math.abs(currentPrice - numericalGuessedPrice);
-        accuracy = (priceDifference / currentPrice);
+        priceAccuracy = (priceDifference / currentPrice) * 100; // as a percentage
       }
 
-      const isAccuracyMet = accuracy <= 0.01; // Within 1%
+      const isAccuracyMet = priceAccuracy <= 1; // Within 1%
 
       const result: GameResult = {
           finalPrice: currentPrice,
@@ -121,6 +122,7 @@ export function CryptoLuckGame() {
           guessedDirection: directionGuess,
           isWinner: false,
           prize: 0,
+          priceAccuracy,
       }
 
       if (!isGuessLocked || !guessedPrice || !directionGuess) {
@@ -131,9 +133,9 @@ export function CryptoLuckGame() {
         result.prize = GRAND_PRIZE;
         toast({ title: "You Won!", description: `A perfect prediction! You've won ${GRAND_PRIZE} Shots!` });
       } else if (!isDirectionCorrect) {
-        toast({ variant: "destructive", title: "Wrong Direction!", description: "You had the price but missed the trend." });
+        toast({ variant: "destructive", title: "Wrong Direction!", description: `So close! Your price guess was only off by ${priceAccuracy.toFixed(1)}%!` });
       } else {
-         toast({ variant: "destructive", title: "Not Close Enough", description: "You had the right direction, but your price was off." });
+         toast({ variant: "destructive", title: "Right Direction, Wrong Price", description: `You had the right trend, but your price was off. Keep trying!` });
       }
        setGameResult(result);
   }, [addShots, toast, currentPrice, marketPrice, directionGuess, guessedPrice, isGuessLocked]);
@@ -214,7 +216,7 @@ export function CryptoLuckGame() {
             </div>
             <p className="text-muted-foreground">The final price was ${gameResult.finalPrice.toFixed(2)}. You guessed ${gameResult.guessedPrice.toFixed(2)}</p>
              <p className="text-sm text-muted-foreground">
-                Direction: You said <span className="font-bold">{gameResult.guessedDirection}</span>, it went <span className="font-bold">{gameResult.actualDirection}</span>.
+                Your price was off by <span className="font-bold">{gameResult.priceAccuracy.toFixed(1)}%</span>. You said <span className="font-bold">{gameResult.guessedDirection}</span>, it went <span className="font-bold">{gameResult.actualDirection}</span>.
             </p>
             <Button onClick={handleStartGame} size="lg" className="w-full">Play Again</Button>
         </div>
