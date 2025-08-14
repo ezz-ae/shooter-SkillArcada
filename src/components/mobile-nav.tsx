@@ -2,9 +2,8 @@
 "use client"
 
 import { useState } from "react"
-import Link, { LinkProps } from "next/link"
-import { useRouter } from "next/navigation"
-import { Menu, Swords, Dices, LineChart, Heart, Bot, Flame, BookOpen, BrainCircuit, Gamepad2, Sun, HelpingHand, User } from "lucide-react"
+import Link from "next/link"
+import { Menu, Swords, Dices, LineChart, Heart, Bot, Flame, BookOpen, BrainCircuit, Gamepad2, Sun, HelpingHand, User, Sparkles, Layers, Grid, RectangleHorizontal } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -13,13 +12,14 @@ import {
   Sheet,
   SheetContent,
   SheetTrigger,
+  SheetTitle,
 } from "@/components/ui/sheet"
 
 export function MobileNav() {
   const [open, setOpen] = useState(false)
 
   const gameLinks = [
-    { href: "/shoterday", label: "Shooterday", icon: Sun },
+    { href: "/shoterday", label: "Shoterday", icon: Sun },
     { href: "/luckshots", label: "ShooterGuns", icon: Dices },
     { href: "/luckgirls", label: "Luckgirls", icon: Heart },
     { href: "/crypto-luck", label: "Crypto Luck", icon: LineChart },
@@ -28,6 +28,9 @@ export function MobileNav() {
     { href: "/ai-adventure", label: "AI Adventure", icon: Bot },
     { href: "/shots-hub", label: "Shots Hub", icon: Flame },
     { href: "/learning-center", label: "How to Earn", icon: BookOpen },
+    { href: "/chess", label: "Chess", icon: BrainCircuit },
+    { href: "/board-games", label: "Board Games", icon: Grid },
+    { href: "/card-games", label: "Card Games", icon: Layers },
   ];
 
   return (
@@ -42,6 +45,7 @@ export function MobileNav() {
         </Button>
       </SheetTrigger>
       <SheetContent side="left" className="pr-0">
+        <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
         <Link href="/" className="flex items-center">
             <span className="font-allura text-4xl text-foreground">ShooterGun</span>
         </Link>
