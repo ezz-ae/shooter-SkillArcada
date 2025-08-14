@@ -17,18 +17,13 @@ export function ShooterChat() {
     const { toast } = useToast();
 
     const handleGenerate = async () => {
-        if (!conversation.trim()) {
-            // Pre-populate with a default for demonstration
-            setConversation("I'm feeling lucky today and want to try something new!");
-        }
-
         setIsLoading(true);
         setResult(null);
 
         try {
             const response = await generateChallenge({ conversation: conversation || "I'm feeling lucky today and want to try something new!" });
             setResult(response);
-        } catch (error) {
+        } catch (error) => {
             console.error("Challenge AI failed:", error);
             toast({
                 variant: "destructive",

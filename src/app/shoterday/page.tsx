@@ -23,7 +23,7 @@ export default function ShooterdayPage() {
     <div className="container mx-auto px-4 py-12">
         <div className="text-center mb-12">
             <h1 className="text-5xl font-black tracking-tight lg:text-7xl font-allura text-transparent bg-clip-text bg-gradient-to-br from-primary to-accent">
-                Shooterday
+                Shoterday
             </h1>
             <p className="mt-4 text-xl text-muted-foreground max-w-3xl mx-auto">
                 A day for learning, for growing, for building your strength. This is where Shooter shares what he reads, what he learns, and what he believes in.
@@ -39,7 +39,7 @@ export default function ShooterdayPage() {
                     Hey, Shooter here. I give you shots in the games so you can win. On Shooterday, I give you a different kind of shot—a shot of inspiration. My grandma used to say, "a sharp mind is the strongest muscle."
                 </p>
                 <p>
-                    I made this place to share the things that build my strength. I hope they make you smile. If they do, I want you to have a <strong className="text-accent">redeemable $10 reward</strong>. That's a shot from me to you.
+                    I made this place to share the things that build my strength. I hope they make you smile. If they do, I want you to have a <strong className="text-accent">redeemable 10 Shot reward</strong>. That's a shot from me to you.
                 </p>
                 <div className="flex justify-center">
                     <Button onClick={handleClaimSmile}>
