@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileOverview A flow that generates a story premise and an image for a text-based adventure game.
@@ -48,7 +49,7 @@ const storyAdventureFlow = ai.defineFlow(
 
     const imageGeneration = await ai.generate({
         model: 'googleai/gemini-2.0-flash-preview-image-generation',
-        prompt: `A dramatic, high-quality product shot of a ${input.productName} on a clean, modern background.`,
+        prompt: `A dramatic, high-quality, professional product photograph of a ${input.productName}. The item should be the hero of the shot, centered on a clean, modern, studio-lit background. The lighting should be dramatic and highlight the product's features.`,
         config: {
             responseModalities: ['TEXT', 'IMAGE'],
         },
