@@ -18,6 +18,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { ShooterWhisper } from "./shooter-whisper";
+import { ThemeToggle } from "./theme-toggle";
 
 export function Header() {
   const { isAuthenticated, user, logout, initializeAuth } = useAuth();
@@ -72,6 +73,7 @@ export function Header() {
         <div className="flex flex-1 items-center justify-end space-x-2">
           {isClient && isAuthenticated && user ? (
             <>
+            <ThemeToggle />
             <Button variant="ghost" size="icon" onClick={() => setIsWhisperOpen(true)}>
                 <MessageSquare />
                 <span className="sr-only">Whisper to Shooter</span>

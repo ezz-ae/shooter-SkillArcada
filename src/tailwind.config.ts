@@ -84,12 +84,17 @@ const config = {
           '0%': { opacity: '1' },
           '100%': { opacity: '0' },
         },
+         'shimmer': {
+          '0%': { 'background-position': '200% 0' },
+          '100%': { 'background-position': '-200% 0' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         'border-pulse': 'border-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'fade-out': 'fade-out 2s ease-out forwards 1s',
+        'shimmer': 'shimmer 4s linear infinite',
       },
     },
   },

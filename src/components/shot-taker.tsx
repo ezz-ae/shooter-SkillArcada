@@ -596,9 +596,9 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
               <div className="flex items-center gap-2">
                 <DollarSign className="h-6 w-6 text-primary" />
                 <span className={cn(
-                  "font-black tracking-wider text-foreground shimmer-text",
+                  "font-black tracking-wider text-foreground",
                   view === 'full' ? "text-3xl lg:text-4xl" : "text-4xl lg:text-6xl"
-                  )} style={{'--trend-color': discountPercent > 0 ? 'hsl(var(--accent))' : 'hsl(var(--destructive))'} as React.CSSProperties}>{currentPrice.toFixed(2)}</span>
+                  )}>{currentPrice.toFixed(2)}</span>
               </div>
               <span className={cn("font-bold text-sm", discountColor)}>
                   {discountPercent > 0 ? `+${discountPercent.toFixed(1)}%` : `${discountPercent.toFixed(1)}%`}
