@@ -95,7 +95,7 @@
 
 @layer base {
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
   }
 }
 
@@ -105,5 +105,20 @@
   }
   .moving-gradient {
     @apply bg-gradient-to-r from-primary via-accent to-primary bg-[length:200%_auto] animate-shimmer;
+  }
+  .animated-background {
+    @apply bg-background;
+    background-image: radial-gradient(circle at 25% 25%, hsl(var(--primary) / 0.1), transparent 35%),
+                      radial-gradient(circle at 75% 75%, hsl(var(--accent) / 0.1), transparent 35%);
+    background-size: 400% 400%;
+    animation: background-move 20s ease-in-out infinite;
+  }
+}
+
+@layer utilities {
+  @keyframes background-move {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
   }
 }
