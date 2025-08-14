@@ -1,8 +1,6 @@
 
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { getAuth, signInAnonymously, onAuthStateChanged, type User as FirebaseUser } from 'firebase/auth';
-import { app } from './firebase'; // Import the initialized app
 import { useStore } from './store';
 
 interface User {
@@ -30,53 +28,25 @@ const initialState = {
   hasAcceptedTerms: false,
 };
 
-// const auth = getAuth(app); // Use the imported, initialized app
-
 export const useAuth = create<AuthState>()(
   persist(
     (set, get) => ({
       ...initialState,
       initializeAuth: () => {
-        // const unsubscribe = onAuthStateChanged(auth, (firebaseUser: FirebaseUser | null) => {
-        //   if (firebaseUser) {
-        //     // User is signed in.
-        //     const isNew = firebaseUser.metadata.creationTime === firebaseUser.metadata.lastSignInTime;
-            
-        //     if (isNew && get().isNewUser) {
-        //       useStore.getState().addShots(10); // New user bonus
-        //     }
-
-        //     set({
-        //       isAuthenticated: true,
-        //       user: { uid: firebaseUser.uid, isAnonymous: firebaseUser.isAnonymous },
-        //       isLoggingIn: false,
-        //       isNewUser: isNew,
-        //     });
-        //   } else {
-        //     // User is signed out or not yet signed in.
-        //     // Try to sign in anonymously.
-        //     signInAnonymously(auth).catch((error) => {
-        //       console.error("Anonymous sign-in failed:", error);
-        //       set({ isLoggingIn: false });
-        //     });
-        //   }
-        // });
-        // return unsubscribe;
-        
-        // --- WORKAROUND START ---
-        console.warn("Firebase Auth is temporarily disabled due to suspended API key.");
+        // This is a temporary workaround to simulate auth without a live Firebase connection.
+        console.warn("Firebase Auth is temporarily disabled. Using a mock user session.");
         set({
             isAuthenticated: true,
             isLoggingIn: false,
             user: { uid: 'temp-user-id', isAnonymous: true },
             isNewUser: false
         })
-        useStore.getState().addShots(10); // Give bonus for demo
+        if (get().isNewUser) {
+            useStore.getState().addShots(10); // Give new user bonus for demo
+        }
         return () => {}; // Return a dummy unsubscribe function
-        // --- WORKAROUND END ---
       },
       logout: async () => {
-        // await auth.signOut();
         useStore.getState().reset();
         const isNewUser = get().isNewUser;
         set({ ...initialState, isLoggingIn: false, isNewUser });
