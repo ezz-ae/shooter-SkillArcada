@@ -38,7 +38,7 @@ export default function RootLayout({
       </head>
       <body
         className={cn(
-          "min-h-screen bg-background font-sans antialiased",
+          "min-h-screen font-sans antialiased",
           inter.variable,
           allura.variable
         )}
@@ -51,7 +51,7 @@ export default function RootLayout({
         >
           <div className="relative flex min-h-screen flex-col">
             <Header />
-            <main className="flex-1">{children}</main>
+            <main className="flex-1 bg-background">{children}</main>
             <Footer />
           </div>
           <Toaster />
