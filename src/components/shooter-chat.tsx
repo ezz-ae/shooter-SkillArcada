@@ -3,7 +3,6 @@
 
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./ui/card";
-import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
 import { generateChallenge, GenerateChallengeOutput } from "@/ai/flows/challenge-flow";
 import { Bot, Loader, TestTube, Gamepad2, Sparkles } from "lucide-react";
@@ -23,7 +22,7 @@ export function ShooterChat() {
         try {
             const response = await generateChallenge({ conversation: conversation || "I'm feeling lucky today and want to try something new!" });
             setResult(response);
-        } catch (error) => {
+        } catch (error) {
             console.error("Challenge AI failed:", error);
             toast({
                 variant: "destructive",
