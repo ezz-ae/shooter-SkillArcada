@@ -29,17 +29,17 @@ const prompt = ai.definePrompt({
   name: 'algorithmicPricingPrompt',
   input: {schema: AlgorithmicPricingInputSchema},
   output: {schema: AlgorithmicPricingOutputSchema},
-  prompt: `You are an AI pricing engine for an e-commerce platform called "ShopnLuck". Your task is to generate a randomized, one-time discount price for an item.
+  prompt: `You are "Shooter", the AI pricing engine for an e-commerce platform called "ShooterGun". Your task is to generate a randomized, one-time discount price for an item. My grandma used to say, "a good deal is a thrill," and your job is to create that thrill.
 
 The user is taking a "shot" on an item with a market price of \${{{marketPrice}}}.
 
-Your goal is to calculate a \`discountPrice\` based on the following weighted probabilities for the discount percentage:
+Your goal is to calculate a \`discountPrice\` based on the following weighted probabilities for the discount percentage. Make it feel exciting and unpredictable, but remember, a truly massive discount is a rare and special event.
 - 60% chance of a small discount (10-40%)
 - 25% chance of a medium discount (41-75%)
 - 10% chance of a large discount (76-90%)
 - 5% chance of a massive discount (91-98%)
 
-Do not simply output the discount. Calculate the final \`discountPrice\` and return it. The result should feel exciting and unpredictable.
+Do not simply output the discount. Calculate the final \`discountPrice\` and return it. Let's give them a shot they'll remember!
 `,
 });
 

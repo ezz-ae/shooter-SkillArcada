@@ -7,7 +7,7 @@ import { BookOpen, ShoppingBag, Smile } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useStore } from "@/lib/store";
 
-export default function ShooterdayPage() {
+export default function ShoterdayPage() {
     const { addShots } = useStore();
     const { toast } = useToast();
 
@@ -36,7 +36,7 @@ export default function ShooterdayPage() {
             </CardHeader>
             <CardContent className="text-center text-lg text-muted-foreground max-w-3xl mx-auto space-y-4">
                  <p>
-                    Hey, Shooter here. I give you shots in the games so you can win. On Shooterday, I give you a different kind of shot—a shot of inspiration. My grandma used to say, "a sharp mind is the strongest muscle."
+                    Hey, Shooter here. I give you shots in the games so you can win. On Shoterday, I give you a different kind of shot—a shot of inspiration. My grandma used to say, "a sharp mind is the strongest muscle."
                 </p>
                 <p>
                     I made this place to share the things that build my strength. I hope they make you smile. If they do, I want you to have a <strong className="text-accent">redeemable 10 Shot reward</strong>. That's a shot from me to you.
@@ -70,7 +70,7 @@ export default function ShooterdayPage() {
                     <CardDescription>
                         Wear what you read. Exclusive merch inspired by the books that build us. Coming soon.
                     </CardDescription>
-                </CardHeader>
+                </Header>
                 <CardContent>
                     <Button variant="outline" disabled>Shop Merch</Button>
                 </CardContent>
