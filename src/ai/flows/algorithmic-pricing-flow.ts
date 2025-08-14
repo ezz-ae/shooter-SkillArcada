@@ -33,13 +33,13 @@ const prompt = ai.definePrompt({
 
 The user is taking a "shot" on an item with a market price of \${{{marketPrice}}}.
 
-Your goal is to calculate a `discountPrice` based on the following weighted probabilities for the discount percentage:
+Your goal is to calculate a \`discountPrice\` based on the following weighted probabilities for the discount percentage:
 - 60% chance of a small discount (10-40%)
 - 25% chance of a medium discount (41-75%)
 - 10% chance of a large discount (76-90%)
 - 5% chance of a massive discount (91-98%)
 
-Do not simply output the discount. Calculate the final `discountPrice` and return it. The result should feel exciting and unpredictable.
+Do not simply output the discount. Calculate the final \`discountPrice\` and return it. The result should feel exciting and unpredictable.
 `,
 });
 
