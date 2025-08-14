@@ -21,8 +21,15 @@ import {
 import { cn } from "@/lib/utils";
 import { Gem, Target } from "lucide-react";
 
-// Filter out game-specific items that don't make sense here
-const displayableProducts = mockProducts.filter(p => p.category !== 'brainshot' && p.category !== 'luckgirls' && p.id !== 'prod_console_01');
+// Widen the variety of products for this game.
+const displayableProducts = mockProducts.filter(p => 
+    p.category !== 'luckgirls' &&
+    !p.game?.includes('riddle') &&
+    !p.game?.includes('chess') &&
+    !p.game?.includes('maze') &&
+    !p.game?.includes('mirror') &&
+    p.id !== 'prod_console_01'
+);
 
 export function HitOrMissGame() {
   const [productIndex, setProductIndex] = useState(0);
