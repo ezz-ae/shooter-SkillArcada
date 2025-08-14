@@ -71,9 +71,6 @@ export function Header() {
               <Button variant="ghost" asChild>
                 <Link href="/shots-hub">Shots Hub</Link>
              </Button>
-              <Button variant="ghost" asChild>
-                <Link href="/dashboard">Dashboard</Link>
-             </Button>
              <Button variant="ghost" asChild>
                 <Link href="/learning-center">How to Earn</Link>
              </Button>
@@ -112,6 +109,12 @@ export function Header() {
                          <Link href="/vault">
                             <Package className="mr-2 h-4 w-4" />
                             <span>Vault & Wallet</span>
+                         </Link>
+                    </DropdownMenuItem>
+                     <DropdownMenuItem asChild>
+                         <Link href="/dashboard">
+                            <BarChart className="mr-2 h-4 w-4" />
+                            <span>Dashboard</span>
                          </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
