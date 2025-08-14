@@ -510,6 +510,7 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
                                 isReelPaused ? "cursor-pointer" : "cursor-default",
                                 isReelPaused && selectedReelIndices.includes(index) && "bg-primary text-primary-foreground",
                                 isReelPaused && !selectedReelIndices.includes(index) && "blur-sm",
+                                !isReelPaused && "blur-sm opacity-50"
                             )}
                         >{num}</button>
                     ))}
