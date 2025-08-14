@@ -12,7 +12,7 @@ export interface Product {
   dataAiHint: string;
   expertSystem: string;
   game?: 'reel-pause' | 'multi-shot' | 'riddle-calc' | 'draw-passcode' | 'chess-mate' | 'time-challenge' | 'pink-cups' | 'snake-and-stairs' | 'ai-adventure' | 'maze-draw' | 'story-match' | 'mirror-game';
-  category?: 'luckshot' | 'brainshot' | 'luckgirls' | 'chess' | 'electronics' | 'fashion' | 'home' | 'collectibles';
+  category?: 'luckshot' | 'brainshot' | 'luckgirls' | 'chess' | 'electronics' | 'fashion' | 'home' | 'collectibles' | 'voucher';
   status?: 'Hot' | 'New' | 'Testing';
 }
 
@@ -29,6 +29,74 @@ export async function getProducts(): Promise<Product[]> {
 
 // Keep one or two products for fallback or initial state if needed
 export const mockProducts: Product[] = [
+    // --- VOUCHERS ---
+    {
+        id: 'voucher_10',
+        name: '$10 Voucher',
+        subtitle: 'Digital Gift Card',
+        description: 'A voucher for the specified store.',
+        marketPrice: 10.0,
+        imageUrl: '/logos/gift-card.png',
+        dataAiHint: 'gift card',
+        expertSystem: 'Win this in the Shop Hunter game.',
+        category: 'voucher',
+    },
+    {
+        id: 'voucher_25',
+        name: '$25 Voucher',
+        subtitle: 'Digital Gift Card',
+        description: 'A voucher for the specified store.',
+        marketPrice: 25.0,
+        imageUrl: '/logos/gift-card.png',
+        dataAiHint: 'gift card',
+        expertSystem: 'Win this in the Shop Hunter game.',
+        category: 'voucher',
+    },
+    {
+        id: 'voucher_50',
+        name: '$50 Voucher',
+        subtitle: 'Digital Gift Card',
+        description: 'A voucher for the specified store.',
+        marketPrice: 50.0,
+        imageUrl: '/logos/gift-card.png',
+        dataAiHint: 'gift card',
+        expertSystem: 'Win this in the Shop Hunter game.',
+        category: 'voucher',
+    },
+    {
+        id: 'voucher_100',
+        name: '$100 Voucher',
+        subtitle: 'Digital Gift Card',
+        description: 'A voucher for the specified store.',
+        marketPrice: 100.0,
+        imageUrl: '/logos/gift-card.png',
+        dataAiHint: 'gift card',
+        expertSystem: 'Win this in the Shop Hunter game.',
+        category: 'voucher',
+    },
+    {
+        id: 'voucher_200',
+        name: '$200 Voucher',
+        subtitle: 'Digital Gift Card',
+        description: 'A voucher for the specified store.',
+        marketPrice: 200.0,
+        imageUrl: '/logos/gift-card.png',
+        dataAiHint: 'gift card',
+        expertSystem: 'Win this in the Shop Hunter game.',
+        category: 'voucher',
+    },
+    {
+        id: 'voucher_500',
+        name: '$500 Voucher',
+        subtitle: 'Digital Gift Card',
+        description: 'A voucher for the specified store.',
+        marketPrice: 500.0,
+        imageUrl: '/logos/gift-card.png',
+        dataAiHint: 'gift card',
+        expertSystem: 'Win this in the Shop Hunter game.',
+        category: 'voucher',
+    },
+    
     // --- BRAINSHOTS (SKILL-BASED) ---
     {
         id: 'prod_phone_01',
@@ -473,5 +541,3 @@ export const mockProducts: Product[] = [
         category: 'chess',
     },
 ];
-
-    
