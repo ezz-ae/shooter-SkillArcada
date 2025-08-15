@@ -8,9 +8,8 @@ import { cn } from "@/lib/utils";
 import { generateLuckAnalysis, LuckAnalysisOutput } from "@/ai/flows/luck-analysis-flow";
 import { useToast } from "@/hooks/use-toast";
 import { useTypewriter } from "@/hooks/use-typewriter";
-import { DiceGame } from "./dice-game";
 
-type SessionState = 'dice_roll' | 'intro' | 'preferences' | 'analyzing' | 'reading';
+type SessionState = 'intro' | 'preferences' | 'analyzing' | 'reading';
 const preferences = [
     { label: "Money", icon: DollarSign },
     { label: "Love", icon: Heart },
@@ -18,7 +17,7 @@ const preferences = [
 ]
 
 export function LuckSession() {
-    const [sessionState, setSessionState] = useState<SessionState>('dice_roll');
+    const [sessionState, setSessionState] = useState<SessionState>('intro');
     const [analysis, setAnalysis] = useState<LuckAnalysisOutput | null>(null);
     const { toast } = useToast();
 
@@ -49,8 +48,6 @@ export function LuckSession() {
 
     const renderContent = () => {
         switch(sessionState) {
-            case 'dice_roll':
-                return <DiceGame onComplete={() => setSessionState('intro')} />
             case 'intro':
                 return (
                     <div className="text-center animate-in fade-in-50 duration-1000">
@@ -117,7 +114,7 @@ export function LuckSession() {
                         </div>
                         <div className="text-center space-y-4 pt-8">
                             <p className="text-muted-foreground">Your lucky symbol is the <span className="font-bold text-primary">{analysis.luckySymbol}</span></p>
-                             <Button size="lg" onClick={() => setSessionState('dice_roll')}>
+                             <Button size="lg" onClick={() => setSessionState('intro')}>
                                 Start Over
                             </Button>
                         </div>
