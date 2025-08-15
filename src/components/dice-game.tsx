@@ -85,10 +85,10 @@ export function DiceGame() {
     }
 
     return (
-        <div className="w-full max-w-2xl text-center">
+        <div className="w-full max-w-2xl text-center px-4">
             {gameState === 'initial' && (
                 <div className="animate-in fade-in-50 duration-1000">
-                    <h1 className="text-4xl font-black tracking-tight lg:text-6xl text-transparent bg-clip-text bg-gradient-to-br from-foreground to-foreground/60">
+                    <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-foreground to-foreground/60">
                         Let Shooter tell you if today is a lucky day.
                     </h1>
                     <Button size="lg" className="mt-8 relative overflow-hidden" onClick={rollDice}>

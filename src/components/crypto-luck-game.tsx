@@ -250,7 +250,7 @@ export function CryptoLuckGame() {
                   </AreaChart>
                 </ChartContainer>
             <div className="absolute inset-0 flex items-center justify-center">
-                 <span className="font-black tracking-wider text-foreground text-5xl lg:text-6xl text-shadow-lg bg-background/50 px-4 py-2 rounded-lg backdrop-blur-sm">${currentPrice.toFixed(2)}</span>
+                 <span className="font-black tracking-wider text-foreground text-4xl sm:text-5xl lg:text-6xl text-shadow-lg bg-background/50 px-4 py-2 rounded-lg backdrop-blur-sm">${currentPrice.toFixed(2)}</span>
             </div>
         </div>
       </CardContent>

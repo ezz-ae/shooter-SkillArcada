@@ -39,25 +39,25 @@ export default function PoolChallengePage({ params }: { params: { id: string } }
                     </Link>
                 </Button>
             </div>
-            <div className="w-full max-w-5xl">
+            <div className="w-full max-w-5xl mx-auto">
                 {/* Player Info Header */}
-                <div className="grid grid-cols-3 items-center text-center gap-4 mb-8">
-                    <div className="flex flex-col items-center gap-2">
-                        <Avatar className="h-24 w-24 border-4 border-primary">
+                <div className="grid grid-cols-1 md:grid-cols-3 items-center text-center gap-4 mb-8">
+                    <div className="flex md:flex-col items-center gap-2">
+                        <Avatar className="h-16 w-16 md:h-24 md:w-24 border-4 border-primary">
                             <AvatarImage src={player1.avatarUrl} alt={player1.name} />
                             <AvatarFallback>{player1.name.substring(0,2)}</AvatarFallback>
                         </Avatar>
                         <h2 className="text-lg md:text-xl font-bold">{player1.name}</h2>
                     </div>
 
-                    <div className="flex flex-col items-center">
+                    <div className="flex flex-col items-center order-first md:order-none">
                         <p className="text-sm text-muted-foreground">Prize Pool</p>
                         <p className="text-4xl lg:text-6xl font-black text-primary">{prizeAmount} Shots</p>
                         <Swords className="h-8 w-8 text-accent mt-2"/>
                     </div>
                     
-                    <div className="flex flex-col items-center gap-2">
-                         <Avatar className="h-24 w-24 border-4 border-background">
+                    <div className="flex md:flex-col items-center gap-2">
+                         <Avatar className="h-16 w-16 md:h-24 md:w-24 border-4 border-background">
                             <AvatarImage src={player2.avatarUrl} alt={player2.name} />
                             <AvatarFallback>{player2.name.substring(0,2)}</AvatarFallback>
                         </Avatar>
