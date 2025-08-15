@@ -4,7 +4,7 @@
 import { ShotTaker } from "@/components/shot-taker";
 import { Product, getProducts } from "@/lib/products";
 import { useEffect, useState } from "react";
-import { BrainCircuit, Target } from "lucide-react";
+import { Target, BrainCircuit } from "lucide-react";
 import { SectionHeader } from "@/components/section-header";
 
 export default function LuckshotsPage() {

@@ -4,9 +4,7 @@ import "./globals.css";
 import { Inter, Allura } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/toaster";
-import { Header } from "@/components/header";
 import { ThemeProvider } from "@/components/theme-provider";
-import { Footer } from "@/components/footer";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 const allura = Allura({ subsets: ["latin"], weight: "400", variable: "--font-allura" });
@@ -49,11 +47,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="relative flex min-h-screen flex-col">
-            <Header />
-            <main className="flex-1 animated-background">{children}</main>
-            <Footer />
-          </div>
+          {children}
           <Toaster />
         </ThemeProvider>
       </body>

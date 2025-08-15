@@ -2,21 +2,24 @@
 "use client";
 
 import { User, getUsers } from "@/lib/user";
-import { BarChart, Bot, Gamepad2, Settings, Users } from "lucide-react";
+import { Bot, Gamepad2, Settings, Users, BarChart3, List } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { StatCard } from "@/components/stat-card";
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { AdminAIAgent } from "@/components/admin-ai-agent";
+import { useGameSettingsStore, Game, GameStatus } from "@/lib/game-settings-store";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
 
 export default function AdminPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
+  const { games, toggleFeatured, setStatus } = useGameSettingsStore();
 
   useEffect(() => {
     async function fetchData() {
@@ -28,8 +31,16 @@ export default function AdminPage() {
     fetchData();
   }, []);
 
+  const getStatusColor = (status: GameStatus) => {
+    switch (status) {
+        case 'live': return 'bg-green-500';
+        case 'maintenance': return 'bg-yellow-500';
+        case 'disabled': return 'bg-red-500';
+    }
+  }
+
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="h-full">
        <div className="flex items-center justify-between mb-8">
             <div>
                 <h1 className="text-3xl font-black">Admin Command Center</h1>
@@ -37,11 +48,11 @@ export default function AdminPage() {
             </div>
        </div>
 
-       <Tabs defaultValue="overview">
+       <Tabs defaultValue="overview" className="h-full">
             <TabsList className="grid w-full grid-cols-4">
-                <TabsTrigger value="overview"><BarChart className="mr-2 h-4 w-4"/>Overview</TabsTrigger>
+                <TabsTrigger value="overview"><BarChart3 className="mr-2 h-4 w-4"/>Overview</TabsTrigger>
                 <TabsTrigger value="users"><Users className="mr-2 h-4 w-4"/>User Management</TabsTrigger>
-                <TabsTrigger value="settings"><Settings className="mr-2 h-4 w-4"/>Platform Settings</TabsTrigger>
+                <TabsTrigger value="games"><Gamepad2 className="mr-2 h-4 w-4"/>Game Control Room</TabsTrigger>
                 <TabsTrigger value="ai-agent"><Bot className="mr-2 h-4 w-4"/>Shooter AI Agent</TabsTrigger>
             </TabsList>
 
@@ -53,8 +64,8 @@ export default function AdminPage() {
                     </CardHeader>
                     <CardContent className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                         <StatCard title="Total Users" value={users.length} icon={Users} />
-                        <StatCard title="Total Revenue (Mock)" value="$12,450" icon={BarChart} />
-                        <StatCard title="Active Games" value="15" icon={Gamepad2} />
+                        <StatCard title="Total Revenue (Mock)" value="$12,450" icon={BarChart3} />
+                        <StatCard title="Active Games" value={games.filter(g => g.status === 'live').length} icon={Gamepad2} />
                         <StatCard title="AI Interactions (24h)" value="1,832" icon={Bot} />
                     </CardContent>
                 </Card>
@@ -72,40 +83,51 @@ export default function AdminPage() {
                 </Card>
             </TabsContent>
 
-            <TabsContent value="settings" className="mt-6">
+            <TabsContent value="games" className="mt-6">
                 <Card>
                     <CardHeader>
-                        <CardTitle>Platform Settings</CardTitle>
-                        <CardDescription>Control global game settings and platform features.</CardDescription>
+                        <CardTitle>Game Control Room</CardTitle>
+                        <CardDescription>Manage the status and visibility of all games on the platform.</CardDescription>
                     </CardHeader>
-                    <CardContent className="space-y-8">
-                        <div className="space-y-4 p-4 border rounded-lg">
-                            <h3 className="text-lg font-semibold">Game Availability</h3>
-                            <div className="flex items-center justify-between">
-                                <Label htmlFor="crypto-luck-switch">Crypto Luck Game</Label>
-                                <Switch id="crypto-luck-switch" defaultChecked/>
-                            </div>
-                            <div className="flex items-center justify-between">
-                                <Label htmlFor="pool-shot-switch">Pool Shot Challenges</Label>
-                                <Switch id="pool-shot-switch" defaultChecked/>
-                            </div>
-                             <div className="flex items-center justify-between">
-                                <Label htmlFor="luckgirls-switch">Luckgirls Games</Label>
-                                <Switch id="luckgirls-switch" />
-                            </div>
-                        </div>
-                        <div className="space-y-4 p-4 border rounded-lg">
-                            <h3 className="text-lg font-semibold">Global Modifiers</h3>
-                             <div className="flex items-center justify-between">
-                                <Label htmlFor="prize-multiplier">Global Prize Multiplier</Label>
-                                <p className="text-sm text-muted-foreground">Set to 1.0x (Normal)</p>
-                            </div>
-                            <Button variant="outline">Adjust Multiplier</Button>
-                        </div>
-                         <div className="flex justify-end gap-2 mt-4">
-                            <Button variant="destructive">Discard Changes</Button>
-                            <Button>Save Settings</Button>
-                        </div>
+                    <CardContent className="space-y-4">
+                       <div className="rounded-lg border">
+                         <table className="w-full">
+                           <thead className="bg-muted/50">
+                                <tr className="border-b">
+                                    <th className="p-3 text-left font-semibold">Game</th>
+                                    <th className="p-3 text-left font-semibold">Description</th>
+                                    <th className="p-3 text-left font-semibold">Status</th>
+                                    <th className="p-3 text-center font-semibold">Is Featured</th>
+                                    <th className="p-3 text-left font-semibold">Actions</th>
+                                </tr>
+                           </thead>
+                           <tbody>
+                            {games.map((game) => (
+                                <tr key={game.id} className="border-b last:border-0">
+                                    <td className="p-3 font-medium">{game.name}</td>
+                                    <td className="p-3 text-sm text-muted-foreground">{game.description}</td>
+                                    <td className="p-3">
+                                        <Badge className="capitalize text-white" style={{ backgroundColor: getStatusColor(game.status) }}>
+                                            {game.status}
+                                        </Badge>
+                                    </td>
+                                    <td className="p-3 text-center">
+                                         <Switch
+                                            checked={game.isFeatured}
+                                            onCheckedChange={() => toggleFeatured(game.id)}
+                                            aria-label={`Toggle featured status for ${game.name}`}
+                                        />
+                                    </td>
+                                    <td className="p-3 flex gap-2">
+                                        <Button size="sm" variant={game.status === 'live' ? "default" : "outline"} onClick={() => setStatus(game.id, 'live')}>Live</Button>
+                                        <Button size="sm" variant={game.status === 'maintenance' ? "default" : "outline"} onClick={() => setStatus(game.id, 'maintenance')}>Maint.</Button>
+                                        <Button size="sm" variant={game.status === 'disabled' ? "destructive" : "outline"} onClick={() => setStatus(game.id, 'disabled')}>Disable</Button>
+                                    </td>
+                                </tr>
+                            ))}
+                           </tbody>
+                         </table>
+                       </div>
                     </CardContent>
                 </Card>
             </TabsContent>
