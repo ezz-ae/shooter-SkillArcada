@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BarChart3, Gamepad2, Settings, Users, Bot, Shield, Home } from "lucide-react";
+import { BarChart3, Gamepad2, Settings, Users, Bot, Shield, Home, TrendingUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
@@ -11,6 +11,7 @@ const adminNavItems = [
     { name: "Overview", href: "/admin", icon: BarChart3 },
     { name: "Users", href: "/admin/users", icon: Users },
     { name: "Games", href: "/admin/games", icon: Gamepad2 },
+    { name: "Performance", href: "/admin/performance", icon: TrendingUp },
     { name: "Settings", href: "/admin/settings", icon: Settings },
     { name: "AI Agent", href: "/admin/ai-agent", icon: Bot },
 ]
