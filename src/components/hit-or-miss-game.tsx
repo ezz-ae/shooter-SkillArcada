@@ -5,7 +5,7 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import { Product, mockProducts } from "@/lib/products";
 import { Button } from "./ui/button";
 import { useStore } from "@/lib/store";
-import { useToast } from "@/hooks/use-toast";
+import { useNotificationStore } from "@/lib/notification-store";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -38,7 +38,7 @@ export function HitOrMissGame() {
   const animationTimeoutRef = useRef<NodeJS.Timeout>();
 
   const { spendShot, addToVault, addShots } = useStore();
-  const { toast } = useToast();
+  const { add: toast } = useNotificationStore();
 
   const animateReels = useCallback(() => {
     // Update product and price
