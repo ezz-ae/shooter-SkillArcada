@@ -12,8 +12,9 @@ import {
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
 import { generateChallenge, GenerateChallengeOutput } from "@/ai/flows/challenge-flow";
-import { Bot, Loader, TestTube, Gamepad2, Sparkles, MessageSquare } from "lucide-react";
+import { Bot, Loader, TestTube, Gamepad2, Sparkles, MessageSquare, Dices } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useStore } from "@/lib/store";
 
 interface ShooterWhisperProps {
     isOpen: boolean;
@@ -25,6 +26,7 @@ export function ShooterWhisper({ isOpen, onOpenChange }: ShooterWhisperProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<GenerateChallengeOutput | null>(null);
   const { toast } = useToast();
+  const { lastLuckReading } = useStore();
 
   const handleGenerate = async () => {
     if (!conversation.trim()) {
@@ -65,6 +67,18 @@ export function ShooterWhisper({ isOpen, onOpenChange }: ShooterWhisperProps) {
                 </DialogDescription>
             </DialogHeader>
             <div className="space-y-4">
+                {lastLuckReading && (
+                    <div className="p-4 bg-secondary/50 rounded-lg border border-border">
+                        <h4 className="font-bold flex items-center mb-2 text-md">
+                            <Dices className="mr-2 h-5 w-5 text-primary"/>
+                            Your Active Luck Card
+                        </h4>
+                        <p className="text-muted-foreground text-sm">
+                            <span className="font-semibold text-foreground">{lastLuckReading.title}:</span> {lastLuckReading.advice}
+                        </p>
+                    </div>
+                )}
+
                  <Textarea 
                     placeholder="e.g., I'm feeling bored and want to try a puzzle..."
                     value={conversation}

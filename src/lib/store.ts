@@ -1,3 +1,4 @@
+
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import type { Product } from "./products";
@@ -11,6 +12,12 @@ export interface ShippingItem extends VaultItem {
   shippingId: string;
 }
 
+export interface LuckReading {
+  title: string;
+  description: string;
+  advice: string;
+}
+
 interface StoreState {
   vault: VaultItem[];
   shippingCart: ShippingItem[];
@@ -18,8 +25,10 @@ interface StoreState {
   luckshots: number; // Represents currency won from skill games
   hasSeenShotInfo: boolean;
   hasSeenVaultInfo: boolean;
+  lastLuckReading: LuckReading | null;
   setHasSeenShotInfo: (hasSeen: boolean) => void;
   setHasSeenVaultInfo: (hasSeen: boolean) => void;
+  setLastLuckReading: (reading: LuckReading) => void;
   spendShot: (amount?: number) => boolean;
   addShots: (amount: number) => void;
   spendLuckshot: (amount?: number) => boolean;
@@ -43,6 +52,7 @@ const initialState = {
     luckshots: 0,
     hasSeenShotInfo: false,
     hasSeenVaultInfo: false,
+    lastLuckReading: null,
 };
 
 export const useStore = create<StoreState>()(
@@ -51,6 +61,7 @@ export const useStore = create<StoreState>()(
       ...initialState,
       setHasSeenShotInfo: (hasSeen: boolean) => set({ hasSeenShotInfo: hasSeen }),
       setHasSeenVaultInfo: (hasSeen: boolean) => set({ hasSeenVaultInfo: hasSeen }),
+      setLastLuckReading: (reading: LuckReading) => set({ lastLuckReading: reading }),
 
       addShots: (amount) => {
         set((state) => ({ shots: state.shots + amount }));

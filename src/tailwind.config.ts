@@ -1,7 +1,7 @@
 
 import type { Config } from 'tailwindcss';
 
-const config: Config = {
+const config = {
   darkMode: ['class'],
   content: [
     './pages/**/*.{ts,tsx}',
@@ -19,9 +19,18 @@ const config: Config = {
       },
     },
     extend: {
+       perspective: {
+        '1000': '1000px',
+      },
+      transformStyle: {
+        '3d': 'preserve-3d',
+      },
+      backfaceVisibility: {
+        'hidden': 'hidden',
+      },
       fontFamily: {
         sans: ['var(--font-sans)', 'sans-serif'],
-        allura: ['var(--font-allura)', 'cursive'],
+        lilita: ['var(--font-lilita)', 'sans-serif'],
       },
       colors: {
         border: 'hsl(var(--border))',
@@ -98,7 +107,23 @@ const config: Config = {
       },
     },
   },
-  plugins: [require('tailwindcss-animate'), require('@tailwindcss/typography')],
+  plugins: [
+    require('tailwindcss-animate'), 
+    require('@tailwindcss/typography'),
+    function ({ addUtilities }: { addUtilities: any }) {
+      addUtilities({
+        '.perspective-1000': {
+          perspective: '1000px',
+        },
+        '.transform-style-3d': {
+          'transform-style': 'preserve-3d',
+        },
+        '[backface-visibility\\:hidden]': {
+          'backface-visibility': 'hidden',
+        },
+      });
+    },
+  ],
 } satisfies Config;
 
 export default config;
