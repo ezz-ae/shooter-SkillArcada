@@ -23,7 +23,7 @@ import { Button } from "./ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
 import { useStore } from "@/lib/store";
 import type { Product } from "@/lib/products";
-import { useToast } from "@/hooks/use-toast";
+import { useNotificationStore } from "@/lib/notification-store";
 import { cn } from "@/lib/utils";
 import { Calculator } from "./calculator";
 import { ChartContainer } from "./ui/chart";
@@ -104,7 +104,7 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
 
 
   const { addToVault, shots, spendShot, hasSeenShotInfo, setHasSeenShotInfo, addShots } = useStore();
-  const { toast } = useToast();
+  const { add: toast } = useNotificationStore();
   
   const isGame = product.game && ['reel-pause', 'multi-shot', 'riddle-calc', 'draw-passcode', 'chess-mate', 'maze-draw'].includes(product.game);
   
