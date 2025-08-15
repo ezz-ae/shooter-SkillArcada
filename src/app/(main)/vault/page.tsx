@@ -7,7 +7,7 @@ import { VaultItemCard } from "@/components/vault-item-card";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { ArrowLeft, ShoppingCart, Repeat, Gift, Wallet, PlusCircle, Gem } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import { useNotificationStore } from "@/lib/notification-store";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -39,7 +39,7 @@ export default function VaultPage() {
   
   const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
   const [isClient, setIsClient] = useState(false);
-  const { toast } = useToast();
+  const { add: toast } = useNotificationStore();
   const [isInfoOpen, setIsInfoOpen] = useState(false);
 
   useEffect(() => {

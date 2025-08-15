@@ -6,7 +6,7 @@ import { Button } from "./ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { cn } from "@/lib/utils";
 import { useStore } from "@/lib/store";
-import { useToast } from "@/hooks/use-toast";
+import { useNotificationStore } from "@/lib/notification-store";
 import { ArrowRight, Bot, Check, User, Sparkles } from "lucide-react";
 import {
   AlertDialog,
@@ -77,7 +77,7 @@ export function ShooterMirror() {
   const [isResultOpen, setIsResultOpen] = useState(false);
 
   const { addShots, spendShot, addToVault } = useStore();
-  const { toast } = useToast();
+  const { add: toast } = useNotificationStore();
 
   const mirrorProduct = mockProducts.find(p => p.game === 'mirror-game');
 

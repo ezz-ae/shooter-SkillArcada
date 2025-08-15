@@ -12,7 +12,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useEffect, useState } from "react";
 import { ChessBoard } from "@/components/chess-board";
 import { useStore } from "@/lib/store";
-import { useToast } from "@/hooks/use-toast";
+import { useNotificationStore } from "@/lib/notification-store";
 import { CreateChallengeDialog } from "@/components/create-challenge-dialog";
 import { useAuth } from "@/lib/auth";
 
@@ -38,7 +38,7 @@ export default function ChessPage() {
   const [users, setUsers] = useState<User[]>([]);
   const { user: currentUser } = useAuth();
   const { addShots, spendShot } = useStore();
-  const { toast } = useToast();
+  const { add: toast } = useNotificationStore();
   const [isChessWon, setIsChessWon] = useState(false);
   const [chessChallenges, setChessChallenges] = useState<Challenge[]>([]);
 

@@ -6,7 +6,7 @@ import { Area, AreaChart } from "recharts";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "./ui/card";
 import { useStore } from "@/lib/store";
-import { useToast } from "@/hooks/use-toast";
+import { useNotificationStore } from "@/lib/notification-store";
 import { cn } from "@/lib/utils";
 import { ChartContainer } from "./ui/chart";
 import { Bitcoin, Check, Gamepad, Target, X, Trophy, ArrowUp, ArrowDown, Loader } from "lucide-react";
@@ -52,7 +52,7 @@ export function CryptoLuckGame() {
   const [gameResult, setGameResult] = useState<GameResult | null>(null);
 
   const { shots, spendShot, addShots } = useStore();
-  const { toast } = useToast();
+  const { add: toast } = useNotificationStore();
   
   const timerInterval = useRef<NodeJS.Timeout>();
   const priceInterval = useRef<NodeJS.Timeout>();

@@ -4,12 +4,12 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { BookOpen, ShoppingBag, Smile } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import { useNotificationStore } from "@/lib/notification-store";
 import { useStore } from "@/lib/store";
 
 export default function ShoterdayPage() {
     const { addShots } = useStore();
-    const { toast } = useToast();
+    const { add: toast } = useNotificationStore();
 
     const handleClaimSmile = () => {
         addShots(10);

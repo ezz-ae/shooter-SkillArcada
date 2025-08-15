@@ -7,7 +7,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from './ui/card'
 import { cn } from '@/lib/utils';
 import { Check, X, MousePointer, TrendingUp, Target, Volume2, VolumeX } from 'lucide-react';
 import { useStore } from '@/lib/store';
-import { useToast } from '@/hooks/use-toast';
+import { useNotificationStore } from '@/lib/notification-store';
 
 type GameState = 'idle' | 'placing' | 'aiming' | 'charging' | 'shot' | 'won' | 'lost';
 
@@ -24,7 +24,7 @@ export function PoolShotGame() {
   const audioRefs = useRef<{ [key: string]: HTMLAudioElement | null }>({}).current;
 
   const { shots, spendShot, addShots } = useStore();
-  const { toast } = useToast();
+  const { add: toast } = useNotificationStore();
 
   const prize = level * 10;
   const cost = level;

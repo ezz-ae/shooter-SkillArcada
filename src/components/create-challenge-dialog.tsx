@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PlusCircle, Swords, Target } from "lucide-react";
 import { useStore } from "@/lib/store";
-import { useToast } from "@/hooks/use-toast";
+import { useNotificationStore } from "@/lib/notification-store";
 
 interface CreateChallengeDialogProps {
   gameType: "pool" | "chess";
@@ -28,7 +28,7 @@ export function CreateChallengeDialog({ gameType, onCreate }: CreateChallengeDia
   const [prize, setPrize] = useState(100);
   const [fee, setFee] = useState(10);
   const { spendShot } = useStore();
-  const { toast } = useToast();
+  const { add: toast } = useNotificationStore();
 
   const handleCreate = () => {
     if (prize <= fee) {

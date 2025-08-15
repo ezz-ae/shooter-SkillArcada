@@ -43,10 +43,10 @@ export default function TermsPage() {
             <li>If you fail, you forfeit the entry fee.</li>
           </ul>
 
-          <h2>3. The Vault & Shipping</h2>
+          <h2>3. The Vault, Shipping, & Trade-Ins</h2>
           <ul>
             <li>Won items are stored in your virtual "Vault."</li>
-            <li>Items in the vault can be traded in for a fluctuating value in Shots or for a flat-rate amount of legacy "ShooterGun."</li>
+            <li>Items in the vault can be traded in for a fluctuating market value in Shots, or for a flat-rate amount of Shots.</li>
             <li>You can select up to 3 items from your vault to move to your shipping cart.</li>
             <li>Once you confirm a shipment, the items are considered finalized and cannot be returned to the vault.</li>
           </ul>
