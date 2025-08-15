@@ -2,7 +2,7 @@
 "use client";
 
 import Link from "next/link";
-import { Package, User, LogOut, MessageSquare, BarChart, Swords, Dices, LineChart, BrainCircuit, BookOpen, Flame, ShoppingCart, Shield, Heart } from "lucide-react";
+import { Package, User, LogOut, MessageSquare, BarChart, Swords, Dices, LineChart, BrainCircuit, BookOpen, Flame, ShoppingCart, Shield, Heart, Repeat } from "lucide-react";
 import { Button } from "./ui/button";
 import { useAuth } from "@/lib/auth";
 import {
@@ -63,7 +63,7 @@ export function Header() {
                 <Link href="/crypto-luck">Crypto Luck</Link>
              </Button>
              <Button variant="ghost" asChild>
-                <Link href="/puzzle-games">Puzzle Games</Link>
+                <Link href="/higher-or-lower">Higher or Lower</Link>
              </Button>
              <Button variant="ghost" asChild>
                 <Link href="/pool-shot">Pool Shot</Link>
@@ -75,7 +75,7 @@ export function Header() {
                 <Link href="/shots-hub">Shots Hub</Link>
              </Button>
              <Button variant="ghost" asChild>
-                <Link href="/learning-center">How to Earn</Link>
+                <Link href="/learning-center">Learning Center</Link>
              </Button>
           </nav>
         </div>

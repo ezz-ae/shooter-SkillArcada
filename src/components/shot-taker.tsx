@@ -28,11 +28,13 @@ import { cn } from "@/lib/utils";
 import { Calculator } from "./calculator";
 import { ChartContainer } from "./ui/chart";
 import { DrawPad } from "./draw-pad";
-import { Target, HelpCircle, Check, Gem, DollarSign, Info, Flame } from "lucide-react";
+import { Target, HelpCircle, Check, Gem, DollarSign, Info, Flame, Loader } from "lucide-react";
 import { ChessBoard } from "./chess-board";
 import { MazeGame } from "./maze-game";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
 import { Badge } from "./ui/badge";
+import { generateProductImage } from "@/ai/flows/generate-product-image-flow";
+import { Skeleton } from "./ui/skeleton";
 
 interface ShotTakerProps {
   product: Product;
@@ -72,6 +74,8 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
   const [capturedPrices, setCapturedPrices] = useState<number[]>([]);
   const [selectedPrice, setSelectedPrice] = useState<number | null>(null);
   const [capturedTime, setCapturedTime] = useState<Date | null>(null);
+  const [generatedImageUrl, setGeneratedImageUrl] = useState<string>('');
+  const [isGeneratingImage, setIsGeneratingImage] = useState(true);
 
   // For reel-pause game
   const [reelNumbers, setReelNumbers] = useState<number[]>(Array(16).fill(0));
@@ -111,6 +115,27 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
       currentTrend: 'stable', // 'stable', 'diving', 'climbing'
       trendSteps: 0, // How long the current trend will last
   }).current;
+
+  useEffect(() => {
+    async function getImage() {
+      if (view === 'chart') return; // Don't generate images for the large product page chart view
+      setIsGeneratingImage(true);
+      try {
+        const result = await generateProductImage({
+          productName: product.name,
+          dataAiHint: product.dataAiHint
+        });
+        if (!result.imageUrl) throw new Error('No URL returned');
+        setGeneratedImageUrl(result.imageUrl);
+      } catch (error) {
+        console.error("Failed to generate image for product:", product.id, error);
+        setGeneratedImageUrl(product.imageUrl); // fallback to original placeholder
+      } finally {
+        setIsGeneratingImage(false);
+      }
+    }
+    getImage();
+  }, [product.id, product.name, product.dataAiHint, product.imageUrl, view]);
 
   const getNewPrice = useCallback((price: number, marketPrice: number) => {
     const now = Date.now();
@@ -303,6 +328,7 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
         ...product,
         pricePaid: priceToPay,
         purchaseTimestamp: Date.now(),
+        imageUrl: generatedImageUrl // Save generated image
       });
 
     if (success) {
@@ -347,6 +373,7 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
         ...product,
         pricePaid: priceToPay,
         purchaseTimestamp: Date.now(),
+        imageUrl: generatedImageUrl
       });
     
     if (success) {
@@ -469,6 +496,10 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
   }
 
   const renderActions = () => {
+    if (isGeneratingImage) {
+      return <Button disabled className="w-full h-12 text-lg font-bold"><Loader className="animate-spin mr-2"/>Generating...</Button>
+    }
+
     if (product.game === 'maze-draw') {
         return (
              <div className="w-full flex flex-col gap-2">
@@ -573,6 +604,7 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
         <button
           className="w-full h-16 text-md font-bold text-primary-foreground rounded-md relative overflow-hidden bg-secondary flex items-center justify-center group"
           onClick={handleShot}
+          disabled={isGeneratingImage}
         >
           <div className="absolute inset-0 moving-gradient opacity-80 group-hover:opacity-100 transition-opacity"></div>
           <div className="relative flex items-baseline w-full justify-center">
@@ -603,16 +635,24 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
                 </ChartContainer>
             </div>
             <div className="relative z-10 flex flex-col items-center justify-center h-full">
-              <div className="flex items-center gap-2">
-                <DollarSign className="h-6 w-6 text-primary" />
-                <span className={cn(
-                  "font-black tracking-wider text-foreground",
-                  view === 'full' ? "text-3xl lg:text-4xl" : "text-4xl lg:text-6xl"
-                  )}>{currentPrice.toFixed(2)}</span>
-              </div>
-              <span className={cn("font-bold text-sm", discountColor)}>
-                  {discountPercent > 0 ? `+${discountPercent.toFixed(1)}%` : `${discountPercent.toFixed(1)}%`}
-              </span>
+              {isGeneratingImage ? (
+                <div className="w-full h-full flex items-center justify-center">
+                  <Skeleton className="h-24 w-48" />
+                </div>
+              ) : (
+              <>
+                <div className="flex items-center gap-2">
+                  <DollarSign className="h-6 w-6 text-primary" />
+                  <span className={cn(
+                    "font-black tracking-wider text-foreground",
+                    view === 'full' ? "text-3xl lg:text-4xl" : "text-4xl lg:text-6xl"
+                    )}>{currentPrice.toFixed(2)}</span>
+                </div>
+                <span className={cn("font-bold text-sm", discountColor)}>
+                    {discountPercent > 0 ? `+${discountPercent.toFixed(1)}%` : `${discountPercent.toFixed(1)}%`}
+                </span>
+              </>
+              )}
             </div>
          </div>
       )
@@ -715,7 +755,7 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
                 </AlertDialogHeader>
                 
                 <div className="relative h-64 w-full my-4 rounded-lg overflow-hidden shadow-lg bg-secondary flex items-center justify-center">
-                    <Gem className="h-24 w-24 text-primary animate-pulse" />
+                    {isGeneratingImage ? <Loader className="h-12 w-12 animate-spin text-primary" /> : <Image src={generatedImageUrl} alt={product.name} fill className="object-contain" />}
                      <div className="absolute inset-0 bg-black/10 flex flex-col justify-between p-4">
                         <div className="text-right">
                         <div className="bg-black/50 text-white p-2 rounded-md text-sm font-mono inline-block">

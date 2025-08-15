@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -5,7 +6,7 @@ import Image from "next/image";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
 import { useStore, type VaultItem } from "@/lib/store";
-import { TrendingDown, TrendingUp, Hourglass, Check, Gem, Repeat, Gift } from "lucide-react";
+import { TrendingDown, TrendingUp, Hourglass, Check, Gem, Repeat, Gift, Loader } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import {
   AlertDialog,
@@ -20,6 +21,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+import { generateProductImage } from "@/ai/flows/generate-product-image-flow";
+import { Skeleton } from "./ui/skeleton";
 
 interface VaultItemCardProps {
   item: VaultItem;
@@ -39,6 +42,9 @@ export function VaultItemCard({
   const [priceTrend, setPriceTrend] = useState<"up" | "down" | "stale">(
     "stale"
   );
+  const [generatedImageUrl, setGeneratedImageUrl] = useState<string>(item.imageUrl);
+  const [isGeneratingImage, setIsGeneratingImage] = useState(true);
+
   const { tradeIn } = useStore();
   const { toast } = useToast();
 
@@ -48,6 +54,32 @@ export function VaultItemCard({
     Math.max(0, TRADE_IN_COOLDOWN_MS - timeSincePurchase)
   );
   
+  useEffect(() => {
+    // Only generate a new image if the stored one is a placeholder
+    if (item.imageUrl.includes('placehold.co')) {
+      async function getImage() {
+        setIsGeneratingImage(true);
+        try {
+          const result = await generateProductImage({
+            productName: item.name,
+            dataAiHint: item.dataAiHint
+          });
+          if (!result.imageUrl) throw new Error('No URL returned');
+          setGeneratedImageUrl(result.imageUrl);
+        } catch (error) {
+          console.error("Failed to generate image for vault item:", item.id, error);
+          setGeneratedImageUrl(item.imageUrl); // fallback to original placeholder
+        } finally {
+          setIsGeneratingImage(false);
+        }
+      }
+      getImage();
+    } else {
+        setIsGeneratingImage(false);
+    }
+  }, [item.id, item.name, item.dataAiHint, item.imageUrl]);
+
+
   // This effect simulates the current market value of the item changing over time.
   useEffect(() => {
     const updatePriceInterval = 5000 + Math.random() * 2000;
@@ -115,15 +147,19 @@ export function VaultItemCard({
         {isSelected && <Check className="h-4 w-4 text-accent" />}
       </button>
 
-      <CardHeader className="p-4">
-         <div className="flex items-start justify-between gap-4">
-            <h3 className="font-bold">{item.name}</h3>
-            <div className="p-2 bg-primary/10 rounded-full shrink-0">
-                <Gem className="h-5 w-5 text-primary" />
-            </div>
-         </div>
+      <CardHeader className="p-4 relative h-40 flex items-center justify-center overflow-hidden">
+        {isGeneratingImage ? <Skeleton className="w-full h-full" /> : (
+            <Image 
+                src={generatedImageUrl} 
+                alt={item.name} 
+                fill 
+                className="object-contain"
+                data-ai-hint={item.dataAiHint}
+            />
+        )}
       </CardHeader>
       <CardContent className="flex-grow p-4 pb-2">
+        <h3 className="font-bold">{item.name}</h3>
         <p className="text-sm text-muted-foreground">
           Paid: {item.pricePaid.toFixed(2)} Shots
         </p>
