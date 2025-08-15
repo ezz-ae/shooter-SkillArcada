@@ -71,6 +71,8 @@ export function LuckSession() {
             setDiceValues(newValues);
             setResultCardIndex(cardIndex);
             setLastLuckReading(luckCards[cardIndex]); // Save to store
+            
+            // Set state to result to show final dice values
             setGameState('result');
             
             // Flip the card after the dice settle
@@ -103,11 +105,11 @@ export function LuckSession() {
                 </div>
             )}
 
-             {(gameState === 'rolling' || gameState === 'result') && (
-                <div className="flex flex-col items-center gap-8">
+            {(gameState === 'rolling' || gameState === 'result') && (
+                <div className="flex flex-col items-center gap-8 h-96">
                      <div className={cn(
-                        "flex justify-center gap-4 sm:gap-8 transition-all duration-500",
-                        gameState === 'result' ? 'opacity-100 scale-100' : 'opacity-0 scale-50'
+                        "flex justify-center gap-4 sm:gap-8 transition-opacity duration-300",
+                        gameState === 'result' ? 'opacity-100' : 'opacity-0'
                      )}>
                         <Dice value={diceValues[0]} isRolling={gameState === 'rolling'} />
                         <Dice value={diceValues[1]} isRolling={gameState === 'rolling'} delay={100} />
@@ -115,7 +117,7 @@ export function LuckSession() {
                     </div>
 
                     <div className={cn(
-                        "transition-all duration-500 delay-300",
+                        "transition-all duration-500",
                          gameState === 'result' ? 'opacity-100 scale-100' : 'opacity-0 scale-90'
                     )}>
                         <LuckCard 
