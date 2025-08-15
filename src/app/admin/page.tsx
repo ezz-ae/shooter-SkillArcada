@@ -20,17 +20,18 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 export default function AdminPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
-  const { games, toggleFeatured, setStatus } = useGameSettingsStore();
+  const { games, toggleFeatured, setStatus, initializeGames } = useGameSettingsStore();
 
   useEffect(() => {
     async function fetchData() {
         setLoading(true);
+        initializeGames(); // Ensure games are loaded dynamically
         const allUsers = await getUsers();
         setUsers(allUsers);
         setLoading(false);
     }
     fetchData();
-  }, []);
+  }, [initializeGames]);
 
   const getStatusColor = (status: GameStatus) => {
     switch (status) {
@@ -106,7 +107,7 @@ export default function AdminPage() {
                             {games.map((game) => (
                                 <tr key={game.id} className="border-b last:border-0">
                                     <td className="p-3 font-medium">{game.name}</td>
-                                    <td className="p-3 text-sm text-muted-foreground">{game.description}</td>
+                                    <td className="p-3 text-sm text-muted-foreground max-w-xs truncate">{game.description}</td>
                                     <td className="p-3">
                                         <Badge className="capitalize text-white" style={{ backgroundColor: getStatusColor(game.status) }}>
                                             {game.status}

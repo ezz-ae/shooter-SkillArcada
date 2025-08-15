@@ -1,6 +1,7 @@
 
 import { create } from 'zustand';
 import { z } from 'zod';
+import { mockProducts } from './products'; // Import products to dynamically generate games
 
 export type GameStatus = 'live' | 'maintenance' | 'disabled';
 
@@ -14,23 +15,45 @@ export interface Game {
 
 interface GameSettingsState {
     games: Game[];
+    initializeGames: () => void;
     setStatus: (id: string, status: GameStatus) => void;
     toggleFeatured: (id: string) => void;
     getGame: (id: string) => Game | undefined;
 }
 
-const initialGames: Game[] = [
-    { id: 'crypto-luck', name: 'Crypto Luck', description: 'Predict Bitcoin\'s next move.', status: 'live', isFeatured: true },
-    { id: 'pool-shot', name: 'Pool Shot Challenges', description: '1-on-1 pool challenges.', status: 'live', isFeatured: false },
-    { id: 'luckgirls', name: 'Luckgirls Games', description: 'Social games with chat features.', status: 'disabled', isFeatured: false },
-    { id: 'hit-or-miss', name: 'Hit or Miss', description: 'Timing-based price capture game.', status: 'live', isFeatured: true },
-    { id: 'ai-adventure', name: 'AI Adventure', description: 'AI-powered story completion game.', status: 'maintenance', isFeatured: false },
-    { id: 'chess', name: 'Chess Puzzles', description: 'Daily checkmate puzzles.', status: 'live', isFeatured: false },
-    { id: 'higher-or-lower', name: 'Higher or Lower', description: 'Card sequence guessing game.', status: 'live', isFeatured: false },
-];
+// Function to generate the initial game list from products
+const generateInitialGames = (): Game[] => {
+    const gameProducts = mockProducts.filter(p => p.game);
+    const uniqueGames = new Map<string, Game>();
+
+    gameProducts.forEach(p => {
+        if (p.game && !uniqueGames.has(p.game)) {
+             uniqueGames.set(p.game, {
+                id: p.game,
+                name: p.name, // Use product name as a default game name
+                description: p.expertSystem, // Use expert system as description
+                status: 'live', // Default status
+                isFeatured: false,
+             });
+        }
+    });
+
+    // Manually add games that don't have a specific product tied to them in the same way
+    if (!uniqueGames.has('crypto-luck')) uniqueGames.set('crypto-luck', { id: 'crypto-luck', name: 'Crypto Luck', description: 'Predict Bitcoin\'s next move.', status: 'live', isFeatured: true });
+    if (!uniqueGames.has('pool-shot')) uniqueGames.set('pool-shot', { id: 'pool-shot', name: 'Pool Shot Challenges', description: '1-on-1 pool challenges.', status: 'live', isFeatured: false });
+    if (!uniqueGames.has('hit-or-miss')) uniqueGames.set('hit-or-miss', { id: 'hit-or-miss', name: 'Hit or Miss', description: 'Timing-based price capture game.', status: 'live', isFeatured: true });
+    if (!uniqueGames.has('shop-hunter')) uniqueGames.set('shop-hunter', { id: 'shop-hunter', name: 'Shop Hunter', description: 'AI-powered discount hunting.', status: 'live', isFeatured: true });
+
+
+    return Array.from(uniqueGames.values());
+};
+
 
 export const useGameSettingsStore = create<GameSettingsState>((set, get) => ({
-    games: initialGames,
+    games: [],
+    initializeGames: () => {
+        set({ games: generateInitialGames() });
+    },
     setStatus: (id, status) => set(state => ({
         games: state.games.map(game => game.id === id ? { ...game, status } : game)
     })),
@@ -39,6 +62,10 @@ export const useGameSettingsStore = create<GameSettingsState>((set, get) => ({
     })),
     getGame: (id) => get().games.find(game => game.id === id),
 }));
+
+// Initialize the store with dynamic games
+useGameSettingsStore.getState().initializeGames();
+
 
 // Zod schema for AI tool input validation
 export const GameSettingsInputSchema = z.object({
