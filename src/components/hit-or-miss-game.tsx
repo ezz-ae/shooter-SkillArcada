@@ -148,7 +148,7 @@ export function HitOrMissGame() {
         {/* Price Reel */}
         <div className="h-24 w-full bg-secondary/50 rounded-xl overflow-hidden relative shadow-inner flex items-center justify-center">
             <div className="transition-opacity duration-300">
-                <p className="text-6xl font-black font-mono shimmer-text">${price.toFixed(2)}</p>
+                <p className="text-5xl md:text-6xl font-black font-mono shimmer-text">${price.toFixed(2)}</p>
             </div>
         </div>
         

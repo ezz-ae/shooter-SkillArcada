@@ -754,7 +754,7 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
                     <AlertDialogTitle className="text-center">You Got a Shot!</AlertDialogTitle>
                 </AlertDialogHeader>
                 
-                <div className="relative h-64 w-full my-4 rounded-lg overflow-hidden shadow-lg bg-secondary flex items-center justify-center">
+                <div className="relative h-48 md:h-64 w-full my-4 rounded-lg overflow-hidden shadow-lg bg-secondary flex items-center justify-center">
                     {isGeneratingImage ? <Loader className="h-12 w-12 animate-spin text-primary" /> : <Image src={generatedImageUrl} alt={product.name} fill className="object-contain" />}
                      <div className="absolute inset-0 bg-black/10 flex flex-col justify-between p-4">
                         <div className="text-right">
@@ -774,8 +774,8 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
                                             selectedPrice === price ? "ring-2 ring-primary" : "hover:bg-black/70"
                                         )}
                                     >
-                                        <div className="text-sm text-muted-foreground">Shot {index + 1}</div>
-                                        <div className={cn("relative text-2xl font-black text-white", selectedPrice === price && "shimmer-text")} style={{'--trend-color': 'hsl(var(--primary))'} as React.CSSProperties}>
+                                        <div className="text-xs text-muted-foreground">Shot {index + 1}</div>
+                                        <div className={cn("relative text-lg sm:text-2xl font-black text-white", selectedPrice === price && "shimmer-text")} style={{'--trend-color': 'hsl(var(--primary))'} as React.CSSProperties}>
                                             ${price.toFixed(2)}
                                         </div>
                                     </button>
@@ -785,8 +785,8 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
                            <div className="bg-black/50 p-4 rounded-lg text-center">
                                 <div className="text-sm text-muted-foreground">Captured Price</div>
                                 <div className="flex items-center justify-center gap-2">
-                                  <DollarSign className="h-6 w-6 text-primary" />
-                                  <div className="relative text-3xl font-black text-white shimmer-text" style={{'--trend-color': 'hsl(var(--primary))'} as React.CSSProperties}>
+                                  <DollarSign className="h-5 sm:h-6 w-5 sm:w-6 text-primary" />
+                                  <div className="relative text-2xl sm:text-3xl font-black text-white shimmer-text" style={{'--trend-color': 'hsl(var(--primary))'} as React.CSSProperties}>
                                       {capturedPrices[0]?.toFixed(2)}
                                   </div>
                                 </div>
@@ -795,7 +795,7 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
                     </div>
                 </div>
 
-                <AlertDialogDescription className="text-center">
+                <AlertDialogDescription className="text-center text-sm sm:text-base">
                      You've captured <span className="font-bold text-foreground">{product.name}</span>! 
                      {product.game === 'multi-shot' 
                         ? ` Choose one price to vault.`
@@ -803,7 +803,7 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
                      }
                 </AlertDialogDescription>
                 
-                <AlertDialogFooter className="gap-2 sm:gap-0 sm:flex-row sm:justify-center">
+                <AlertDialogFooter className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-4">
                     <AlertDialogCancel onClick={handleCloseDialog}>Let it go</AlertDialogCancel>
                     <AlertDialogAction onClick={() => handleVault()} disabled={product.game === 'multi-shot' && selectedPrice === null}>Vault It!</AlertDialogAction>
                 </AlertDialogFooter>

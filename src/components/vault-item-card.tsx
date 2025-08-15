@@ -7,7 +7,7 @@ import { Button } from "./ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
 import { useStore, type VaultItem } from "@/lib/store";
 import { TrendingDown, TrendingUp, Hourglass, Check, Gem, Repeat, Gift, Loader } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import { useNotificationStore } from "@/lib/notification-store";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -46,7 +46,7 @@ export function VaultItemCard({
   const [isGeneratingImage, setIsGeneratingImage] = useState(true);
 
   const { tradeIn } = useStore();
-  const { toast } = useToast();
+  const { add: toast } = useNotificationStore();
 
   const timeSincePurchase = Date.now() - item.purchaseTimestamp;
   const isCoolingDown = timeSincePurchase < TRADE_IN_COOLDOWN_MS;
