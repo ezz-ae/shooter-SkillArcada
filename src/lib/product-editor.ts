@@ -7,12 +7,12 @@ import { mockProducts } from './products';
 // This is a mock implementation. In a real app, this would write to a database.
 // For now, we are just logging the changes.
 
-export const ProductEditInputSchema = z.object({
-  productId: z.string().describe("The unique ID of the product to edit, e.g., 'prod_phone_01'."),
-  name: z.string().optional().describe("The new name for the product."),
-  subtitle: z.string().optional().describe("The new subtitle for the product."),
-  description: z.string().optional().describe("The new description for the product."),
-  marketPrice: z.number().optional().describe("The new market price for the product."),
+const ProductEditInputSchema = z.object({
+  productId: z.string(),
+  name: z.string().optional(),
+  subtitle: z.string().optional(),
+  description: z.string().optional(),
+  marketPrice: z.number().optional(),
 });
 
 export type ProductEditInput = z.infer<typeof ProductEditInputSchema>;

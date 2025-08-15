@@ -11,7 +11,7 @@
 import {ai} from '@/ai/genkit';
 import {z} from 'zod';
 import { updateGameSettings, GameSettingsInputSchema } from '@/lib/game-settings-store';
-import { updateProductDetails, ProductEditInputSchema } from '@/lib/product-editor';
+import { updateProductDetails, type ProductEditInput } from '@/lib/product-editor';
 
 const AdminAgentInputSchema = z.object({
   question: z.string().describe("The admin's question about the platform's status, users, or performance. It can also be a request to perform an action, like enabling a game or changing a product's details."),
@@ -27,6 +27,15 @@ export type AdminAgentOutput = z.infer<typeof AdminAgentOutputSchema>;
 export async function askAdminAgent(input: AdminAgentInput): Promise<AdminAgentOutput> {
   return adminAgentFlow(input);
 }
+
+// Zod schema for the updateProductDetails tool
+const ProductEditInputSchema = z.object({
+  productId: z.string().describe("The unique ID of the product to edit, e.g., 'prod_phone_01'."),
+  name: z.string().optional().describe("The new name for the product."),
+  subtitle: z.string().optional().describe("The new subtitle for the product."),
+  description: z.string().optional().describe("The new description for the product."),
+  marketPrice: z.number().optional().describe("The new market price for the product."),
+});
 
 // Define the tools for the AI to use
 const updateGameSettingsTool = ai.defineTool(
