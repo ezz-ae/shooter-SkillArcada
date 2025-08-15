@@ -13,12 +13,20 @@ const adminNavItems = [
     { name: "Managers", href: "/admin/managers", icon: Users },
     { name: "Games", href: "/admin/games", icon: Gamepad2 },
     { name: "Performance", href: "/admin/performance", icon: TrendingUp },
-    { name: "Settings", href: "/admin/settings", icon: Settings },
     { name: "AI Agent", href: "/admin/ai-agent", icon: Bot },
 ]
 
 export function AdminSidebar() {
     const pathname = usePathname();
+
+    const isLinkActive = (href: string) => {
+        // Exact match for overview page
+        if (href === "/admin") {
+            return pathname === href;
+        }
+        // Starts-with match for other pages
+        return pathname.startsWith(href);
+    };
 
     return (
         <aside className="w-64 flex-col border-r bg-background p-4 hidden md:flex">
@@ -33,7 +41,7 @@ export function AdminSidebar() {
                     <Button 
                         key={item.name}
                         asChild
-                        variant={pathname.startsWith(item.href) && (item.href !== '/admin' || pathname === '/admin') ? "secondary" : "ghost"}
+                        variant={isLinkActive(item.href) ? "secondary" : "ghost"}
                         className="justify-start"
                     >
                         <Link href={item.href}>
