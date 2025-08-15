@@ -2,7 +2,7 @@
 "use client";
 
 import Link from "next/link";
-import { Package, User, LogOut, MessageSquare, BarChart, Swords, Dices, LineChart, BrainCircuit, BookOpen, Flame, ShoppingCart, Shield, Heart, Repeat } from "lucide-react";
+import { Package, User, LogOut, MessageSquare, BarChart, Swords, Dices, LineChart, BrainCircuit, BookOpen, Flame, ShoppingCart, Shield, Heart, Repeat, Menu } from "lucide-react";
 import { Button } from "./ui/button";
 import { useAuth } from "@/lib/auth";
 import {
@@ -14,16 +14,38 @@ import {
   DropdownMenuTrigger,
   DropdownMenuGroup,
 } from "@/components/ui/dropdown-menu";
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetClose,
+} from "@/components/ui/sheet";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { ShooterWhisper } from "./shooter-whisper";
 import { ThemeToggle } from "./theme-toggle";
+import { useIsMobile } from "@/hooks/use-mobile";
+
+const navLinks = [
+    { href: "/shoterday", label: "Shoterday" },
+    { href: "/luckshots", label: "ShooterGuns" },
+    { href: "/luckgirls", label: "Luckgirls" },
+    { href: "/hit-or-miss", label: "Hit or Miss" },
+    { href: "/shop-hunter", label: "Shop Hunter" },
+    { href: "/puzzle-games", label: "Puzzle Games" },
+    { href: "/pool-shot", label: "Pool Shot" },
+    { href: "/chess", label: "Chess" },
+    { href: "/ai-adventure", label: "AI Adventure" },
+    { href: "/shots-hub", label: "Shots Hub" },
+    { href: "/learning-center", label: "Learning Center" },
+];
 
 export function Header() {
   const { isAuthenticated, user, logout, initializeAuth } = useAuth();
   const [isClient, setIsClient] = useState(false);
   const [isWhisperOpen, setIsWhisperOpen] = useState(false);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     setIsClient(true);
@@ -31,6 +53,24 @@ export function Header() {
     const unsubscribe = initializeAuth();
     return () => unsubscribe();
   }, [initializeAuth]);
+
+  const renderNavLinks = (isMobileLayout = false) => (
+    <nav className={isMobileLayout ? "flex flex-col gap-2" : "hidden md:flex items-center space-x-1"}>
+      {navLinks.map((link) => (
+        isMobileLayout ? (
+          <SheetClose asChild key={link.href}>
+            <Button variant="ghost" className="justify-start text-lg" asChild>
+              <Link href={link.href}>{link.label}</Link>
+            </Button>
+          </SheetClose>
+        ) : (
+          <Button variant="ghost" asChild key={link.href}>
+            <Link href={link.href}>{link.label}</Link>
+          </Button>
+        )
+      ))}
+    </nav>
+  );
 
   return (
     <>
@@ -40,45 +80,26 @@ export function Header() {
           <Link href="/" className="mr-6 flex items-center space-x-2">
             <span className="font-lilita text-4xl shimmer-text">ShopnLuck</span>
           </Link>
-          <nav className="hidden md:flex items-center space-x-1">
-             <Button variant="ghost" asChild>
-                <Link href="/shoterday">Shoterday</Link>
-             </Button>
-             <Button variant="ghost" asChild>
-                <Link href="/luckshots">ShooterGuns</Link>
-             </Button>
-              <Button variant="ghost" asChild>
-                <Link href="/luckgirls">Luckgirls</Link>
-             </Button>
-             <Button variant="ghost" asChild>
-                <Link href="/hit-or-miss">Hit or Miss</Link>
-             </Button>
-              <Button variant="ghost" asChild>
-                <Link href="/shop-hunter">Shop Hunter</Link>
-             </Button>
-              <Button variant="ghost" asChild>
-                <Link href="/puzzle-games">Puzzle Games</Link>
-             </Button>
-              <Button variant="ghost" asChild>
-                <Link href="/pool-shot">Pool Shot</Link>
-             </Button>
-              <Button variant="ghost" asChild>
-                <Link href="/chess">Chess</Link>
-             </Button>
-             <Button variant="ghost" asChild>
-                <Link href="/ai-adventure">AI Adventure</Link>
-             </Button>
-              <Button variant="ghost" asChild>
-                <Link href="/shots-hub">Shots Hub</Link>
-             </Button>
-             <Button variant="ghost" asChild>
-                <Link href="/learning-center">Learning Center</Link>
-             </Button>
-          </nav>
+          {!isMobile && renderNavLinks(false)}
         </div>
         <div className="flex flex-1 items-center justify-end space-x-2">
           {isClient && isAuthenticated && user ? (
             <>
+            {isMobile && (
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button variant="ghost" size="icon">
+                    <Menu />
+                    <span className="sr-only">Open Menu</span>
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="left" className="w-full max-w-sm">
+                   <div className="p-4">
+                     {renderNavLinks(true)}
+                   </div>
+                </SheetContent>
+              </Sheet>
+            )}
             <ThemeToggle />
             <Button variant="ghost" size="icon" onClick={() => setIsWhisperOpen(true)}>
                 <MessageSquare />
