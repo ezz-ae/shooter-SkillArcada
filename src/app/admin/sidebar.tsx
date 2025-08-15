@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 const adminNavItems = [
     { name: "Overview", href: "/admin", icon: BarChart3 },
     { name: "Users", href: "/admin/users", icon: Users },
+    { name: "Managers", href: "/admin/managers", icon: Users },
     { name: "Games", href: "/admin/games", icon: Gamepad2 },
     { name: "Performance", href: "/admin/performance", icon: TrendingUp },
     { name: "Settings", href: "/admin/settings", icon: Settings },
