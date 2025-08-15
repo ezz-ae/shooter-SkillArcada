@@ -56,17 +56,14 @@ export function Header() {
               <Button variant="ghost" asChild>
                 <Link href="/shop-hunter">Shop Hunter</Link>
              </Button>
-             <Button variant="ghost" asChild>
-                <Link href="/shooter-man">ShooterMan</Link>
+              <Button variant="ghost" asChild>
+                <Link href="/puzzle-games">Puzzle Games</Link>
              </Button>
-             <Button variant="ghost" asChild>
-                <Link href="/crypto-luck">Crypto Luck</Link>
-             </Button>
-             <Button variant="ghost" asChild>
-                <Link href="/higher-or-lower">Higher or Lower</Link>
-             </Button>
-             <Button variant="ghost" asChild>
+              <Button variant="ghost" asChild>
                 <Link href="/pool-shot">Pool Shot</Link>
+             </Button>
+              <Button variant="ghost" asChild>
+                <Link href="/chess">Chess</Link>
              </Button>
              <Button variant="ghost" asChild>
                 <Link href="/ai-adventure">AI Adventure</Link>
