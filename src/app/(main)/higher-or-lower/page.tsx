@@ -4,7 +4,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { useToast } from "@/hooks/use-toast";
+import { useNotificationStore } from "@/lib/notification-store";
 import { useStore } from "@/lib/store";
 import { ArrowDown, ArrowUp, Check, Layers, X } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -39,7 +39,7 @@ const puzzleSequence: [{rank: number, suit: number}, 'higher' | 'lower'][] = [
 ];
 
 export default function HigherOrLowerPage() {
-    const { toast } = useToast();
+    const { add: toast } = useNotificationStore();
     const { addShots } = useStore();
 
     const [currentStep, setCurrentStep] = useState(0);
