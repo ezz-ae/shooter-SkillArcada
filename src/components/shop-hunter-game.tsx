@@ -5,7 +5,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { Product, getProducts } from "@/lib/products";
 import { Button } from "./ui/button";
 import { useStore } from "@/lib/store";
-import { useToast } from "@/hooks/use-toast";
+import { useNotificationStore } from "@/lib/notification-store";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -34,7 +34,7 @@ export function ShopHunterGame() {
     const [isGeneratingImage, setIsGeneratingImage] = useState(false);
     
     const { spendShot, addToVault } = useStore();
-    const { toast } = useToast();
+    const { add: toast } = useNotificationStore();
 
     useEffect(() => {
       async function fetchAndFilterProducts() {
@@ -144,7 +144,7 @@ export function ShopHunterGame() {
                 <CardHeader>
                     <CardTitle className="text-2xl font-bold text-center">Choose Your Target</CardTitle>
                 </CardHeader>
-                <CardContent className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <CardContent className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                     {products.map(product => (
                         <button key={product.id} onClick={() => handleSelectProduct(product)} className="p-4 bg-secondary rounded-lg flex flex-col items-center justify-center gap-2 hover:ring-2 hover:ring-primary transition-all h-48 group">
                            <div className="w-full h-24 relative">
@@ -171,7 +171,7 @@ export function ShopHunterGame() {
                             <Image src={generatedImageUrl} alt={selectedProduct.name} fill className="object-contain" data-ai-hint={selectedProduct.dataAiHint}/>
                         )}
                      </div>
-                    <p className="text-2xl font-black text-foreground text-center">{selectedProduct.name}</p>
+                    <p className="text-xl md:text-2xl font-black text-foreground text-center">{selectedProduct.name}</p>
                     <p className="text-sm text-muted-foreground font-semibold">Market Price: ${selectedProduct.marketPrice.toFixed(2)}</p>
                 </div>
 
@@ -183,20 +183,20 @@ export function ShopHunterGame() {
             </div>
 
             <AlertDialog open={!!capturedResult} onOpenChange={(open) => !open && handleCloseDialog()}>
-                 <AlertDialogContent onEscapeKeyDown={handleCloseDialog}>
+                 <AlertDialogContent onEscapeKeyDown={handleCloseDialog} className="sm:max-w-sm">
                     <AlertDialogHeader>
-                        <AlertDialogTitle className={cn("text-center", capturedResult && capturedResult.product.marketPrice > capturedResult.price ? "text-primary" : "text-destructive")}>
+                        <AlertDialogTitle className={cn("text-center text-2xl", capturedResult && capturedResult.product.marketPrice > capturedResult.price ? "text-primary" : "text-destructive")}>
                            <span className="flex items-center justify-center gap-2">
                                {capturedResult && capturedResult.product.marketPrice > capturedResult.price ? <><Check/>Nice Catch!</> : <><X/>Bad Deal...</>}
                            </span>
                         </AlertDialogTitle>
                     </AlertDialogHeader>
                     
-                    <div className="relative h-64 w-full my-4 rounded-lg overflow-hidden shadow-lg bg-secondary flex flex-col items-center justify-center p-4 gap-4">
+                    <div className="relative h-64 w-full my-2 rounded-lg overflow-hidden shadow-lg bg-secondary flex flex-col items-center justify-center p-4 gap-4">
                         <div className="w-full h-24 relative">
                             <Image src={capturedResult?.imageUrl || ''} alt={capturedResult?.product.name || ''} fill className="object-contain" data-ai-hint={capturedResult?.product.dataAiHint}/>
                         </div>
-                        <p className="text-2xl font-bold">{capturedResult?.product.name}</p>
+                        <p className="text-2xl font-bold text-center">{capturedResult?.product.name}</p>
                         <p className="text-lg text-muted-foreground">for</p>
                         <p className="text-4xl font-black shimmer-text">{capturedResult?.price.toFixed(2)} Shots</p>
                     </div>
