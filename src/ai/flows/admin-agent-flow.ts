@@ -11,10 +11,12 @@
 import {ai} from '@/ai/genkit';
 import {z} from 'zod';
 import { updateGameSettings, GameSettingsInputSchema } from '@/lib/game-settings-store';
-import { updateProductDetails, type ProductEditInput } from '@/lib/product-editor';
+import { updateProductDetails } from '@/lib/product-editor';
+import { sendNotification, NotificationInputSchema } from '@/lib/actions';
+
 
 const AdminAgentInputSchema = z.object({
-  question: z.string().describe("The admin's question about the platform's status, users, or performance. It can also be a request to perform an action, like enabling a game or changing a product's details."),
+  question: z.string().describe("The admin's question about the platform's status, users, or performance. It can also be a request to perform an action, like enabling a game, changing a product's details, or sending a notification to a user."),
 });
 export type AdminAgentInput = z.infer<typeof AdminAgentInputSchema>;
 
@@ -66,15 +68,29 @@ const updateProductDetailsTool = ai.defineTool(
     }
 );
 
+const sendUserNotificationTool = ai.defineTool(
+    {
+        name: 'sendUserNotification',
+        description: "Sends a direct, real-time notification to a user's screen. Use this to send warnings, congratulations, or important alerts. For example, if you detect an exploit, you could disable the game and send a notification to all active players.",
+        inputSchema: NotificationInputSchema,
+        outputSchema: z.string(),
+    },
+    async (input) => {
+        console.log("AI TOOL: Sending user notification with input:", input);
+        const result = await sendNotification(input);
+        return result.message;
+    }
+);
+
 
 const prompt = ai.definePrompt({
   name: 'adminAgentPrompt',
   input: {schema: AdminAgentInputSchema},
   output: {schema: AdminAgentOutputSchema},
-  tools: [updateGameSettingsTool, updateProductDetailsTool],
+  tools: [updateGameSettingsTool, updateProductDetailsTool, sendUserNotificationTool],
   prompt: `You are "Shooter", the AI brain and guardian of the ShooterGun platform. Today, you are in **Admin Mode**. You are speaking to the platform administrator. Your tone should be professional, data-driven, and insightful, but you can still retain a hint of your core "gamegang mega" persona.
 
-You have access to the platform's key metrics and a live intelligence feed that flags anomalies. You can also perform actions, like changing game settings or editing product details.
+You have access to the platform's key metrics and a live intelligence feed that flags anomalies. You can also perform actions, like changing game settings, editing product details, or sending notifications to users.
 
 **Live Platform Data:**
 - Total Users: 1,250
@@ -93,9 +109,9 @@ You have access to the platform's key metrics and a live intelligence feed that 
 
 **Your Task:**
 1.  **Analyze the Question & Live Feed:** Understand the admin's request in the context of the live data and intelligence alerts. Are they asking for data, an opinion, or to perform an action? Proactively mention any relevant alerts.
-2.  **Use Tools to Take Action:** If the admin asks to make a change (e.g., "disable the crypto luck game" or "change the name of the iPhone to SuperPhone X"), or if you identify a critical issue from the feed (e.g., the exploit warning), use the appropriate tool ('updateGameSettings' or 'updateProductDetails') to perform the action. When you detect an exploit, you should proactively suggest and be prepared to disable the game to "patch the glitch."
-3.  **Provide a Data-Driven Response:** Use all available data to formulate a clear, concise answer in markdown. If you take an action, confirm it. For example, "I've disabled the 'Higher or Lower' game to investigate the potential exploit you mentioned." or "I have updated the product's name to SuperPhone X."
-4.  **Offer Actionable Suggestions:** Based on your analysis, provide a concrete, suggested action. For example, "We should consider adding a tutorial to the 'Crypto Luck' game to reduce the drop-off rate."
+2.  **Use Tools to Take Action:** If the admin asks to make a change (e.g., "disable the crypto luck game", "change the iPhone name", or "send a welcome message to all users"), or if you identify a critical issue (e.g., the exploit warning), use the appropriate tool ('updateGameSettings', 'updateProductDetails', 'sendUserNotification'). When you detect an exploit, you should proactively suggest disabling the game and sending a notification to players about the maintenance.
+3.  **Provide a Data-Driven Response:** Use all available data to formulate a clear, concise answer in markdown. If you take an action, confirm it. For example, "I've disabled the 'Higher or Lower' game to investigate the potential exploit and sent a notification to active players about the downtime." or "I have updated the product's name to SuperPhone X."
+4.  **Offer Actionable Suggestions:** Based on your analysis, provide a concrete, suggested action. For example, "We should consider sending a notification to 'CyberRonin' offering help with the puzzle."
 
 Let's give the admin the intel they need to get a W.
 `,

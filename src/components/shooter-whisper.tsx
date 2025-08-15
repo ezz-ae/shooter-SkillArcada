@@ -13,7 +13,7 @@ import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
 import { generateChallenge, GenerateChallengeOutput } from "@/ai/flows/challenge-flow";
 import { Bot, Loader, TestTube, Gamepad2, Sparkles, MessageSquare, Dices } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import { useNotificationStore } from "@/lib/notification-store";
 import { useStore } from "@/lib/store";
 
 interface ShooterWhisperProps {
@@ -25,7 +25,7 @@ export function ShooterWhisper({ isOpen, onOpenChange }: ShooterWhisperProps) {
   const [conversation, setConversation] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<GenerateChallengeOutput | null>(null);
-  const { toast } = useToast();
+  const { add: toast } = useNotificationStore();
   const { lastLuckReading } = useStore();
 
   const handleGenerate = async () => {

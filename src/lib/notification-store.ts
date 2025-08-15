@@ -1,4 +1,6 @@
 
+'use client';
+
 import { create } from 'zustand';
 import type { ToastProps } from "@/components/ui/toast"
 
@@ -14,6 +16,7 @@ interface NotificationState {
   dismiss: (id: string) => void;
 }
 
+// This is a client-side store for managing UI notifications.
 export const useNotificationStore = create<NotificationState>((set) => ({
   notifications: [],
   add: (notification) => {
