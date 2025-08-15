@@ -2,7 +2,7 @@
 "use client";
 
 import { User, getUsers } from "@/lib/user";
-import { Bot, Gamepad2, Settings, Users, BarChart3, List } from "lucide-react";
+import { Bot, Gamepad2, Settings, Users, BarChart3, List, MoreHorizontal } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -15,6 +15,7 @@ import { useGameSettingsStore, Game, GameStatus } from "@/lib/game-settings-stor
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 export default function AdminPage() {
   const [users, setUsers] = useState<User[]>([]);
@@ -118,10 +119,20 @@ export default function AdminPage() {
                                             aria-label={`Toggle featured status for ${game.name}`}
                                         />
                                     </td>
-                                    <td className="p-3 flex gap-2">
-                                        <Button size="sm" variant={game.status === 'live' ? "default" : "outline"} onClick={() => setStatus(game.id, 'live')}>Live</Button>
-                                        <Button size="sm" variant={game.status === 'maintenance' ? "default" : "outline"} onClick={() => setStatus(game.id, 'maintenance')}>Maint.</Button>
-                                        <Button size="sm" variant={game.status === 'disabled' ? "destructive" : "outline"} onClick={() => setStatus(game.id, 'disabled')}>Disable</Button>
+                                    <td className="p-3">
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger asChild>
+                                                <Button variant="ghost" size="sm">
+                                                    <MoreHorizontal />
+                                                </Button>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent>
+                                                <DropdownMenuLabel>Set Status</DropdownMenuLabel>
+                                                <DropdownMenuItem onClick={() => setStatus(game.id, 'live')}>Live</DropdownMenuItem>
+                                                <DropdownMenuItem onClick={() => setStatus(game.id, 'maintenance')}>Maintenance</DropdownMenuItem>
+                                                <DropdownMenuItem onClick={() => setStatus(game.id, 'disabled')} className="text-destructive focus:text-destructive">Disable</DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
                                     </td>
                                 </tr>
                             ))}
