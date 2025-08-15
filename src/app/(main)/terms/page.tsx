@@ -1,6 +1,6 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { FileText } from "lucide-react";
+import { FileText, ShieldCheck, UserX } from "lucide-react";
 import Link from "next/link";
 
 export default function TermsPage() {
@@ -22,7 +22,7 @@ export default function TermsPage() {
           <h2>1. The "Shots" Currency</h2>
           <p>
             The platform uses a virtual currency called "Shots." Shots can be purchased, won in games, or acquired through trade-ins. 
-            Shots have a real-world value and can be used to pay for items you win. The current conversion rate is approximately 1 Shot = $1 USD, though this may be subject to change.
+            Shots do not have a real-world monetary value and cannot be redeemed for cash. They are used to pay for items you win and to enter challenges.
           </p>
 
           <h2>2. Game Rules</h2>
@@ -53,9 +53,23 @@ export default function TermsPage() {
           
           <h2>4. User Conduct</h2>
           <ul>
-            <li>You must be of legal age in your jurisdiction to participate.</li>
-            <li>Any use of bots, scripts, or other unfair methods will result in an immediate and permanent ban.</li>
             <li>Be respectful to other players in all chat and social features.</li>
+            <li>Any use of bots, scripts, or other unfair methods will result in an immediate and permanent ban.</li>
+          </ul>
+
+          <h2 id="age-restriction" className="flex items-center gap-2"><UserX /> Age Restriction</h2>
+          <p>
+            You must be at least 18 years old, or the age of legal majority in your jurisdiction, to create an account and participate in any games on ShooterGun. By creating an account, you represent that you meet this minimum age requirement. We reserve the right to suspend any account that is found to be in violation of this policy.
+          </p>
+          
+          <h2 id="privacy-policy" className="flex items-center gap-2"><ShieldCheck /> Privacy Policy</h2>
+          <p>
+            We respect your privacy. As this is a demonstration application, we do not collect or store any personally identifiable information (PII) from our users. The authentication system uses an anonymous, temporary ID that is reset when you log out. All user data, such as items in your vault and your "Shots" balance, is stored locally in your browser and is not transmitted to our servers.
+          </p>
+          <ul>
+              <li><strong>Data We Do Not Collect:</strong> We do not collect your name, email address, IP address, or any other personal information.</li>
+              <li><strong>Local Storage:</strong> All game progress and session data is stored on your own device and is under your control. Clearing your browser's storage will reset your account on this platform.</li>
+              <li><strong>Third-Party Services:</strong> This platform does not integrate with any third-party analytics or advertising services.</li>
           </ul>
 
           <h2>5. Limitation of Liability</h2>
