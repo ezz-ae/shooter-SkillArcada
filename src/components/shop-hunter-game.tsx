@@ -17,7 +17,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { Target, Gem, DollarSign, Loader, Check, X } from "lucide-react";
+import { Target, Gem, DollarSign, Loader, Check, X, Tag } from "lucide-react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { algorithmicPricing } from "@/ai/flows/algorithmic-pricing-flow";
@@ -65,13 +65,13 @@ export function ShopHunterGame() {
                 dataAiHint: product.dataAiHint,
             });
 
-            if (!result.imageUrl) {
-              throw new Error("Image generation failed to return a URL.");
+            if (!result.imageUrl || result.imageUrl.includes('placehold.co')) {
+              throw new Error("Image generation failed to return a valid URL.");
             }
             setGeneratedImageUrl(result.imageUrl);
         } catch (error) {
             console.error("Failed to generate image:", error);
-            setGeneratedImageUrl(product.imageUrl); // fallback to placeholder
+            setGeneratedImageUrl(product.imageUrl); // Store original placeholder to signal failure
             toast({ variant: "destructive", title: "Image Generation Failed", description: "Could not generate a unique image for this product." });
         } finally {
             setIsGeneratingImage(false);
@@ -79,7 +79,7 @@ export function ShopHunterGame() {
     };
 
     const handleTakeShot = async () => {
-        if (!selectedProduct || !generatedImageUrl) return;
+        if (!selectedProduct) return;
 
         if (!spendShot(1)) {
             toast({ variant: "destructive", title: "Not enough Shots!", description: "You need 1 Shot to play." });
@@ -148,7 +148,9 @@ export function ShopHunterGame() {
                     {products.map(product => (
                         <button key={product.id} onClick={() => handleSelectProduct(product)} className="p-4 bg-secondary rounded-lg flex flex-col items-center justify-center gap-2 hover:ring-2 hover:ring-primary transition-all h-48 group">
                            <div className="w-full h-24 relative">
-                             <Image src={product.imageUrl} alt={product.name} fill className="object-contain group-hover:scale-105 transition-transform" data-ai-hint={product.dataAiHint}/>
+                             <div className="w-full h-full bg-secondary/50 flex items-center justify-center rounded-lg">
+                                <Tag className="h-10 w-10 text-muted-foreground" />
+                            </div>
                            </div>
                            <p className="text-sm font-semibold text-center mt-2 flex-grow">{product.name}</p>
                            <p className="text-xs font-bold text-muted-foreground">${product.marketPrice.toFixed(2)}</p>
@@ -168,7 +170,13 @@ export function ShopHunterGame() {
                  <div className="h-48 bg-secondary/50 rounded-xl overflow-hidden relative shadow-inner flex flex-col items-center justify-center p-4 gap-2">
                      <div className="w-full h-24 relative">
                         {isGeneratingImage ? <Skeleton className="w-full h-full" /> : (
-                            <Image src={generatedImageUrl} alt={selectedProduct.name} fill className="object-contain" data-ai-hint={selectedProduct.dataAiHint}/>
+                            generatedImageUrl.includes('placehold.co') ? (
+                                <div className="w-full h-full bg-secondary flex items-center justify-center rounded-lg">
+                                    <Tag className="h-10 w-10 text-muted-foreground" />
+                                </div>
+                            ) : (
+                                <Image src={generatedImageUrl} alt={selectedProduct.name} fill className="object-contain" data-ai-hint={selectedProduct.dataAiHint}/>
+                            )
                         )}
                      </div>
                     <p className="text-xl md:text-2xl font-black text-foreground text-center">{selectedProduct.name}</p>
@@ -194,7 +202,13 @@ export function ShopHunterGame() {
                     
                     <div className="relative h-64 w-full my-2 rounded-lg overflow-hidden shadow-lg bg-secondary flex flex-col items-center justify-center p-4 gap-4">
                         <div className="w-full h-24 relative">
-                            <Image src={capturedResult?.imageUrl || ''} alt={capturedResult?.product.name || ''} fill className="object-contain" data-ai-hint={capturedResult?.product.dataAiHint}/>
+                            {capturedResult?.imageUrl.includes('placehold.co') ? (
+                                <div className="w-full h-full bg-background flex items-center justify-center rounded-lg">
+                                    <Tag className="h-10 w-10 text-muted-foreground" />
+                                </div>
+                            ) : (
+                                <Image src={capturedResult?.imageUrl || ''} alt={capturedResult?.product.name || ''} fill className="object-contain" data-ai-hint={capturedResult?.product.dataAiHint}/>
+                            )}
                         </div>
                         <p className="text-2xl font-bold text-center">{capturedResult?.product.name}</p>
                         <p className="text-lg text-muted-foreground">for</p>

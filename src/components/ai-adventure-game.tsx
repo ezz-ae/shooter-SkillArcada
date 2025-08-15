@@ -8,8 +8,8 @@ import { Textarea } from './ui/textarea';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from './ui/card';
 import Image from 'next/image';
 import { Skeleton } from './ui/skeleton';
-import { Sparkles, FileText } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+import { Sparkles, FileText, ImageIcon } from 'lucide-react';
+import { useNotificationStore } from '@/lib/notification-store';
 import { useStore } from '@/lib/store';
 import { generateProductImage } from '@/ai/flows/generate-product-image-flow';
 
@@ -23,13 +23,15 @@ export function AIAdventureGame({ productName }: AIAdventureGameProps) {
     const [loading, setLoading] = useState(true);
     const [storyConclusion, setStoryConclusion] = useState("");
     const [submitted, setSubmitted] = useState(false);
-    const { toast } = useToast();
+    const { add: toast } = useNotificationStore();
     const { addShots } = useStore();
+    const [imageFailed, setImageFailed] = useState(false);
 
     useEffect(() => {
         async function getAdventure() {
             try {
                 setLoading(true);
+                setImageFailed(false);
                 const [storyResult, imageResult] = await Promise.all([
                     generateStoryAdventure({ productName }),
                     generateProductImage({ productName, dataAiHint: "fantasy adventure" })
@@ -41,10 +43,10 @@ export function AIAdventureGame({ productName }: AIAdventureGameProps) {
                      throw new Error('Failed to generate story.');
                 }
 
-                if (imageResult.imageUrl) {
+                if (imageResult.imageUrl && !imageResult.imageUrl.includes('placehold.co')) {
                     setImageUrl(imageResult.imageUrl);
                 } else {
-                    setImageUrl('https://placehold.co/600x400.png');
+                    setImageFailed(true);
                 }
 
             } catch (error) {
@@ -54,9 +56,8 @@ export function AIAdventureGame({ productName }: AIAdventureGameProps) {
                     title: "Generation Failed",
                     description: "Could not generate the AI adventure. Please try refreshing the page."
                 });
-                // Set fallback values on error
                 setStory("A golden key lies on an ancient pedestal, humming with a faint magical energy. You reach out to touch it, and as your fingers make contact, the world around you dissolves into a swirl of colors. What secrets will it unlock?");
-                setImageUrl('https://placehold.co/600x400.png');
+                setImageFailed(true);
             } finally {
                 setLoading(false);
             }
@@ -103,7 +104,7 @@ export function AIAdventureGame({ productName }: AIAdventureGameProps) {
         );
     }
 
-    if (!story || !imageUrl) {
+    if (!story) {
         return (
              <Card className="w-full max-w-2xl mx-auto text-center">
                 <CardHeader>
@@ -129,13 +130,20 @@ export function AIAdventureGame({ productName }: AIAdventureGameProps) {
             </CardHeader>
             <CardContent className="space-y-4">
                 <div className="relative h-80 w-full overflow-hidden rounded-lg border shadow-inner">
-                    <Image
-                        src={imageUrl}
-                        alt="AI-generated adventure scene"
-                        fill
-                        className="object-cover"
-                        data-ai-hint="fantasy adventure"
-                    />
+                    {imageFailed ? (
+                         <div className="w-full h-full bg-secondary flex flex-col items-center justify-center text-muted-foreground gap-2">
+                            <ImageIcon className="h-12 w-12" />
+                            <p className="font-semibold">Image Generation Failed</p>
+                        </div>
+                    ) : (
+                        <Image
+                            src={imageUrl}
+                            alt="AI-generated adventure scene"
+                            fill
+                            className="object-cover"
+                            data-ai-hint="fantasy adventure"
+                        />
+                    )}
                 </div>
                 <blockquote className="border-l-4 border-accent pl-4 italic text-muted-foreground">
                     {story}

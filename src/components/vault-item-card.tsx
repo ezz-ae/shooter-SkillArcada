@@ -6,7 +6,7 @@ import Image from "next/image";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
 import { useStore, type VaultItem } from "@/lib/store";
-import { TrendingDown, TrendingUp, Hourglass, Check, Gem, Repeat, Gift, Loader } from "lucide-react";
+import { TrendingDown, TrendingUp, Hourglass, Check, Gem, Repeat, Gift, Loader, Tag } from "lucide-react";
 import { useNotificationStore } from "@/lib/notification-store";
 import {
   AlertDialog,
@@ -64,7 +64,7 @@ export function VaultItemCard({
             productName: item.name,
             dataAiHint: item.dataAiHint
           });
-          if (!result.imageUrl) throw new Error('No URL returned');
+          if (!result.imageUrl || result.imageUrl.includes('placehold.co')) throw new Error('No valid URL returned');
           setGeneratedImageUrl(result.imageUrl);
         } catch (error) {
           console.error("Failed to generate image for vault item:", item.id, error);
@@ -149,13 +149,19 @@ export function VaultItemCard({
 
       <CardHeader className="p-4 relative h-40 flex items-center justify-center overflow-hidden">
         {isGeneratingImage ? <Skeleton className="w-full h-full" /> : (
-            <Image 
-                src={generatedImageUrl} 
-                alt={item.name} 
-                fill 
-                className="object-contain"
-                data-ai-hint={item.dataAiHint}
-            />
+            generatedImageUrl.includes('placehold.co') ? (
+                 <div className="w-full h-full bg-secondary flex items-center justify-center rounded-lg">
+                    <Tag className="h-16 w-16 text-muted-foreground" />
+                </div>
+            ) : (
+                <Image 
+                    src={generatedImageUrl} 
+                    alt={item.name} 
+                    fill 
+                    className="object-contain"
+                    data-ai-hint={item.dataAiHint}
+                />
+            )
         )}
       </CardHeader>
       <CardContent className="flex-grow p-4 pb-2">
