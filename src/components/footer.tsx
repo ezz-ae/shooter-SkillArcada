@@ -30,7 +30,7 @@ export function Footer() {
     <footer className="border-t bg-background mt-12 py-8">
       <div className="container mx-auto px-4">
         <div className="mb-8">
-          <h3 className="font-bold text-lg mb-3 text-center">Top Games by Win Rate</h3>
+          <h2 className="font-bold text-lg mb-3 text-center">Top Games by Win Rate</h2>
           <TopGames />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -65,10 +65,8 @@ export function Footer() {
               </div>
           </div>
           <div className="space-y-6">
-              <div>
-                  <h3 className="font-bold text-base mb-3">Live Wins</h3>
-                  <ActivityFeed users={users} />
-              </div>
+              <h3 className="font-bold text-base mb-3">Live Wins</h3>
+              <ActivityFeed users={users} />
           </div>
         </div>
       </div>

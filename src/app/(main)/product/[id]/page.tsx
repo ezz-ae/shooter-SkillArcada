@@ -1,6 +1,4 @@
 
-"use client";
-
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Product, getProducts } from "@/lib/products";
@@ -9,26 +7,54 @@ import { ArrowLeft, HelpCircle, Gamepad2, Zap, Tag, Clock, TrendingUp, Bot } fro
 import { ShotTaker } from "@/components/shot-taker";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { useEffect, useState } from "react";
 import { AIGameGuide } from "@/components/ai-game-guide";
+import type { Metadata, ResolvingMetadata } from 'next'
 
-export default function ProductPage({ params }: { params: { id: string } }) {
-  const [product, setProduct] = useState<Product | null>(null);
-  const [loading, setLoading] = useState(true);
+type Props = {
+  params: { id: string }
+}
 
-  useEffect(() => {
-    async function fetchProduct() {
-      const allProducts = await getProducts();
-      const foundProduct = allProducts.find((p) => p.id === params.id) || null;
-      setProduct(foundProduct);
-      setLoading(false);
+export async function generateMetadata(
+  { params }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const id = params.id
+  const products = await getProducts();
+  const product = products.find((p) => p.id === id)
+
+  if (!product) {
+    return {
+        title: 'Product Not Found',
+        description: 'The requested product could not be found.'
     }
-    fetchProduct();
-  }, [params.id]);
-
-  if (loading) {
-    return <div>Loading...</div>; // Or a proper skeleton loader
   }
+ 
+  return {
+    title: product.name,
+    description: product.description,
+     openGraph: {
+      title: `${product.name} | ShooterGun`,
+      description: product.description,
+      images: [
+        {
+          url: product.imageUrl,
+          width: 600,
+          height: 400,
+          alt: product.name,
+        },
+      ],
+    },
+  }
+}
+
+async function getProduct(id: string) {
+    const allProducts = await getProducts();
+    const product = allProducts.find((p) => p.id === id) || null;
+    return product;
+}
+
+export default async function ProductPage({ params }: { params: { id: string } }) {
+  const product = await getProduct(params.id);
 
   if (!product) {
     notFound();
@@ -139,3 +165,4 @@ export default function ProductPage({ params }: { params: { id: string } }) {
     </div>
   );
 }
+
