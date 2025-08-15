@@ -108,10 +108,10 @@
   }
   .animated-background {
     @apply bg-background;
-    background-image: radial-gradient(circle at 25% 25%, hsl(var(--primary) / 0.1), transparent 35%),
-                      radial-gradient(circle at 75% 75%, hsl(var(--accent) / 0.1), transparent 35%);
-    background-size: 400% 400%;
-    animation: background-move 20s ease-in-out infinite;
+    background-image: radial-gradient(circle at 25% 25%, hsl(var(--primary) / 0.05), transparent 40%),
+                      radial-gradient(circle at 75% 75%, hsl(var(--accent) / 0.05), transparent 40%);
+    background-size: 200% 200%;
+    animation: background-move 30s ease-in-out infinite;
   }
 }
 
