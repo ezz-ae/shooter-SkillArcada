@@ -1,13 +1,12 @@
 
 "use client";
 
-import { FeaturedContent } from "@/components/featured-content";
 import { ActivityFeed } from "@/components/activity-feed";
 import { History } from "lucide-react";
 import { useEffect, useState } from "react";
 import { User, getUsers } from "@/lib/user";
 import { SectionHeader } from "@/components/section-header";
-import { WelcomeChallenge } from "@/components/welcome-challenge";
+import { DiceGame } from "@/components/dice-game";
 
 export default function Home() {
   const [users, setUsers] = useState<User[]>([]);
@@ -23,7 +22,7 @@ export default function Home() {
   return (
     <>
       <div className="w-full flex items-center justify-center min-h-[calc(100vh-4rem)]">
-          <WelcomeChallenge />
+          <DiceGame />
       </div>
       <div className="py-12 container mx-auto px-4">
          <SectionHeader 

@@ -19,6 +19,15 @@ const config = {
       },
     },
     extend: {
+       perspective: {
+        '1000': '1000px',
+      },
+      transformStyle: {
+        '3d': 'preserve-3d',
+      },
+      backfaceVisibility: {
+        'hidden': 'hidden',
+      },
       fontFamily: {
         sans: ['var(--font-sans)', 'sans-serif'],
         lilita: ['var(--font-lilita)', 'sans-serif'],
@@ -98,7 +107,23 @@ const config = {
       },
     },
   },
-  plugins: [require('tailwindcss-animate'), require('@tailwindcss/typography')],
+  plugins: [
+    require('tailwindcss-animate'), 
+    require('@tailwindcss/typography'),
+    function ({ addUtilities }: { addUtilities: any }) {
+      addUtilities({
+        '.perspective-1000': {
+          perspective: '1000px',
+        },
+        '.transform-style-3d': {
+          'transform-style': 'preserve-3d',
+        },
+        '[backface-visibility\\:hidden]': {
+          'backface-visibility': 'hidden',
+        },
+      });
+    },
+  ],
 } satisfies Config;
 
 export default config;

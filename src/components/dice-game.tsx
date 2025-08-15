@@ -11,11 +11,7 @@ import { cn } from "@/lib/utils";
 type GameState = 'initial' | 'rolling' | 'result';
 type ResultCategory = 'ShooterGuns' | 'Brainshots' | 'Challenges';
 
-interface DiceGameProps {
-    onComplete: () => void;
-}
-
-export function DiceGame({ onComplete }: DiceGameProps) {
+export function DiceGame() {
     const [gameState, setGameState] = useState<GameState>('initial');
     const [diceValues, setDiceValues] = useState([1, 1, 1]);
     const [result, setResult] = useState<{category: ResultCategory, message: string, advice: string} | null>(null);
@@ -66,7 +62,7 @@ export function DiceGame({ onComplete }: DiceGameProps) {
 
         const content = {
             'ShooterGuns': { icon: Dices, href: '/luckshots', buttonText: "Go to ShooterGuns" },
-            'Brainshots': { icon: BrainCircuit, href: '/luckshots#brainshot-products', buttonText: "Go to Brainshots" },
+            'Brainshots': { icon: BrainCircuit, href: '/puzzle-games', buttonText: "Go to Brainshots" },
             'Challenges': { icon: Swords, href: '/pool-shot', buttonText: "Go to Challenges" }
         }
         const { icon: Icon, href, buttonText } = content[result.category];
@@ -78,8 +74,10 @@ export function DiceGame({ onComplete }: DiceGameProps) {
                  <p className="text-muted-foreground text-lg italic">"{result.advice}"</p>
                  <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
                     <Button size="lg" variant="outline" onClick={resetGame}>Roll Again</Button>
-                    <Button size="lg" onClick={onComplete} className="moving-gradient text-primary-foreground">
-                        Let Shooter Read Your Luck <Sparkles className="ml-2"/>
+                     <Button size="lg" asChild className="moving-gradient text-primary-foreground">
+                        <Link href={href}>
+                           {buttonText} <ArrowRight className="ml-2"/>
+                        </Link>
                     </Button>
                  </div>
             </div>
