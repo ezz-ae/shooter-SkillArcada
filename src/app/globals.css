@@ -10,7 +10,7 @@
     --card-foreground: 240 10% 3.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
-    --primary: 262 88% 66%;
+    --primary: 180 100% 25%;
     --primary-foreground: 0 0% 98%;
     --secondary: 240 4.8% 95.9%;
     --secondary-foreground: 240 5.9% 10%;
@@ -27,25 +27,25 @@
   }
 
   .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 262 88% 76%; /* Lighter Vibrant Purple */
-    --primary-foreground: 0 0% 98%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 45 95% 60%; /* Sunshine Yellow */
-    --accent-foreground: 240 5.9% 10%;
+    --background: 224 71.4% 4.1%;
+    --foreground: 210 20% 98%;
+    --card: 224 71.4% 4.1%;
+    --card-foreground: 210 20% 98%;
+    --popover: 224 71.4% 4.1%;
+    --popover-foreground: 210 20% 98%;
+    --primary: 180 100% 30%; /* Dark Teal */
+    --primary-foreground: 210 20% 98%;
+    --secondary: 215 27.9% 16.9%;
+    --secondary-foreground: 210 20% 98%;
+    --muted: 215 27.9% 16.9%;
+    --muted-foreground: 217.9 10.6% 64.9%;
+    --accent: 38 92% 50%; /* Soft Orange */
+    --accent-foreground: 210 20% 98%;
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 262 88% 76%;
+    --destructive-foreground: 210 20% 98%;
+    --border: 215 27.9% 16.9%;
+    --input: 215 27.9% 16.9%;
+    --ring: 180 100% 30%;
   }
 
   .pink-dark {
@@ -108,10 +108,10 @@
   }
   .animated-background {
     @apply bg-background;
-    background-image: radial-gradient(circle at 25% 25%, hsl(var(--primary) / 0.05), transparent 40%),
-                      radial-gradient(circle at 75% 75%, hsl(var(--accent) / 0.05), transparent 40%);
+    background-image: radial-gradient(circle at 25% 25%, hsl(var(--primary) / 0.1), transparent 50%),
+                      radial-gradient(circle at 75% 75%, hsl(var(--accent) / 0.08), transparent 50%);
     background-size: 200% 200%;
-    animation: background-move 30s ease-in-out infinite;
+    animation: background-move 45s ease-in-out infinite;
   }
 }
 
