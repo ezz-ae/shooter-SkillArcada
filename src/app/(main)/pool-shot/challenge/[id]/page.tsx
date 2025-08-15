@@ -6,7 +6,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { mockUsers } from "@/lib/user";
-import { HelpCircle, Shield, Swords, Users } from "lucide-react";
+import { ArrowLeft, HelpCircle, Shield, Swords, Users } from "lucide-react";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 // This is a placeholder page for a specific challenge.
@@ -29,7 +30,15 @@ export default function PoolChallengePage({ params }: { params: { id: string } }
 
   return (
     <div className="w-full min-h-[calc(100vh-4rem)] bg-secondary/50">
-        <div className="container mx-auto px-4 py-8 flex flex-col items-center">
+        <div className="container mx-auto px-4 py-8">
+             <div className="mb-6">
+                <Button variant="ghost" asChild>
+                    <Link href="/pool-shot" className="flex items-center text-sm text-muted-foreground hover:text-foreground">
+                        <ArrowLeft className="mr-2 h-4 w-4" />
+                        Back to All Challenges
+                    </Link>
+                </Button>
+            </div>
             <div className="w-full max-w-5xl">
                 {/* Player Info Header */}
                 <div className="grid grid-cols-3 items-center text-center gap-4 mb-8">

@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -223,7 +224,10 @@ export default function VaultPage() {
                             <TabsContent value="deposit" className="mt-4">
                                 <div className="space-y-2">
                                     <Input type="number" placeholder="Shots amount" />
-                                    <Button className="w-full" onClick={() => addShots(50)}>Buy 50 Shots</Button>
+                                    <Button className="w-full" onClick={() => addShots(50)}>
+                                      <PlusCircle className="mr-2 h-4 w-4" />
+                                      Buy 50 Shots
+                                    </Button>
                                 </div>
                             </TabsContent>
                             <TabsContent value="withdraw" className="mt-4">
@@ -246,7 +250,7 @@ export default function VaultPage() {
                                 {shippingCart.map(item => (
                                     <div key={item.shippingId} className="flex items-center justify-between p-2 bg-secondary/50 rounded-lg">
                                         <div className="flex items-center gap-4">
-                                            <div className="h-12 w-12 rounded-md bg-muted flex items-center justify-center">
+                                            <div className="h-12 w-12 rounded-md bg-muted flex items-center justify-center shrink-0">
                                                 <Gem className="h-6 w-6 text-muted-foreground" />
                                             </div>
                                             <div>
