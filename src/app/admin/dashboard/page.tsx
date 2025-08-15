@@ -32,7 +32,7 @@ export default function DashboardPage() {
        <SectionHeader 
             icon={BarChart}
             title="Platform Dashboard"
-            description="Your mission control for ShopnLuck. Monitor live activity and key metrics."
+            description="Your mission control for ShooterGun. Monitor live activity and key metrics."
        />
 
        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 my-8">

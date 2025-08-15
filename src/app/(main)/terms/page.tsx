@@ -17,7 +17,7 @@ export default function TermsPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="prose dark:prose-invert max-w-none">
-          <p>Welcome to ShopnLuck! By using our platform, you agree to these terms. Please read them carefully.</p>
+          <p>Welcome to ShooterGun! By using our platform, you agree to these terms. Please read them carefully.</p>
 
           <h2>1. The "Shots" Currency</h2>
           <p>
@@ -60,7 +60,7 @@ export default function TermsPage() {
 
           <h2>5. Limitation of Liability</h2>
           <p>
-            ShopnLuck is provided "as is." While we strive for a fair and fun environment, we are not responsible for any losses incurred. All transactions are final.
+            ShooterGun is provided "as is." While we strive for a fair and fun environment, we are not responsible for any losses incurred. All transactions are final.
           </p>
 
           <p>
