@@ -12,17 +12,17 @@ const lilitaOne = Lilita_One({ subsets: ["latin"], weight: "400", variable: "--f
 
 export const metadata: Metadata = {
   title: {
-    default: 'ShooterGun | Win Amazing Products at Unbelievable Prices',
-    template: '%s | ShooterGun',
+    default: 'ShopnLuck | Win Amazing Products at Unbelievable Prices',
+    template: '%s | ShopnLuck',
   },
-  description: "Welcome to ShooterGun, the premier platform for taking a chance on amazing products at unbelievable prices. Play skill-based games, win prizes, and get your shot at a killer deal.",
+  description: "Welcome to ShopnLuck, the premier platform for taking a chance on amazing products at unbelievable prices. Play skill-based games, win prizes, and get your shot at a killer deal.",
   keywords: ['online games', 'discount shopping', 'skill games', 'win prizes', 'e-commerce', 'deal hunting'],
-  authors: [{ name: 'ShooterGun' }],
+  authors: [{ name: 'ShopnLuck' }],
   openGraph: {
-    title: 'ShooterGun',
+    title: 'ShopnLuck',
     description: 'Your shot at unbelievable prices.',
-    url: 'https://shootersgun.com', // Replace with your actual domain
-    siteName: 'ShooterGun',
+    url: 'https://shopnluck.com', // Replace with your actual domain
+    siteName: 'ShopnLuck',
     images: [
       {
         url: 'https://placehold.co/1200x630.png', // Replace with a real OG image
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'ShooterGun - Your Shot at Unbelievable Prices',
+    title: 'ShopnLuck - Your Shot at Unbelievable Prices',
     description: 'Play games, win prizes, and get killer deals on the hottest products.',
     // creator: '@yourtwitterhandle', // Replace with your Twitter handle
     images: ['https://placehold.co/1200x630.png'], // Replace with a real OG image

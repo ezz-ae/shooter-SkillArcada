@@ -28,7 +28,7 @@ export default function Home() {
          <SectionHeader 
             icon={History}
             title="Live Shots"
-            description="See what's happening right now on ShooterGun. Real wins from real players."
+            description="See what's happening right now on ShopnLuck. Real wins from real players."
         />
         <div className="max-w-2xl mx-auto mt-8">
             <ActivityFeed users={users} />

@@ -36,7 +36,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="flex flex-col gap-4">
               <Link href="/">
-                  <span className="font-lilita text-4xl text-foreground">ShooterGun</span>
+                  <span className="font-lilita text-4xl text-foreground">ShopnLuck</span>
               </Link>
               <p className="text-sm text-muted-foreground">Your shot at unbelievable prices, powered by our resident gamegang mega, Shooter.</p>
           </div>

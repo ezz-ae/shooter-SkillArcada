@@ -26,7 +26,7 @@ export default function AdminPage() {
        <div className="flex items-center justify-between">
             <div>
                 <h1 className="text-3xl font-black">Admin Command Center</h1>
-                <p className="text-muted-foreground">An overview of the ShooterGun platform.</p>
+                <p className="text-muted-foreground">An overview of the ShopnLuck platform.</p>
             </div>
        </div>
        <Card>

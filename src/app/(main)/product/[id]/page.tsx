@@ -33,7 +33,7 @@ export async function generateMetadata(
     title: product.name,
     description: product.description,
      openGraph: {
-      title: `${product.name} | ShooterGun`,
+      title: `${product.name} | ShopnLuck`,
       description: product.description,
       images: [
         {
@@ -165,4 +165,3 @@ export default async function ProductPage({ params }: { params: { id: string } }
     </div>
   );
 }
-

@@ -38,7 +38,7 @@ export function Header() {
       <div className="container flex h-16 items-center">
         <div className="mr-auto flex items-center">
           <Link href="/" className="mr-6 flex items-center space-x-2">
-            <span className="font-lilita text-4xl shimmer-text">ShooterGun</span>
+            <span className="font-lilita text-4xl shimmer-text">ShopnLuck</span>
           </Link>
           <nav className="hidden md:flex items-center space-x-1">
              <Button variant="ghost" asChild>
