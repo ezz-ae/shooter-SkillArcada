@@ -22,7 +22,7 @@ export default function ShoterdayPage() {
   return (
     <div className="container mx-auto px-4 py-12">
         <div className="text-center mb-12">
-            <h1 className="text-5xl font-black tracking-tight lg:text-7xl font-allura text-transparent bg-clip-text bg-gradient-to-br from-primary to-accent">
+            <h1 className="text-5xl font-black tracking-tight lg:text-7xl font-lilita text-transparent bg-clip-text bg-gradient-to-br from-primary to-accent">
                 Shoterday
             </h1>
             <p className="mt-4 text-xl text-muted-foreground max-w-3xl mx-auto">

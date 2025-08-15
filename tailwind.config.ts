@@ -21,7 +21,7 @@ const config = {
     extend: {
       fontFamily: {
         sans: ['var(--font-sans)', 'sans-serif'],
-        allura: ['var(--font-allura)', 'cursive'],
+        lilita: ['var(--font-lilita)', 'sans-serif'],
       },
       colors: {
         border: 'hsl(var(--border))',
