@@ -1,4 +1,3 @@
-
 "use client";
 
 import Link from "next/link";
@@ -94,7 +93,7 @@ export function Header() {
               <DropdownMenuTrigger asChild>
                 <Button variant="secondary" className="relative h-9 w-9 rounded-full">
                     <Avatar className="h-9 w-9">
-                        <AvatarImage src="https://firebasestorage.googleapis.com/v0/b/reodywellness.firebasestorage.app/o/Untitled-4%20(14).png?alt=media&token=01417f92-30fc-4a5a-bb8a-69f3101811f0" alt="Shooter" />
+                        <AvatarImage src="https://firebasestorage.googleapis.com/v0/b/reodywellness.firebasestorage.app/o/Untitled-4%20(14).png?alt=media&amp;token=01417f92-30fc-4a5a-bb8a-69f3101811f0" alt="Shooter" />
                         <AvatarFallback className="bg-primary text-primary-foreground text-xs font-bold">
                             {user.uid.substring(0,2).toUpperCase()}
                         </AvatarFallback>
@@ -108,7 +107,7 @@ export function Header() {
                     <DropdownMenuItem asChild>
                          <Link href="/vault">
                             <Package className="mr-2 h-4 w-4" />
-                            <span>Vault & Wallet</span>
+                            <span>Vault &amp; Wallet</span>
                          </Link>
                     </DropdownMenuItem>
                      <DropdownMenuItem asChild>
