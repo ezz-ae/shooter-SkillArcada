@@ -28,7 +28,7 @@ import { ThemeToggle } from "./theme-toggle";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 const navLinks = [
-    { href: "/shoterday", label: "Shoterday" },
+    { href: "/shooterday", label: "Shooterday" },
     { href: "/luckshots", label: "ShooterGuns" },
     { href: "/luckgirls", label: "Luckgirls" },
     { href: "/hit-or-miss", label: "Hit or Miss" },
