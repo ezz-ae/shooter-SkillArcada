@@ -29,6 +29,7 @@ interface StoreState {
   setHasSeenShotInfo: (hasSeen: boolean) => void;
   setHasSeenVaultInfo: (hasSeen: boolean) => void;
   setLastLuckReading: (reading: LuckReading) => void;
+  setShots: (amount: number) => void; // For authoritative updates from server
   spendShot: (amount?: number) => boolean;
   addShots: (amount: number) => void;
   spendLuckshot: (amount?: number) => boolean;
@@ -48,7 +49,7 @@ const getVaultItemKey = (item: { id: string; purchaseTimestamp: number }) => {
 const initialState = {
     vault: [],
     shippingCart: [],
-    shots: 0, // Start with 0 shots, new users get a bonus
+    shots: 100, // Start with 100 shots for demo purposes
     luckshots: 0,
     hasSeenShotInfo: false,
     hasSeenVaultInfo: false,
@@ -63,6 +64,9 @@ export const useStore = create<StoreState>()(
       setHasSeenVaultInfo: (hasSeen: boolean) => set({ hasSeenVaultInfo: hasSeen }),
       setLastLuckReading: (reading: LuckReading) => set({ lastLuckReading: reading }),
 
+      setShots: (amount) => {
+        set({ shots: amount });
+      },
       addShots: (amount) => {
         set((state) => ({ shots: state.shots + amount }));
       },

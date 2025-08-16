@@ -6,12 +6,11 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from "./ui/button";
 import { generateChallenge, GenerateChallengeOutput } from "@/ai/flows/challenge-flow";
 import { Bot, Loader, TestTube, Gamepad2 } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
-
+import * as toastModule from "@/components/ui/toast";
 export function ChallengeAI() {
     const [isLoading, setIsLoading] = useState(false);
     const [result, setResult] = useState<GenerateChallengeOutput | null>(null);
-    const { toast } = useToast();
+    const { toast } = toastModule;
 
     const handleTestMe = async () => {
         setIsLoading(true);

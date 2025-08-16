@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { cn } from "@/lib/utils";
 import { useStore } from "@/lib/store";
 import { useNotificationStore } from "@/lib/notification-store";
-import { ArrowRight, Bot, Check, User, Sparkles } from "lucide-react";
+import { ArrowRight, Bot, Check, User, Sparkles, Loader } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -19,6 +19,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { mockProducts } from "@/lib/products";
+import { submitScore } from "@/lib/score-actions";
 
 const GRID_SIZE = 5;
 const PATTERN_LENGTH = 6;
@@ -72,11 +73,12 @@ export function ShooterMirror() {
   const [shooterPattern, setShooterPattern] = useState<number[]>([]);
   const [playerPattern, setPlayerPattern] = useState<number[]>([]);
   const [isRevealing, setIsRevealing] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isGameWon, setIsGameWon] = useState(false);
   const [isGameActive, setIsGameActive] = useState(false);
   const [isResultOpen, setIsResultOpen] = useState(false);
 
-  const { addShots, spendShot, addToVault } = useStore();
+  const { shots, spendShot, setShots, addToVault } = useStore();
   const { add: toast } = useNotificationStore();
 
   const mirrorProduct = mockProducts.find(p => p.game === 'mirror-game');
@@ -115,31 +117,50 @@ export function ShooterMirror() {
     });
   };
 
-  const handleSubmit = () => {
-    const sortedShooter = [...shooterPattern].sort((a, b) => a - b);
-    const sortedPlayer = [...playerPattern].sort((a, b) => a - b);
-
-    if (JSON.stringify(sortedShooter) === JSON.stringify(sortedPlayer)) {
-      setIsGameWon(true);
-      addShots(10); // Win 10 shots prize
-      if (mirrorProduct) {
-        addToVault({ ...mirrorProduct, pricePaid: 0, purchaseTimestamp: Date.now() });
-      }
-      toast({
-        title: "Perfect Reflection!",
-        description: `You won 10 Shots and the ${mirrorProduct?.name}!`,
+  const handleSubmit = async () => {
+    setIsSubmitting(true);
+    try {
+      const result = await submitScore({
+        gameId: 'shooter-mirror',
+        actions: {
+          playerPattern,
+          shooterPattern,
+        },
       });
-    } else {
-      setIsGameWon(false);
+
+      if (result.isWinner) {
+        setIsGameWon(true);
+        if (result.newBalance !== undefined) {
+          setShots(result.newBalance); // Update balance from server response
+        }
+        if (mirrorProduct) {
+          addToVault({ ...mirrorProduct, pricePaid: 0, purchaseTimestamp: Date.now() });
+        }
+        toast({
+          title: "Perfect Reflection!",
+          description: `You won ${result.prizeAwarded} Shots and the ${mirrorProduct?.name}!`,
+        });
+      } else {
+        setIsGameWon(false);
+        toast({
+          variant: "destructive",
+          title: "Not quite a mirror image.",
+          description: "The patterns didn't match. Try again!",
+        });
+      }
+    } catch (error) {
+      console.error("Error submitting score:", error);
       toast({
         variant: "destructive",
-        title: "Not quite a mirror image.",
-        description: "The patterns didn't match. Try again!",
+        title: "Submission Error",
+        description: "Could not verify your result. Please try again.",
       });
+    } finally {
+      setIsSubmitting(false);
+      setIsResultOpen(true);
+      setIsRevealing(true); // Show the correct pattern after submission
+      setIsGameActive(false);
     }
-    setIsResultOpen(true);
-    setIsRevealing(true);
-    setIsGameActive(false);
   };
   
   const handleDialogClose = () => {
@@ -190,7 +211,8 @@ export function ShooterMirror() {
               Play for 1 Shot <ArrowRight className="ml-2" />
             </Button>
           ) : (
-            <Button size="lg" onClick={handleSubmit} disabled={isRevealing || playerPattern.length !== PATTERN_LENGTH}>
+            <Button size="lg" onClick={handleSubmit} disabled={isRevealing || isSubmitting || playerPattern.length !== PATTERN_LENGTH}>
+                {isSubmitting && <Loader className="animate-spin mr-2" />}
                 {isRevealing ? "Memorize..." : "Submit Reflection"}
             </Button>
           )}
@@ -204,7 +226,7 @@ export function ShooterMirror() {
             </AlertDialogTitle>
             <AlertDialogDescription className="text-center pt-2">
                 {isGameWon 
-                    ? "Your focus is sharp. You've won 10 Shots and a prize has been added to your Vault!"
+                    ? `Your focus is sharp. You've won a prize which has been added to your Vault!`
                     : "The pattern was not an exact match. A true master must have perfect recall. Feel free to try again."
                 }
             </AlertDialogDescription>
