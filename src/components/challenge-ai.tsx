@@ -18,8 +18,14 @@ export function ChallengeAI() {
         setResult(null);
 
         try {
-            // Using a default conversation starter to showcase the feature
-            const response = await generateChallenge({ conversation: "I'm feeling adventurous today and looking for a real challenge!" });
+            // In a real app, this would be fetched from a user's profile.
+            const mockGameHistory = "Played Target Shots 5 times (avg score: 850), Pool Shot 2 times (lost both).";
+            const mockConversation = "I'm feeling adventurous today, but I keep losing at Pool. Suggest something else!";
+
+            const response = await generateChallenge({ 
+                conversation: mockConversation,
+                gameHistory: mockGameHistory,
+            });
             setResult(response);
         } catch (error) {
             console.error("Challenge AI failed:", error);
@@ -39,7 +45,7 @@ export function ChallengeAI() {
                 <Bot className="mx-auto h-12 w-12 text-accent"/>
                 <CardTitle className="text-3xl font-black text-center">AI Coach: Suggest a Challenge</CardTitle>
                 <CardDescription className="text-lg text-center mt-1">
-                    Let our AI Shooter analyze a conversation and give you a free, personalized test!
+                    Let our AI Shooter analyze your recent performance and give you a free, personalized test!
                 </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
