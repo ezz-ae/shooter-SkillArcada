@@ -6,9 +6,9 @@ import { BrainCircuit, LineChart, Swords, Target } from "lucide-react";
 
 const mockTopGames = [
     { name: 'Pool Shot', winRate: '68%', icon: Swords, color: 'text-green-500' },
-    { name: 'Crypto Luck', winRate: '55%', icon: LineChart, color: 'text-yellow-500' },
+    { name: 'Crypto Signal', winRate: '55%', icon: LineChart, color: 'text-yellow-500' },
     { name: 'Brainshots', winRate: '42%', icon: BrainCircuit, color: 'text-blue-500' },
-    { name: 'Luckshots', winRate: '25%', icon: Target, color: 'text-purple-500' },
+    { name: 'Target Shots', winRate: '25%', icon: Target, color: 'text-purple-500' },
 ];
 
 export function TopGames() {

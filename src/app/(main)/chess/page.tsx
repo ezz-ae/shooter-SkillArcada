@@ -117,7 +117,7 @@ export default function ChessPage() {
           <Swords size={40} className="text-primary"/> Chess Challenges
         </h1>
         <p className="mt-2 text-lg text-muted-foreground max-w-2xl mx-auto">
-          Outsmart your opponent in 1-on-1 puzzle speedruns and join high-stakes leagues.
+          Solve tactical puzzles against the clock. Server-verified solutions.
         </p>
       </div>
 

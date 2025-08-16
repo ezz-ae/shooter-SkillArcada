@@ -20,8 +20,8 @@ export function Footer() {
     }, []);
     
     const gameLinks = [
-      { href: "/luckshots", label: "ShooterGuns", icon: Dices },
-      { href: "/crypto-luck", label: "Crypto Luck", icon: LineChart },
+      { href: "/target-shots", label: "Target Shots", icon: Dices },
+      { href: "/crypto-signal", label: "Crypto Signal", icon: LineChart },
       { href: "/pool-shot", label: "Pool Shot", icon: Swords },
       { href: "/shooter-man", label: "ShooterMan", icon: UserIcon },
     ];
@@ -69,6 +69,9 @@ export function Footer() {
               <h3 className="font-bold text-base mb-3">Live Wins</h3>
               <ActivityFeed users={users} />
           </div>
+        </div>
+        <div className="border-t pt-4 mt-8 text-center text-xs text-muted-foreground">
+            <p>Skill-based entertainment. No real-money gambling or chance-only games.</p>
         </div>
       </div>
     </footer>

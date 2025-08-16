@@ -6,11 +6,12 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from "./ui/button";
 import { generateChallenge, GenerateChallengeOutput } from "@/ai/flows/challenge-flow";
 import { Bot, Loader, TestTube, Gamepad2 } from "lucide-react";
-import * as toastModule from "@/components/ui/toast";
+import { useNotificationStore } from "@/lib/notification-store";
+
 export function ChallengeAI() {
     const [isLoading, setIsLoading] = useState(false);
     const [result, setResult] = useState<GenerateChallengeOutput | null>(null);
-    const { toast } = toastModule;
+    const { add: toast } = useNotificationStore();
 
     const handleTestMe = async () => {
         setIsLoading(true);
@@ -36,7 +37,7 @@ export function ChallengeAI() {
         <Card className="shadow-2xl border-accent/20 border-2 overflow-hidden">
             <CardHeader>
                 <Bot className="mx-auto h-12 w-12 text-accent"/>
-                <CardTitle className="text-3xl font-black text-center">AI Challenge Suggester</CardTitle>
+                <CardTitle className="text-3xl font-black text-center">AI Coach: Suggest a Challenge</CardTitle>
                 <CardDescription className="text-lg text-center mt-1">
                     Let our AI Shooter analyze a conversation and give you a free, personalized test!
                 </CardDescription>

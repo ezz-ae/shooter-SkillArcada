@@ -9,7 +9,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 type GameState = 'initial' | 'rolling' | 'result';
-type ResultCategory = 'ShooterGuns' | 'Brainshots' | 'Challenges';
+type ResultCategory = 'Target Shots' | 'Brainshots' | 'Challenges';
 
 export function DiceGame() {
     const [gameState, setGameState] = useState<GameState>('initial');
@@ -36,8 +36,8 @@ export function DiceGame() {
                 });
             } else if (total <= 12) {
                 setResult({
-                    category: 'ShooterGuns',
-                    message: "Lady Luck is on your side!",
+                    category: 'Target Shots',
+                    message: "Your timing is on point!",
                     advice: "The dice are whispering your name. Today is about timing and intuition. Feel the rhythm, watch the prices, and take your shot. Fortune favors the bold!"
                 });
             } else {
@@ -61,7 +61,7 @@ export function DiceGame() {
         if (!result) return null;
 
         const content = {
-            'ShooterGuns': { icon: Dices, href: '/luckshots', buttonText: "Go to ShooterGuns" },
+            'Target Shots': { icon: Dices, href: '/target-shots', buttonText: "Go to Target Shots" },
             'Brainshots': { icon: BrainCircuit, href: '/puzzle-games', buttonText: "Go to Brainshots" },
             'Challenges': { icon: Swords, href: '/pool-shot', buttonText: "Go to Challenges" }
         }
@@ -73,7 +73,7 @@ export function DiceGame() {
                  <h2 className="text-3xl font-bold">{result.message}</h2>
                  <p className="text-muted-foreground text-lg italic">"{result.advice}"</p>
                  <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-                    <Button size="lg" variant="outline" onClick={resetGame}>Roll Again</Button>
+                    <Button size="lg" variant="outline" onClick={resetGame}>Try Again</Button>
                      <Button size="lg" asChild className="moving-gradient text-primary-foreground">
                         <Link href={href}>
                            {buttonText} <ArrowRight className="ml-2"/>
@@ -85,15 +85,18 @@ export function DiceGame() {
     }
 
     return (
-        <div className="w-full max-w-2xl text-center px-4">
+        <div className="w-full max-w-4xl text-center px-4">
             {gameState === 'initial' && (
                 <div className="animate-in fade-in-50 duration-1000">
                     <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-foreground to-foreground/60">
-                        Let Shooter tell you if today is a lucky day.
+                        Master the Shot. Beat the Challenge.
                     </h1>
+                     <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
+                       Skill-based mini games with real-time timing, puzzles, and strategy. Play solo or in rooms, track leaderboards, and learn from the AI Coach.
+                    </p>
                     <Button size="lg" className="mt-8 relative overflow-hidden" onClick={rollDice}>
                          <div className="absolute inset-0 moving-gradient opacity-80"></div>
-                         <span className="relative">Roll the Dice</span>
+                         <span className="relative">Start a Skill Challenge</span>
                     </Button>
                 </div>
             )}

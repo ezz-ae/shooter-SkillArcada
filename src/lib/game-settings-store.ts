@@ -39,7 +39,7 @@ const generateInitialGames = (): Game[] => {
     });
 
     // Manually add games that don't have a specific product tied to them in the same way
-    if (!uniqueGames.has('crypto-luck')) uniqueGames.set('crypto-luck', { id: 'crypto-luck', name: 'Crypto Luck', description: 'Predict Bitcoin\'s next move.', status: 'live', isFeatured: true });
+    if (!uniqueGames.has('crypto-signal')) uniqueGames.set('crypto-signal', { id: 'crypto-signal', name: 'Crypto Signal', description: 'Predict Bitcoin\'s next move.', status: 'live', isFeatured: true });
     if (!uniqueGames.has('pool-shot')) uniqueGames.set('pool-shot', { id: 'pool-shot', name: 'Pool Shot Challenges', description: '1-on-1 pool challenges.', status: 'live', isFeatured: false });
     if (!uniqueGames.has('hit-or-miss')) uniqueGames.set('hit-or-miss', { id: 'hit-or-miss', name: 'Hit or Miss', description: 'Timing-based price capture game.', status: 'live', isFeatured: true });
     if (!uniqueGames.has('shop-hunter')) uniqueGames.set('shop-hunter', { id: 'shop-hunter', name: 'Shop Hunter', description: 'AI-powered discount hunting.', status: 'live', isFeatured: true });
@@ -69,7 +69,7 @@ useGameSettingsStore.getState().initializeGames();
 
 // Zod schema for AI tool input validation
 export const GameSettingsInputSchema = z.object({
-    gameId: z.string().describe("The unique identifier for the game, e.g., 'crypto-luck' or 'pool-shot'."),
+    gameId: z.string().describe("The unique identifier for the game, e.g., 'crypto-signal' or 'pool-shot'."),
     status: z.nativeEnum(['live', 'maintenance', 'disabled']).optional().describe("The new status for the game."),
     isFeatured: z.boolean().optional().describe("Whether the game should be featured on the homepage."),
 });

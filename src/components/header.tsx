@@ -29,8 +29,8 @@ import { useIsMobile } from "@/hooks/use-mobile";
 
 const navLinks = [
     { href: "/shooterday", label: "Shooterday" },
-    { href: "/luckshots", label: "ShooterGuns" },
-    { href: "/luckgirls", label: "Luckgirls" },
+    { href: "/target-shots", label: "Target Shots" },
+    { href: "/social-games", label: "Social Games" },
     { href: "/hit-or-miss", label: "Hit or Miss" },
     { href: "/shop-hunter", label: "Shop Hunter" },
     { href: "/puzzle-games", label: "Puzzle Games" },

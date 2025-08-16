@@ -220,7 +220,7 @@ export function ShopHunterGame() {
                     </AlertDialogDescription>
                     
                     <AlertDialogFooter className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        <AlertDialogCancel onClick={handleCloseDialog}>Let It Go</AlertDialogCancel>
+                        <AlertDialogCancel onClick={handleCloseDialog}>Let it go</AlertDialogCancel>
                         <AlertDialogAction onClick={handleVault}>Vault It!</AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>

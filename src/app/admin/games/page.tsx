@@ -31,6 +31,7 @@ export default function GamesPage() {
             <div>
                 <h1 className="text-3xl font-black">Game Control Room</h1>
                 <p className="text-muted-foreground">Manage the status and visibility of all games.</p>
+                <p className="text-xs text-muted-foreground mt-1">Server-authoritative scoring. Room limits, cooldowns, and anti-cheat checks are enforced.</p>
             </div>
        </div>
         <Card>

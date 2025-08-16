@@ -28,7 +28,7 @@ import { cn } from "@/lib/utils";
 import { Calculator } from "./calculator";
 import { ChartContainer } from "./ui/chart";
 import { DrawPad } from "./draw-pad";
-import { Target, HelpCircle, Check, Gem, DollarSign, Info, Flame, Loader } from "lucide-react";
+import { Target, HelpCircle, Check, Gem, DollarSign, Info, Flame, Loader, Tag } from "lucide-react";
 import { ChessBoard } from "./chess-board";
 import { MazeGame } from "./maze-game";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
@@ -475,9 +475,6 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
   const timerColor = riddleTimer <= 60 ? "text-destructive" : "text-foreground";
 
   const isGameCard = ['reel-pause', 'riddle-calc', 'draw-passcode', 'chess-mate', 'maze-draw'].includes(product.game ?? '');
-
-  const discountPercent = ((product.marketPrice - currentPrice) / product.marketPrice) * 100;
-  const discountColor = discountPercent > 0 ? "text-green-500" : "text-red-500";
   
   const renderGameStatus = () => {
     if (!product.status) return null;
@@ -510,7 +507,7 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
                     </div>
                 ) : (
                     <Button onClick={handleMazeStart} disabled={isMazeGameActive} className="w-full h-12 text-lg font-bold">
-                        {isMazeGameActive ? `Time: ${mazeTimer}s` : 'Start Game'}
+                        {isMazeGameActive ? `Time: ${mazeTimer}s` : 'Start Challenge'}
                     </Button>
                 )}
             </div>
@@ -559,7 +556,7 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
                     <Button onClick={() => handleTakeShot(stopReelGame)} className="w-full h-12 text-lg font-bold">Pause</Button>
                 ) : (
                     <Button onClick={handleReelShot} disabled={selectedReelIndices.length !== 3} className="w-full h-12 text-lg font-bold">
-                        Shot
+                        Take the Shot
                     </Button>
                 )}
             </div>
@@ -574,7 +571,7 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
                 <Calculator value={calculatorValue} onValueChange={setCalculatorValue} />
                  {isCorrectAnswer ? (
                      <Button onClick={handleRiddleShot} className="w-full h-12 text-lg font-bold">
-                        Shot for {gameAnswer}
+                        Take the Shot for {gameAnswer}
                     </Button>
                  ) : (
                     <Button onClick={handleRiddleStart} className="w-full h-12 text-lg font-bold">Start Challenge</Button>
@@ -590,7 +587,7 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
                 <DrawPad onPatternComplete={setDrawPadValue} />
                 {isCorrectAnswer ? (
                     <Button onClick={handleDrawPasscodeShot} className="w-full h-12 text-lg font-bold">
-                        Shot for {DRAW_PASSCODE_PRICE}
+                        Take the Shot for {DRAW_PASSCODE_PRICE}
                     </Button>
                 ) : (
                     <Button onClick={handleDrawPasscodeStart} className="w-full h-12 text-lg font-bold">Start Challenge</Button>
@@ -609,7 +606,7 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
           <div className="absolute inset-0 moving-gradient opacity-80 group-hover:opacity-100 transition-opacity"></div>
           <div className="relative flex items-baseline w-full justify-center">
                <span className={cn("font-black", product.game === 'multi-shot' ? "text-2xl" : "text-3xl")}>
-                {product.game === 'multi-shot' ? 'x3 Shot' : 'Shot'}
+                {product.game === 'multi-shot' ? 'x3 Shot' : 'Take the Shot'}
                </span>
           </div>
         </button>
@@ -640,18 +637,22 @@ export function ShotTaker({ product, view = 'full' }: ShotTakerProps) {
                   <Skeleton className="h-24 w-48" />
                 </div>
               ) : (
-              <>
-                <div className="flex items-center gap-2">
-                  <DollarSign className="h-6 w-6 text-primary" />
-                  <span className={cn(
-                    "font-black tracking-wider text-foreground",
-                    view === 'full' ? "text-3xl lg:text-4xl" : "text-4xl lg:text-6xl"
-                    )}>{currentPrice.toFixed(2)}</span>
-                </div>
-                <span className={cn("font-bold text-sm", discountColor)}>
-                    {discountPercent > 0 ? `+${discountPercent.toFixed(1)}%` : `${discountPercent.toFixed(1)}%`}
-                </span>
-              </>
+              <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <div className="flex items-center gap-2">
+                        <DollarSign className="h-6 w-6 text-primary" />
+                        <span className={cn(
+                          "font-black tracking-wider text-foreground",
+                          view === 'full' ? "text-3xl lg:text-4xl" : "text-4xl lg:text-6xl"
+                          )}>{currentPrice.toFixed(2)}</span>
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Prices drift in defined ranges. Success depends on timing accuracy.</p>
+                    </TooltipContent>
+                  </Tooltip>
+              </TooltipProvider>
               )}
             </div>
          </div>
