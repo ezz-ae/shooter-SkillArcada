@@ -5,9 +5,19 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { Button } from './ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from './ui/card';
 import { cn } from '@/lib/utils';
-import { Check, X, MousePointer, TrendingUp, Target, Volume2, VolumeX } from 'lucide-react';
+import { Check, X, MousePointer, TrendingUp, Target, Volume2, VolumeX, Lightbulb, Bot } from 'lucide-react';
 import { useStore } from '@/lib/store';
 import { useNotificationStore } from '@/lib/notification-store';
+import { getCoachHint } from '@/lib/callables';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 type GameState = 'idle' | 'placing' | 'aiming' | 'charging' | 'shot' | 'won' | 'lost';
 
@@ -18,6 +28,8 @@ export function PoolShotGame() {
   const [cueRotation, setCueRotation] = useState(0);
   const [shotPower, setShotPower] = useState(0);
   const [isMuted, setIsMuted] = useState(true);
+  const [isHintLoading, setIsHintLoading] = useState(false);
+  const [hint, setHint] = useState<string | null>(null);
   
   const tableRef = useRef<HTMLDivElement>(null);
   const powerIntervalRef = useRef<NodeJS.Timeout>();
@@ -146,6 +158,22 @@ export function PoolShotGame() {
     setShotPower(0);
     setCueRotation(0);
   }
+
+  const handleGetHint = async () => {
+    setIsHintLoading(true);
+    // In a real app, this state would come from the server.
+    // We send a mock state for the AI to analyze.
+    const mockGameState = {
+      level,
+      gameState,
+      cueBallPosition,
+      cueRotation,
+      shotPower,
+    };
+    const hintText = await getCoachHint('pool-shot', mockGameState);
+    setHint(hintText);
+    setIsHintLoading(false);
+  };
 
   const renderGameStateUI = () => {
     switch(gameState) {
@@ -299,7 +327,26 @@ export function PoolShotGame() {
                 </div>
             </div>
         )}
+        <Button variant="link" size="sm" onClick={handleGetHint} disabled={isHintLoading || gameState === 'shot'}>
+            <Lightbulb className="mr-2 h-4 w-4" /> Need a hint?
+        </Button>
       </CardFooter>
+      <AlertDialog open={!!hint} onOpenChange={(isOpen) => !isOpen && setHint(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2">
+                <Bot className="h-6 w-6 text-primary" />
+                Shooter's Advice
+            </AlertDialogTitle>
+            <AlertDialogDescription className="pt-4 whitespace-pre-wrap">
+              {hint}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction onClick={() => setHint(null)}>Got it</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Card>
   );
 }
