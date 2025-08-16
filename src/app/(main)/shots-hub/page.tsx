@@ -8,6 +8,7 @@ import { History, MessageSquare, Flame } from "lucide-react";
 import { useEffect, useState } from "react";
 import { LuckiestUsers } from "@/components/luckiest-users";
 import { TopGames } from "@/components/top-games";
+import { LuckAnalysis } from "@/components/luck-analysis";
 
 export default function ShotsHubPage() {
   const [users, setUsers] = useState<User[]>([]);
@@ -27,8 +28,12 @@ export default function ShotsHubPage() {
           <Flame className="text-accent"/> Shots Hub
         </h1>
         <p className="mt-2 text-lg text-muted-foreground max-w-2xl mx-auto">
-          The heart of the community. See live wins, top players, and join the conversation.
+          The heart of the community. See live wins, top players, and get your daily challenge from Shooter.
         </p>
+      </div>
+      
+      <div className="max-w-4xl mx-auto mb-12">
+        <LuckAnalysis />
       </div>
 
       <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
