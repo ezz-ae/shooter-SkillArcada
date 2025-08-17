@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PoolChallengeCard } from "@/components/pool-challenge-card";
 import { User, getUsers } from "@/lib/user";
-import { Trophy, PlusCircle, Swords, Check, MousePointerClick } from "lucide-react";
+import { Trophy, PlusCircle, Swords, Check, MousePointerClick, Lightbulb, Bot } from "lucide-react";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useEffect, useState } from "react";
@@ -16,6 +16,16 @@ import { useNotificationStore } from "@/lib/notification-store";
 import { CreateChallengeDialog } from "@/components/create-challenge-dialog";
 import { useAuth } from "@/lib/auth";
 import { cn } from "@/lib/utils";
+import { getCoachHint } from "@/lib/callables";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 const CHESS_MATE_MOVE = { from: [1, 5], to: [0, 5] };
 const CHESS_PRIZE_SHOTS = 500;
@@ -45,6 +55,8 @@ export default function ChessPage() {
   const { add: toast } = useNotificationStore();
   const [puzzleState, setPuzzleState] = useState<PuzzleState>('idle');
   const [chessChallenges, setChessChallenges] = useState<Challenge[]>([]);
+  const [isHintLoading, setIsHintLoading] = useState(false);
+  const [hint, setHint] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchData() {
@@ -123,6 +135,18 @@ export default function ChessPage() {
         })
     }
   }
+
+  const handleGetHint = async () => {
+    setIsHintLoading(true);
+    const mockGameState = {
+      board: initialChessBoard,
+      turn: 'white',
+      puzzle: 'Mate in 1'
+    };
+    const hintText = await getCoachHint('chess-puzzle', mockGameState);
+    setHint(hintText);
+    setIsHintLoading(false);
+  };
   
   const renderTutorialOverlay = () => {
     if (puzzleState === 'idle' || puzzleState === 'solved') return null;
@@ -190,6 +214,9 @@ export default function ChessPage() {
                                     {puzzleState === 'idle' ? `Play Puzzle (${PUZZLE_COST} Shots)` : 'Puzzle Active'}
                                 </Button>
                             )}
+                             <Button variant="link" size="sm" onClick={handleGetHint} disabled={isHintLoading || puzzleState === 'solved'}>
+                                <Lightbulb className="mr-2 h-4 w-4" /> Need a hint?
+                            </Button>
                         </div>
                     </CardContent>
                 </Card>
@@ -247,7 +274,24 @@ export default function ChessPage() {
             </TabsContent>
         </Tabs>
       </div>
-
+       <AlertDialog open={!!hint} onOpenChange={(isOpen) => !isOpen && setHint(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2">
+                <Bot className="h-6 w-6 text-primary" />
+                Shooter's Advice
+            </AlertDialogTitle>
+            <AlertDialogDescription className="pt-4 whitespace-pre-wrap">
+              {hint}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction onClick={() => setHint(null)}>Got it</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
+
+    
