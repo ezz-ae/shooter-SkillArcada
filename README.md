@@ -2,8 +2,7 @@
 
 A premium **skill-based** gaming platform with timing & puzzle challenges, real-time rooms, an **AI Coach/Opponent**, and a full operator dashboard. Built with Next.js + Firebase (Auth, Firestore, Functions) and Genkit for pluggable AI (Gemini or OpenAI).
 
-> **Compliance**
-> Shooter is **skill-based entertainment**. **No real-money gambling** or chance-only games are included. Scoring is **server-authoritative** and verified on the backend.
+> **Compliance:** Shooter is skill-based entertainment. No real-money gambling or chance-only games are included. Scoring is server-authoritative and verified on the backend.
 
 ---
 
