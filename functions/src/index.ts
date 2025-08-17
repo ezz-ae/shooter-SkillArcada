@@ -1,7 +1,7 @@
 import * as admin from "firebase-admin";
-import { onCall, HttpsOptions } from "firebase-functions/v2/https";
+import { onCall, HttpsOptions, CallableRequest } from "firebase-functions/v2/https";
 import * as functions from "firebase-functions";
-import { defineSecret } from "firebase-functions/params";
+import { defineSecret, SecretParam } from "firebase-functions/params";
 import { coachFlow, opponentFlow, suggesterFlow, puzzleGenFlow } from "./ai/flows.js";
 
 if (!admin.apps.length) admin.initializeApp();
@@ -14,33 +14,33 @@ export const OPENAI_API_KEY = defineSecret("OPENAI_API_KEY");
 
 // ---- Expose Genkit flows as callable functions (recommended by Firebase) ----
 
-// Helper to apply authPolicy if needed (can be simplified or removed if not strictly required by Genkit)
-const callableOptions = (options: HttpsOptions = {}): HttpsOptions => ({
-  ...options,
-  // Note: authPolicy with hasClaim is generally handled by Firebase Auth rules or within the function logic in v2.
-  // If Genkit requires a specific auth check here, you might need a custom check or adjust Genkit's configuration.
-  // For now, removing the explicit hasClaim check as it might not be directly compatible with v2 HttpsOptions.
-  // You should implement equivalent auth checks inside your callable function logic if necessary.
-  enforceAppCheck: true, // Assuming you want to keep App Check enforcement
-});
-
 export const aiCoach_getHint = onCall(
-  callableOptions({ secrets: [GEMINI_API_KEY, OPENAI_API_KEY] }),
-  coachFlow
+  { secrets: [GEMINI_API_KEY, OPENAI_API_KEY], enforceAppCheck: true },
+  async (request: CallableRequest<{ uid: string; roomId: string }>) => {
+    // Ensure user is authenticated
+    if (!request.auth) {
+      throw new functions.https.HttpsError(
+        'unauthenticated',
+        'The function must be called while authenticated.'
+      );
+    }
+    // Extract data from the request
+    const { uid, roomId } = request.data;
+    // Call the Genkit flow and return the result
+    const result = await coachFlow.run({ uid, roomId });
+    return result;
+  }
 );
 
 export const aiOpponent_nextMove = onCall(
-  callableOptions(),
   opponentFlow
 );
 
 export const aiSuggest_challenge = onCall(
-  callableOptions(),
   suggesterFlow
 );
 
 export const puzzles_generate = onCall(
-  callableOptions(),
   puzzleGenFlow
 );
 
