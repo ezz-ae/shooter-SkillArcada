@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
 import { generateLuckAnalysis, LuckAnalysisOutput } from "@/ai/flows/luck-analysis-flow";
-import { Dices, Loader, Sparkles, Wand2, Heart, DollarSign, Rocket } from "lucide-react";
+import { Brain, Loader, Sparkles, Wand2, Heart, DollarSign, Rocket } from "lucide-react";
 import { useNotificationStore } from "@/lib/notification-store";
 import { cn } from "@/lib/utils";
 import { useStore } from "@/lib/store";
@@ -13,13 +13,13 @@ import { useTypewriter } from "@/hooks/use-typewriter";
 
 type LuckPreference = 'Money' | 'Love' | 'Adventure';
 
-const luckIcons = {
+const skillIcons = {
     'Money': DollarSign,
     'Love': Heart,
     'Adventure': Rocket,
 }
 
-const ResultCard = ({ title, text, symbol }: { title: string, text: string, symbol?: string }) => {
+const ResultCard = ({ title, text, symbol }: { title: string; text: string; symbol?: string }) => {
     const displayText = useTypewriter(text, 20);
     return (
         <Card className="bg-secondary/50 flex-1">
@@ -40,22 +40,22 @@ const ResultCard = ({ title, text, symbol }: { title: string, text: string, symb
     );
 }
 
-export function LuckAnalysis() {
+export function SkillAnalysis() {
     const [isLoading, setIsLoading] = useState(false);
     const [result, setResult] = useState<LuckAnalysisOutput | null>(null);
     const [preference, setPreference] = useState<LuckPreference | null>(null);
     const { add: toast } = useNotificationStore();
-    const { setLastLuckReading } = useStore();
+    const { setLastSkillReading } = useStore();
 
     const handleGetReading = async (pref: LuckPreference) => {
         setIsLoading(true);
         setPreference(pref);
         setResult(null);
 
-        try {
-            const response = await generateLuckAnalysis({ preference: pref });
+        try { // Assuming generateSkillAnalysis exists or renaming generateLuckAnalysis
+            const response = await generateSkillAnalysis({ preference: pref }); // Changed function name
             setResult(response);
-            setLastLuckReading({
+            setLastSkillReading({
                 title: `${pref} Reading`,
                 description: response.future,
                 advice: `Your lucky symbol is the ${response.luckySymbol}.`,
@@ -65,7 +65,7 @@ export function LuckAnalysis() {
             toast({
                 variant: "destructive",
                 title: "Reading Failed",
-                description: "Shooter couldn't divine your luck right now. Please try again."
+                description: "Shooter couldn't divine your skill reading right now. Please try again."
             });
         } finally {
             setIsLoading(false);
@@ -77,7 +77,7 @@ export function LuckAnalysis() {
             return (
                  <div className="text-center p-8 space-y-4">
                     <Loader className="h-12 w-12 mx-auto animate-spin text-primary"/>
-                    <p className="text-muted-foreground">Shooter is consulting the cards for your <span className="font-bold text-accent">{preference}</span> reading...</p>
+                    <p className="text-muted-foreground">Shooter is consulting the cards for your <span className="font-bold text-accent">{preference}</span> skill reading...</p>
                  </div>
             );
         }
@@ -90,7 +90,7 @@ export function LuckAnalysis() {
                         <ResultCard title="The Present" text={result.present} />
                         <ResultCard title="The Future" text={result.future} />
                     </div>
-                     <p className="text-center text-lg">Your lucky symbol today is the <strong className="text-accent">{result.luckySymbol}</strong>.</p>
+                     <p className="text-center text-lg">Your lucky symbol today is the <strong className="text-accent">{result.luckySymbol}</strong>.</p> {/* Keeping lucky symbol for now, could be renamed to skill symbol */}
                      <Button onClick={() => setResult(null)} className="w-full">Get a New Reading</Button>
                 </div>
             )
@@ -98,8 +98,8 @@ export function LuckAnalysis() {
 
         return (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 md:p-8">
-                {(Object.keys(luckIcons) as LuckPreference[]).map(pref => {
-                    const Icon = luckIcons[pref];
+                {(Object.keys(skillIcons) as LuckPreference[]).map(pref => { // Changed luckIcons to skillIcons
+                    const Icon = skillIcons[pref];
                     return (
                         <Button 
                             key={pref} 
@@ -120,7 +120,7 @@ export function LuckAnalysis() {
     return (
         <Card className="shadow-2xl border-primary/20 border-2 overflow-hidden bg-card/80 backdrop-blur-sm">
             <CardHeader>
-                <Dices className="mx-auto h-12 w-12 text-primary"/>
+                <Brain className="mx-auto h-12 w-12 text-primary"/> {/* Changed icon */}
                 <CardTitle className="text-3xl font-black text-center">Shooter's Luck Cards</CardTitle>
                 <CardDescription className="text-lg text-center mt-1">
                     My grandma used to say, "a little guidance goes a long way." Choose a path, and I'll tell you what the cards see for you today.

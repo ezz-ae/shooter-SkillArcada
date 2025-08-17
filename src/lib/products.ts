@@ -12,7 +12,7 @@ export interface Product {
   dataAiHint: string;
   expertSystem: string;
   game?: 'reel-pause' | 'multi-shot' | 'riddle-calc' | 'draw-passcode' | 'chess-mate' | 'time-challenge' | 'pink-cups' | 'snake-and-stairs' | 'ai-adventure' | 'maze-draw' | 'story-match' | 'mirror-game';
-  category?: 'luckshot' | 'brainshot' | 'luckgirls' | 'chess' | 'electronics' | 'fashion' | 'home' | 'collectibles' | 'voucher';
+  category?: 'skillshot' | 'brainshot' | 'skillgirls' | 'chess' | 'electronics' | 'fashion' | 'home' | 'collectibles' | 'voucher';
   status?: 'Hot' | 'New' | 'Testing';
 }
 
@@ -108,7 +108,7 @@ export const mockProducts: Product[] = [
         dataAiHint: 'smartphone mockup',
         expertSystem: 'The price is hidden behind a fast-spinning reel of numbers. Click "Pause" to freeze the reel, then select three digits to form your price.',
         game: 'reel-pause',
-        category: 'brainshot',
+        category: 'skillshot',
         status: 'Hot',
     },
     {
@@ -121,7 +121,7 @@ export const mockProducts: Product[] = [
         dataAiHint: 'bitcoin treasure',
         expertSystem: 'This item\'s price is locked behind a riddle. Click "Start Challenge", use the on-card calculator to punch in the correct answer. If you solve it, you can buy the item for a fixed, low price.',
         game: 'riddle-calc',
-        category: 'brainshot',
+        category: 'skillshot',
     },
     {
         id: 'prod_math_01',
@@ -133,7 +133,7 @@ export const mockProducts: Product[] = [
         dataAiHint: 'math formula',
         expertSystem: 'This item\'s price is locked behind a math problem. Click "Start Challenge" to begin the timer and use the on-card calculator to punch in the correct answer.',
         game: 'riddle-calc',
-        category: 'brainshot',
+        category: 'skillshot',
     },
     {
         id: 'prod_headset_01',
@@ -145,7 +145,7 @@ export const mockProducts: Product[] = [
         dataAiHint: 'futuristic headset',
         expertSystem: 'A secret pattern is the key. Click "Start Challenge" and a pattern will flash on screen. Memorize it, then draw it on the 3x3 grid to unlock the prize.',
         game: 'draw-passcode',
-        category: 'brainshot',
+        category: 'skillshot',
         status: 'New',
     },
     {
@@ -158,7 +158,7 @@ export const mockProducts: Product[] = [
         dataAiHint: 'glowing maze',
         expertSystem: 'A timed Pathfinder puzzle. Click "Start Game" and draw the correct path from start (S) to end (E) before the timer runs out to win the prize!',
         game: 'maze-draw',
-        category: 'brainshot',
+        category: 'skillshot',
     },
     {
         id: 'prod_mirror_01',
@@ -170,7 +170,7 @@ export const mockProducts: Product[] = [
         dataAiHint: 'glowing crystal',
         expertSystem: 'Shooter creates a pattern on a grid. It is revealed for a moment. You must perfectly mirror his pattern on your own grid to win this prize for free.',
         game: 'mirror-game',
-        category: 'brainshot',
+        category: 'skillshot',
         status: 'Testing',
     },
     {
@@ -183,7 +183,7 @@ export const mockProducts: Product[] = [
         dataAiHint: 'glowing chesspiece',
         expertSystem: 'A "Checkmate in One" puzzle. You are playing as White. Analyze the board and make the single move that puts the Black king in checkmate to win.',
         game: 'chess-mate',
-        category: 'brainshot',
+        category: 'chess',
     },
     {
         id: 'prod_adventure_01',
@@ -195,12 +195,12 @@ export const mockProducts: Product[] = [
         dataAiHint: 'ornate key',
         expertSystem: 'The AI has started a story and created an image. It\'s up to you to write the perfect ending.',
         game: 'ai-adventure',
-        category: 'brainshot',
+        category: 'skillshot',
     },
 
-    // --- LUCKGIRLS (SOCIAL GAMES) ---
+    // --- SKILLGIRLS (SOCIAL GAMES) ---
     {
-        id: 'prod_luckgirl_01',
+        id: 'prod_skillgirl_01',
         name: 'Time Challenge',
         subtitle: 'Beat the clock!',
         description: 'A fast-paced puzzle game. Solve as many mini-puzzles as you can before the time runs out.',
@@ -212,10 +212,10 @@ export const mockProducts: Product[] = [
         category: 'luckgirls',
     },
     {
-        id: 'prod_luckgirl_02',
-        name: 'Pink Cups',
-        subtitle: 'Find the lucky cup!',
-        description: 'A classic shell game with a fun twist. Keep your eye on the pink cup to win the prize.',
+        id: 'prod_skillgirl_02',
+        name: 'Skillful Cups',
+        subtitle: 'Find the winning cup!',
+        description: 'A classic shell game with a fun twist. Keep your eye on the correct cup to win the prize.',
         marketPrice: 10,
         imageUrl: 'https://placehold.co/600x400.png',
         dataAiHint: 'anime girl purple',
@@ -224,7 +224,7 @@ export const mockProducts: Product[] = [
         category: 'luckgirls',
     },
     {
-        id: 'prod_luckgirl_03',
+        id: 'prod_skillgirl_03',
         name: 'Snake and Stairs',
         subtitle: 'Social board game',
         description: 'A social board game where you can chat with your opponent and the audience. Roll the dice and climb to victory!',
@@ -236,7 +236,7 @@ export const mockProducts: Product[] = [
         category: 'luckgirls',
     },
     {
-        id: 'prod_luckgirl_04',
+        id: 'prod_skillgirl_04',
         name: 'Story Match',
         subtitle: 'Connect the narrative',
         description: 'A social deduction game where players match story snippets to win. Who is telling the truth?',
@@ -248,7 +248,7 @@ export const mockProducts: Product[] = [
         category: 'luckgirls',
     },
 
-    // --- LUCKSHOTS (DYNAMIC PRICING) ---
+    // --- SKILLSHOTS (DYNAMIC PRICING) ---
     // --- ELECTRONICS ---
     {
         id: 'prod_console_01',
@@ -260,7 +260,7 @@ export const mockProducts: Product[] = [
         dataAiHint: 'game console',
         expertSystem: 'Instead of one, you get three shots at a great price! Click the "x3 Shot" button to capture three different prices simultaneously. Review the three options and pick the best one.',
         game: 'multi-shot',
-        category: 'luckshot',
+        category: 'skillshot',
         status: 'Hot',
     },
     {
@@ -273,6 +273,7 @@ export const mockProducts: Product[] = [
         dataAiHint: 'gaming laptop',
         expertSystem: 'The price of this item is constantly changing. Watch the chart and click the "Shot" button when you see a price you like to capture it.',
         category: 'luckshot',
+        category: 'skillshot',
     },
     {
         id: 'prod_camera_01',
@@ -284,6 +285,7 @@ export const mockProducts: Product[] = [
         dataAiHint: 'professional camera',
         expertSystem: 'The price of this item is constantly changing. Watch the chart and click the "Shot" button when you see a price you like to capture it.',
         category: 'luckshot',
+        category: 'skillshot',
     },
     {
         id: 'prod_drone_01',
@@ -295,6 +297,7 @@ export const mockProducts: Product[] = [
         dataAiHint: 'flying drone',
         expertSystem: 'The price of this item is constantly changing. Watch the chart and click the "Shot" button when you see a price you like to capture it.',
         category: 'luckshot',
+        category: 'skillshot',
         status: 'New'
     },
     {
@@ -307,6 +310,7 @@ export const mockProducts: Product[] = [
         dataAiHint: 'smart watch',
         expertSystem: 'The price of this item is constantly changing. Watch the chart and click the "Shot" button when you see a price you like to capture it.',
         category: 'luckshot',
+        category: 'skillshot',
     },
      {
         id: 'prod_tablet_01',
@@ -318,6 +322,7 @@ export const mockProducts: Product[] = [
         dataAiHint: 'drawing tablet',
         expertSystem: 'The price of this item is constantly changing. Watch the chart and click the "Shot" button when you see a price you like to capture it.',
         category: 'luckshot',
+        category: 'skillshot',
     },
     {
         id: 'prod_headphones_01',
@@ -329,7 +334,7 @@ export const mockProducts: Product[] = [
         dataAiHint: 'studio headphones',
         expertSystem: 'The price of this item is constantly changing. Watch the chart and click the "Shot" button when you see a price you like to capture it.',
         category: 'luckshot',
-        status: 'Hot',
+        category: 'skillshot', status: 'Hot',
     },
 
     // --- FASHION ---
@@ -343,6 +348,7 @@ export const mockProducts: Product[] = [
         dataAiHint: 'hype sneakers',
         expertSystem: 'The price of this item is constantly changing. Watch the chart and click the "Shot" button when you see a price you like to capture it.',
         category: 'luckshot',
+        category: 'skillshot',
     },
     {
         id: 'prod_handbag_01',
@@ -354,6 +360,7 @@ export const mockProducts: Product[] = [
         dataAiHint: 'luxury handbag',
         expertSystem: 'The price of this item is constantly changing. Watch the chart and click the "Shot" button when you see a price you like to capture it.',
         category: 'luckshot',
+        category: 'skillshot',
     },
     {
         id: 'prod_jacket_01',
@@ -365,6 +372,7 @@ export const mockProducts: Product[] = [
         dataAiHint: 'patched jacket',
         expertSystem: 'The price of this item is constantly changing. Watch the chart and click the "Shot" button when you see a price you like to capture it.',
         category: 'luckshot',
+        category: 'skillshot',
     },
     {
         id: 'prod_sunglasses_01',
@@ -376,6 +384,7 @@ export const mockProducts: Product[] = [
         dataAiHint: 'fashion sunglasses',
         expertSystem: 'The price of this item is constantly changing. Watch the chart and click the "Shot" button when you see a price you like to capture it.',
         category: 'luckshot',
+        category: 'skillshot',
     },
 
     // --- HOME & LIFESTYLE ---
@@ -389,6 +398,7 @@ export const mockProducts: Product[] = [
         dataAiHint: 'coffee machine',
         expertSystem: 'The price of this item is constantly changing. Watch the chart and click the "Shot" button when you see a price you like to capture it.',
         category: 'luckshot',
+        category: 'skillshot',
     },
     {
         id: 'prod_chair_01',
@@ -400,6 +410,7 @@ export const mockProducts: Product[] = [
         dataAiHint: 'ergonomic chair',
         expertSystem: 'The price of this item is constantly changing. Watch the chart and click the "Shot" button when you see a price you like to capture it.',
         category: 'luckshot',
+        category: 'skillshot',
     },
     {
         id: 'prod_art_01',
@@ -411,6 +422,7 @@ export const mockProducts: Product[] = [
         dataAiHint: 'abstract art',
         expertSystem: 'The price of this item is constantly changing. Watch the chart and click the "Shot" button when you see a price you like to capture it.',
         category: 'luckshot',
+        category: 'skillshot',
     },
 
     // --- COLLECTIBLES ---
@@ -424,7 +436,7 @@ export const mockProducts: Product[] = [
         dataAiHint: 'holographic card',
         expertSystem: 'The price of this item is constantly changing. Watch the chart and click the "Shot" button when you see a price you like to capture it.',
         category: 'luckshot',
-        status: 'Hot',
+        category: 'skillshot', status: 'Hot',
     },
     {
         id: 'prod_figure_01',
@@ -436,6 +448,7 @@ export const mockProducts: Product[] = [
         dataAiHint: 'retro actionfigure',
         expertSystem: 'The price of this item is constantly changing. Watch the chart and click the "Shot" button when you see a price you like to capture it.',
         category: 'luckshot',
+        category: 'skillshot',
     },
     {
         id: 'prod_coin_01',
@@ -447,6 +460,7 @@ export const mockProducts: Product[] = [
         dataAiHint: 'silver coin',
         expertSystem: 'The price of this item is constantly changing. Watch the chart and click the "Shot" button when you see a price you like to capture it.',
         category: 'luckshot',
+        category: 'skillshot',
     },
      {
         id: 'prod_tv_01',
@@ -458,6 +472,7 @@ export const mockProducts: Product[] = [
         dataAiHint: 'oled tv',
         expertSystem: 'The price of this item is constantly changing. Watch the chart and click the "Shot" button when you see a price you like to capture it.',
         category: 'luckshot',
+        category: 'skillshot',
     },
     {
         id: 'prod_blender_01',
@@ -469,6 +484,7 @@ export const mockProducts: Product[] = [
         dataAiHint: 'powerful blender',
         expertSystem: 'The price of this item is constantly changing. Watch the chart and click the "Shot" button when you see a price you like to capture it.',
         category: 'luckshot',
+        category: 'skillshot',
     },
     {
         id: 'prod_bike_01',
@@ -480,6 +496,7 @@ export const mockProducts: Product[] = [
         dataAiHint: 'electric bike',
         expertSystem: 'The price of this item is constantly changing. Watch the chart and click the "Shot" button when you see a price you like to capture it.',
         category: 'luckshot',
+        category: 'skillshot',
     },
     {
         id: 'prod_keyboard_01',
@@ -491,6 +508,7 @@ export const mockProducts: Product[] = [
         dataAiHint: 'rgb keyboard',
         expertSystem: 'The price of this item is constantly changing. Watch the chart and click the "Shot" button when you see a price you like to capture it.',
         category: 'luckshot',
+        category: 'skillshot',
     },
      {
         id: 'prod_subscription_01',
@@ -502,7 +520,7 @@ export const mockProducts: Product[] = [
         dataAiHint: 'music subscription',
         expertSystem: 'Instead of one, you get three shots at a great price! Click the "x3 Shot" button to capture three different prices simultaneously. Review the three options and pick the best one.',
         game: 'multi-shot',
-        category: 'luckshot',
+        category: 'skillshot',
     },
     {
         id: 'prod_watch_01',
@@ -514,8 +532,8 @@ export const mockProducts: Product[] = [
         dataAiHint: 'swiss watch',
         expertSystem: 'The price of this item is constantly changing. Watch the chart and click the "Shot" button when you see a price you like to capture it.',
         category: 'luckshot',
-        status: 'Hot'
-    },
+        category: 'skillshot', status: 'Hot'
+     },
     {
         id: 'prod_vr_gloves_01',
         name: 'Haptic VR Gloves',
@@ -526,7 +544,7 @@ export const mockProducts: Product[] = [
         dataAiHint: 'haptic gloves',
         expertSystem: 'A secret pattern is the key. Click "Start Challenge" and a pattern will flash on screen. Memorize it, then draw it on the 3x3 grid to unlock the prize.',
         game: 'draw-passcode',
-        category: 'brainshot',
+        category: 'skillshot',
     },
      {
         id: 'prod_chess_challenge_01',

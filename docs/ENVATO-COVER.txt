@@ -1,0 +1,3 @@
+Shooter - Skill Arcade Platform
+
+Keywords: Skill Games, AI Coach, Firebase, Next.js, Realtime Multiplayer
