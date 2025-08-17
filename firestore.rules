@@ -1,0 +1,65 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{db}/documents {
+
+    // Helper functions
+    function authed() {
+      return request.auth != null;
+    }
+    function isUser(uid) {
+      return authed() && request.auth.uid == uid;
+    }
+    function isAdmin() {
+      // In a real app, this would check a custom claim set via a backend process
+      return authed() && (exists(/databases/$(db)/documents/admins/$(request.auth.uid)) || request.auth.token.role == 'admin');
+    }
+
+    // Rules for each collection
+    match /users/{userId} {
+      allow read: if authed();
+      allow create: if isUser(userId);
+      allow update: if isUser(userId) || isAdmin();
+    }
+
+    match /leaderboards/{leaderboardId} {
+      allow read: if authed();
+      allow create: if authed(); // Scores are submitted via trusted server-side logic
+    }
+    
+    match /rooms/{roomId} {
+        allow read: if authed();
+        allow create: if authed();
+        allow update: if authed(); // Game moves and state changes
+        match /events/{eventId} {
+            allow read, create: if authed();
+        }
+    }
+    
+    match /messages/{roomId}/{msgId} {
+      allow read: if authed();
+      allow create: if authed() && request.resource.data.authorId == request.auth.uid;
+      allow update: if isAdmin(); // For moderation updates
+      allow delete: if isAdmin();
+    }
+
+    match /ai_sessions/{id} {
+      allow create: if authed() && (request.resource.data.userId == request.auth.uid || request.resource.data.userId == null);
+      allow read: if isAdmin(); // Usage logs are admin-only
+      allow update, delete: if false;
+    }
+
+    match /admin_reports/{id} {
+      allow read, write: if isAdmin();
+    }
+    
+    match /admins/{userId} {
+        allow read: if isAdmin();
+    }
+
+    match /rate_limiter/{docId} {
+      // Should only be written by the server, but this allows for transactions from a trusted client/server action
+      allow write: if authed() && request.auth.uid in docId;
+      allow read: if isAdmin();
+    }
+  }
+}
