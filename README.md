@@ -1,6 +1,60 @@
 
-# ShooterGun
+# Shooter — Skill Arcade Platform (Next.js + Firebase + Genkit AI)
 
-Welcome to ShooterGun, the premier platform for taking a chance on amazing products at unbelievable prices. It's all orchestrated by Shooter, our resident gamegang mega, who sells his "shots" because he fondly remembers his past life.
+A premium **skill-based** gaming platform with timing & puzzle challenges, real-time rooms, an **AI Coach/Opponent**, and a full operator dashboard. Built with Next.js + Firebase (Auth, Firestore, Functions) and Genkit for pluggable AI (Gemini or OpenAI).
 
-To get started, take a look at `src/app/page.tsx`.
+> **Compliance**  
+> Shooter is **skill-based entertainment**. **No real-money gambling** or chance-only games are included. Scoring is **server-authoritative** and verified on the backend.
+
+---
+
+## Table of Contents
+- [Highlights](#highlights)
+- [Screenshots](#screenshots)
+- [Architecture](#architecture)
+- [Tech Stack](#tech-stack)
+- [Getting Started](#getting-started)
+- [Configuration](#configuration)
+  - [.env / environment](#env--environment)
+  - [Firebase setup](#firebase-setup)
+  - [AI provider (Genkit)](#ai-provider-genkit)
+- [Development](#development)
+- [Deployment](#deployment)
+- [Security & Fairness](#security--fairness)
+- [Admin & Operations](#admin--operations)
+- [FAQ](#faq)
+- [Changelog](#changelog)
+- [Support](#support)
+- [License](#license)
+
+---
+
+## Highlights
+- 🎯 **Skill-first games**: timing, puzzles, chess-tactics, memory — not chance-only.
+- 🤖 **AI Coach & Opponent** (Genkit): concise hints, server-generated bot moves, personalized challenge suggestions.
+- 🕹️ **Real-time rooms**: secure sessions, events stream, leaderboards & seasons.
+- 🛠️ **Operator dashboard**: enable/disable games, feature flags, cooldowns, moderation.
+- 💳 **Credits wallet (optional)**: Stripe-ready webhooks & append-only ledger.
+- 🧊 **Beautiful UI**: glassmorphism, Dark/Light themes, responsive.
+- 🔐 **Server-authoritative scoring**: anti-cheat checks, rate-limits, immutable logs.
+- 🧩 **Puzzle generator** (extensible): server-verified challenges.
+- 🧭 **Daily insights**: scheduled AI summaries of KPIs & tuning suggestions.
+
+---
+
+## Screenshots
+> Place images under `docs/screenshots/` and keep them ~1600×1000 (WebP/PNG).  
+> Replace filenames below with your assets.
+
+<div align="center">
+  <img src="docs/screenshots/cover-hero.webp" alt="Hero" width="850" />
+  <img src="docs/screenshots/dashboard-market-cards.webp" alt="Timing challenges" width="850" />
+  <img src="docs/screenshots/puzzle-center.webp" alt="Puzzle & AI coach" width="850" />
+  <img src="docs/screenshots/chess-challenges.webp" alt="Chess tactics" width="850" />
+  <img src="docs/screenshots/rooms-grid.webp" alt="Rooms & leaderboards" width="850" />
+  <img src="docs/screenshots/admin-games.webp" alt="Admin controls" width="850" />
+</div>
+
+---
+
+## Architecture
