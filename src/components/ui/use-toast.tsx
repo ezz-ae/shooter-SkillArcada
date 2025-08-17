@@ -1,6 +1,3 @@
-tsx
-"use client";
-
 import React, {
   createContext,
   useCallback,
