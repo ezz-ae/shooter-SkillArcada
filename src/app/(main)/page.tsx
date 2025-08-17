@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { User, getUsers } from "@/lib/user";
 import { SectionHeader } from "@/components/section-header";
 import { DiceGame } from "@/components/dice-game";
+import { useAuth } from "@/lib/auth";
 
 export default function Home() {
   const [users, setUsers] = useState<User[]>([]);
