@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PoolChallengeCard } from "@/components/pool-challenge-card";
 import { User, getUsers } from "@/lib/user";
-import { Trophy, PlusCircle, Swords, Check } from "lucide-react";
+import { Trophy, PlusCircle, Swords, Check, MousePointerClick } from "lucide-react";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useEffect, useState } from "react";
@@ -15,9 +15,11 @@ import { useStore } from "@/lib/store";
 import { useNotificationStore } from "@/lib/notification-store";
 import { CreateChallengeDialog } from "@/components/create-challenge-dialog";
 import { useAuth } from "@/lib/auth";
+import { cn } from "@/lib/utils";
 
 const CHESS_MATE_MOVE = { from: [1, 5], to: [0, 5] };
 const CHESS_PRIZE_SHOTS = 500;
+const PUZZLE_COST = 50;
 
 const initialChessBoard = Array(8).fill(null).map(() => Array(8).fill(null));
 initialChessBoard[7][4] = { type: 'King', color: 'black' };
@@ -34,12 +36,14 @@ interface Challenge {
     type: 'pool' | 'chess';
 }
 
+type PuzzleState = 'idle' | 'playing' | 'piece_selected' | 'solved';
+
 export default function ChessPage() {
   const [users, setUsers] = useState<User[]>([]);
   const { user: currentUser } = useAuth();
   const { addShots, spendShot } = useStore();
   const { add: toast } = useNotificationStore();
-  const [isChessWon, setIsChessWon] = useState(false);
+  const [puzzleState, setPuzzleState] = useState<PuzzleState>('idle');
   const [chessChallenges, setChessChallenges] = useState<Challenge[]>([]);
 
   useEffect(() => {
@@ -71,15 +75,25 @@ export default function ChessPage() {
     setChessChallenges(prev => [newChallenge, ...prev]);
   }
 
-  const handleChessMove = (from: [number, number], to: [number, number]) => {
-      if (isChessWon) return;
+  const handleChessMove = (from: [number, number], to: [number, number] | null) => {
+      if (puzzleState !== 'playing' && puzzleState !== 'piece_selected') return;
 
+      if (to === null) { // This means a piece was just selected
+        if(from[0] === CHESS_MATE_MOVE.from[0] && from[1] === CHESS_MATE_MOVE.from[1]) {
+            setPuzzleState('piece_selected');
+        } else {
+             toast({ variant: "destructive", title: "Incorrect Piece", description: "That's not the piece that delivers checkmate." });
+        }
+        return;
+      }
+      
       const isCorrectMove = from[0] === CHESS_MATE_MOVE.from[0] &&
                             from[1] === CHESS_MATE_MOVE.from[1] &&
                             to[0] === CHESS_MATE_MOVE.to[0] &&
                             to[1] === CHESS_MATE_MOVE.to[1];
+
       if (isCorrectMove) {
-          setIsChessWon(true);
+          setPuzzleState('solved');
           addShots(CHESS_PRIZE_SHOTS);
           toast({
             title: "Checkmate!",
@@ -95,8 +109,8 @@ export default function ChessPage() {
   }
 
   const handlePlayPuzzle = () => {
-    if (spendShot(50)) {
-        setIsChessWon(false);
+    if (spendShot(PUZZLE_COST)) {
+        setPuzzleState('playing');
         toast({
             title: "Good Luck!",
             description: "The puzzle is now active. Find the checkmate."
@@ -105,9 +119,27 @@ export default function ChessPage() {
         toast({
             variant: "destructive",
             title: "Not enough Shots!",
-            description: "You need 50 Shots to play this puzzle."
+            description: `You need ${PUZZLE_COST} Shots to play this puzzle.`
         })
     }
+  }
+  
+  const renderTutorialOverlay = () => {
+    if (puzzleState === 'idle' || puzzleState === 'solved') return null;
+
+    let text = "Click the piece to move.";
+    if (puzzleState === 'piece_selected') {
+        text = "Now click the square to deliver checkmate.";
+    }
+
+    return (
+        <div className="absolute inset-0 bg-black/60 flex items-center justify-center z-10 animate-in fade-in-50">
+            <div className="text-center text-white p-4 rounded-lg">
+                <MousePointerClick className="mx-auto h-12 w-12 mb-4" />
+                <p className="text-xl font-bold">{text}</p>
+            </div>
+        </div>
+    )
   }
 
   return (
@@ -132,13 +164,16 @@ export default function ChessPage() {
                 <Card className="shadow-2xl">
                     <CardHeader>
                         <CardTitle>Checkmate in One</CardTitle>
-                        <CardDescription>White to move and win the game. Solve it to win a massive prize!</CardDescription>
+                        <CardDescription>White to move and deliver checkmate. Click the correct piece, then the correct square to solve the puzzle and win a massive prize!</CardDescription>
                     </CardHeader>
                     <CardContent className="flex flex-col md:flex-row items-center gap-8">
-                        <div className="w-full md:w-96">
+                        <div className="w-full md:w-96 relative">
+                            {renderTutorialOverlay()}
                             <ChessBoard 
+                                key={puzzleState} // Force re-render on state change to clear selection
                                 initialBoard={initialChessBoard}
                                 onMove={handleChessMove}
+                                isSelectable={puzzleState === 'playing' || puzzleState === 'piece_selected'}
                             />
                         </div>
                         <div className="text-center space-y-4">
@@ -146,12 +181,14 @@ export default function ChessPage() {
                                 <p className="text-3xl md:text-5xl font-black text-primary">{CHESS_PRIZE_SHOTS} Shots</p>
                                 <p className="text-muted-foreground font-semibold">Prize</p>
                             </div>
-                            {isChessWon ? (
+                            {puzzleState === 'solved' ? (
                                 <div className="p-4 rounded-lg bg-green-500/10 text-green-700 dark:text-green-400 font-bold flex items-center justify-center gap-2">
                                     <Check /> Puzzle Solved! Prize Awarded.
                                 </div>
                             ) : (
-                                <Button onClick={handlePlayPuzzle} size="lg">Play Puzzle (50 Shots)</Button>
+                                <Button onClick={handlePlayPuzzle} size="lg" disabled={puzzleState !== 'idle'}>
+                                    {puzzleState === 'idle' ? `Play Puzzle (${PUZZLE_COST} Shots)` : 'Puzzle Active'}
+                                </Button>
                             )}
                         </div>
                     </CardContent>

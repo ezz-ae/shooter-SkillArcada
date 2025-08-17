@@ -14,9 +14,10 @@ interface Piece {
 
 interface ChessBoardProps {
   initialBoard?: (Piece | null)[][];
-  onMove: (from: [number, number], to: [number, number]) => void;
+  onMove: (from: [number, number], to: [number, number] | null) => void;
   isWhiteTurn?: boolean;
   className?: string;
+  isSelectable?: boolean;
 }
 
 const defaultBoard: (Piece | null)[][] = Array(8).fill(null).map(() => Array(8).fill(null));
@@ -34,11 +35,13 @@ const PieceIcon = ({ piece }: { piece: Piece }) => (
 );
 
 
-export function ChessBoard({ initialBoard = defaultBoard, onMove, isWhiteTurn = true, className }: ChessBoardProps) {
-  const [board, setBoard] = useState(initialBoard);
+export function ChessBoard({ initialBoard = defaultBoard, onMove, isWhiteTurn = true, className, isSelectable = true }: ChessBoardProps) {
+  const [board] = useState(initialBoard);
   const [selectedPiece, setSelectedPiece] = useState<[number, number] | null>(null);
 
   const handleSquareClick = (row: number, col: number) => {
+    if (!isSelectable) return;
+
     if (selectedPiece) {
       const [fromRow, fromCol] = selectedPiece;
       if (fromRow === row && fromCol === col) {
@@ -51,6 +54,7 @@ export function ChessBoard({ initialBoard = defaultBoard, onMove, isWhiteTurn = 
       const piece = board[row][col];
       if (piece && (isWhiteTurn ? piece.color === 'white' : piece.color === 'black')) {
         setSelectedPiece([row, col]);
+        onMove([row, col], null); // Notify parent of selection
       }
     }
   };
@@ -66,13 +70,13 @@ export function ChessBoard({ initialBoard = defaultBoard, onMove, isWhiteTurn = 
               className={cn(
                 "w-full h-full flex items-center justify-center relative",
                 isLightSquare ? 'bg-[#eeeed2]' : 'bg-[#769656]',
-                'cursor-pointer transition-colors'
+                isSelectable && 'cursor-pointer transition-colors'
               )}
               onClick={() => handleSquareClick(rowIndex, colIndex)}
             >
               {piece && <PieceIcon piece={piece} />}
               {selectedPiece && selectedPiece[0] === rowIndex && selectedPiece[1] === colIndex && (
-                 <div className="absolute inset-0 bg-yellow-500/50" />
+                 <div className="absolute inset-0 bg-yellow-500/50 border-2 border-yellow-400" />
               )}
             </div>
           );
