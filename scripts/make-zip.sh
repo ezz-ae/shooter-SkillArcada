@@ -1,9 +1,22 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 
-# Create the release directory if it doesn't exist
-mkdir -p release
+# Usage: scripts/make-zip.sh [version]
+# Example: scripts/make-zip.sh v1.0.0
+VERSION="${1:-$(git describe --tags --abbrev=0 2>/dev/null || echo "v$(date +%Y.%m.%d)")}"
+OUTDIR="release"
+ZIP="shooter-${VERSION}.zip"
 
-# Create the ZIP archive using git archive and .gitattributes
-git archive --format=zip --output release/shooter-v1.0.0.zip HEAD
+echo "==> Creating ${OUTDIR}/${ZIP}"
+mkdir -p "${OUTDIR}"
 
-echo "Clean ZIP archive created at release/shooter-v1.0.0.zip"
+# Optional: build Functions ahead of time so buyers get lib/
+if [ -d "functions" ] && [ -f "functions/package.json" ]; then
+  echo "==> Building functions/"
+  (cd functions && npm ci >/dev/null 2>&1 || npm i && npm run build)
+fi
+
+# Archive current HEAD (respects .gitattributes export-ignore if present)
+git archive --format=zip --output "${OUTDIR}/${ZIP}" HEAD
+
+echo "==> Done: ${OUTDIR}/${ZIP}"

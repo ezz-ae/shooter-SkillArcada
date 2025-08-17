@@ -1,10 +1,12 @@
-# ShooterGun — Skill Arcade Platform (Next.js + Firebase + Genkit AI)
+
+# Shooter — Skill Arcade Platform (Next.js + Firebase + Genkit AI)
 
 A premium **skill-based** gaming platform with timing & puzzle challenges, real-time rooms, an **AI Coach/Opponent**, and a full operator dashboard. Built with Next.js + Firebase (Auth, Firestore, Functions) and Genkit for pluggable AI (Gemini or OpenAI).
 
-> **Compliance**  
-> Shooter is **skill-based entertainment**. **No real-money gambling** or chance-only games are included. Scoring is **server-authoritative** and verified on the backend.
+> **Compliance:** Shooter is skill-based entertainment. No real-money gambling or chance-only games are included. Scoring is server-authoritative and verified on the backend.
+
 ---
+
 
 ## Table of Contents
 - [Highlights](#highlights)
@@ -41,7 +43,7 @@ A premium **skill-based** gaming platform with timing & puzzle challenges, real-
 ---
 
 ## Screenshots
-> These screenshots are hosted on Firebase Storage.
+> Hosted on Firebase Storage.
 
 <div align="center">
   <img src="https://firebasestorage.googleapis.com/v0/b/luckshots-a4e60.firebasestorage.app/o/Screenshot%202025-08-16%20at%203.17.13%E2%80%AFpm.png?alt=media&token=d7c31379-025c-4d10-aa71-a540051bc0ca" alt="Game Control Room" width="850" />
