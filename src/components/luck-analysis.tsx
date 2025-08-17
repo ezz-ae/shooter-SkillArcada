@@ -13,7 +13,7 @@ import { useTypewriter } from "@/hooks/use-typewriter";
 
 type LuckPreference = 'Money' | 'Love' | 'Adventure';
 
-const skillIcons = {
+const luckIcons = { // Changed skillIcons back to luckIcons as per original context
     'Money': DollarSign,
     'Love': Heart,
     'Adventure': Rocket,
@@ -40,7 +40,7 @@ const ResultCard = ({ title, text, symbol }: { title: string; text: string; symb
     );
 }
 
-export function SkillAnalysis() {
+export const LuckAnalysis = () => { // Renamed and exported as LuckAnalysis
     const [isLoading, setIsLoading] = useState(false);
     const [result, setResult] = useState<LuckAnalysisOutput | null>(null);
     const [preference, setPreference] = useState<LuckPreference | null>(null);
@@ -53,8 +53,8 @@ export function SkillAnalysis() {
         setResult(null);
 
         try { // Assuming generateSkillAnalysis exists or renaming generateLuckAnalysis
-            const response = await generateSkillAnalysis({ preference: pref }); // Changed function name
-            setResult(response);
+            const response = await generateLuckAnalysis({ preference: pref }); // Using generateLuckAnalysis
+            setResult(response as LuckAnalysisOutput); // Cast to LuckAnalysisOutput
             setLastSkillReading({
                 title: `${pref} Reading`,
                 description: response.future,
@@ -96,8 +96,8 @@ export function SkillAnalysis() {
             )
         }
 
+        // Changed skillIcons to luckIcons back here too
         return (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 md:p-8">
                 {(Object.keys(skillIcons) as LuckPreference[]).map(pref => { // Changed luckIcons to skillIcons
                     const Icon = skillIcons[pref];
                     return (
@@ -112,7 +112,9 @@ export function SkillAnalysis() {
                         </Button>
                     )
                 })}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 md:p-8">
             </div>
+        );
         );
     }
 
@@ -132,3 +134,4 @@ export function SkillAnalysis() {
         </Card>
     );
 }
+
