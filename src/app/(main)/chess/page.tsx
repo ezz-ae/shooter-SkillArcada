@@ -305,7 +305,3 @@ export default function ChessPage() {
     </div>
   );
 }
-
-    
-
-    
