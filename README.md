@@ -46,11 +46,6 @@ A premium **skill-based** gaming platform with timing & puzzle challenges, real-
 > These screenshots are hosted on Firebase Storage.
 
 <div align="center">
-  <img src="docs/screenshots/cover-hero.webp" alt="Hero" width="850" />
-  <img src="docs/screenshots/dashboard-market-cards.webp" alt="Timing challenges" width="850" />
-  <img src="docs/screenshots/puzzle-center.webp" alt="Puzzle & AI coach" width="850" />
-  <img src="docs/screenshots/chess-challenges.webp" alt="Chess tactics" width="850" />
-  <img src="docs/screenshots/rooms-grid.webp" alt="Rooms & leaderboards" width="850" />
   <img src="https://firebasestorage.googleapis.com/v0/b/luckshots-a4e60.firebasestorage.app/o/Screenshot%202025-08-16%20at%203.17.13%E2%80%AFpm.png?alt=media&token=d7c31379-025c-4d10-aa71-a540051bc0ca" alt="Game Control Room" width="850" />
   <img src="https://firebasestorage.googleapis.com/v0/b/luckshots-a4e60.firebasestorage.app/o/Screenshot%202025-08-16%20at%203.16.50%E2%80%AFpm.png?alt=media&token=3becbd74-bf65-4c14-ad8d-44de9dd096a8" alt="Admin Panel" width="850" />
   <img src="https://firebasestorage.googleapis.com/v0/b/luckshots-a4e60.firebasestorage.app/o/Screenshot%202025-08-16%20at%203.16.15%E2%80%AFpm.png?alt=media&token=0222bf01-5fe2-4828-a895-f9f306975f4c" alt="Platform Live updates" width="850" />
@@ -60,9 +55,14 @@ A premium **skill-based** gaming platform with timing & puzzle challenges, real-
   <img src="https://firebasestorage.googleapis.com/v0/b/luckshots-a4e60.firebasestorage.app/o/Screenshot%202025-08-16%20at%203.14.25%E2%80%AFpm.png?alt=media&token=07bdfa50-641f-41c7-a734-0491b87250f4" alt="AI Puzzles" width="850" />
   <img src="https://firebasestorage.googleapis.com/v0/b/luckshots-a4e60.firebasestorage.app/o/Screenshot%202025-08-16%20at%203.07.59%E2%80%AFpm.png?alt=media&token=ed385078-721d-409d-a03f-f6e2fcda1768" alt="Games" width="850" />
   <img src="https://firebasestorage.googleapis.com/v0/b/luckshots-a4e60.firebasestorage.app/o/Screenshot%202025-08-16%20at%203.07.41%E2%80%AFpm.png?alt=media&token=764a9abf-099e-44ab-ac09-0046dcab889a" alt="Shooting puzzles" width="850" />
-  <img src="docs/screenshots/admin-games.webp" alt="Admin controls" width="850" />
+  <img src="https://firebasestorage.googleapis.com/v0/b/luckshots-a4e60.firebasestorage.app/o/Screenshot%202025-08-16%20at%203.16.35%E2%80%AFpm.png?alt=media&token=94642bd0-0a71-4da9-a9b6-d7eca9e4a36a" alt="Platform Live updates" width="850" />
+  <img src="https://firebasestorage.googleapis.com/v0/b/luckshots-a4e60.firebasestorage.app/o/Screenshot%202025-08-16%20at%203.09.24%E2%80%AFpm.png?alt=media&token=ce230552-bb60-47d9-9140-8f1e4e2ead32" alt="Gameplay screenshot 1" width="850" />
+  <img src="https://firebasestorage.googleapis.com/v0/b/luckshots-a4e60.firebasestorage.app/o/Screenshot%202025-08-16%20at%203.08.20%E2%80%AFpm.png?alt=media&token=ca276bdf-06b0-4e71-9676-34126d49bda9" alt="Gameplay screenshot 2" width="850" />
 </div>
 
 ---
 
 ## Architecture
+
+
+To get started, take a look at `src/app/page.tsx`.
