@@ -1,0 +1,9 @@
+gitattributes
+.gitignore         export-ignore
+.github/           export-ignore
+node_modules/      export-ignore
+functions/node_modules/ export-ignore
+release/           export-ignore
+dist/              export-ignore
+*.log              export-ignore
+*.env*             export-ignore
