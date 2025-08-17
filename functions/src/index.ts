@@ -1,7 +1,7 @@
 import * as admin from "firebase-admin";
 import { onCall, HttpsOptions, CallableRequest } from "firebase-functions/v2/https";
 import * as functions from "firebase-functions";
-import { defineSecret, SecretParam } from "firebase-functions/params";
+import { defineSecret } from "firebase-functions/params";
 import { coachFlow, opponentFlow, suggesterFlow, puzzleGenFlow } from "./ai/flows.js";
 
 if (!admin.apps.length) admin.initializeApp();
@@ -32,16 +32,52 @@ export const aiCoach_getHint = onCall(
   }
 );
 
+// Assuming opponentFlow expects { uid: string; roomId: string }
 export const aiOpponent_nextMove = onCall(
-  opponentFlow
+  { enforceAppCheck: true },
+  async (request: CallableRequest<{ uid: string; roomId: string }>) => {
+    if (!request.auth) {
+      throw new functions.https.HttpsError(
+        'unauthenticated',
+        'The function must be called while authenticated.'
+      );
+    }
+    const { uid, roomId } = request.data;
+    const result = await opponentFlow.run({ uid, roomId });
+    return result;
+  }
 );
 
+// Assuming suggesterFlow expects { uid: string }
 export const aiSuggest_challenge = onCall(
-  suggesterFlow
+  { enforceAppCheck: true },
+  async (request: CallableRequest<{ uid: string }>) => {
+    if (!request.auth) {
+      throw new functions.https.HttpsError(
+        'unauthenticated',
+        'The function must be called while authenticated.'
+      );
+    }
+    const { uid } = request.data;
+    const result = await suggesterFlow.run({ uid });
+    return result;
+  }
 );
 
+// Assuming puzzleGenFlow expects { uid: string; kind: 'math' | 'memory' | 'path' | 'chess'; difficulty: 'easy' | 'med' | 'hard' }
 export const puzzles_generate = onCall(
-  puzzleGenFlow
+  { enforceAppCheck: true },
+  async (request: CallableRequest<{ uid: string; kind: 'math' | 'memory' | 'path' | 'chess'; difficulty: 'easy' | 'med' | 'hard' }>) => {
+    if (!request.auth) {
+      throw new functions.https.HttpsError(
+        'unauthenticated',
+        'The function must be called while authenticated.'
+      );
+    }
+    const { uid, kind, difficulty } = request.data;
+    const result = await puzzleGenFlow.run({ uid, kind, difficulty });
+    return result;
+  }
 );
 
 // ---- Moderation trigger (uses plain Functions, can call flows internally later) ----
