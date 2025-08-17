@@ -10,7 +10,7 @@ import { app } from "@/lib/firebaseApp"; // 🔧 ensure this exists in your proj
  * The corresponding Cloud Function should be exposed as `aiCoach_getHint`
  * via onCallGenkit in your Functions code.
  */
-export async function getCoachHint(roomId: string, uid: string) {
+export async function callCoachHintCallable(roomId: string, uid: string) {
   const fn = httpsCallable(getFunctions(app), "aiCoach_getHint");
   const res: any = await fn({ uid, roomId });
   return (res?.data?.hint as string) || "";

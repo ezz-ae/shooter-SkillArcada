@@ -6,8 +6,8 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from "./ui/button";
 import { generateChallenge, GenerateChallengeOutput } from "@/ai/flows/challenge-flow";
 import { Bot, Loader, TestTube, Gamepad2, Sparkles } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
-import { cn } from "@/lib/utils";
+import { useToast } from "@/components/ui/use-toast";
+import { cn } from "@/lib/utils"; // Assuming useToast is directly in src/hooks
 
 export function ShooterChat() {
     const [conversation, setConversation] = useState("");
