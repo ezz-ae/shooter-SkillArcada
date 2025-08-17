@@ -32,9 +32,7 @@ export default function ShotsHubPage() {
         </p>
       </div>
       
-      <div className="max-w-4xl mx-auto mb-12">
-        <LuckAnalysis />
-      </div>
+   
 
       <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-8">
