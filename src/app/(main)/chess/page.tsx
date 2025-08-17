@@ -26,6 +26,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { getOpponentMove } from "@/ai/flows/opponent-flow";
 
 const CHESS_MATE_MOVE = { from: [1, 5], to: [0, 5] };
 const CHESS_PRIZE_SHOTS = 500;
@@ -148,6 +149,25 @@ export default function ChessPage() {
     setIsHintLoading(false);
   };
   
+  const handlePlayVsBot = async () => {
+    const mockGameState = {
+        legalMoves: ["e4", "d4", "Nf3", "c4"], // Example legal moves
+        boardFEN: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+    };
+     toast({ title: "Thinking...", description: "Shooter Bot is planning its move." });
+     try {
+        const result = await getOpponentMove({
+            gameId: 'chess-vs-bot',
+            gameState: mockGameState,
+            difficulty: 'med', // This could be a user setting
+            serverSeed: `chess-bot-match-${Date.now()}` // A unique seed for this match
+        });
+        toast({ title: "Bot's Move", description: `The bot played: ${result.move}` });
+     } catch (e) {
+        toast({ variant: 'destructive', title: 'Error', description: 'Could not get a move from the bot.'})
+     }
+  }
+  
   const renderTutorialOverlay = () => {
     if (puzzleState === 'idle' || puzzleState === 'solved') return null;
 
@@ -226,10 +246,14 @@ export default function ChessPage() {
                 <Card>
                     <CardHeader>
                         <CardTitle>Play against Shooter Bot</CardTitle>
-                        <CardDescription>A simple AI opponent. Feature coming soon!</CardDescription>
+                        <CardDescription>Challenge our deterministic AI opponent to a match.</CardDescription>
                     </CardHeader>
-                    <CardContent className="flex items-center justify-center text-muted-foreground h-64">
-                       <p>Bot implementation is under construction.</p>
+                    <CardContent className="flex flex-col items-center justify-center h-64 gap-4">
+                       <p className="text-muted-foreground">The bot is ready to play. Click the button to have it make a move.</p>
+                       <Button size="lg" onClick={handlePlayVsBot}>
+                            <Bot className="mr-2 h-5 w-5"/>
+                            Get Bot Move
+                       </Button>
                     </CardContent>
                 </Card>
             </TabsContent>
