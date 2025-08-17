@@ -8,7 +8,6 @@ import { History, MessageSquare, Flame } from "lucide-react";
 import { useEffect, useState } from "react";
 import { LuckiestUsers } from "@/components/luckiest-users";
 import { TopGames } from "@/components/top-games";
-import { LuckAnalysis } from "@/components/luck-analysis";
 
 export default function ShotsHubPage() {
   const [users, setUsers] = useState<User[]>([]);
