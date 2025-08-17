@@ -52,6 +52,15 @@ A premium **skill-based** gaming platform with timing & puzzle challenges, real-
   <img src="docs/screenshots/puzzle-center.webp" alt="Puzzle & AI coach" width="850" />
   <img src="docs/screenshots/chess-challenges.webp" alt="Chess tactics" width="850" />
   <img src="docs/screenshots/rooms-grid.webp" alt="Rooms & leaderboards" width="850" />
+  <img src="docs/screenshots/Screenshot 2025-08-16 at 3.17.13 pm.png" alt="Game Control Room" width="850" />
+  <img src="docs/screenshots/Screenshot 2025-08-16 at 3.16.50 pm.png" alt="Admin Panel" width="850" />
+  <img src="docs/screenshots/Screenshot 2025-08-16 at 3.16.15 pm.png" alt="Platform Live updates" width="850" />
+  <img src="docs/screenshots/Screenshot 2025-08-16 at 3.15.50 pm.png" alt="User Wallet" width="850" />
+  <img src="docs/screenshots/Screenshot 2025-08-16 at 3.15.01 pm.png" alt="Chess League 32 players" width="850" />
+  <img src="docs/screenshots/Screenshot 2025-08-16 at 3.14.56 pm.png" alt="Chess solo puzzles" width="850" />
+  <img src="docs/screenshots/Screenshot 2025-08-16 at 3.14.25 pm.png" alt="AI Puzzles" width="850" />
+  <img src="docs/screenshots/Screenshot 2025-08-16 at 3.07.59 pm.png" alt="Games" width="850" />
+  <img src="docs/screenshots/Screenshot 2025-08-16 at 3.07.41 pm.png" alt="Shooting puzzles" width="850" />
   <img src="docs/screenshots/admin-games.webp" alt="Admin controls" width="850" />
 </div>
 
