@@ -82,6 +82,27 @@ const sendUserNotificationTool = ai.defineTool(
     }
 );
 
+// Simulate a more dynamic data feed
+const getLiveIntelligenceFeed = () => {
+    const users = ['PixelPioneer', 'CyberRonin', 'QuantumQueen', 'SynthwaveSamurai'];
+    const games = ['Higher or Lower', 'Crypto Signal', 'Pool Shot', 'AI Adventure'];
+    const randomUser = () => users[Math.floor(Math.random() * users.length)];
+    const randomGame = () => games[Math.floor(Math.random() * games.length)];
+    const randomPercent = (max: number) => Math.floor(Math.random() * max);
+    const randomIp = () => `${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}`;
+
+    return {
+        totalUsers: 1250 + Math.floor(Math.random() * 50),
+        totalRevenue: 12450 + Math.floor(Math.random() * 500),
+        alerts: [
+            { type: 'Engagement', detail: `"${randomGame()}" game shows a ${70 + randomPercent(10)}% user drop-off before they make a guess.`},
+            { type: 'Exploit Warning', detail: `User '${randomUser()}' has won the "${randomGame()}" puzzle ${5 + Math.floor(Math.random()*3)} times in a row.`},
+            { type: 'Security', detail: `An IP address (${randomIp()}) has attempted to access '/admin' ${20 + randomPercent(15)} times in the last hour.`},
+            { type: 'User Stuck', detail: `A session for user '${randomUser()}' has been active on the "${randomGame()}" puzzle page for over 30 minutes.`},
+        ]
+    };
+}
+
 
 const prompt = ai.definePrompt({
   name: 'adminAgentPrompt',
@@ -93,23 +114,22 @@ const prompt = ai.definePrompt({
 You have access to the platform's key metrics and a live intelligence feed that flags anomalies. You can also perform actions, like changing game settings, editing product details, or sending notifications to users.
 
 **Live Platform Data:**
-- Total Users: 1,250
-- Total Revenue (USD): $12,450
+- Total Users: {{totalUsers}}
+- Total Revenue (USD): \${{totalRevenue}}
 - Active Games: 15
 - Top Performing Game: Pool Shot (68% Win Rate)
 - Luckiest User (Today): QuantumQueen ($1,500 total winnings)
 
 **Live Intelligence Feed (Anomalies & Alerts):**
-- **Engagement Alert:** "Crypto Luck" game shows a 75% user drop-off before they make a guess. This might mean the rules are unclear or the game isn't engaging enough.
-- **Exploit Warning:** User 'PixelPioneer' has won the "Higher or Lower" puzzle 5 times in a row using a predictable sequence. This suggests a potential flaw in the game's randomization logic that could be exploited.
-- **Security Alert:** An IP address (142.250.191.238) has attempted to access '/admin' and '/config' 23 times in the last hour.
-- **User Stuck:** A session for user 'CyberRonin' has been active on the "Siga" puzzle page for over 30 minutes with no moves made, indicating they might be stuck or have abandoned the page.
+{{#each alerts}}
+- **{{type}}:** {{detail}}
+{{/each}}
 
 **Admin's Question:** "{{{question}}}"
 
 **Your Task:**
 1.  **Analyze the Question & Live Feed:** Understand the admin's request in the context of the live data and intelligence alerts. Are they asking for data, an opinion, or to perform an action? Proactively mention any relevant alerts.
-2.  **Use Tools to Take Action:** If the admin asks to make a change (e.g., "disable the crypto luck game", "change the iPhone name", or "send a welcome message to all users"), or if you identify a critical issue (e.g., the exploit warning), use the appropriate tool ('updateGameSettings', 'updateProductDetails', 'sendUserNotification'). When you detect an exploit, you should proactively suggest disabling the game and sending a notification to players about the maintenance.
+2.  **Use Tools to Take Action:** If the admin asks to make a change (e.g., "disable the crypto signal game", "change the iPhone name", or "send a welcome message to all users"), or if you identify a critical issue (e.g., the exploit warning), use the appropriate tool ('updateGameSettings', 'updateProductDetails', 'sendUserNotification'). When you detect an exploit, you should proactively suggest disabling the game and sending a notification to players about the maintenance.
 3.  **Provide a Data-Driven Response:** Use all available data to formulate a clear, concise answer in markdown. If you take an action, confirm it. For example, "I've disabled the 'Higher or Lower' game to investigate the potential exploit and sent a notification to active players about the downtime." or "I have updated the product's name to SuperPhone X."
 4.  **Offer Actionable Suggestions:** Based on your analysis, provide a concrete, suggested action. For example, "We should consider sending a notification to 'CyberRonin' offering help with the puzzle."
 
@@ -124,7 +144,10 @@ const adminAgentFlow = ai.defineFlow(
     outputSchema: AdminAgentOutputSchema,
   },
   async (input) => {
-    const {output} = await prompt(input);
+    const liveData = getLiveIntelligenceFeed();
+    const {output} = await prompt({...input, ...liveData});
     return output!;
   }
 );
+
+    

@@ -1,13 +1,14 @@
 
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useNotificationStore } from "@/lib/notification-store";
 import { useStore } from "@/lib/store";
-import { ArrowDown, ArrowUp, Check, Layers, X } from "lucide-react";
+import { ArrowDown, ArrowUp, Check, Layers, Loader, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { generatePuzzle } from "@/ai/flows/generate-puzzle-flow";
 
 const cardRanks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
 const cardSuits = ['♥', '♦', '♣', '♠'];
@@ -30,29 +31,52 @@ const CardFace = ({ rank, suit, isFlipped }: { rank: string, suit: string, isFli
     );
 };
 
-// Puzzle sequence: Card, Correct Guess
-const puzzleSequence: [{rank: number, suit: number}, 'higher' | 'lower'][] = [
-    [{ rank: 7, suit: 0 }, 'higher'], // 8 of Hearts -> guess higher
-    [{ rank: 11, suit: 2 }, 'lower'], // Queen of Clubs -> guess lower
-    [{ rank: 3, suit: 1 }, 'higher'], // 4 of Diamonds -> guess higher
-    [{ rank: 9, suit: 3 }, 'lower'], // 10 of Spades -> guess lower
-];
+type PuzzleStep = { card: { rank: number; suit: number }; guess: 'higher' | 'lower' };
 
 export default function HigherOrLowerPage() {
     const { add: toast } = useNotificationStore();
     const { addShots } = useStore();
 
+    const [puzzleSequence, setPuzzleSequence] = useState<PuzzleStep[]>([]);
     const [currentStep, setCurrentStep] = useState(0);
     const [feedback, setFeedback] = useState<'correct' | 'incorrect' | null>(null);
     const [isFlipped, setIsFlipped] = useState(false);
     const [isWon, setIsWon] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
-    const currentCard = puzzleSequence[currentStep][0];
+    useEffect(() => {
+        const fetchPuzzle = async () => {
+            setIsLoading(true);
+            try {
+                const puzzle = await generatePuzzle({ kind: 'higher-lower', difficulty: 'med' });
+                setPuzzleSequence(puzzle.sequence);
+                startNewGame(puzzle.sequence);
+            } catch (e) {
+                console.error("Failed to generate puzzle", e);
+                toast({
+                    variant: "destructive",
+                    title: "Puzzle Generation Failed",
+                    description: "Could not load a new puzzle. Please try again later.",
+                });
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        fetchPuzzle();
+    }, []);
+
+    const startNewGame = (sequence: PuzzleStep[]) => {
+        setPuzzleSequence(sequence);
+        setCurrentStep(0);
+        setFeedback(null);
+        setIsFlipped(false);
+        setIsWon(false);
+    }
 
     const handleGuess = (guess: 'higher' | 'lower') => {
-        if (feedback || isWon) return; // Don't allow guesses while feedback is showing or game is won
+        if (feedback || isWon || isLoading) return;
 
-        const correctGuess = puzzleSequence[currentStep][1];
+        const correctGuess = puzzleSequence[currentStep].guess;
         
         setIsFlipped(true);
 
@@ -89,6 +113,27 @@ export default function HigherOrLowerPage() {
         }, 500);
     };
 
+    if (isLoading) {
+        return (
+            <div className="container mx-auto px-4 py-8 flex flex-col items-center">
+                 <div className="text-center mb-8">
+                    <h1 className="text-4xl font-black tracking-tight lg:text-5xl">
+                    Higher or Lower
+                    </h1>
+                    <p className="mt-2 text-lg text-muted-foreground max-w-2xl mx-auto">
+                    Guess if the next card is higher or lower to complete the sequence and win a prize.
+                    </p>
+                </div>
+                 <div className="flex flex-col items-center justify-center h-96">
+                    <Loader className="h-12 w-12 animate-spin text-primary" />
+                    <p className="text-muted-foreground mt-4">Generating new puzzle sequence...</p>
+                </div>
+            </div>
+        )
+    }
+
+    const currentCard = puzzleSequence[currentStep]?.card;
+
   return (
     <div className="container mx-auto px-4 py-8 flex flex-col items-center">
       <div className="text-center mb-8">
@@ -106,11 +151,11 @@ export default function HigherOrLowerPage() {
           <CardDescription>Will the next card be higher or lower than the card shown?</CardDescription>
         </CardHeader>
         <CardContent className="flex justify-center items-center h-56 perspective-1000">
-             <CardFace 
+             {currentCard && <CardFace 
                 rank={cardRanks[currentCard.rank]} 
                 suit={cardSuits[currentCard.suit]} 
                 isFlipped={!isFlipped}
-            />
+            />}
         </CardContent>
         <CardFooter className="flex-col gap-4">
             {isWon ? (
@@ -138,3 +183,5 @@ export default function HigherOrLowerPage() {
     </div>
   );
 }
+
+    

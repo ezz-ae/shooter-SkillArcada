@@ -31,11 +31,11 @@ const CHESS_MATE_MOVE = { from: [1, 5], to: [0, 5] };
 const CHESS_PRIZE_SHOTS = 500;
 const PUZZLE_COST = 50;
 
-const initialChessBoard = Array(8).fill(null).map(() => Array(8).fill(null));
-initialChessBoard[7][4] = { type: 'King', color: 'black' };
-initialChessBoard[0][4] = { type: 'King', color: 'white' };
-initialChessBoard[1][5] = { type: 'Rook', color: 'white' };
-initialChessBoard[1][7] = { type: 'Rook', color: 'white' };
+const initialPuzzleBoard = Array(8).fill(null).map(() => Array(8).fill(null));
+initialPuzzleBoard[7][4] = { type: 'King', color: 'black' };
+initialPuzzleBoard[0][4] = { type: 'King', color: 'white' };
+initialPuzzleBoard[1][5] = { type: 'Rook', color: 'white' };
+initialPuzzleBoard[1][7] = { type: 'Rook', color: 'white' };
 
 interface Challenge {
     id: string;
@@ -139,7 +139,7 @@ export default function ChessPage() {
   const handleGetHint = async () => {
     setIsHintLoading(true);
     const mockGameState = {
-      board: initialChessBoard,
+      board: initialPuzzleBoard,
       turn: 'white',
       puzzle: 'Mate in 1'
     };
@@ -179,8 +179,9 @@ export default function ChessPage() {
 
       <div className="w-full max-w-5xl mx-auto">
         <Tabs defaultValue="puzzle" className="w-full">
-            <TabsList className="grid w-full grid-cols-3">
+            <TabsList className="grid w-full grid-cols-4">
                 <TabsTrigger value="puzzle">Daily Puzzle</TabsTrigger>
+                <TabsTrigger value="bot">Play vs. Bot</TabsTrigger>
                 <TabsTrigger value="challenges">Public Challenges</TabsTrigger>
                 <TabsTrigger value="leagues">Leagues</TabsTrigger>
             </TabsList>
@@ -195,7 +196,7 @@ export default function ChessPage() {
                             {renderTutorialOverlay()}
                             <ChessBoard 
                                 key={puzzleState} // Force re-render on state change to clear selection
-                                initialBoard={initialChessBoard}
+                                initialBoard={initialPuzzleBoard}
                                 onMove={handleChessMove}
                                 isSelectable={puzzleState === 'playing' || puzzleState === 'piece_selected'}
                             />
@@ -218,6 +219,17 @@ export default function ChessPage() {
                                 <Lightbulb className="mr-2 h-4 w-4" /> Need a hint?
                             </Button>
                         </div>
+                    </CardContent>
+                </Card>
+            </TabsContent>
+            <TabsContent value="bot" className="mt-6">
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Play against Shooter Bot</CardTitle>
+                        <CardDescription>A simple AI opponent. Feature coming soon!</CardDescription>
+                    </CardHeader>
+                    <CardContent className="flex items-center justify-center text-muted-foreground h-64">
+                       <p>Bot implementation is under construction.</p>
                     </CardContent>
                 </Card>
             </TabsContent>
@@ -293,5 +305,7 @@ export default function ChessPage() {
     </div>
   );
 }
+
+    
 
     
