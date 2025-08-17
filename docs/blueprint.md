@@ -1,13 +1,13 @@
-# **App Name**: ShopnLuck
+# **App Name**: ShooterGun
 
 ## Core Features:
 
-- Instant Purchase: Implement a system to purchase items, immediately debiting the user's account. Call it 'Buy & Vault'
-- Consolidated Shipping: Allow users to consolidate purchased items in their account to be shipped together for one fee. Each cart can not carry over 3 products
-- Dynamic Delivery: Apply shipping separately with option to ship any time, giving users to decide to ship. They can buy today and ship at a later time. Products for sale are dropshipped, where you partner with wholesalers who stock your product.
-- Algorithmic Pricing: Use an LLM as a tool to set randomized disscount amount based on a market prices
-- The Trade-In Vault: Design an intuitive dashboard, dubbed "Trade-In," that allows the user to chose non-shipped products, showing current re-sell value based on discount fluctuations.
-- Disscount Price Returns: Timer starts if decided to return a non-shipped product which users do not chose to immediately do, making it returned at the moment price/disscount
+A premium skill-based gaming platform with timing & puzzle challenges
+real-time rooms
+an AI Coach/Opponent
+full operator dashboard.
+
+
 
 ## Style Guidelines:
 
