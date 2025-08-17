@@ -8,6 +8,7 @@ import { History, MessageSquare, Flame } from "lucide-react";
 import { useEffect, useState } from "react";
 import { LuckiestUsers } from "@/components/luckiest-users";
 import { TopGames } from "@/components/top-games";
+import { ChallengeAI } from "@/components/challenge-ai";
 
 export default function ShotsHubPage() {
   const [users, setUsers] = useState<User[]>([]);
@@ -35,6 +36,9 @@ export default function ShotsHubPage() {
 
       <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="md:col-span-2">
+                 <ChallengeAI />
+            </div>
             <div className="space-y-6">
                 <h3 className="text-lg font-bold flex items-center gap-2 mb-2"><History /> Live Activity</h3>
                 <ActivityFeed users={users} />
