@@ -1,4 +1,4 @@
-# Shooter — Skill Arcade Platform (Next.js + Firebase + Genkit AI)
+git# Shooter — Skill Arcade Platform (Next.js + Firebase + Genkit AI)
 
 A premium **skill-based** gaming platform with timing & puzzle challenges, real-time rooms, an **AI Coach/Opponent**, and a full operator dashboard. Built with Next.js + Firebase (Auth, Firestore, Functions) and Genkit for pluggable AI (Gemini or OpenAI).
 
