@@ -27,5 +27,8 @@ jobs:
       run: ls -al
     - name: Read package.json
       run: cat package.json
+    - name: Run test script directly
+      run: npm run test
     - name: Run tests
       run: npm test
+
