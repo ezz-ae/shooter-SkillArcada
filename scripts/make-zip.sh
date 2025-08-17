@@ -1,3 +1,6 @@
+git add scripts/make-zip.sh
+git commit -m "Add debug steps to make-zip.sh"
+git push
 #!/usr/bin/env bash
 set -euo pipefail
 
@@ -13,6 +16,9 @@ mkdir -p "${OUTDIR}"
 # Optional: build Functions ahead of time so buyers get lib/
 if [ -d "functions" ] && [ -f "functions/package.json" ]; then
   echo "==> Building functions/"
+  echo "Content of node-types.d.ts before build:"
+  cat /home/user/studio/functions/node_modules/@genkit-ai/compat-oai/node_modules/openai/_shims/node-types.d.ts
+  sleep 5 # Short delay
   (cd functions && npm ci >/dev/null 2>&1 || npm i && npm run build)
 fi
 
