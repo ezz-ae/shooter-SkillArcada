@@ -1,9 +1,10 @@
+
 'use server';
 
 // Client helpers for calling Firebase callable functions (Genkit-wrapped)
 // Adjust the firebaseApp import path if your app initializes elsewhere.
 import { getFunctions, httpsCallable } from 'firebase/functions';
-import { app } from "@/lib/firebaseApp"; // 🔧 ensure this exists in your project
+import { app } from "@/lib/firebase"; // 🔧 ensure this exists in your project
 
 /**
  * Get an AI hint from the Coach for the current room.
