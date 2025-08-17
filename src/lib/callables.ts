@@ -1,6 +1,8 @@
+'use server';
+
 // Client helpers for calling Firebase callable functions (Genkit-wrapped)
 // Adjust the firebaseApp import path if your app initializes elsewhere.
-import { getFunctions, httpsCallable } from "firebase/functions";
+import { getFunctions, httpsCallable } from 'firebase/functions';
 import { app } from "@/lib/firebaseApp"; // 🔧 ensure this exists in your project
 
 /**
@@ -43,8 +45,6 @@ export async function generatePuzzle(uid: string, kind: "math"|"memory"|"path"|"
   const res: any = await fn({ uid, kind, difficulty });
   return res?.data as { id: string; puzzle: any };
 }
-
-'use server';
 
 import { getCoachHint as getCoachHintFlow } from "@/ai/flows/coach-flow";
 
