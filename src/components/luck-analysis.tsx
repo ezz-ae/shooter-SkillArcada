@@ -19,7 +19,7 @@ const luckIcons = { // Changed skillIcons back to luckIcons as per original cont
     'Adventure': Rocket,
 }
 
-const ResultCard = ({ title, text, symbol }: { title: string; text: string; symbol?: string }) => {
+const ResultCard = ({ title, text, symbol }: { title: string; text: string; symbol?: string }) => { // Changed skillIcons back to luckIcons as per original context
     const displayText = useTypewriter(text, 20);
     return (
         <Card className="bg-secondary/50 flex-1">
@@ -47,7 +47,7 @@ export const LuckAnalysis = () => { // Renamed and exported as LuckAnalysis
     const { add: toast } = useNotificationStore();
     const { setLastSkillReading } = useStore();
 
-    const handleGetReading = async (pref: LuckPreference) => {
+    const handleGetReading = async (pref: LuckPreference) => { // Assuming generateSkillAnalysis exists or renaming generateLuckAnalysis
         setIsLoading(true);
         setPreference(pref);
         setResult(null);
@@ -97,9 +97,8 @@ export const LuckAnalysis = () => { // Renamed and exported as LuckAnalysis
         }
 
         // Changed skillIcons to luckIcons back here too
-        return (
-                {(Object.keys(skillIcons) as LuckPreference[]).map(pref => { // Changed luckIcons to skillIcons
-                    const Icon = skillIcons[pref];
+        return ( // Changed luckIcons to skillIcons
+                <>{(Object.keys(luckIcons) as LuckPreference[]).map(pref => {
                     return (
                         <Button 
                             key={pref} 
@@ -109,10 +108,9 @@ export const LuckAnalysis = () => { // Renamed and exported as LuckAnalysis
                         >
                             <Icon className="h-8 w-8"/>
                             {pref}
-                        </Button>
+                       </Button>
                     )
-                })}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 md:p-8">
+                })}<div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 md:p-8">
             </div>
         );
         );
