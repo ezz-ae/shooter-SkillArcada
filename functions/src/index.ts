@@ -2,7 +2,7 @@ import * as admin from "firebase-admin";
 import { onCallGenkit, hasClaim } from "firebase-functions/https";
 import * as functions from "firebase-functions";
 import { defineSecret } from "firebase-functions/params";
-import { coachFlow, opponentFlow, suggesterFlow, puzzleGenFlow } from "./ai/flows";
+import { coachFlow, opponentFlow, suggesterFlow, puzzleGenFlow } from "./ai/flows.js";
 
 if (!admin.apps.length) admin.initializeApp();
 
