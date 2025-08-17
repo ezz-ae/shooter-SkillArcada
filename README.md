@@ -43,8 +43,7 @@ A premium **skill-based** gaming platform with timing & puzzle challenges, real-
 ---
 
 ## Screenshots
-> Place images under `docs/screenshots/` and keep them ~1600×1000 (WebP/PNG).  
-> Replace filenames below with your assets.
+> These screenshots are hosted on Firebase Storage.
 
 <div align="center">
   <img src="docs/screenshots/cover-hero.webp" alt="Hero" width="850" />
@@ -52,15 +51,15 @@ A premium **skill-based** gaming platform with timing & puzzle challenges, real-
   <img src="docs/screenshots/puzzle-center.webp" alt="Puzzle & AI coach" width="850" />
   <img src="docs/screenshots/chess-challenges.webp" alt="Chess tactics" width="850" />
   <img src="docs/screenshots/rooms-grid.webp" alt="Rooms & leaderboards" width="850" />
-  <img src="docs/screenshots/Screenshot 2025-08-16 at 3.17.13 pm.png" alt="Game Control Room" width="850" />
-  <img src="docs/screenshots/Screenshot 2025-08-16 at 3.16.50 pm.png" alt="Admin Panel" width="850" />
-  <img src="docs/screenshots/Screenshot 2025-08-16 at 3.16.15 pm.png" alt="Platform Live updates" width="850" />
-  <img src="docs/screenshots/Screenshot 2025-08-16 at 3.15.50 pm.png" alt="User Wallet" width="850" />
-  <img src="docs/screenshots/Screenshot 2025-08-16 at 3.15.01 pm.png" alt="Chess League 32 players" width="850" />
-  <img src="docs/screenshots/Screenshot 2025-08-16 at 3.14.56 pm.png" alt="Chess solo puzzles" width="850" />
-  <img src="docs/screenshots/Screenshot 2025-08-16 at 3.14.25 pm.png" alt="AI Puzzles" width="850" />
-  <img src="docs/screenshots/Screenshot 2025-08-16 at 3.07.59 pm.png" alt="Games" width="850" />
-  <img src="docs/screenshots/Screenshot 2025-08-16 at 3.07.41 pm.png" alt="Shooting puzzles" width="850" />
+  <img src="https://firebasestorage.googleapis.com/v0/b/luckshots-a4e60.firebasestorage.app/o/Screenshot%202025-08-16%20at%203.17.13%E2%80%AFpm.png?alt=media&token=d7c31379-025c-4d10-aa71-a540051bc0ca" alt="Game Control Room" width="850" />
+  <img src="https://firebasestorage.googleapis.com/v0/b/luckshots-a4e60.firebasestorage.app/o/Screenshot%202025-08-16%20at%203.16.50%E2%80%AFpm.png?alt=media&token=3becbd74-bf65-4c14-ad8d-44de9dd096a8" alt="Admin Panel" width="850" />
+  <img src="https://firebasestorage.googleapis.com/v0/b/luckshots-a4e60.firebasestorage.app/o/Screenshot%202025-08-16%20at%203.16.15%E2%80%AFpm.png?alt=media&token=0222bf01-5fe2-4828-a895-f9f306975f4c" alt="Platform Live updates" width="850" />
+  <img src="https://firebasestorage.googleapis.com/v0/b/luckshots-a4e60.firebasestorage.app/o/Screenshot%202025-08-16%20at%203.15.50%E2%80%AFpm.png?alt=media&token=a7a40597-f891-4346-aabd-0a2451d3b9e1" alt="User Wallet" width="850" />
+  <img src="https://firebasestorage.googleapis.com/v0/b/luckshots-a4e60.firebasestorage.app/o/Screenshot%202025-08-16%20at%203.15.01%E2%80%AFpm.png?alt=media&token=3a61b4f2-623b-4609-af60-5595d1f6e3fd" alt="Chess League 32 players" width="850" />
+  <img src="https://firebasestorage.googleapis.com/v0/b/luckshots-a4e60.firebasestorage.app/o/Screenshot%202025-08-16%20at%203.14.56%E2%80%AFpm.png?alt=media&token=b87caa97-a06c-41fd-bbf0-384a032b17d3" alt="Chess solo puzzles" width="850" />
+  <img src="https://firebasestorage.googleapis.com/v0/b/luckshots-a4e60.firebasestorage.app/o/Screenshot%202025-08-16%20at%203.14.25%E2%80%AFpm.png?alt=media&token=07bdfa50-641f-41c7-a734-0491b87250f4" alt="AI Puzzles" width="850" />
+  <img src="https://firebasestorage.googleapis.com/v0/b/luckshots-a4e60.firebasestorage.app/o/Screenshot%202025-08-16%20at%203.07.59%E2%80%AFpm.png?alt=media&token=ed385078-721d-409d-a03f-f6e2fcda1768" alt="Games" width="850" />
+  <img src="https://firebasestorage.googleapis.com/v0/b/luckshots-a4e60.firebasestorage.app/o/Screenshot%202025-08-16%20at%203.07.41%E2%80%AFpm.png?alt=media&token=764a9abf-099e-44ab-ac09-0046dcab889a" alt="Shooting puzzles" width="850" />
   <img src="docs/screenshots/admin-games.webp" alt="Admin controls" width="850" />
 </div>
 
