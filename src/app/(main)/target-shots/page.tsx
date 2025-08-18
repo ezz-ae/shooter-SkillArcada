@@ -13,8 +13,8 @@ export default function TargetShotsPage() {
   useEffect(() => {
     async function fetchProducts() {
       const allProducts = await getProducts();
-      // This page now only shows luckshot and brainshot type games
-      setShooterGunProducts(allProducts.filter(p => p.category === 'luckshot' || p.category === 'brainshot'));
+      // This page shows luckshot, brainshot, and skillshot type games
+      setShooterGunProducts(allProducts.filter(p => p.category === 'luckshot' || p.category === 'brainshot' || p.category === 'skillshot'));
     }
     fetchProducts();
   }, []);
