@@ -1,5 +1,5 @@
 
-# Shooter — Skill Arcade Platform (Next.js + Firebase + Genkit AI)
+Shooter — Skill Arcade Platform (Next.js + Firebase + Genkit AI)
 
 A premium **skill-based** gaming platform with timing & puzzle challenges, real-time rooms, an **AI Coach/Opponent**, and a full operator dashboard. Built with Next.js + Firebase (Auth, Firestore, Functions) and Genkit for pluggable AI (Gemini or OpenAI).
 
@@ -8,7 +8,7 @@ A premium **skill-based** gaming platform with timing & puzzle challenges, real-
 ---
 
 
-## Table of Contents
+ Table of Contents
 - [Highlights](#highlights)
 - [Screenshots](#screenshots)
 - [Architecture](#architecture)
@@ -30,15 +30,15 @@ A premium **skill-based** gaming platform with timing & puzzle challenges, real-
 ---
 
 ## Highlights
-- 🎯 **Skill-first games**: timing, puzzles, chess-tactics, memory — not chance-only.
-- 🤖 **AI Coach & Opponent** (Genkit): concise hints, server-generated bot moves, personalized challenge suggestions.
-- 🕹️ **Real-time rooms**: secure sessions, events stream, leaderboards & seasons.
-- 🛠️ **Operator dashboard**: enable/disable games, feature flags, cooldowns, moderation.
-- 💳 **Credits wallet (optional)**: Stripe-ready webhooks & append-only ledger.
-- 🧊 **Beautiful UI**: glassmorphism, Dark/Light themes, responsive.
-- 🔐 **Server-authoritative scoring**: anti-cheat checks, rate-limits, immutable logs.
-- 🧩 **Puzzle generator** (extensible): server-verified challenges.
-- 🧭 **Daily insights**: scheduled AI summaries of KPIs & tuning suggestions.
+- Skill-first games**: timing, puzzles, chess-tactics, memory — not chance-only.
+- AI Coach & Opponent** (Genkit): concise hints, server-generated bot moves, personalized challenge suggestions.
+- Real-time rooms**: secure sessions, events stream, leaderboards & seasons.
+- Operator dashboard**: enable/disable games, feature flags, cooldowns, moderation.
+- Credits wallet (optional)**: Stripe-ready webhooks & append-only ledger.
+- Beautiful UI**: glassmorphism, Dark/Light themes, responsive.
+- Server-authoritative scoring**: anti-cheat checks, rate-limits, immutable logs.
+- Puzzle generator** (extensible): server-verified challenges.
+- Daily insights**: scheduled AI summaries of KPIs & tuning suggestions.
 
 ---
 
